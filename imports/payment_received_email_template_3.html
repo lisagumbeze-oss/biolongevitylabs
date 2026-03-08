@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Admin Order Details</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "Noto Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 4px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.5s, bottom 0.5s;
+        }
+        .toast.show {
+            visibility: visible;
+            opacity: 1;
+            bottom: 50px;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen p-4 sm:p-8">
+<div class="max-w-5xl mx-auto flex flex-col gap-6">
+<header class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4">
+<div>
+<h1 class="text-2xl font-bold">Order #1234</h1>
+<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Placed on Oct 24, 2023 at 10:23 AM</p>
+</div>
+<div class="flex gap-3">
+<button class="px-4 py-2 bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-lg text-sm font-medium hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors">
+                Print Invoice
+            </button>
+<button class="px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors">
+                Fulfill Order
+            </button>
+</div>
+</header>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="md:col-span-2 flex flex-col gap-6">
+<section class="bg-white dark:bg-slate-900 rounded-xl shadow-sm p-6 border border-slate-200 dark:border-slate-800">
+<h2 class="text-lg font-semibold mb-4 border-b border-slate-100 dark:border-slate-800 pb-2">Items</h2>
+<div class="flex items-center justify-between py-2 border-b border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-slate-100 dark:bg-slate-800 rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-400">inventory_2</span>
+</div>
+<div>
+<p class="font-medium">Wireless Noise-Cancelling Headphones</p>
+<p class="text-sm text-slate-500">SKU: WH-1000XM4</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-medium">$299.99</p>
+<p class="text-sm text-slate-500">Qty: 1</p>
+</div>
+</div>
+<div class="flex justify-between font-bold mt-4">
+<span>Total</span>
+<span>$299.99</span>
+</div>
+</section>
+<section class="bg-white dark:bg-slate-900 rounded-xl shadow-sm p-6 border border-slate-200 dark:border-slate-800">
+<h2 class="text-lg font-semibold mb-4 border-b border-slate-100 dark:border-slate-800 pb-2">Order Timeline</h2>
+<div class="flex flex-col gap-4 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-200 dark:before:via-slate-800 before:to-transparent">
+<div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+<div class="flex items-center justify-center w-10 h-10 rounded-full border border-white dark:border-slate-900 bg-primary text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2">
+<span class="material-symbols-outlined text-sm">shopping_cart</span>
+</div>
+<div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex items-center justify-between space-x-2 mb-1">
+<div class="font-bold text-slate-900 dark:text-slate-100">Order Placed</div>
+<time class="text-xs font-medium text-slate-500">Oct 24, 10:23 AM</time>
+</div>
+<div class="text-slate-500 text-sm">Customer placed order.</div>
+</div>
+</div>
+<div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active" id="timeline-reminder" style="display: none;">
+<div class="flex items-center justify-center w-10 h-10 rounded-full border border-white dark:border-slate-900 bg-amber-500 text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2">
+<span class="material-symbols-outlined text-sm">mark_email_read</span>
+</div>
+<div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white dark:bg-slate-900 p-4 rounded-xl border border-amber-200 dark:border-amber-800 shadow-sm">
+<div class="flex items-center justify-between space-x-2 mb-1">
+<div class="font-bold text-amber-700 dark:text-amber-400">Reminder Sent</div>
+<time class="text-xs font-medium text-slate-500" id="reminder-time">Just now</time>
+</div>
+<div class="text-slate-500 text-sm">Payment reminder email sent to customer.</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+<div class="flex flex-col gap-6">
+<section class="bg-white dark:bg-slate-900 rounded-xl shadow-sm p-6 border border-slate-200 dark:border-slate-800">
+<h2 class="text-lg font-semibold mb-4 border-b border-slate-100 dark:border-slate-800 pb-2">Payment</h2>
+<div class="flex items-center gap-2 mb-4">
+<span class="flex h-2 w-2 rounded-full bg-amber-500"></span>
+<span class="font-medium text-amber-600 dark:text-amber-400">Payment Pending</span>
+</div>
+<p class="text-sm text-slate-500 dark:text-slate-400 mb-6">Customer selected Manual Payment (Zelle). Awaiting confirmation of funds.</p>
+<div class="flex flex-col gap-3">
+<button class="w-full px-4 py-2 bg-slate-800 text-white rounded-lg text-sm font-medium hover:bg-slate-700 transition-colors">
+                        Mark as Paid
+                    </button>
+<button class="w-full px-4 py-2 bg-transparent border border-primary text-primary rounded-lg text-sm font-medium hover:bg-primary/5 transition-colors flex items-center justify-center gap-2" onclick="triggerReminder()">
+<span class="material-symbols-outlined text-sm">mail</span>
+                        Send Payment Reminder
+                    </button>
+</div>
+</section>
+<section class="bg-white dark:bg-slate-900 rounded-xl shadow-sm p-6 border border-slate-200 dark:border-slate-800">
+<h2 class="text-lg font-semibold mb-4 border-b border-slate-100 dark:border-slate-800 pb-2">Customer</h2>
+<div class="mb-4">
+<h3 class="font-medium">Guest User</h3>
+<p class="text-sm text-primary">guest_user@example.com</p>
+<p class="text-sm text-slate-500">+1 (555) 123-4567</p>
+</div>
+<div>
+<h3 class="font-medium mb-1">Shipping Address</h3>
+<p class="text-sm text-slate-500">
+                        123 Commerce St<br/>
+                        Suite 100<br/>
+                        Austin, TX 78701<br/>
+                        United States
+                    </p>
+</div>
+</section>
+</div>
+</div>
+</div>
+<div class="toast flex items-center justify-center gap-2 bg-slate-800 text-white shadow-lg border border-slate-700" id="toast">
+<span class="material-symbols-outlined text-green-400">check_circle</span>
+<span>Reminder Email Sent</span>
+</div>
+<script>
+    function triggerReminder() {
+        // Show Toast
+        var toast = document.getElementById("toast");
+        toast.className = "toast show flex items-center justify-center gap-2 bg-slate-800 text-white shadow-lg border border-slate-700";
+        setTimeout(function(){ 
+            toast.className = toast.className.replace("show", ""); 
+        }, 3000);
+        // Update Timeline
+        var timelineEntry = document.getElementById("timeline-reminder");
+        timelineEntry.style.display = "flex";
+        var now = new Date();
+        var timeString = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + ', ' + now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+        document.getElementById("reminder-time").innerText = timeString;
+    }
+</script>
+
+</body></html>

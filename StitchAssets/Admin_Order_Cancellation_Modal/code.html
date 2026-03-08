@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Admin Order Cancellation</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f2a20d",
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#221c10",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex items-center justify-center p-4">
+<!-- Modal Overlay -->
+<div class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 flex items-center justify-center p-4 sm:p-6">
+<!-- Modal Content -->
+<div class="relative w-full max-w-[600px] flex flex-col bg-white dark:bg-slate-800 rounded-xl shadow-2xl overflow-hidden z-50">
+<!-- Header -->
+<div class="flex flex-wrap justify-between gap-3 p-6 border-b border-slate-200 dark:border-slate-700">
+<div class="flex flex-col gap-1">
+<h1 class="text-slate-900 dark:text-white tracking-tight text-2xl font-bold leading-tight">Cancel Order #49281-A</h1>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium leading-normal flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary inline-block"></span>
+                        Status: Awaiting Payment
+                    </p>
+</div>
+<button class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors self-start">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="p-6 flex flex-col gap-6">
+<!-- Reason Select -->
+<div class="flex flex-col gap-2">
+<label class="text-slate-900 dark:text-white text-sm font-semibold leading-normal" for="cancel-reason">Reason for Cancellation</label>
+<div class="relative">
+<select class="form-input flex w-full resize-none overflow-hidden rounded-lg text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 h-12 px-4 appearance-none text-base font-normal leading-normal shadow-sm" id="cancel-reason">
+<option value="">Select a reason</option>
+<option value="timeout">Payment Timeout</option>
+<option value="request">Customer Request</option>
+<option value="unavailable">Product Unavailable</option>
+<option value="fraud">Suspected Fraud</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-500">
+<span class="material-symbols-outlined">expand_more</span>
+</div>
+</div>
+</div>
+<!-- Internal Note -->
+<div class="flex flex-col gap-2">
+<label class="text-slate-900 dark:text-white text-sm font-semibold leading-normal" for="internal-note">Internal Note (Optional)</label>
+<textarea class="form-input flex w-full resize-none overflow-hidden rounded-lg text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 min-h-[120px] placeholder:text-slate-400 dark:placeholder:text-slate-500 p-4 text-base font-normal leading-normal shadow-sm" id="internal-note" placeholder="Add any relevant details about this cancellation..."></textarea>
+</div>
+<!-- Notification Toggle -->
+<div class="flex items-center gap-4 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg border border-slate-200 dark:border-slate-700 justify-between mt-2">
+<div class="flex items-center gap-3">
+<div class="text-slate-600 dark:text-slate-300 flex items-center justify-center rounded-lg bg-white dark:bg-slate-700 shadow-sm shrink-0 w-10 h-10 border border-slate-200 dark:border-slate-600">
+<span class="material-symbols-outlined">mail</span>
+</div>
+<div class="flex flex-col">
+<p class="text-slate-900 dark:text-white text-sm font-semibold leading-normal flex-1 truncate">Notify Customer via Email</p>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-normal">Send a standard cancellation notice.</p>
+</div>
+</div>
+<div class="shrink-0">
+<label class="relative flex h-[32px] w-[52px] cursor-pointer items-center rounded-full border-none bg-slate-200 dark:bg-slate-600 p-1 has-[:checked]:justify-end has-[:checked]:bg-primary transition-colors duration-200">
+<div class="h-6 w-6 rounded-full bg-white shadow-sm transition-transform duration-200"></div>
+<input checked="" class="invisible absolute" type="checkbox"/>
+</label>
+</div>
+</div>
+</div>
+<!-- Footer Actions -->
+<div class="flex justify-end gap-3 px-6 py-4 bg-slate-50 dark:bg-slate-800/80 border-t border-slate-200 dark:border-slate-700 rounded-b-xl">
+<button class="flex min-w-[100px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-5 bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-sm font-semibold leading-normal border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-600 transition-colors shadow-sm">
+                    Keep Order
+                </button>
+<button class="flex min-w-[140px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-5 bg-primary text-slate-900 text-sm font-bold leading-normal hover:bg-primary/90 transition-colors shadow-sm">
+                    Confirm Cancellation
+                </button>
+</div>
+</div>
+</div>
+</body></html>

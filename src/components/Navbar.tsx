@@ -1,0 +1,149 @@
+"use client";
+
+import React, { useState, useRef } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { ShoppingCart, ShoppingBag, Menu, X, ChevronDown } from "lucide-react";
+import { useCart } from "@/store/useCart";
+import CartDrawer from "./CartDrawer";
+import LiveSearch from "./LiveSearch";
+import DarkModeToggle from "./DarkModeToggle";
+import { motion, AnimatePresence } from "framer-motion";
+
+const resourceLinks = [
+    { href: "/resources/peptide-calculator", label: "Peptide Calculator" },
+    { href: "/peptide-guide", label: "Peptide Guide" },
+];
+
+const Navbar = () => {
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isCartOpen, setIsCartOpen] = useState(false);
+    const [isResourcesOpen, setIsResourcesOpen] = useState(false);
+    const resourcesRef = useRef<HTMLDivElement>(null);
+    const items = useCart((state) => state.items);
+    const cartCount = items.reduce((acc, item) => acc + item.quantity, 0);
+
+    return (
+        <header className="bg-white dark:bg-slate-900 shadow-sm sticky top-0 z-50 transition-colors border-b border-slate-100 dark:border-slate-800">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="flex justify-between items-center h-20 gap-6">
+                    {/* Logo */}
+                    <div className="shrink-0 flex items-center">
+                        <Link href="/" className="flex items-center">
+                            <Image
+                                src="https://biolongevitylabs.com/wp-content/uploads/2025/01/BLL-logo-full-HR.webp"
+                                alt="BioLongevity Labs Logo"
+                                width={220}
+                                height={38}
+                                className="object-contain dark:brightness-150 transition-all"
+                                priority
+                            />
+                        </Link>
+                    </div>
+
+                    {/* Live Search - Desktop */}
+                    <div className="flex-1 hidden lg:block">
+                        <LiveSearch />
+                    </div>
+
+                    {/* Actions */}
+                    <div className="flex items-center gap-4">
+                        <nav className="hidden md:flex items-center space-x-6">
+                            <Link href="/about" className="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary font-bold transition-colors text-sm uppercase tracking-widest">About</Link>
+                            <Link href="/shop" className="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary font-bold transition-colors text-sm uppercase tracking-widest">Shop</Link>
+                            <Link href="/research" className="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary font-bold transition-colors text-sm uppercase tracking-widest">Research</Link>
+                            <div ref={resourcesRef} className="relative" onMouseEnter={() => setIsResourcesOpen(true)} onMouseLeave={() => setIsResourcesOpen(false)}>
+                                <button className="flex items-center gap-1 text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary font-bold transition-colors text-sm uppercase tracking-widest">
+                                    Resources <ChevronDown className={`w-4 h-4 transition-transform ${isResourcesOpen ? 'rotate-180' : ''}`} />
+                                </button>
+                                <AnimatePresence>
+                                    {isResourcesOpen && (
+                                        <motion.div
+                                            initial={{ opacity: 0, y: 8 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            exit={{ opacity: 0, y: 8 }}
+                                            transition={{ duration: 0.15 }}
+                                            className="absolute top-full left-0 mt-2 w-56 bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-100 dark:border-slate-700 p-2 z-[60]"
+                                        >
+                                            {resourceLinks.map(link => (
+                                                <Link key={link.href} href={link.href} className="flex items-center gap-3 px-4 py-3 text-sm font-bold text-slate-700 dark:text-slate-200 hover:bg-primary/5 hover:text-primary rounded-xl transition-all">
+                                                    {link.label}
+                                                </Link>
+                                            ))}
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+                            </div>
+                            <Link href="/support" className="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary font-bold transition-colors text-sm uppercase tracking-widest">Support</Link>
+                        </nav>
+
+                        <div className="flex items-center gap-1">
+                            <DarkModeToggle />
+
+                            <motion.button
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.9 }}
+                                onClick={() => setIsCartOpen(true)}
+                                className="relative p-2.5 text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary transition-all rounded-xl hover:bg-primary/5"
+                                aria-label="Shopping Cart"
+                            >
+                                <ShoppingCart className="w-6 h-6" />
+                                <AnimatePresence>
+                                    {cartCount > 0 && (
+                                        <motion.span
+                                            key="badge"
+                                            initial={{ scale: 0 }}
+                                            animate={{ scale: 1 }}
+                                            exit={{ scale: 0 }}
+                                            transition={{ type: "spring", stiffness: 500, damping: 25 }}
+                                            className="absolute -top-1 -right-1 inline-flex items-center justify-center px-2 py-1 text-[10px] font-black leading-none text-white transform bg-primary rounded-full min-w-5 h-5 shadow-lg shadow-primary/40 ring-2 ring-white dark:ring-slate-900"
+                                        >
+                                            {cartCount}
+                                        </motion.span>
+                                    )}
+                                </AnimatePresence>
+                            </motion.button>
+
+                            <button
+                                className="md:hidden p-2 text-slate-600 dark:text-slate-300 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                                aria-label="Toggle Menu"
+                            >
+                                {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Mobile Menu */}
+            <AnimatePresence>
+                {isMenuOpen && (
+                    <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="md:hidden bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden"
+                    >
+                        <div className="px-4 pt-4 pb-8 space-y-4">
+                            <LiveSearch />
+                            <div className="grid grid-cols-1 gap-2 pt-2">
+                                <Link href="/about" onClick={() => setIsMenuOpen(false)} className="block px-4 py-4 rounded-xl text-lg font-bold text-slate-700 dark:text-slate-200 hover:bg-primary/5 hover:text-primary transition-all">About Us</Link>
+                                <Link href="/shop" onClick={() => setIsMenuOpen(false)} className="block px-4 py-4 rounded-xl text-lg font-bold text-slate-700 dark:text-slate-200 hover:bg-primary/5 hover:text-primary transition-all">Shop All</Link>
+                                <Link href="/research" onClick={() => setIsMenuOpen(false)} className="block px-4 py-4 rounded-xl text-lg font-bold text-slate-700 dark:text-slate-200 hover:bg-primary/5 hover:text-primary transition-all">Research</Link>
+                                <Link href="/resources/peptide-calculator" onClick={() => setIsMenuOpen(false)} className="block px-4 py-4 rounded-xl text-lg font-bold text-slate-700 dark:text-slate-200 hover:bg-primary/5 hover:text-primary transition-all">Peptide Calculator</Link>
+                                <Link href="/peptide-guide" onClick={() => setIsMenuOpen(false)} className="block px-4 py-4 rounded-xl text-lg font-bold text-slate-700 dark:text-slate-200 hover:bg-primary/5 hover:text-primary transition-all">Peptide Guide</Link>
+                                <Link href="/support" onClick={() => setIsMenuOpen(false)} className="block px-4 py-4 rounded-xl text-lg font-bold text-slate-700 dark:text-slate-200 hover:bg-primary/5 hover:text-primary transition-all">Support</Link>
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+        </header>
+    );
+};
+
+export default Navbar;

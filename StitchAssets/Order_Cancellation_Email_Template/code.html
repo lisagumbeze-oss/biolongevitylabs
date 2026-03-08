@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Order Cancellation Email</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1e293b",
+                        "neutral-100": "#f1f5f9",
+                        "neutral-200": "#e2e8f0",
+                        "neutral-300": "#cbd5e1",
+                        "neutral-600": "#475569",
+                        "neutral-800": "#1e293b",
+                        "neutral-900": "#0f172a",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-neutral-900 dark:text-neutral-100 min-h-screen flex items-center justify-center p-4">
+<div class="w-full max-w-[600px] bg-surface-light dark:bg-surface-dark rounded-xl shadow-lg overflow-hidden border border-neutral-200 dark:border-neutral-800">
+<header class="flex items-center justify-between px-8 py-6 border-b border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-800/50">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-3xl">shopping_cart</span>
+<h2 class="text-xl font-bold tracking-tight">Streamlined Store</h2>
+</div>
+<a class="text-sm font-medium text-neutral-600 dark:text-neutral-300 hover:text-primary dark:hover:text-primary transition-colors" href="#">Shop Now</a>
+</header>
+<main class="px-8 py-10 flex flex-col items-center text-center">
+<div class="w-16 h-16 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-red-600 dark:text-red-400 text-3xl">cancel</span>
+</div>
+<h1 class="text-3xl font-bold mb-2">Order Canceled</h1>
+<p class="text-lg font-medium text-neutral-600 dark:text-neutral-300 mb-6">Your Order #1234 has been canceled</p>
+<div class="bg-neutral-100 dark:bg-neutral-800/50 rounded-lg p-5 w-full mb-8 text-left">
+<h3 class="text-sm font-bold text-neutral-900 dark:text-neutral-100 uppercase tracking-wider mb-2">Reason for Cancellation</h3>
+<p class="text-neutral-600 dark:text-neutral-300">Payment was not received within the required 24-hour timeframe. As a guest checkout, unpaid orders are automatically released.</p>
+</div>
+<div class="flex flex-col sm:flex-row gap-4 w-full justify-center">
+<button class="bg-primary hover:bg-primary/90 text-white font-bold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2 w-full sm:w-auto">
+<span class="material-symbols-outlined text-xl">storefront</span>
+                    Shop Again
+                </button>
+<button class="bg-neutral-200 dark:bg-neutral-800 hover:bg-neutral-300 dark:hover:bg-neutral-700 text-neutral-900 dark:text-neutral-100 font-bold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2 w-full sm:w-auto">
+<span class="material-symbols-outlined text-xl">support_agent</span>
+                    Contact Support
+                </button>
+</div>
+<div class="mt-8 text-sm text-neutral-500 dark:text-neutral-400">
+<p>Need help? <a class="text-primary hover:underline" href="#">Reach out to our support team</a>.</p>
+</div>
+</main>
+<footer class="px-8 py-6 border-t border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-800/50 text-center text-xs text-neutral-500 dark:text-neutral-400">
+<p class="mb-2">This is an automated message, please do not reply directly to this email.</p>
+<p>© 2024 Streamlined E-commerce. All rights reserved.</p>
+<div class="mt-3 flex justify-center gap-4">
+<a class="hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors" href="#">Terms of Service</a>
+</div>
+</footer>
+</div>
+</body></html>

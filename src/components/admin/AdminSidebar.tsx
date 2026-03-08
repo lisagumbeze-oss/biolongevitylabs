@@ -1,0 +1,82 @@
+"use client";
+
+import React from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import {
+    LayoutDashboard,
+    ShoppingCart,
+    Users,
+    Settings,
+    LogOut,
+    Package,
+    Archive,
+    MessageSquare,
+    Activity
+} from 'lucide-react';
+
+const AdminSidebar = () => {
+    const pathname = usePathname();
+
+    const navigation = [
+        { name: 'Overview', href: '/admin', icon: LayoutDashboard },
+        { name: 'Products', href: '/admin/products', icon: Package },
+        { name: 'Inventory', href: '/admin/inventory', icon: Archive },
+        { name: 'Orders', href: '/admin/orders', icon: ShoppingCart },
+        { name: 'Customers', href: '/admin/customers', icon: Users },
+        { name: 'Support', href: '/admin/support', icon: MessageSquare },
+        { name: 'Settings', href: '/admin/settings', icon: Settings },
+    ];
+
+    const isActive = (path: string) => {
+        if (path === '/admin') {
+            return pathname === '/admin';
+        }
+        return pathname?.startsWith(path);
+    };
+
+    return (
+        <div className="flex flex-col w-64 bg-slate-900 border-r border-slate-800 text-slate-300 min-h-screen sticky top-0">
+            {/* Logo Area */}
+            <div className="h-16 flex items-center px-6 border-b border-slate-800">
+                <Link href="/admin" className="flex items-center gap-2 text-white font-black tracking-tighter">
+                    <Activity className="w-6 h-6 text-primary" />
+                    <span className="text-xl">Bio<span className="text-primary">Admin</span></span>
+                </Link>
+            </div>
+
+            {/* Navigation Links */}
+            <nav className="flex-1 px-4 py-6 space-y-1">
+                {navigation.map((item) => {
+                    const active = isActive(item.href);
+                    return (
+                        <Link
+                            key={item.name}
+                            href={item.href}
+                            className={`flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 ${active
+                                ? 'bg-primary text-white shadow-md shadow-primary/20'
+                                : 'hover:bg-slate-800 hover:text-white'
+                                }`}
+                        >
+                            <item.icon className={`w-5 h-5 ${active ? 'text-white' : 'text-slate-400'}`} />
+                            {item.name}
+                        </Link>
+                    );
+                })}
+            </nav>
+
+            {/* Bottom Actions */}
+            <div className="p-4 border-t border-slate-800">
+                <Link
+                    href="/"
+                    className="flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+                >
+                    <LogOut className="w-5 h-5" />
+                    Exit to Store
+                </Link>
+            </div>
+        </div>
+    );
+};
+
+export default AdminSidebar;

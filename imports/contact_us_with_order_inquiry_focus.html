@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>StreamlineCommerce - Contact Us</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen antialiased flex flex-col">
+<div class="relative flex h-auto w-full flex-col bg-white dark:bg-slate-900 group/design-root overflow-x-hidden border-b border-solid border-slate-200 dark:border-slate-800">
+<div class="layout-container flex h-full grow flex-col">
+<div class="px-4 md:px-10 lg:px-40 flex flex-1 justify-center py-5">
+<div class="layout-content-container flex flex-col max-w-[1200px] flex-1 w-full">
+<header class="flex flex-col md:flex-row items-center justify-between whitespace-nowrap py-3 gap-4">
+<div class="flex items-center gap-8">
+<a class="flex items-center gap-4 text-slate-900 dark:text-white" href="#">
+<div class="size-6 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-3xl">shopping_cart_checkout</span>
+</div>
+<h2 class="text-lg font-bold leading-tight tracking-[-0.015em]">StreamlineCommerce</h2>
+</a>
+<nav class="hidden md:flex items-center gap-9">
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Shop</a>
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">About</a>
+<a class="text-sm font-medium leading-normal text-primary" href="#">Contact</a>
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">FAQ</a>
+</nav>
+</div>
+<div class="flex flex-1 justify-end gap-4 w-full md:w-auto">
+<label class="flex flex-col min-w-40 h-10 w-full md:max-w-64">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full bg-slate-100 dark:bg-slate-800">
+<div class="text-slate-500 dark:text-slate-400 flex items-center justify-center pl-4 rounded-l-lg">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-white focus:outline-0 focus:ring-0 border-none bg-transparent h-full placeholder:text-slate-500 dark:placeholder:text-slate-400 px-4 rounded-l-none pl-2 text-sm font-normal leading-normal" placeholder="Search products..." value=""/>
+</div>
+</label>
+<button class="flex shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 w-10 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+<span class="material-symbols-outlined">shopping_bag</span>
+</button>
+</div>
+</header>
+</div>
+</div>
+</div>
+</div>
+<main class="flex-grow flex flex-col items-center py-10 px-4 md:px-10 lg:px-40 w-full">
+<div class="max-w-[1200px] w-full flex flex-col gap-10">
+<div class="flex flex-col gap-3">
+<h1 class="text-4xl md:text-5xl font-black leading-tight tracking-[-0.033em] text-slate-900 dark:text-white">Contact Us</h1>
+<p class="text-slate-600 dark:text-slate-400 text-lg font-normal leading-normal max-w-2xl">We're here to help with your order or any questions you may have. Need an immediate answer? Check our FAQs below.</p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24">
+<div class="flex flex-col gap-8 bg-white dark:bg-slate-900 p-8 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800">
+<div>
+<h2 class="text-2xl font-bold leading-tight tracking-[-0.015em] mb-2 text-slate-900 dark:text-white">Send us a message</h2>
+<p class="text-slate-600 dark:text-slate-400 text-sm">Please provide your Order ID if inquiring about a specific purchase.</p>
+</div>
+<form class="flex flex-col gap-5">
+<div class="flex flex-col gap-2">
+<label class="text-sm font-medium leading-none text-slate-900 dark:text-white" for="name">Name</label>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-white focus:ring-2 focus:ring-primary border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 h-11 placeholder:text-slate-400 px-4 text-base font-normal leading-normal" id="name" placeholder="John Doe" required="" type="text"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-sm font-medium leading-none text-slate-900 dark:text-white" for="email">Email Address</label>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-white focus:ring-2 focus:ring-primary border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 h-11 placeholder:text-slate-400 px-4 text-base font-normal leading-normal" id="email" placeholder="john@example.com" required="" type="email"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-sm font-medium leading-none text-slate-900 dark:text-white" for="orderId">Order ID (Optional)</label>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-white focus:ring-2 focus:ring-primary border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 h-11 placeholder:text-slate-400 px-4 text-base font-normal leading-normal" id="orderId" placeholder="e.g. SC-12345" type="text"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-sm font-medium leading-none text-slate-900 dark:text-white" for="message">Message</label>
+<textarea class="form-textarea flex w-full min-w-0 flex-1 resize-y overflow-hidden rounded-lg text-slate-900 dark:text-white focus:ring-2 focus:ring-primary border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 min-h-[120px] placeholder:text-slate-400 p-4 text-base font-normal leading-normal" id="message" placeholder="How can we help you?" required=""></textarea>
+</div>
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-primary text-white text-base font-bold leading-normal tracking-[0.015em] mt-2 hover:bg-blue-600 transition-colors">
+                            Send Message
+                        </button>
+</form>
+</div>
+<div class="flex flex-col gap-10">
+<div class="flex flex-col gap-6">
+<h2 class="text-2xl font-bold leading-tight tracking-[-0.015em] text-slate-900 dark:text-white">Contact Information</h2>
+<div class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-6">
+<div class="flex items-start justify-center text-primary pt-1">
+<span class="material-symbols-outlined">location_on</span>
+</div>
+<div class="flex flex-col">
+<p class="text-sm font-medium text-slate-900 dark:text-white mb-1">Address</p>
+<p class="text-base text-slate-600 dark:text-slate-400">123 E-commerce Blvd, Suite 100<br/>New York, NY 10001</p>
+</div>
+<div class="flex items-start justify-center text-primary pt-1">
+<span class="material-symbols-outlined">phone</span>
+</div>
+<div class="flex flex-col">
+<p class="text-sm font-medium text-slate-900 dark:text-white mb-1">Phone</p>
+<p class="text-base text-slate-600 dark:text-slate-400">1-800-555-0199</p>
+<p class="text-xs text-slate-500 mt-1">Mon-Fri 9am-6pm EST</p>
+</div>
+<div class="flex items-start justify-center text-primary pt-1">
+<span class="material-symbols-outlined">mail</span>
+</div>
+<div class="flex flex-col">
+<p class="text-sm font-medium text-slate-900 dark:text-white mb-1">Email</p>
+<a class="text-base text-primary hover:underline" href="mailto:support@streamlinecommerce.com">support@streamlinecommerce.com</a>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-4">
+<h3 class="text-lg font-bold leading-tight text-slate-900 dark:text-white">Follow Us</h3>
+<div class="flex flex-wrap gap-4">
+<a class="flex items-center justify-center size-12 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-primary hover:text-white dark:hover:bg-primary transition-colors" href="#">
+<span class="material-symbols-outlined">public</span>
+</a>
+<a class="flex items-center justify-center size-12 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-primary hover:text-white dark:hover:bg-primary transition-colors" href="#">
+<span class="material-symbols-outlined">share</span>
+</a>
+<a class="flex items-center justify-center size-12 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-primary hover:text-white dark:hover:bg-primary transition-colors" href="#">
+<span class="material-symbols-outlined">photo_camera</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-12 border-t border-slate-200 dark:border-slate-800 pt-12 flex flex-col gap-8">
+<div class="text-center">
+<h2 class="text-3xl font-bold leading-tight tracking-[-0.015em] text-slate-900 dark:text-white mb-4">Frequently Asked Questions</h2>
+<p class="text-slate-600 dark:text-slate-400">Quick answers to common questions about your orders.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">How can I track my order?</h3>
+<p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">Once your order ships, you'll receive a confirmation email with a tracking link. You can also enter your Order ID and Email on our tracking page to see live updates.</p>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">What is your return policy?</h3>
+<p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">We accept returns within 30 days of delivery. Items must be unused and in original packaging. Contact support with your Order ID to initiate a return.</p>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Do I need an account to buy?</h3>
+<p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">No, you can check out as a guest. All order details and updates will be sent directly to the email address you provide during checkout.</p>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">How long does shipping take?</h3>
+<p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">Standard shipping within the US typically takes 3-5 business days. Expedited shipping options are available at checkout for 1-2 day delivery.</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-8 mt-auto">
+<div class="max-w-[1200px] mx-auto px-4 md:px-10 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-sm text-slate-500 dark:text-slate-400">© 2024 StreamlineCommerce. All rights reserved.</p>
+<div class="flex gap-6">
+<a class="text-sm text-slate-500 dark:text-slate-400 hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="text-sm text-slate-500 dark:text-slate-400 hover:text-primary transition-colors" href="#">Terms of Service</a>
+</div>
+</div>
+</footer>
+</body></html>

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Streamlined Store - Guest Checkout</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }.payment-instructions {
+            display: none;
+        }
+        input[type="radio"]:checked ~ .payment-instructions {
+            display: block;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-10 py-4 shadow-sm">
+<div class="flex items-center gap-4 text-primary">
+<span class="material-symbols-outlined text-2xl">local_mall</span>
+<h2 class="text-slate-900 dark:text-white text-xl font-bold leading-tight tracking-[-0.015em]">Streamlined Store</h2>
+</div>
+<div class="flex flex-1 justify-end gap-8">
+<div class="flex items-center gap-9">
+<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Home</a>
+<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Shop</a>
+<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">About Us</a>
+</div>
+<button class="flex cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 w-10 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+<span class="material-symbols-outlined text-[20px]">shopping_cart</span>
+</button>
+</div>
+</header>
+<main class="flex-1 w-full max-w-[1200px] mx-auto px-4 py-8 md:py-12">
+<div class="mb-10 flex flex-col gap-4">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+<div class="flex flex-col gap-2">
+<h1 class="text-slate-900 dark:text-white tracking-tight text-3xl md:text-4xl font-bold leading-tight flex items-center gap-3">
+                    Guest Checkout
+                </h1>
+<div class="flex items-center gap-2 text-slate-500 dark:text-slate-400 text-sm font-medium">
+<span class="material-symbols-outlined text-sm text-green-500">lock</span> Secure Checkout
+                </div>
+</div>
+</div>
+<div class="flex flex-col gap-3 mt-4 max-w-2xl">
+<div class="flex justify-between items-center text-sm font-semibold text-slate-500 dark:text-slate-400">
+<span class="text-primary">Shipping</span>
+<span class="text-primary">Payment</span>
+<span>Review</span>
+</div>
+<div class="relative w-full h-2 rounded-full bg-slate-200 dark:bg-slate-700">
+<div class="absolute top-0 left-0 h-full rounded-full bg-primary" style="width: 66%;"></div>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+<div class="lg:col-span-7 flex flex-col gap-8">
+<section class="bg-white dark:bg-slate-900 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-800">
+<h2 class="text-slate-900 dark:text-white text-xl font-bold mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">local_shipping</span> Shipping Details
+                </h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+<label class="flex flex-col gap-1.5">
+<span class="text-slate-700 dark:text-slate-300 text-sm font-medium">First Name</span>
+<input class="form-input rounded-lg border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-primary focus:border-primary h-12" placeholder="John" type="text"/>
+</label>
+<label class="flex flex-col gap-1.5">
+<span class="text-slate-700 dark:text-slate-300 text-sm font-medium">Last Name</span>
+<input class="form-input rounded-lg border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-primary focus:border-primary h-12" placeholder="Doe" type="text"/>
+</label>
+</div>
+<label class="flex flex-col gap-1.5 mb-4">
+<span class="text-slate-700 dark:text-slate-300 text-sm font-medium">Email Address (for order updates)</span>
+<input class="form-input rounded-lg border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-primary focus:border-primary h-12" placeholder="john.doe@example.com" type="email"/>
+</label>
+<label class="flex flex-col gap-1.5 mb-4">
+<span class="text-slate-700 dark:text-slate-300 text-sm font-medium">Street Address</span>
+<input class="form-input rounded-lg border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-primary focus:border-primary h-12" placeholder="123 Main St" type="text"/>
+</label>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+<label class="flex flex-col gap-1.5 md:col-span-1">
+<span class="text-slate-700 dark:text-slate-300 text-sm font-medium">City</span>
+<input class="form-input rounded-lg border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-primary focus:border-primary h-12" placeholder="Anytown" type="text"/>
+</label>
+<label class="flex flex-col gap-1.5 md:col-span-1">
+<span class="text-slate-700 dark:text-slate-300 text-sm font-medium">State</span>
+<select class="form-select rounded-lg border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-primary focus:border-primary h-12">
+<option>California</option>
+<option>New York</option>
+<option>Texas</option>
+</select>
+</label>
+<label class="flex flex-col gap-1.5 md:col-span-1">
+<span class="text-slate-700 dark:text-slate-300 text-sm font-medium">ZIP Code</span>
+<input class="form-input rounded-lg border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-primary focus:border-primary h-12" placeholder="12345" type="text"/>
+</label>
+</div>
+<div class="border-t border-slate-200 dark:border-slate-800 pt-6">
+<h3 class="text-slate-900 dark:text-white text-lg font-semibold mb-4">Shipping Method</h3>
+<div class="flex flex-col gap-3">
+<label class="flex items-center justify-between p-4 border border-slate-200 dark:border-slate-700 rounded-lg cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="flex items-center gap-3">
+<input checked="" class="form-radio text-primary focus:ring-primary h-5 w-5" name="shipping" type="radio"/>
+<div>
+<p class="font-medium text-slate-900 dark:text-white">Standard Delivery</p>
+<p class="text-sm text-slate-500 dark:text-slate-400">3-5 Business Days</p>
+</div>
+</div>
+<span class="font-semibold text-slate-900 dark:text-white">Free</span>
+</label>
+<label class="flex items-center justify-between p-4 border border-slate-200 dark:border-slate-700 rounded-lg cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="flex items-center gap-3">
+<input class="form-radio text-primary focus:ring-primary h-5 w-5" name="shipping" type="radio"/>
+<div>
+<p class="font-medium text-slate-900 dark:text-white">Express Delivery</p>
+<p class="text-sm text-slate-500 dark:text-slate-400">1-2 Business Days</p>
+</div>
+</div>
+<span class="font-semibold text-slate-900 dark:text-white">$15.00</span>
+</label>
+</div>
+</div>
+</section>
+<section class="bg-white dark:bg-slate-900 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-800">
+<h2 class="text-slate-900 dark:text-white text-xl font-bold mb-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">payments</span> Payment Details
+                </h2>
+<p class="text-slate-500 dark:text-slate-400 text-sm mb-6">Select a manual payment option. Instructions will be provided to complete your order.</p>
+<div class="flex flex-col gap-3">
+<div class="border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden">
+<label class="flex items-center gap-3 p-4 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<input checked="" class="peer form-radio text-primary focus:ring-primary h-5 w-5" name="payment_method" type="radio"/>
+<span class="font-medium text-slate-900 dark:text-white">Zelle</span>
+<div class="payment-instructions w-full bg-slate-50 dark:bg-slate-800/50 p-4 border-t border-slate-200 dark:border-slate-700 mt-4 -ml-[44px]">
+<p class="text-sm text-slate-700 dark:text-slate-300">Please send your payment to <strong class="text-slate-900 dark:text-white">pay@streamlinedstore.com</strong> via Zelle.</p>
+<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Include your order number in the memo field. Your order will be processed once payment is confirmed.</p>
+</div>
+</label>
+</div>
+<div class="border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden">
+<label class="flex flex-col cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors relative">
+<div class="flex items-center gap-3 p-4">
+<input class="peer form-radio text-primary focus:ring-primary h-5 w-5 absolute top-4 left-4" name="payment_method" type="radio"/>
+<span class="font-medium text-slate-900 dark:text-white ml-8">Bank Transfer (ACH / Wire)</span>
+</div>
+<div class="payment-instructions w-full bg-slate-50 dark:bg-slate-800/50 p-4 border-t border-slate-200 dark:border-slate-700">
+<p class="text-sm text-slate-700 dark:text-slate-300">Bank Name: <strong class="text-slate-900 dark:text-white">First National Bank</strong></p>
+<p class="text-sm text-slate-700 dark:text-slate-300">Routing Number: <strong class="text-slate-900 dark:text-white">123456789</strong></p>
+<p class="text-sm text-slate-700 dark:text-slate-300">Account Number: <strong class="text-slate-900 dark:text-white">9876543210</strong></p>
+<p class="text-sm text-slate-500 dark:text-slate-400 mt-2">Please use your order number as the transfer reference.</p>
+</div>
+</label>
+</div>
+<div class="border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden">
+<label class="flex flex-col cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors relative">
+<div class="flex items-center gap-3 p-4">
+<input class="peer form-radio text-primary focus:ring-primary h-5 w-5 absolute top-4 left-4" name="payment_method" type="radio"/>
+<span class="font-medium text-slate-900 dark:text-white ml-8">Venmo</span>
+</div>
+<div class="payment-instructions w-full bg-slate-50 dark:bg-slate-800/50 p-4 border-t border-slate-200 dark:border-slate-700">
+<p class="text-sm text-slate-700 dark:text-slate-300">Send payment to Venmo username: <strong class="text-slate-900 dark:text-white">@StreamlinedStore</strong></p>
+<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Please do not mark as "Goods and Services" to avoid fees, and include your order number.</p>
+</div>
+</label>
+</div>
+<div class="border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden">
+<label class="flex flex-col cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors relative">
+<div class="flex items-center gap-3 p-4">
+<input class="peer form-radio text-primary focus:ring-primary h-5 w-5 absolute top-4 left-4" name="payment_method" type="radio"/>
+<span class="font-medium text-slate-900 dark:text-white ml-8">Cash App</span>
+</div>
+<div class="payment-instructions w-full bg-slate-50 dark:bg-slate-800/50 p-4 border-t border-slate-200 dark:border-slate-700">
+<p class="text-sm text-slate-700 dark:text-slate-300">Send payment to Cashtag: <strong class="text-slate-900 dark:text-white">$StreamlinedStore</strong></p>
+<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Include your order number in the "For" field.</p>
+</div>
+</label>
+</div>
+<div class="border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden">
+<label class="flex flex-col cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors relative">
+<div class="flex items-center gap-3 p-4">
+<input class="peer form-radio text-primary focus:ring-primary h-5 w-5 absolute top-4 left-4" name="payment_method" type="radio"/>
+<span class="font-medium text-slate-900 dark:text-white ml-8">Check / Money Order</span>
+</div>
+<div class="payment-instructions w-full bg-slate-50 dark:bg-slate-800/50 p-4 border-t border-slate-200 dark:border-slate-700">
+<p class="text-sm text-slate-700 dark:text-slate-300">Make checks payable to <strong class="text-slate-900 dark:text-white">Streamlined Store LLC</strong>.</p>
+<p class="text-sm text-slate-700 dark:text-slate-300 mt-1">Mail to: <strong class="text-slate-900 dark:text-white">123 E-commerce Way, Suite 100, Techville, CA 90210</strong></p>
+<p class="text-sm text-slate-500 dark:text-slate-400 mt-2">Your order will ship once the check has cleared.</p>
+</div>
+</label>
+</div>
+</div>
+<div class="mt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700 gap-4">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-primary">support_agent</span>
+</div>
+<div>
+<p class="text-sm font-medium text-slate-900 dark:text-white">Confused about the transfer?</p>
+<p class="text-sm text-slate-500 dark:text-slate-400">Get immediate help from our support team.</p>
+</div>
+</div>
+<button class="text-sm font-medium bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-primary dark:hover:border-primary text-slate-700 dark:text-slate-300 hover:text-primary dark:hover:text-primary px-4 py-2 rounded-lg transition-colors flex items-center gap-2 whitespace-nowrap">
+<span class="material-symbols-outlined text-[18px]">chat</span> Chat with an Agent
+</button>
+</div>
+</section>
+<div class="flex justify-end">
+<button class="bg-primary hover:bg-blue-600 text-white font-semibold py-3 px-8 rounded-lg flex items-center gap-2 transition-colors">
+                    Review Order <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+<div class="lg:col-span-5">
+<div class="bg-white dark:bg-slate-900 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-800 sticky top-6">
+<h2 class="text-slate-900 dark:text-white text-xl font-bold mb-6">Order Summary</h2>
+<div class="flex flex-col gap-4 mb-6">
+<div class="flex gap-4 items-start">
+<div class="w-20 h-20 rounded-md bg-slate-100 dark:bg-slate-800 flex-shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-400 text-3xl">headphones</span>
+</div>
+<div class="flex-1">
+<h4 class="font-semibold text-slate-900 dark:text-white line-clamp-2">Wireless Noise-Canceling Headphones</h4>
+<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Qty: 1</p>
+</div>
+<span class="font-semibold text-slate-900 dark:text-white">$249.99</span>
+</div>
+<div class="flex gap-4 items-start">
+<div class="w-20 h-20 rounded-md bg-slate-100 dark:bg-slate-800 flex-shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-400 text-3xl">watch</span>
+</div>
+<div class="flex-1">
+<h4 class="font-semibold text-slate-900 dark:text-white line-clamp-2">Smart Fitness Watch Pro</h4>
+<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Qty: 1</p>
+</div>
+<span class="font-semibold text-slate-900 dark:text-white">$129.50</span>
+</div>
+</div>
+<div class="border-t border-slate-200 dark:border-slate-800 pt-4 mb-4">
+<div class="flex justify-between items-center mb-2">
+<span class="text-slate-600 dark:text-slate-400">Subtotal</span>
+<span class="font-medium text-slate-900 dark:text-white">$379.49</span>
+</div>
+<div class="flex justify-between items-center mb-2">
+<span class="text-slate-600 dark:text-slate-400">Shipping</span>
+<span class="font-medium text-slate-900 dark:text-white">Free</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-slate-600 dark:text-slate-400">Taxes (calculated at next step)</span>
+<span class="font-medium text-slate-900 dark:text-white">--</span>
+</div>
+</div>
+<div class="border-t border-slate-200 dark:border-slate-800 pt-4 mb-6 flex justify-between items-center">
+<span class="text-lg font-bold text-slate-900 dark:text-white">Total</span>
+<span class="text-2xl font-bold text-primary">$379.49</span>
+</div>
+<div class="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-4 text-sm text-slate-600 dark:text-slate-400 flex gap-3 items-start">
+<span class="material-symbols-outlined text-slate-400">info</span>
+<p>Taxes and shipping are estimates and will be finalized during the review step.</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

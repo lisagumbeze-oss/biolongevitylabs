@@ -1,0 +1,298 @@
+"use client";
+
+import React, { useState } from 'react';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
+import {
+    ArrowLeft, Printer, Truck, PackageOpen, MonitorSmartphone, Cable,
+    History, PersonStanding, CreditCard, StickyNote, Image as ImageIcon,
+    ZoomIn, Download, FileText, Info, CheckCircle, XCircle, MoreVertical,
+    Clock, MapPin, Mail, Phone, ExternalLink
+} from 'lucide-react';
+import Image from 'next/image';
+
+export default function AdminOrderDetailsPage() {
+    const params = useParams();
+    const orderId = params.id as string || 'ORD-89432';
+
+    // Mock state for payment verification
+    const [needsVerification, setNeedsVerification] = useState(true);
+    const [verificationStatus, setVerificationStatus] = useState<'pending' | 'approved' | 'rejected'>('pending');
+
+    return (
+        <div className="flex flex-col gap-6 max-w-7xl mx-auto w-full animate-in fade-in slide-in-from-bottom-4 duration-500">
+            {/* Page Header */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="space-y-1">
+                    <div className="flex items-center gap-2 text-sm font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">
+                        <Link href="/admin/orders" className="hover:text-primary transition-colors flex items-center gap-1">
+                            <ArrowLeft className="w-4 h-4" />
+                            Orders
+                        </Link>
+                        <span>/</span>
+                        <span className="text-slate-900 dark:text-white">{orderId}</span>
+                    </div>
+                    <h1 className="text-4xl font-black tracking-tighter text-slate-900 dark:text-white flex items-center gap-3">
+                        Order #{orderId.replace('ORD-', '')}
+                        <span className={`px-3 py-1 rounded-xl text-[10px] font-black uppercase tracking-wider border ${needsVerification ? 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400 border-amber-200 dark:border-amber-800' : 'bg-primary/10 text-primary dark:bg-primary/20 dark:text-blue-400 border-primary/20 dark:border-primary/50'}`}>
+                            {needsVerification ? 'Pending Review' : 'Payment Verified'}
+                        </span>
+                    </h1>
+                </div>
+                <div className="flex items-center gap-3">
+                    <button className="p-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-50 transition-all shadow-sm">
+                        <Printer className="w-5 h-5" />
+                    </button>
+                    {!needsVerification && (
+                        <Link href={`/admin/orders/${orderId}/shipping`} className="flex items-center gap-2 bg-primary hover:bg-sky-500 text-white px-6 py-3 rounded-xl font-black text-sm transition-all shadow-lg shadow-primary/20">
+                            <Truck className="w-4 h-4" />
+                            Ship Order
+                        </Link>
+                    )}
+                    <button className="p-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-50 transition-all shadow-sm">
+                        <MoreVertical className="w-5 h-5" />
+                    </button>
+                </div>
+            </div>
+
+            {/* Main Content Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {/* Left Column: Order Details */}
+                <div className="lg:col-span-2 space-y-8">
+
+                    {/* PAYMENT VERIFICATION MODULE */}
+                    {needsVerification && (
+                        <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-xl border-2 border-amber-500/20 overflow-hidden">
+                            <div className="bg-amber-500/10 px-8 py-6 flex items-center justify-between border-b border-amber-500/10">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-12 h-12 bg-amber-500/20 rounded-2xl flex items-center justify-center text-amber-600">
+                                        <Info className="w-6 h-6" />
+                                    </div>
+                                    <div>
+                                        <h2 className="font-black text-xl text-amber-900 dark:text-amber-400 tracking-tight">Review Payment Proof</h2>
+                                        <p className="text-amber-700/70 dark:text-amber-500/50 text-xs font-bold uppercase tracking-wider">Action required to process order</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div className="space-y-4">
+                                    <div className="aspect-[4/3] bg-slate-50 dark:bg-slate-950 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center text-slate-400 relative group overflow-hidden">
+                                        <FileText className="w-12 h-12 opacity-20 mb-2 group-hover:scale-110 transition-transform" />
+                                        <p className="text-[10px] font-black uppercase tracking-widest">payment_receipt.jpg</p>
+                                        <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
+                                            <button className="p-3 bg-white rounded-full text-slate-900 hover:scale-110 transition-transform"><ZoomIn className="w-5 h-5" /></button>
+                                            <button className="p-3 bg-white rounded-full text-slate-900 hover:scale-110 transition-transform"><Download className="w-5 h-5" /></button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="flex flex-col justify-center gap-6">
+                                    <div className="bg-slate-50 dark:bg-slate-800/50 p-6 rounded-2xl border border-slate-100 dark:border-slate-800">
+                                        <p className="text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-1">Expected Amount</p>
+                                        <p className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter">$361.76</p>
+                                        <p className="text-xs font-bold text-primary mt-2">Manual Bank Transfer</p>
+                                    </div>
+                                    <div className="space-y-3">
+                                        <button
+                                            onClick={() => setNeedsVerification(false)}
+                                            className="w-full bg-primary hover:bg-sky-500 text-white py-4 rounded-xl font-black text-sm transition-all shadow-lg shadow-primary/20 active:scale-[0.98]"
+                                        >
+                                            Approve Payment
+                                        </button>
+                                        <button className="w-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 py-4 rounded-xl font-black text-sm transition-all">
+                                            Reject & Contact
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Order Items Section */}
+                    <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+                        <div className="px-8 py-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50/50 dark:bg-slate-900/50">
+                            <h3 className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-3">
+                                <PackageOpen className="w-5 h-5 text-slate-400" />
+                                Items List
+                            </h3>
+                            <span className="bg-slate-200 dark:bg-slate-800 px-3 py-1 rounded-lg text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase">3 Items Ordered</span>
+                        </div>
+                        <div className="p-0">
+                            <table className="w-full text-left">
+                                <thead className="bg-white dark:bg-slate-900/50 border-b border-slate-100 dark:border-slate-800">
+                                    <tr className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                                        <th className="px-8 py-4">Product Details</th>
+                                        <th className="px-8 py-4 text-center">Qty</th>
+                                        <th className="px-8 py-4 text-right">Price</th>
+                                        <th className="px-8 py-4 text-right">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-slate-100 dark:divide-slate-800/50">
+                                    {[
+                                        { name: 'BPC-157 (5mg)', sku: 'PEP-BPC-05', price: 49.99, qty: 2 },
+                                        { name: 'TB-500 (2mg)', sku: 'PEP-TB5-02', price: 39.99, qty: 1 },
+                                        { name: 'Bacteriostatic Water', sku: 'SUP-BAC-30', price: 14.99, qty: 1 },
+                                    ].map((item, i) => (
+                                        <tr key={i} className="group hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+                                            <td className="px-8 py-6">
+                                                <div className="flex items-center gap-4">
+                                                    <div className="w-14 h-14 bg-slate-100 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-slate-400">
+                                                        <ImageIcon className="w-6 h-6 opacity-30" />
+                                                    </div>
+                                                    <div>
+                                                        <p className="font-black text-slate-900 dark:text-white text-sm">{item.name}</p>
+                                                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter mt-1">SKU: {item.sku}</p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td className="px-8 py-6 text-center font-black text-slate-900 dark:text-white">x{item.qty}</td>
+                                            <td className="px-8 py-6 text-right font-bold text-slate-500 dark:text-slate-400">${item.price.toFixed(2)}</td>
+                                            <td className="px-8 py-6 text-right font-black text-slate-900 dark:text-white">${(item.price * item.qty).toFixed(2)}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                        {/* Financials Summary */}
+                        <div className="p-8 bg-slate-50/50 dark:bg-slate-900/50 border-t border-slate-100 dark:border-slate-800 flex justify-end">
+                            <div className="w-full max-w-xs space-y-4">
+                                <div className="flex justify-between text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">
+                                    <span>Subtotal</span>
+                                    <span className="text-slate-900 dark:text-white">$154.96</span>
+                                </div>
+                                <div className="flex justify-between text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">
+                                    <span>Shipping</span>
+                                    <span className="text-slate-900 dark:text-white">$15.00</span>
+                                </div>
+                                <div className="pt-4 border-t border-slate-200 dark:border-slate-800 flex justify-between items-center">
+                                    <span className="font-black text-slate-900 dark:text-white text-lg">Order Total</span>
+                                    <span className="font-black text-3xl text-primary tracking-tighter">$169.96</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Timeline */}
+                    <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-8">
+                        <h3 className="text-lg font-black text-slate-900 dark:text-white mb-8 flex items-center gap-3">
+                            <History className="w-5 h-5 text-slate-400" />
+                            Activity Log
+                        </h3>
+                        <div className="relative pl-8 space-y-8 before:absolute before:inset-y-0 before:left-3 before:w-0.5 before:bg-slate-100 dark:before:bg-slate-800">
+                            <div className="relative flex gap-6">
+                                <div className={`absolute -left-10 w-6 h-6 rounded-full border-4 border-white dark:border-slate-900 flex items-center justify-center ${needsVerification ? 'bg-amber-500' : 'bg-primary zoom-in shadow-[0_0_10px_rgba(19,127,236,0.3)]'}`}>
+                                    {needsVerification ? <Clock className="w-2.5 h-2.5 text-white" /> : <CheckCircle className="w-2.5 h-2.5 text-white" />}
+                                </div>
+                                <div>
+                                    <p className="font-black text-sm text-slate-900 dark:text-white">{needsVerification ? 'Awaiting Payment Approval' : 'Payment Verified'}</p>
+                                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-bold italic">Process managed by System Admin</p>
+                                </div>
+                            </div>
+                            <div className="relative flex gap-6 opacity-50">
+                                <div className="absolute -left-10 w-6 h-6 rounded-full bg-slate-200 dark:bg-slate-800 border-4 border-white dark:border-slate-900" />
+                                <div>
+                                    <p className="font-black text-sm text-slate-600 dark:text-slate-400">Order Placed</p>
+                                    <p className="text-xs text-slate-400 font-bold mt-1">Oct 24, 2026 • 10:45 AM</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Right Column: Customer & Shipping */}
+                <div className="space-y-6">
+                    {/* Customer Info Card */}
+                    <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-8 shadow-sm">
+                        <div className="flex justify-between items-start mb-6">
+                            <h3 className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-3">
+                                <PersonStanding className="w-5 h-5 text-slate-400" />
+                                Customer
+                            </h3>
+                            <button className="text-primary hover:bg-primary/5 p-2 rounded-xl transition-colors">
+                                <ExternalLink className="w-4 h-4" />
+                            </button>
+                        </div>
+                        <div className="space-y-6">
+                            <div className="flex items-center gap-4">
+                                <div className="w-12 h-12 rounded-2xl bg-primary text-white flex items-center justify-center font-black text-xl">
+                                    SJ
+                                </div>
+                                <div>
+                                    <p className="font-black text-slate-900 dark:text-white">Sarah Jenkins</p>
+                                    <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">Guest Account</p>
+                                </div>
+                            </div>
+                            <div className="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-800">
+                                <div className="flex items-center gap-3 text-sm font-bold text-slate-600 dark:text-slate-400">
+                                    <Mail className="w-4 h-4" />
+                                    sarah.j@example.com
+                                </div>
+                                <div className="flex items-center gap-3 text-sm font-bold text-slate-600 dark:text-slate-400">
+                                    <Phone className="w-4 h-4" />
+                                    +1 (555) 867-5309
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Shipping Address Card */}
+                    <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-8 shadow-sm">
+                        <div className="flex justify-between items-center mb-6">
+                            <h3 className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-3">
+                                <MapPin className="w-5 h-5 text-slate-400" />
+                                Shipping
+                            </h3>
+                            <button className="text-[10px] font-black uppercase text-primary tracking-widest hover:underline">Edit</button>
+                        </div>
+                        <div className="space-y-4">
+                            <p className="text-sm font-bold text-slate-600 dark:text-slate-300 leading-relaxed uppercase tracking-tighter">
+                                1234 Commerce Blvd<br />
+                                Suite 400<br />
+                                Austin, TX 78701<br />
+                                United States
+                            </p>
+                            <div className="pt-4 border-t border-slate-100 dark:border-slate-800">
+                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Selected Method</p>
+                                <div className="flex items-center gap-3 bg-slate-50 dark:bg-slate-800 p-3 rounded-xl border border-slate-100 dark:border-slate-700">
+                                    <Truck className="w-4 h-4 text-primary" />
+                                    <span className="text-xs font-black text-slate-800 dark:text-white">USPS Priority Mail</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Manual Billing Card */}
+                    <div className="bg-slate-900 dark:bg-white rounded-3xl p-8 shadow-xl">
+                        <div className="flex items-center gap-3 mb-6">
+                            <div className="w-10 h-10 rounded-xl bg-white/10 dark:bg-slate-900/10 flex items-center justify-center text-white dark:text-slate-900">
+                                <CreditCard className="w-5 h-5" />
+                            </div>
+                            <h3 className="text-lg font-black text-white dark:text-slate-900">Payment</h3>
+                        </div>
+                        <div className="space-y-2">
+                            <p className="text-white/60 dark:text-slate-500 text-[10px] font-black uppercase tracking-widest">Manual Method</p>
+                            <p className="text-xl font-black text-white dark:text-slate-900">Direct Bank Transfer</p>
+                            <div className="inline-flex mt-4 px-3 py-1 bg-white/10 dark:bg-slate-900/10 rounded-lg text-[10px] font-black text-white dark:text-slate-900 uppercase tracking-widest">
+                                Transaction Pending
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Admin Notes */}
+                    <div className="bg-amber-50 dark:bg-amber-900/10 rounded-3xl border border-amber-200 dark:border-amber-900/30 p-8">
+                        <h3 className="text-lg font-black text-amber-900 dark:text-amber-400 mb-4 flex items-center gap-3">
+                            <StickyNote className="w-5 h-5" />
+                            Admin Notes
+                        </h3>
+                        <textarea
+                            className="w-full bg-white dark:bg-slate-900 border border-amber-200 dark:border-amber-800 rounded-2xl p-4 text-xs font-bold text-slate-800 dark:text-slate-200 placeholder:text-amber-900/30 min-h-[120px] focus:ring-2 focus:ring-amber-500 outline-none transition-all"
+                            placeholder="Add internal notes for this order..."
+                        />
+                        <button className="w-full mt-4 bg-amber-900 dark:bg-amber-800 text-white py-3 rounded-xl font-black text-xs uppercase tracking-widest hover:brightness-110 transition-all">
+                            Save Note
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}

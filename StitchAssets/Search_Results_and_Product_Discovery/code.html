@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Search Results - Streamline Shop</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "Noto Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<div class="px-4 md:px-10 lg:px-40 flex flex-1 justify-center py-5">
+<div class="layout-content-container flex flex-col max-w-[960px] flex-1 w-full">
+<!-- Top Navigation Bar -->
+<header class="flex flex-wrap items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4 mb-6 gap-4">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-4 text-primary">
+<span class="material-symbols-outlined text-2xl">local_mall</span>
+<h2 class="text-xl font-bold leading-tight tracking-[-0.015em]">Streamline Shop</h2>
+</div>
+<div class="hidden md:flex items-center gap-6">
+<a class="text-slate-700 dark:text-slate-300 text-sm font-medium hover:text-primary transition-colors" href="#">Shop</a>
+<a class="text-slate-700 dark:text-slate-300 text-sm font-medium hover:text-primary transition-colors" href="#">Categories</a>
+</div>
+</div>
+<div class="flex flex-1 justify-end gap-4 md:gap-8 items-center">
+<label class="flex flex-col min-w-40 h-10 max-w-64 flex-1">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 overflow-hidden focus-within:border-primary focus-within:ring-1 focus-within:ring-primary">
+<div class="text-slate-500 dark:text-slate-400 flex items-center justify-center pl-3">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="w-full min-w-0 flex-1 border-none bg-transparent h-full px-3 text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-0" placeholder="Search products..." value="running shoes"/>
+</div>
+</label>
+<button class="flex items-center justify-center rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold hover:bg-primary/90 transition-colors gap-2">
+<span class="material-symbols-outlined text-sm">shopping_cart</span>
+<span class="hidden sm:inline">Cart (2)</span>
+</button>
+</div>
+</header>
+<!-- Search Results Header -->
+<div class="flex flex-wrap items-baseline justify-between gap-3 mb-6">
+<div class="flex flex-col gap-1">
+<h1 class="text-3xl font-bold leading-tight text-slate-900 dark:text-white">Results for "running shoes"</h1>
+<p class="text-slate-600 dark:text-slate-400 text-sm font-medium">8 items found</p>
+</div>
+</div>
+<!-- Filters -->
+<div class="flex gap-3 mb-6 flex-wrap">
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-slate-200 dark:bg-slate-800 px-4 hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors border border-transparent">
+<span class="text-sm font-medium text-slate-800 dark:text-slate-200">Price: Low to High</span>
+<span class="material-symbols-outlined text-sm">expand_more</span>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-slate-900 px-4 border border-slate-300 dark:border-slate-700 hover:border-primary transition-colors text-primary bg-primary/5">
+<span class="text-sm font-medium">In Stock</span>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-slate-900 px-4 border border-slate-300 dark:border-slate-700 hover:border-slate-400 transition-colors">
+<span class="text-sm font-medium">Brand</span>
+<span class="material-symbols-outlined text-sm">expand_more</span>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-slate-900 px-4 border border-slate-300 dark:border-slate-700 hover:border-slate-400 transition-colors">
+<span class="text-sm font-medium">Size</span>
+<span class="material-symbols-outlined text-sm">expand_more</span>
+</button>
+</div>
+<!-- Product Grid -->
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-10">
+<!-- Product Card 1 -->
+<div class="flex flex-col group cursor-pointer">
+<div class="relative w-full aspect-square bg-slate-100 dark:bg-slate-800 rounded-xl mb-3 overflow-hidden">
+<img alt="Red Nike running shoe on dark background" class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300" data-alt="Red Nike running shoe" src="https://lh3.googleusercontent.com/aida-public/AB6AXuATETtEmNR9YiKktnDJNCsnQy5jdfEvXLIEi1_HZsfE8wYxoo3Vyl2f0_gS8C6rLidF28VqkYgq_0GGe-Z56D0X-pgvni7YzuUeOi_0crkRGIVCLhdgYui1qmZ6FEZSfPsfIcoVX63v3_3QnhqF3tme6dHmt-OoJQllQ8LU1HLVpV14jJTBTAzQ3ld7s5XDEeFwWgyGdTPveMfjL8gSdqWT7cFpOfR-4pTK9tH7vBkVsymaNtWCF6kd63luOaYgeRa7Y_GH7x0uOmY"/>
+<div class="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">Sale</div>
+</div>
+<div class="flex flex-col flex-1">
+<h3 class="text-base font-medium text-slate-900 dark:text-white leading-snug mb-1 group-hover:text-primary transition-colors">AeroGlide Pro Runners</h3>
+<div class="flex items-center gap-2 mb-2">
+<span class="text-lg font-bold text-slate-900 dark:text-white">$129.99</span>
+<span class="text-sm text-slate-500 line-through">$159.99</span>
+</div>
+<button class="mt-auto w-full py-2 px-4 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-primary hover:text-white dark:hover:bg-primary text-slate-800 dark:text-slate-200 text-sm font-medium transition-colors border border-transparent flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">add_shopping_cart</span>
+                                    Add to Cart
+                                </button>
+</div>
+</div>
+<!-- Product Card 2 -->
+<div class="flex flex-col group cursor-pointer">
+<div class="relative w-full aspect-square bg-slate-100 dark:bg-slate-800 rounded-xl mb-3 overflow-hidden">
+<img alt="Black and white athletic shoe" class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300" data-alt="Black running shoe" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2b2JvXRBYgFNc1VLjSH3zBmWG2SiWhL6h0b__FvBM4Q-YzlzW3Zh4C3m17bSdB2pKvKY58WGrbnvYDN83qAauCpsgLHBzK94doZfzEZsFADHQJc6Flu4EXyXczaYiwg5rTSZVnqsEXer7dJYrKInxNbMURskS4Cq0DoD9R7uqf8BeFNAU7nBszlEpYkiqfSqiZ7O3SZUmkbSroqPOx7DpVqqoxZ7D7RiiN2S4yZW89vttTLhNZGAuOLFKHxt1UTE7tljrnuvffS0"/>
+</div>
+<div class="flex flex-col flex-1">
+<h3 class="text-base font-medium text-slate-900 dark:text-white leading-snug mb-1 group-hover:text-primary transition-colors">Velocity Sprint XT</h3>
+<div class="flex items-center gap-2 mb-2">
+<span class="text-lg font-bold text-slate-900 dark:text-white">$89.50</span>
+</div>
+<button class="mt-auto w-full py-2 px-4 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-primary hover:text-white dark:hover:bg-primary text-slate-800 dark:text-slate-200 text-sm font-medium transition-colors border border-transparent flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">add_shopping_cart</span>
+                                    Add to Cart
+                                </button>
+</div>
+</div>
+<!-- Product Card 3 (Low Stock) -->
+<div class="flex flex-col group cursor-pointer">
+<div class="relative w-full aspect-square bg-slate-100 dark:bg-slate-800 rounded-xl mb-3 overflow-hidden">
+<img alt="Colorful running sneaker" class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300" data-alt="Colorful running sneaker" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBK9wVZJ0yHjCj2xskAyGBB2k59pCd7xgj5WdoDkpCf7CFp-glo2ykGk94omRzWOUNNI4MzuCkLHhtyVFQt7Jagpk-XayEKfzsIeUXckyh-UCLudZvjFwNyGKQapLdrwjcobejrjH_yS0iv0hn7KTg3aBgNN6AlAGtZrlKOGasH4dgAiqcqdRX_zek2w8Vd-cWVgnZlErbYQpDsjePHYl5T50Yb7W02o6sG02dQqob9yvCc5aVD7xVCJHMmyMoU_z09tEccrrlkow"/>
+</div>
+<div class="flex flex-col flex-1">
+<h3 class="text-base font-medium text-slate-900 dark:text-white leading-snug mb-1 group-hover:text-primary transition-colors">Neon Trailblazer</h3>
+<div class="flex items-center gap-2 mb-1">
+<span class="text-lg font-bold text-slate-900 dark:text-white">$145.00</span>
+</div>
+<div class="mb-2 flex items-center gap-1 text-orange-600 dark:text-orange-400 text-xs font-medium">
+<span class="material-symbols-outlined text-[14px]">warning</span>
+                                    Only 2 left in stock
+                                </div>
+<button class="mt-auto w-full py-2 px-4 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-primary hover:text-white dark:hover:bg-primary text-slate-800 dark:text-slate-200 text-sm font-medium transition-colors border border-transparent flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">add_shopping_cart</span>
+                                    Add to Cart
+                                </button>
+</div>
+</div>
+<!-- Product Card 4 -->
+<div class="flex flex-col group cursor-pointer">
+<div class="relative w-full aspect-square bg-slate-100 dark:bg-slate-800 rounded-xl mb-3 overflow-hidden">
+<img alt="Minimalist white running shoe" class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300" data-alt="White minimalist running shoe" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzUv-gluVnMrXYacuAFIlH_EuEJPSOwL6ZJ9DBSGOTJQbFNAGGgBxZx2TiyvwL5U-v0GG3yHEJThmXc_CF_ht1Xk15Rd59HMuiBXNo6pgjHoQqKYiGxGsP-90QyuF5qD1MQWYqdu7EdrGgMefmf6NEgY_l4Evuy_x-S5shYNsslc6AC77hFaIkq__JCCGPAjgLhSctOK9Mwquy35YPPCfS1DYKl50umy_gkKi_6baX8G5E0cUYgFbVF1qCi-4ul_SE-Yt4bRLShg8"/>
+</div>
+<div class="flex flex-col flex-1">
+<h3 class="text-base font-medium text-slate-900 dark:text-white leading-snug mb-1 group-hover:text-primary transition-colors">Cloud Walkers V2</h3>
+<div class="flex items-center gap-2 mb-2">
+<span class="text-lg font-bold text-slate-900 dark:text-white">$110.00</span>
+</div>
+<button class="mt-auto w-full py-2 px-4 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-primary hover:text-white dark:hover:bg-primary text-slate-800 dark:text-slate-200 text-sm font-medium transition-colors border border-transparent flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">add_shopping_cart</span>
+                                    Add to Cart
+                                </button>
+</div>
+</div>
+</div>
+<!-- Pagination -->
+<div class="flex items-center justify-center mb-10 gap-2">
+<button class="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-300 dark:border-slate-700 text-slate-400 cursor-not-allowed" disabled="">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-white font-medium">1</button>
+<button class="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium transition-colors">2</button>
+<button class="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body></html>

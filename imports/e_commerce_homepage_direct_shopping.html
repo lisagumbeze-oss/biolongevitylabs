@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>E-commerce Homepage Direct Shopping</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display min-h-screen flex flex-col relative pb-32">
+<header class="bg-white dark:bg-slate-900 shadow-sm sticky top-0 z-50">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex justify-between items-center h-16">
+<div class="flex-shrink-0 flex items-center">
+<a class="text-2xl font-bold text-primary flex items-center gap-2" href="#">
+<span class="material-icons">shopping_bag</span>
+                        DirectShop
+                    </a>
+</div>
+<div class="flex-1 max-w-2xl px-8 hidden md:block">
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-icons text-slate-400">search</span>
+</div>
+<input class="block w-full pl-10 pr-3 py-2 border border-slate-300 dark:border-slate-700 rounded-full leading-5 bg-background-light dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary sm:text-sm" placeholder="Search for products..." type="text"/>
+</div>
+</div>
+<div class="flex items-center space-x-6">
+<nav class="hidden md:flex space-x-8">
+<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary font-medium" href="#">Deals</a>
+<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary font-medium" href="#">Categories</a>
+<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary font-medium" href="#">Support</a>
+</nav>
+<button class="relative p-2 text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary transition-colors">
+<span class="material-icons">shopping_cart</span>
+<span class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/4 -translate-y-1/4 bg-primary rounded-full">3</span>
+</button>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-grow">
+<div class="relative bg-white dark:bg-slate-900 overflow-hidden">
+<div class="max-w-7xl mx-auto">
+<div class="relative z-10 pb-8 bg-white dark:bg-slate-900 sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
+<svg aria-hidden="true" class="hidden lg:block absolute right-0 inset-y-0 h-full w-48 text-white dark:text-slate-900 transform translate-x-1/2" fill="currentColor" preserveAspectRatio="none" viewBox="0 0 100 100">
+<polygon points="50,0 100,0 50,100 0,100"></polygon>
+</svg>
+<div class="pt-10 mx-auto max-w-7xl px-4 sm:pt-12 sm:px-6 md:pt-16 lg:pt-20 lg:px-8 xl:pt-28">
+<div class="sm:text-center lg:text-left">
+<h1 class="text-4xl tracking-tight font-extrabold text-slate-900 dark:text-slate-100 sm:text-5xl md:text-6xl">
+<span class="block xl:inline">Quality essentials</span>
+<span class="block text-primary">delivered directly</span>
+</h1>
+<p class="mt-3 text-base text-slate-500 dark:text-slate-400 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
+                                Shop our curated collection of everyday products. No signup required. Fast, free shipping on all orders across the USA.
+                            </p>
+<div class="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
+<div class="rounded-md shadow">
+<a class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-primary hover:bg-primary/90 md:py-4 md:text-lg md:px-10 transition-colors" href="#">
+                                        Shop Now
+                                    </a>
+</div>
+<div class="mt-3 sm:mt-0 sm:ml-3">
+<a class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-lg text-primary bg-primary/10 hover:bg-primary/20 md:py-4 md:text-lg md:px-10 transition-colors" href="#">
+                                        View Deals
+                                    </a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
+<img alt="Lifestyle product flatlay" class="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full" data-alt="Modern lifestyle products arranged neatly" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNRB3L0eQkH89hvFOSSv5sVEk4861N_uvtEn5frUVjdS6IBFspVFOh1mB8lltSvpdpzh6RTHCx19LklNsmqHGHgp9zpp0PxpuU4JN0YW7bJ1hbiKwdAEoRGpEDeZCLxZP78OePF2Bo2deYvCFjMk3Nbn6qbXTbLm_8QREkOzpe9tDvOEve7-8qvj2lPcERLba8fANLF-dfeijRm-SpLsiXvYFcagS1ywc9nr6b7g4PcYmNEKyLfXZV9-i4KIjZlotjCQsAphPKH6g"/>
+</div>
+</div>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+<h2 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100 mb-8">Featured Products</h2>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+<div class="group bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow border border-slate-100 dark:border-slate-700 flex flex-col">
+<div class="relative aspect-w-1 aspect-h-1 bg-background-light dark:bg-slate-700 overflow-hidden">
+<img alt="Smart Watch" class="w-full h-64 object-cover object-center group-hover:opacity-75 transition-opacity" data-alt="Minimalist smart watch on light background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDsqGv9JTVlfrOuw-Oq8WmZQeyR5TWYOgKlr85A8x3C-AvqSi6gMHTwYckyfAPEulN-LGRYkX-XidMuT0kJN6E3AJe0LyIFlO3c-dxrJmryxYof2ERdGVrrMD8ca7OLkOjynCADHzoQT7cD5E-TnfEZbWk1CnfDZ5PLpUiT6PnGYjglAs2uxUpOAfb71UDdS7X9msCwynJB32VUvgVI1uZTckz5GTJuYuLZk0s0OcHQwdrhawj25v1hD5KR4ppF6yQ9rUu2cnsj0Hk"/>
+</div>
+<div class="p-5 flex-grow flex flex-col">
+<div class="flex justify-between items-start">
+<h3 class="text-lg font-medium text-slate-900 dark:text-slate-100">
+                                Minimalist Smart Watch
+                            </h3>
+<p class="text-lg font-semibold text-primary">$199.00</p>
+</div>
+<p class="mt-1 text-sm text-slate-500 dark:text-slate-400 mb-4">Space Gray</p>
+<button class="mt-auto w-full bg-primary/10 hover:bg-primary text-primary hover:text-white dark:bg-slate-700 dark:hover:bg-primary dark:text-slate-100 py-2 px-4 rounded-lg font-medium transition-colors flex justify-center items-center gap-2">
+<span class="material-icons text-sm">add_shopping_cart</span>
+                            Add to Cart
+                        </button>
+</div>
+</div>
+<div class="group bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow border border-slate-100 dark:border-slate-700 flex flex-col">
+<div class="relative aspect-w-1 aspect-h-1 bg-background-light dark:bg-slate-700 overflow-hidden">
+<img alt="Wireless Headphones" class="w-full h-64 object-cover object-center group-hover:opacity-75 transition-opacity" data-alt="Premium wireless headphones resting on surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCyg0OW4iqTCN_oDKykTcpRVsinozLIJoqD4E01ollYWdebt-nnwUD41QpHG6iJxPletl18gUKEJTkJJqmbpO9W_5i5wYgwZXJcnZnppyfzbzUII6ePf3NTBqO8pVs7sfsvJJswrOKuzWbi447MzqoPPLO6LTmofXtJE_7luE3Mfb_AhjGm277TxxQWTYZWxI222BQt6njVZtYON5_Z5sJDHDJewGthdtIGQAu3vyoMtxs8QFbX11P_dyLof3TNy1pMOiihoxGY7rw"/>
+<span class="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">Sale</span>
+</div>
+<div class="p-5 flex-grow flex flex-col">
+<div class="flex justify-between items-start">
+<h3 class="text-lg font-medium text-slate-900 dark:text-slate-100">
+                                Premium Wireless Headphones
+                            </h3>
+<div class="text-right">
+<p class="text-lg font-semibold text-primary">$249.00</p>
+<p class="text-sm text-slate-400 line-through">$299.00</p>
+</div>
+</div>
+<p class="mt-1 text-sm text-slate-500 dark:text-slate-400 mb-4">Matte Black</p>
+<button class="mt-auto w-full bg-primary/10 hover:bg-primary text-primary hover:text-white dark:bg-slate-700 dark:hover:bg-primary dark:text-slate-100 py-2 px-4 rounded-lg font-medium transition-colors flex justify-center items-center gap-2">
+<span class="material-icons text-sm">add_shopping_cart</span>
+                            Add to Cart
+                        </button>
+</div>
+</div>
+<div class="group bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow border border-slate-100 dark:border-slate-700 flex flex-col">
+<div class="relative aspect-w-1 aspect-h-1 bg-background-light dark:bg-slate-700 overflow-hidden">
+<img alt="Mechanical Keyboard" class="w-full h-64 object-cover object-center group-hover:opacity-75 transition-opacity" data-alt="Sleek mechanical keyboard with white keys" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCX4DaWeoHjzipPznSJ_XrhH8mFIF5Q64yuQ4MKNHH4BbyFqS9ZPoFXNRAfj7OIisgGrlXBvN-O0dPTWwOoVFF-Sd-K8Wb3ju78Zadv8UJmwdnS8uoz0eNkUWuXzUyEcIxPDsGy-eOMA0HzsCxJALWKDv2f6Vtqk9sqPBRwOKH0cwRrwUxzdDYCoSuQKLl6s17imAgcGRfI4X3DD3HRSmzxVFmjRKKiB5uBJw4X8Xa5nFsFOW30HxzMOdW1Glh6AVkmKmVFEzaBl5I"/>
+</div>
+<div class="p-5 flex-grow flex flex-col">
+<div class="flex justify-between items-start">
+<h3 class="text-lg font-medium text-slate-900 dark:text-slate-100">
+                                Pro Mechanical Keyboard
+                            </h3>
+<p class="text-lg font-semibold text-primary">$129.00</p>
+</div>
+<p class="mt-1 text-sm text-slate-500 dark:text-slate-400 mb-4">Tactile Switches</p>
+<button class="mt-auto w-full bg-primary/10 hover:bg-primary text-primary hover:text-white dark:bg-slate-700 dark:hover:bg-primary dark:text-slate-100 py-2 px-4 rounded-lg font-medium transition-colors flex justify-center items-center gap-2">
+<span class="material-icons text-sm">add_shopping_cart</span>
+                            Add to Cart
+                        </button>
+</div>
+</div>
+<div class="group bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow border border-slate-100 dark:border-slate-700 flex flex-col">
+<div class="relative aspect-w-1 aspect-h-1 bg-background-light dark:bg-slate-700 overflow-hidden">
+<img alt="Instant Camera" class="w-full h-64 object-cover object-center group-hover:opacity-75 transition-opacity" data-alt="Vintage style instant camera" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-WwfWlyra8hwZ16Y6hKS09L2_EEq3zplOC8f-0gsORMtyXTm1PXG3k0nNuuA0RpoxGRaA-jeYk3GfJnLjdritbvulgNh6_lQ8VTQgdRW1f8j3DkL2qv2niw4dcG8ZaAMwA39C9DFpIWhvsPOYlJsBmp5-kIt2BcjlW9Q_zj4TOxlpxBxiLJtWypRwP_WbVHOysjvqB-lsyzerOIZgVwQV0pTbQ-ZkJvmCHGHg0OHLPxKodsqzhdrIcgDMNAWLSqjoX9fZ5rdA0zg"/>
+</div>
+<div class="p-5 flex-grow flex flex-col">
+<div class="flex justify-between items-start">
+<h3 class="text-lg font-medium text-slate-900 dark:text-slate-100">
+                                Retro Instant Camera
+                            </h3>
+<p class="text-lg font-semibold text-primary">$89.00</p>
+</div>
+<p class="mt-1 text-sm text-slate-500 dark:text-slate-400 mb-4">Mint Green</p>
+<button class="mt-auto w-full bg-primary/10 hover:bg-primary text-primary hover:text-white dark:bg-slate-700 dark:hover:bg-primary dark:text-slate-100 py-2 px-4 rounded-lg font-medium transition-colors flex justify-center items-center gap-2">
+<span class="material-icons text-sm">add_shopping_cart</span>
+                            Add to Cart
+                        </button>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-primary/5 dark:bg-slate-800 border-t border-b border-primary/10 dark:border-slate-700 py-12">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+<div class="flex flex-col items-center">
+<div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4 text-primary">
+<span class="material-icons">local_shipping</span>
+</div>
+<h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100">Free USA Shipping</h3>
+<p class="mt-2 text-slate-500 dark:text-slate-400 text-sm">On all orders over $50</p>
+</div>
+<div class="flex flex-col items-center">
+<div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4 text-primary">
+<span class="material-icons">security</span>
+</div>
+<h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100">Secure Checkout</h3>
+<p class="mt-2 text-slate-500 dark:text-slate-400 text-sm">No account required</p>
+</div>
+<div class="flex flex-col items-center">
+<div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4 text-primary">
+<span class="material-icons">replay</span>
+</div>
+<h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100">30-Day Returns</h3>
+<p class="mt-2 text-slate-500 dark:text-slate-400 text-sm">Hassle-free return policy</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 mt-auto">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+<div class="md:flex md:items-center md:justify-between">
+<div class="flex justify-center md:justify-start mb-6 md:mb-0">
+<a class="text-2xl font-bold text-primary flex items-center gap-2" href="#">
+<span class="material-icons">shopping_bag</span>
+                        DirectShop
+                    </a>
+</div>
+<div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-8">
+<a class="text-sm text-slate-500 hover:text-primary dark:text-slate-400 text-center" href="#">About Us</a>
+<a class="text-sm text-slate-500 hover:text-primary dark:text-slate-400 text-center" href="#">Customer Service</a>
+<a class="text-sm text-slate-500 hover:text-primary dark:text-slate-400 text-center" href="#">Privacy Policy</a>
+<a class="text-sm text-slate-500 hover:text-primary dark:text-slate-400 text-center" href="#">Terms of Service</a>
+</div>
+</div>
+<div class="mt-8 border-t border-slate-200 dark:border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center">
+<p class="text-sm text-slate-400 text-center md:text-left">
+                    © 2023 DirectShop. All rights reserved.
+                </p>
+<div class="mt-4 md:mt-0 flex space-x-4">
+</div>
+</div>
+</div>
+</footer>
+<div class="fixed bottom-0 left-0 w-full bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] z-[100] px-4 py-4 sm:px-6 lg:px-8">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+<div class="flex-1 text-sm text-slate-600 dark:text-slate-300">
+<p>
+                We use cookies to improve your browsing experience, analyze site traffic, and serve personalized content. By clicking "Accept All", you consent to our use of cookies.
+            </p>
+</div>
+<div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+<button class="px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-md text-sm font-medium text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors whitespace-nowrap">
+                Manage Preferences
+            </button>
+<button class="px-4 py-2 border border-transparent rounded-md text-sm font-medium text-white bg-primary hover:bg-primary/90 transition-colors whitespace-nowrap shadow-sm">
+                Accept All
+            </button>
+</div>
+</div>
+</div>
+</body></html>

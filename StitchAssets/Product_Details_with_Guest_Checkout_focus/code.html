@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Product Details - Guest Checkout Focus</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<div class="relative flex min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<div class="bg-primary/10 text-primary text-center py-2 text-sm font-medium">
+            No account needed! Checkout as a guest instantly.
+        </div>
+<div class="layout-container flex h-full grow flex-col">
+<div class="px-4 md:px-10 lg:px-40 flex flex-1 justify-center py-5">
+<div class="layout-content-container flex flex-col max-w-[1200px] w-full flex-1">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 pb-4 mb-6">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-4 text-slate-900 dark:text-slate-100">
+<span class="material-symbols-outlined text-primary text-2xl">shopping_bag</span>
+<h2 class="text-lg font-bold leading-tight tracking-[-0.015em]">QuickBuy</h2>
+</div>
+<div class="hidden md:flex items-center gap-9">
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Shop</a>
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Categories</a>
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Support</a>
+</div>
+</div>
+<div class="flex flex-1 justify-end gap-4 md:gap-8">
+<label class="hidden md:flex flex-col min-w-40 !h-10 max-w-64">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full bg-slate-100 dark:bg-slate-800">
+<div class="text-slate-500 flex items-center justify-center pl-4 rounded-l-lg border-r-0">
+<span class="material-symbols-outlined text-xl">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-slate-100 focus:outline-0 focus:ring-0 border-none bg-transparent h-full placeholder:text-slate-500 px-4 rounded-l-none border-l-0 pl-2 text-sm font-normal leading-normal" placeholder="Search products" value=""/>
+</div>
+</label>
+<button class="flex items-center justify-center rounded-lg h-10 w-10 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors relative">
+<span class="material-symbols-outlined text-xl">shopping_cart</span>
+<span class="absolute -top-1 -right-1 bg-primary text-white text-xs font-bold w-4 h-4 rounded-full flex items-center justify-center">2</span>
+</button>
+</div>
+</header>
+<div class="flex flex-col lg:flex-row gap-8 lg:gap-12 mb-12">
+<div class="flex-1 flex flex-col gap-4">
+<div class="w-full bg-slate-100 dark:bg-slate-800 rounded-xl overflow-hidden aspect-square flex items-center justify-center relative group">
+<img alt="Premium wireless over-ear headphones in silver" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" data-alt="Premium wireless over-ear headphones in silver" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJ9FIwy4DBpDLxLb_SvSrVcTY4CTYJsjhXsiVuNgoGq7QqDy34tnaEsaCWQx6sFqwOQN16t2HjkqTSIxjy09JyF3x-X7GQo8_1zKBPaPrGASaqoL9I03K0ZPkqAJ4eX1aghsNm61w_LQRVjCJuDBTK69ZhLrACdrXUYttY232dZiNcD_lghximcv2pA_Yo7jJCo-WVlxEy93Xsi1o2hKExU8nS4iGrsFgNjwMWzGHOBQWjz1jEp3-2qx39R-ba3v7EtOa1tD6Po5E"/>
+</div>
+<div class="grid grid-cols-4 gap-4">
+<button class="bg-slate-100 dark:bg-slate-800 rounded-lg overflow-hidden aspect-square border-2 border-primary">
+<img alt="Headphones front view thumbnail" class="w-full h-full object-cover" data-alt="Headphones front view thumbnail" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKgqiyz6C79V41nvyjE-k9hd61yyVqPzNGxIBtYyXl32v7aX6GhmCUak_InGzDbCh_HMP_hSqjnxA5VMxlu3IPFlHymFpKGMe414mwgxuk4Qc2SAjTcsXdSEPDLrl7lhkuU4dmtBSgvKnMugoOzJJrakh-4UIVu0cpumsrJ5avnGxp_J_L4IjrcR0RL1cNvkufThImbxXvtNZLiHXnZE2tMVXG8eMnnuOeK1ckFcS0BMCjsKcEpm0QIVLNuK9rWnMxoKqa25QvxVQ"/>
+</button>
+<button class="bg-slate-100 dark:bg-slate-800 rounded-lg overflow-hidden aspect-square border-2 border-transparent hover:border-slate-300 dark:hover:border-slate-600 transition-colors">
+<img alt="Headphones side view thumbnail" class="w-full h-full object-cover" data-alt="Headphones side view thumbnail" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxa4LG70HnGh_GOmgRjTMBTyfkfR81gcsBFMk1QzIeMrogPmeRiqy91SKjeX_5iRtRrgynMWCfkK0WxG4IcbQRaRvst9N2ZbpDi-YnCaIYF-A4FBO7O2KVzHxHRDYXRZxv7ADUvq2bW0_4tIDtg7yI32MkzYGTp3cig4vyOhaOH1Gei79RgS6cEW80CRn0zYEoPmO7fOPBzWld4QVD4UKLpyvt9yQRuLcTKr2ax1q8J6GDWBpWDUge-1cbJ7WxiOPD-qIJ4H9Ue7o"/>
+</button>
+<button class="bg-slate-100 dark:bg-slate-800 rounded-lg overflow-hidden aspect-square border-2 border-transparent hover:border-slate-300 dark:hover:border-slate-600 transition-colors">
+<img alt="Headphones lifestyle view thumbnail" class="w-full h-full object-cover" data-alt="Headphones lifestyle view thumbnail" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDq3d0VOSIwHBq40kAJaWVCP0R3iGJJSSvxC_djhCsHvjDth6ddnMqO6jO_x3SwiDTIUECeweBc1mZ9ZG4WdCl2A0xusDFy0JFI2b6tRyV4u_okN4OOd_4s1m1anytJr9Hi94tjwhexSu0D6iaAJC0GlvGcn76O6I76Yyg4hjtTXXxU4dR5FWoj-uKF-nTFGH3QkGLajfEBjMe11Fe_y5ToLyB7qN9ZIOgY7WVm21G4LQfYRm6n8BZkd8vS9Jk2tbhNSMCECBNRTAE"/>
+</button>
+<button class="bg-slate-100 dark:bg-slate-800 rounded-lg overflow-hidden aspect-square border-2 border-transparent hover:border-slate-300 dark:hover:border-slate-600 transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-500 text-3xl">play_circle</span>
+</button>
+</div>
+</div>
+<div class="flex-1 flex flex-col gap-6">
+<div>
+<div class="inline-flex items-center gap-1.5 bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300 px-2 py-1 rounded text-xs font-bold uppercase tracking-wider mb-3 w-fit">
+<span class="material-symbols-outlined text-[14px]">inventory_2</span>
+        Limited Stock
+    </div>
+<h1 class="text-3xl lg:text-4xl font-black leading-tight tracking-tight mb-2">Aura Pro Noise-Cancelling Headphones</h1>
+<div class="flex items-center gap-4 text-sm mb-4">
+<div class="flex items-center gap-1 text-yellow-500">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star_half</span>
+</div>
+<span class="font-medium">4.8</span>
+<a class="text-primary hover:underline" href="#reviews">(124 reviews)</a>
+</div>
+<p class="text-2xl font-bold text-slate-900 dark:text-slate-100">$299.00</p>
+<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Free shipping within the USA.</p>
+</div>
+<div class="text-base text-slate-600 dark:text-slate-300 leading-relaxed">
+                                Experience unparalleled sound quality and comfort with the Aura Pro. Featuring industry-leading active noise cancellation, 30-hour battery life, and crystal-clear calls. Designed for the modern audiophile.
+                            </div>
+<div class="flex flex-col gap-3 mt-2">
+<span class="text-sm font-medium">Color: <span class="text-slate-500">Silver</span></span>
+<div class="flex gap-3">
+<button aria-label="Silver" class="w-10 h-10 rounded-full bg-slate-200 border-2 border-primary shadow-sm"></button>
+<button aria-label="Black" class="w-10 h-10 rounded-full bg-slate-900 border-2 border-transparent hover:border-slate-300 transition-colors shadow-sm"></button>
+<button aria-label="Midnight Blue" class="w-10 h-10 rounded-full bg-blue-900 border-2 border-transparent hover:border-slate-300 transition-colors shadow-sm"></button>
+</div>
+</div>
+<div class="flex flex-col gap-3 mt-2">
+<span class="text-sm font-medium">Quantity</span>
+<div class="flex items-center border border-slate-300 dark:border-slate-700 rounded-lg w-fit">
+<button class="px-3 py-2 text-slate-600 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-sm">remove</span>
+</button>
+<input class="w-12 text-center border-none bg-transparent focus:ring-0 text-sm font-medium" readonly="" type="number" value="1"/>
+<button class="px-3 py-2 text-slate-600 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-sm">add</span>
+</button>
+</div>
+</div>
+<div class="mt-4 flex flex-col gap-3 sticky bottom-0 bg-background-light dark:bg-background-dark py-4 z-10 border-t border-slate-200 dark:border-slate-800 lg:static lg:border-none lg:py-0">
+<div class="flex items-center gap-2 text-sm text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 p-3 rounded-xl border border-amber-200 dark:border-amber-800/50">
+<span class="material-symbols-outlined text-base">local_fire_department</span>
+<span class="font-medium">Only <strong class="font-bold">3</strong> left in stock - <strong class="font-bold">12</strong> people have this in their carts right now</span>
+</div>
+<button class="w-full bg-primary text-white font-bold py-4 rounded-xl shadow-lg hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 text-lg">
+<span class="material-symbols-outlined">bolt</span>
+                                    Buy Now - Guest Checkout
+                                </button>
+<button class="w-full bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-medium py-3 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">add_shopping_cart</span>
+                                    Add to Cart
+                                </button>
+<p class="text-xs text-center text-slate-500 mt-2 flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-sm">lock</span>
+                                    Secure, encrypted checkout. No account required.
+                                </p>
+</div>
+<ul class="flex flex-col gap-2 mt-4 text-sm">
+<li class="flex items-center gap-2 text-slate-600 dark:text-slate-300">
+<span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+                                    Industry-leading Active Noise Cancellation
+                                </li>
+<li class="flex items-center gap-2 text-slate-600 dark:text-slate-300">
+<span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+                                    Up to 30 hours of battery life
+                                </li>
+<li class="flex items-center gap-2 text-slate-600 dark:text-slate-300">
+<span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+                                    Premium, lightweight materials
+                                </li>
+</ul>
+</div>
+</div>
+<div class="border-t border-slate-200 dark:border-slate-800 pt-12 pb-24" id="reviews">
+<h2 class="text-2xl font-bold mb-8">Customer Reviews</h2>
+<div class="flex flex-col md:flex-row gap-12">
+<div class="w-full md:w-1/3 flex flex-col gap-6">
+<div class="flex items-end gap-4">
+<p class="text-5xl font-black leading-none tracking-tight">4.8</p>
+<div class="flex flex-col gap-1 pb-1">
+<div class="flex gap-0.5 text-yellow-500">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star_half</span>
+</div>
+<p class="text-sm text-slate-500 font-medium">Based on 124 reviews</p>
+</div>
+</div>
+<div class="grid grid-cols-[20px_1fr_40px] items-center gap-y-3 gap-x-3 w-full max-w-[300px]">
+<span class="text-sm font-medium">5</span>
+<div class="flex h-2 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div class="rounded-full bg-yellow-500" style="width: 78%;"></div></div>
+<span class="text-sm text-slate-500 text-right">78%</span>
+<span class="text-sm font-medium">4</span>
+<div class="flex h-2 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div class="rounded-full bg-yellow-500" style="width: 15%;"></div></div>
+<span class="text-sm text-slate-500 text-right">15%</span>
+<span class="text-sm font-medium">3</span>
+<div class="flex h-2 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div class="rounded-full bg-yellow-500" style="width: 4%;"></div></div>
+<span class="text-sm text-slate-500 text-right">4%</span>
+<span class="text-sm font-medium">2</span>
+<div class="flex h-2 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div class="rounded-full bg-yellow-500" style="width: 2%;"></div></div>
+<span class="text-sm text-slate-500 text-right">2%</span>
+<span class="text-sm font-medium">1</span>
+<div class="flex h-2 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div class="rounded-full bg-yellow-500" style="width: 1%;"></div></div>
+<span class="text-sm text-slate-500 text-right">1%</span>
+</div>
+</div>
+<div class="w-full md:w-2/3 flex flex-col gap-8">
+<div class="border-b border-slate-200 dark:border-slate-800 pb-6">
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center gap-2 text-yellow-500">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<span class="text-xs text-slate-500">2 days ago</span>
+</div>
+<h4 class="font-bold text-lg mb-1">Incredible sound and comfort</h4>
+<p class="text-slate-600 dark:text-slate-300 text-sm mb-3">I've tried many premium headphones, but these are by far the best. The noise cancellation is unreal, and they are comfortable enough to wear for a full workday. Checkout was super fast too!</p>
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-xs font-bold text-slate-600">JS</div>
+<span class="text-sm font-medium text-slate-700 dark:text-slate-400">John S.</span>
+<span class="text-xs text-green-600 dark:text-green-400 flex items-center gap-1 bg-green-50 dark:bg-green-900/30 px-2 py-0.5 rounded-full"><span class="material-symbols-outlined text-[10px]">verified</span> Verified Buyer</span>
+</div>
+</div>
+<div class="border-b border-slate-200 dark:border-slate-800 pb-6">
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center gap-2 text-yellow-500">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm">star</span>
+</div>
+<span class="text-xs text-slate-500">1 week ago</span>
+</div>
+<h4 class="font-bold text-lg mb-1">Great battery life</h4>
+<p class="text-slate-600 dark:text-slate-300 text-sm mb-3">The battery truly lasts forever. I took these on a cross-country flight and didn't have to charge them once. Sound is punchy and clear. Only minor complaint is the carrying case is a bit bulky.</p>
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-xs font-bold text-slate-600">EM</div>
+<span class="text-sm font-medium text-slate-700 dark:text-slate-400">Emily M.</span>
+<span class="text-xs text-green-600 dark:text-green-400 flex items-center gap-1 bg-green-50 dark:bg-green-900/30 px-2 py-0.5 rounded-full"><span class="material-symbols-outlined text-[10px]">verified</span> Verified Buyer</span>
+</div>
+</div>
+<button class="text-primary font-medium text-sm hover:underline self-start">Read all 124 reviews</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body></html>

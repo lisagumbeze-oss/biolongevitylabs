@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f6f7f8;
+  --foreground: #0f172a;
+  --primary: #137fec;
+  --background-dark: #0d1520;
+}
+
+/* next-themes uses .dark class on <html> */
+.dark {
+  --background: #0d1520;
+  --foreground: #f8fafc;
+}
+
+/* Also respect system preference when no explicit class is set */
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --background: #0d1520;
+    --foreground: #f8fafc;
+  }
+}
+
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-background-dark: var(--background-dark);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --radius-default: 0.25rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Admin Global Settings Dashboard</title>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light font-display text-slate-900 min-h-screen flex flex-col antialiased">
+<!-- Top Navigation Bar -->
+<header class="bg-white border-b border-slate-200 sticky top-0 z-10 flex-none">
+<div class="max-w-[1400px] mx-auto px-6 h-16 flex items-center justify-between">
+<!-- Logo & Title -->
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-primary/10 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">storefront</span>
+</div>
+<h2 class="text-lg font-bold tracking-tight text-slate-900">Admin Dashboard</h2>
+</div>
+<!-- Global Nav & Profile -->
+<div class="flex items-center gap-8">
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors" href="#">Orders</a>
+<a class="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors" href="#">Products</a>
+<a class="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors" href="#">Customers</a>
+<a class="text-sm font-medium text-primary bg-primary/5 px-3 py-1.5 rounded-md" href="#">Settings</a>
+</nav>
+<div class="w-9 h-9 rounded-full bg-slate-200 border border-slate-300 bg-cover bg-center" data-alt="Admin user profile picture" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuASGWx7mc-iYralOKa3jbudvd3hxaMBlV57iMmz6tkI3SUTkGbaNwM0L71Xht1UQwD13iJ8_Qxlhp_6gAFfdW-ZT-ri7_YGahY8P065ypDzOdWzcB2_bwYbJxH-MbV2MGyzZc3V5rhvCxqMLMC3ILRJxedpg-gugqMvbBcNN3VBh4oPVDpI-2fa7klSy42I4sZ2rMhfGUKNhWPLr4UVe42Eu7XUbH3Z0pjjaXW2-kSR8psp9kIYodTX_YZRI2lfERXf1CPb9SVH7So');"></div>
+</div>
+</div>
+</header>
+<!-- Main Layout -->
+<div class="flex flex-1 max-w-[1400px] mx-auto w-full w-full">
+<!-- Sidebar Navigation -->
+<aside class="w-64 flex-shrink-0 border-r border-slate-200 bg-white min-h-[calc(100vh-4rem)] p-6 hidden lg:block">
+<div class="mb-8">
+<h1 class="text-xl font-bold text-slate-900">Settings</h1>
+<p class="text-sm text-slate-500 mt-1">Manage store preferences</p>
+</div>
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors group" href="#">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-slate-600">settings</span>
+<span class="text-sm font-medium">General</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">local_shipping</span>
+<span class="text-sm font-medium">Shipping &amp; Tax</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors group" href="#">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-slate-600">policy</span>
+<span class="text-sm font-medium">Policies</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors group" href="#">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-slate-600">credit_card</span>
+<span class="text-sm font-medium">Payments</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors group" href="#">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-slate-600">notifications</span>
+<span class="text-sm font-medium">Notifications</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 p-6 lg:p-10 max-w-4xl">
+<!-- Page Header -->
+<div class="mb-8">
+<h1 class="text-3xl font-bold tracking-tight text-slate-900">Shipping &amp; Tax</h1>
+<p class="text-sm text-slate-500 mt-2">Configure tax settings and manage shipping rates for your US store.</p>
+</div>
+<div class="flex flex-col gap-8">
+<!-- Tax Configuration Section -->
+<section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+<div class="px-6 py-5 border-b border-slate-100 bg-slate-50/50">
+<h2 class="text-lg font-semibold text-slate-900">Tax Configuration</h2>
+<p class="text-sm text-slate-500 mt-1">Determine how sales tax is calculated at checkout.</p>
+</div>
+<div class="p-6 flex flex-col gap-4">
+<label class="flex items-start gap-4 rounded-lg border border-slate-200 p-4 cursor-pointer hover:border-primary/50 transition-colors bg-white relative">
+<input checked="" class="mt-0.5 h-5 w-5 border-slate-300 text-primary focus:ring-primary cursor-pointer" name="tax_config" type="radio"/>
+<div class="flex flex-col flex-1">
+<span class="text-sm font-semibold text-slate-900">Automatic US Sales Tax</span>
+<span class="text-sm text-slate-500 mt-1">Automatically calculate and collect precise US sales tax based on the customer's exact location. Recommended for frictionless checkout.</span>
+</div>
+<span class="bg-primary/10 text-primary text-xs font-semibold px-2 py-1 rounded absolute top-4 right-4">Recommended</span>
+</label>
+<label class="flex items-start gap-4 rounded-lg border border-slate-200 p-4 cursor-pointer hover:border-slate-300 transition-colors bg-white">
+<input class="mt-0.5 h-5 w-5 border-slate-300 text-primary focus:ring-primary cursor-pointer" name="tax_config" type="radio"/>
+<div class="flex flex-col flex-1">
+<span class="text-sm font-semibold text-slate-900">Manual State Tax Rates</span>
+<span class="text-sm text-slate-500 mt-1">Manually set specific flat tax rates for each US state. Requires manual updates when state laws change.</span>
+</div>
+</label>
+</div>
+</section>
+<!-- Shipping Rates Section -->
+<section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+<div class="px-6 py-5 border-b border-slate-100 bg-slate-50/50">
+<h2 class="text-lg font-semibold text-slate-900">Shipping Rates &amp; Carriers</h2>
+<p class="text-sm text-slate-500 mt-1">Set flat shipping rates, offer free shipping, and select active carriers.</p>
+</div>
+<div class="p-6 flex flex-col gap-8">
+<!-- Rates Configuration -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="flex flex-col gap-2">
+<label class="text-sm font-medium text-slate-700" for="flat_rate">Standard Flat Rate (USD)</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="text-slate-500 sm:text-sm">$</span>
+</div>
+<input class="pl-7 block w-full rounded-md border-slate-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm text-slate-900 py-2.5" id="flat_rate" name="flat_rate" type="text" value="5.99"/>
+</div>
+<p class="text-xs text-slate-500">Default rate applied if free shipping isn't met.</p>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-sm font-medium text-slate-700" for="free_shipping">Free Shipping Threshold (USD)</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="text-slate-500 sm:text-sm">$</span>
+</div>
+<input class="pl-7 block w-full rounded-md border-slate-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm text-slate-900 py-2.5" id="free_shipping" name="free_shipping" type="text" value="50.00"/>
+</div>
+<p class="text-xs text-slate-500">Orders above this amount ship for free. Leave blank for no free shipping.</p>
+</div>
+</div>
+<hr class="border-slate-100"/>
+<!-- Carrier Selection -->
+<div>
+<h3 class="text-sm font-medium text-slate-900 mb-4">Active US Carriers</h3>
+<div class="space-y-3">
+<label class="flex items-center gap-3 p-3 border border-slate-200 rounded-lg bg-slate-50/50 hover:bg-slate-50 transition-colors cursor-pointer">
+<input checked="" class="h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+<div class="flex items-center gap-3 flex-1">
+<div class="w-10 h-10 bg-white rounded border border-slate-200 flex items-center justify-center text-slate-400 font-bold text-xs tracking-tighter">USPS</div>
+<div>
+<p class="text-sm font-medium text-slate-900">USPS (United States Postal Service)</p>
+<p class="text-xs text-slate-500">Standard domestic delivery.</p>
+</div>
+</div>
+</label>
+<label class="flex items-center gap-3 p-3 border border-slate-200 rounded-lg bg-slate-50/50 hover:bg-slate-50 transition-colors cursor-pointer">
+<input checked="" class="h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+<div class="flex items-center gap-3 flex-1">
+<div class="w-10 h-10 bg-white rounded border border-slate-200 flex items-center justify-center text-slate-400 font-bold text-xs">FedEx</div>
+<div>
+<p class="text-sm font-medium text-slate-900">FedEx</p>
+<p class="text-xs text-slate-500">Expedited and ground options.</p>
+</div>
+</div>
+</label>
+<label class="flex items-center gap-3 p-3 border border-slate-200 rounded-lg bg-slate-50/50 hover:bg-slate-50 transition-colors cursor-pointer">
+<input class="h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+<div class="flex items-center gap-3 flex-1">
+<div class="w-10 h-10 bg-white rounded border border-slate-200 flex items-center justify-center text-slate-400 font-bold text-xs">UPS</div>
+<div>
+<p class="text-sm font-medium text-slate-900">UPS</p>
+<p class="text-xs text-slate-500">Commercial and residential delivery.</p>
+</div>
+</div>
+</label>
+</div>
+</div>
+</div>
+</section>
+<!-- Actions -->
+<div class="flex justify-end pt-4 mb-10">
+<button class="bg-white px-4 py-2 text-sm font-medium text-slate-700 border border-slate-300 rounded-lg hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary mr-4 transition-colors" type="button">
+                        Cancel
+                    </button>
+<button class="bg-primary px-6 py-2 text-sm font-medium text-white rounded-lg hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary shadow-sm transition-colors flex items-center gap-2" type="button">
+<span class="material-symbols-outlined text-[20px]">save</span>
+                        Save Changes
+                    </button>
+</div>
+</div>
+</main>
+</div>
+</body></html>

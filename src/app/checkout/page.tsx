@@ -1,0 +1,349 @@
+"use client";
+
+import React, { useState } from "react";
+import { useCart } from "@/store/useCart";
+import { Lock, Truck, CreditCard, ChevronRight, Info, CheckCircle2, ShieldCheck, MapPin, Mail, User } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+const paymentMethods = [
+    {
+        id: "zelle",
+        name: "Zelle",
+        instructions: "Please send your payment to pay@biolongevitylabs.com via Zelle. Include your order number in the memo field."
+    },
+    {
+        id: "venmo",
+        name: "Venmo",
+        instructions: "Send payment to Venmo username: @BioLongevityLabs. Please include your order ID."
+    },
+    {
+        id: "cashapp",
+        name: "Cash App",
+        instructions: "Send payment to Cashtag: $BioLongevityLabs. Include your order number."
+    },
+    {
+        id: "check",
+        name: "Check / Money Order",
+        instructions: "Make checks payable to BioLongevity Labs LLC. Mail to: 123 Research Way, Suite 100, Austin, TX 78701."
+    }
+];
+
+export default function CheckoutPage() {
+    const { items, clearCart } = useCart();
+    const router = useRouter();
+    const [selectedPayment, setSelectedPayment] = useState(paymentMethods[0].id);
+    const [formData, setFormData] = useState({
+        firstName: "",
+        lastName: "",
+        email: "",
+        address: "",
+        city: "",
+        state: "",
+        zipCode: "",
+        shippingMethod: "standard"
+    });
+
+    const subtotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    const shipping = formData.shippingMethod === "express" ? 15.0 : 0.0;
+    const total = subtotal + shipping;
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        // In a real app, you'd send order to server here
+        clearCart();
+        router.push("/order-confirmation");
+    };
+
+    if (items.length === 0) {
+        return (
+            <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
+                <div className="w-20 h-20 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mb-6">
+                    <CheckCircle2 className="w-10 h-10 text-slate-300" />
+                </div>
+                <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-4">Your cart is empty</h1>
+                <p className="text-slate-600 dark:text-slate-400 mb-8">Add some research products to your cart before checking out.</p>
+                <Link href="/shop" className="bg-primary text-white px-8 py-3 rounded-xl font-bold hover:bg-primary/90 transition-all shadow-lg shadow-primary/20">
+                    Start Shopping
+                </Link>
+            </div>
+        );
+    }
+
+    return (
+        <div className="bg-background min-h-screen transition-colors">
+            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-16">
+                <div className="mb-12 flex flex-col gap-6">
+                    <div className="flex flex-col gap-2">
+                        <h1 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">
+                            Secure Checkout
+                        </h1>
+                        <div className="flex items-center gap-2 text-primary text-sm font-bold uppercase tracking-wider">
+                            <Lock className="w-4 h-4" />
+                            <span>Encrypted Guest Checkout</span>
+                        </div>
+                    </div>
+
+                    <div className="flex flex-col gap-3 max-w-2xl">
+                        <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-slate-400">
+                            <span className="text-primary">Information</span>
+                            <span className="text-primary">Shipping</span>
+                            <span>Review</span>
+                        </div>
+                        <div className="relative w-full h-1.5 rounded-full bg-slate-200 dark:bg-slate-800">
+                            <div className="absolute top-0 left-0 h-full rounded-full bg-primary shadow-[0_0_10px_rgba(19,127,236,0.5)] transition-all duration-500" style={{ width: "66%" }}></div>
+                        </div>
+                    </div>
+                </div>
+
+                <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                    {/* Main Form Area */}
+                    <div className="lg:col-span-7 space-y-10">
+                        {/* Shipping Section */}
+                        <section className="bg-white dark:bg-slate-900 rounded-2xl p-8 shadow-sm border border-slate-100 dark:border-slate-800 transition-all">
+                            <h2 className="text-slate-900 dark:text-white text-xl font-bold mb-8 flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                                    <MapPin className="w-5 h-5" />
+                                </div>
+                                Shipping Details
+                            </h2>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                <div className="flex flex-col gap-2">
+                                    <label className="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider">First Name</label>
+                                    <div className="relative">
+                                        <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                                        <input
+                                            required
+                                            className="w-full pl-11 pr-4 py-3.5 rounded-xl border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                                            placeholder="John"
+                                            type="text"
+                                            value={formData.firstName}
+                                            onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="flex flex-col gap-2">
+                                    <label className="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider">Last Name</label>
+                                    <input
+                                        required
+                                        className="w-full px-4 py-3.5 rounded-xl border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                                        placeholder="Doe"
+                                        type="text"
+                                        value={formData.lastName}
+                                        onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="flex flex-col gap-2 mb-6">
+                                <label className="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider">Email (Order Tracking)</label>
+                                <div className="relative">
+                                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                                    <input
+                                        required
+                                        className="w-full pl-11 pr-4 py-3.5 rounded-xl border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                                        placeholder="john.doe@example.com"
+                                        type="email"
+                                        value={formData.email}
+                                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="flex flex-col gap-2 mb-6">
+                                <label className="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider">Street Address</label>
+                                <input
+                                    required
+                                    className="w-full px-4 py-3.5 rounded-xl border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                                    placeholder="123 Science Way"
+                                    type="text"
+                                    value={formData.address}
+                                    onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                                />
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                                <div className="flex flex-col gap-2 md:col-span-1">
+                                    <label className="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider">City</label>
+                                    <input
+                                        required
+                                        className="w-full px-4 py-3.5 rounded-xl border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                                        placeholder="Austin"
+                                        type="text"
+                                        value={formData.city}
+                                        onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                                    />
+                                </div>
+                                <div className="flex flex-col gap-2 md:col-span-1">
+                                    <label className="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider">State</label>
+                                    <input
+                                        required
+                                        className="w-full px-4 py-3.5 rounded-xl border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                                        placeholder="Texas"
+                                        type="text"
+                                        value={formData.state}
+                                        onChange={(e) => setFormData({ ...formData, state: e.target.value })}
+                                    />
+                                </div>
+                                <div className="flex flex-col gap-2 md:col-span-1">
+                                    <label className="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider">ZIP Code</label>
+                                    <input
+                                        required
+                                        className="w-full px-4 py-3.5 rounded-xl border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                                        placeholder="78701"
+                                        type="text"
+                                        value={formData.zipCode}
+                                        onChange={(e) => setFormData({ ...formData, zipCode: e.target.value })}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="border-t border-slate-100 dark:border-slate-800 pt-8">
+                                <h3 className="text-slate-900 dark:text-white font-bold mb-6 flex items-center gap-2">
+                                    <Truck className="w-5 h-5 text-primary" />
+                                    Shipping Method
+                                </h3>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <label className={`flex items-center justify-between p-5 border-2 rounded-2xl cursor-pointer transition-all ${formData.shippingMethod === "standard" ? "border-primary bg-primary/5" : "border-slate-100 dark:border-slate-800 hover:border-slate-200 dark:hover:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800/50"}`}>
+                                        <div className="flex items-center gap-4">
+                                            <input
+                                                type="radio"
+                                                name="shipping"
+                                                checked={formData.shippingMethod === "standard"}
+                                                onChange={() => setFormData({ ...formData, shippingMethod: "standard" })}
+                                                className="w-5 h-5 text-primary focus:ring-primary border-slate-300 dark:border-slate-600 bg-transparent"
+                                            />
+                                            <div>
+                                                <p className="font-bold text-slate-900 dark:text-white">Standard Delivery</p>
+                                                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">3-5 Business Days</p>
+                                            </div>
+                                        </div>
+                                        <span className="font-bold text-primary">Free</span>
+                                    </label>
+                                    <label className={`flex items-center justify-between p-5 border-2 rounded-2xl cursor-pointer transition-all ${formData.shippingMethod === "express" ? "border-primary bg-primary/5" : "border-slate-100 dark:border-slate-800 hover:border-slate-200 dark:hover:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800/50"}`}>
+                                        <div className="flex items-center gap-4">
+                                            <input
+                                                type="radio"
+                                                name="shipping"
+                                                checked={formData.shippingMethod === "express"}
+                                                onChange={() => setFormData({ ...formData, shippingMethod: "express" })}
+                                                className="w-5 h-5 text-primary focus:ring-primary border-slate-300 dark:border-slate-600 bg-transparent"
+                                            />
+                                            <div>
+                                                <p className="font-bold text-slate-900 dark:text-white">Priority Express</p>
+                                                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">1-2 Business Days</p>
+                                            </div>
+                                        </div>
+                                        <span className="font-bold text-slate-900 dark:text-white">$15.00</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </section>
+
+                        {/* Payment Section */}
+                        <section className="bg-white dark:bg-slate-900 rounded-2xl p-8 shadow-sm border border-slate-100 dark:border-slate-800 transition-all">
+                            <h2 className="text-slate-900 dark:text-white text-xl font-bold mb-2 flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                                    <CreditCard className="w-5 h-5" />
+                                </div>
+                                Manual Payment Selection
+                            </h2>
+                            <p className="text-slate-500 dark:text-slate-400 text-sm mb-8 ml-13 font-medium">Research-compliant payment steps follow order review.</p>
+
+                            <div className="flex flex-col gap-4">
+                                {paymentMethods.map((pm) => (
+                                    <div key={pm.id} className={`border-2 rounded-2xl overflow-hidden transition-all ${selectedPayment === pm.id ? "border-primary" : "border-slate-100 dark:border-slate-800"}`}>
+                                        <label className={`flex items-center gap-4 p-5 cursor-pointer transition-colors ${selectedPayment === pm.id ? "bg-primary/5" : "hover:bg-slate-50 dark:hover:bg-slate-800/50"}`}>
+                                            <input
+                                                type="radio"
+                                                name="payment_method"
+                                                checked={selectedPayment === pm.id}
+                                                onChange={() => setSelectedPayment(pm.id)}
+                                                className="w-5 h-5 text-primary focus:ring-primary border-slate-300 dark:border-slate-600 bg-transparent"
+                                            />
+                                            <span className="font-bold text-slate-900 dark:text-white">{pm.name}</span>
+                                        </label>
+                                        {selectedPayment === pm.id && (
+                                            <div className="px-5 pb-5 animate-in slide-in-from-top-2 duration-300">
+                                                <div className="bg-white dark:bg-slate-800/50 p-5 rounded-xl border border-primary/10 shadow-inner">
+                                                    <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed font-medium">
+                                                        {pm.instructions}
+                                                    </p>
+                                                    <div className="flex items-center gap-2 mt-4 text-[10px] font-black text-amber-500 uppercase tracking-widest border-t border-slate-100 dark:border-slate-700 pt-3">
+                                                        <Info className="w-3 h-3" /> Note: Order processes only after manual confirmation.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+                    </div>
+
+                    {/* Sidebar Area */}
+                    <div className="lg:col-span-5">
+                        <div className="bg-white dark:bg-slate-900 rounded-2xl p-8 shadow-lg border border-slate-100 dark:border-slate-800 sticky top-24">
+                            <h2 className="text-slate-900 dark:text-white text-2xl font-black mb-10 tracking-tight">Order Summary</h2>
+
+                            <div className="max-h-[400px] overflow-y-auto pr-2 mb-8 space-y-6">
+                                {items.map((item) => (
+                                    <div key={item.id} className="flex gap-5 items-center">
+                                        <div className="relative w-24 h-24 rounded-2xl bg-slate-50 dark:bg-slate-800 group overflow-hidden border border-slate-100 dark:border-slate-800 flex-shrink-0">
+                                            <img src={item.image} alt={item.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                                            <div className="absolute top-1 right-1 w-6 h-6 bg-primary text-white text-[10px] font-black flex items-center justify-center rounded-full shadow-lg">
+                                                {item.quantity}
+                                            </div>
+                                        </div>
+                                        <div className="flex-1">
+                                            <h4 className="font-bold text-slate-900 dark:text-white line-clamp-2 text-sm leading-snug">
+                                                {item.name}
+                                            </h4>
+                                            <p className="text-xs font-black text-primary mt-1">${(item.price * item.quantity).toFixed(2)}</p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            <div className="space-y-4 pt-8 border-t border-slate-100 dark:border-slate-800">
+                                <div className="flex justify-between items-center text-slate-500 dark:text-slate-400">
+                                    <span className="text-sm font-bold uppercase tracking-widest">Subtotal</span>
+                                    <span className="font-bold text-slate-900 dark:text-white text-lg">${subtotal.toFixed(2)}</span>
+                                </div>
+                                <div className="flex justify-between items-center text-slate-500 dark:text-slate-400">
+                                    <span className="text-sm font-bold uppercase tracking-widest">Shipping</span>
+                                    <span className="font-bold text-slate-900 dark:text-white">{shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}</span>
+                                </div>
+                                <div className="pt-6 border-t border-slate-100 dark:border-slate-800 flex justify-between items-end">
+                                    <span className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-tighter">Grand Total</span>
+                                    <span className="text-4xl font-black text-primary drop-shadow-sm">${total.toFixed(2)}</span>
+                                </div>
+                            </div>
+
+                            <div className="mt-10">
+                                <button
+                                    type="submit"
+                                    className="w-full bg-primary text-white font-black py-5 rounded-2xl flex items-center justify-center gap-3 hover:bg-primary/95 transition-all shadow-xl shadow-primary/25 active:scale-[0.98] text-lg uppercase tracking-widest"
+                                >
+                                    Confirm Order
+                                    <ChevronRight className="w-6 h-6" />
+                                </button>
+                            </div>
+
+                            <div className="mt-8 flex flex-col gap-4">
+                                <div className="flex items-center justify-center gap-3 py-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-100 dark:border-slate-700">
+                                    <ShieldCheck className="w-5 h-5 text-primary" />
+                                    <span className="text-[10px] font-black uppercase tracking-widest text-slate-600 dark:text-slate-400">Pure Lab-Grade Compliance</span>
+                                </div>
+                                <p className="text-center text-[10px] text-slate-400 font-bold px-4 leading-relaxed">
+                                    By confirming, you agree that this order is for research laboratory use only.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </main>
+        </div>
+    );
+}
