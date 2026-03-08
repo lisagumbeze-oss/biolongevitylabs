@@ -129,7 +129,7 @@ export default function PeptideGuidePage() {
                             <div className="space-y-4 text-lg text-slate-600 dark:text-slate-400 font-medium leading-relaxed">
                                 <p>Peptides are short chains of amino acids that play crucial roles in biological processes, making them invaluable tools for scientific research. These versatile molecules serve as hormones, neurotransmitters, signaling compounds, and regulatory factors in living systems.</p>
                                 <p>For laboratory researchers, peptides offer unique advantages in studying cellular mechanisms, protein interactions, and biochemical pathways through controlled in vitro and ex vivo experimental systems.</p>
-                                <p>Today's research labs rely on high-quality, well-characterized peptides to conduct reproducible experiments and generate meaningful data in controlled environments.</p>
+                                <p>Today&apos;s research labs rely on high-quality, well-characterized peptides to conduct reproducible experiments and generate meaningful data in controlled environments.</p>
                             </div>
                         </div>
                     </div>
@@ -237,10 +237,10 @@ export default function PeptideGuidePage() {
 
                             <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-end">
                                 <h3 className="text-3xl font-black text-white mb-4">
-                                    Why Some Vials <span className="text-primary">Aren't Vacuum Sealed?</span>
+                                    Why Some Vials <span className="text-primary">Aren&apos;t Vacuum Sealed?</span>
                                 </h3>
                                 <p className="text-lg text-slate-300 font-medium mb-8 max-w-md">
-                                    Vacuum sealing isn't required for peptide quality or research effectiveness. Learn why some research-grade peptide vials lack vacuum seals.
+                                    Vacuum sealing isn&apos;t required for peptide quality or research effectiveness. Learn why some research-grade peptide vials lack vacuum seals.
                                 </p>
                                 <div className="self-start">
                                     <Link href="#" className="inline-flex items-center text-white font-bold group-hover:text-primary transition-colors">

@@ -61,7 +61,7 @@ export default function LiveSearch() {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -8, scale: 0.98 }}
                         transition={{ duration: 0.15, ease: "easeOut" }}
-                        className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl shadow-slate-900/20 z-[200] overflow-hidden"
+                        className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl shadow-slate-900/20 z-50 overflow-hidden"
                     >
                         {results.length > 0 ? (
                             <>
@@ -97,14 +97,14 @@ export default function LiveSearch() {
                                         onClick={() => { setQuery(""); setIsFocused(false); }}
                                         className="text-xs font-bold text-primary hover:underline"
                                     >
-                                        View all results for "{query}" →
+                                        View all results for &quot;{query}&quot; →
                                     </Link>
                                 </div>
                             </>
                         ) : (
                             <div className="px-4 py-6 flex flex-col items-center text-center gap-2">
                                 <Package className="w-8 h-8 text-slate-300" />
-                                <p className="text-sm text-slate-500 dark:text-slate-400">No products found for "<span className="font-bold">{query}</span>"</p>
+                                <p className="text-sm text-slate-500 dark:text-slate-400">No products found for &quot;<span className="font-bold">{query}</span>&quot;</p>
                             </div>
                         )}
                     </motion.div>

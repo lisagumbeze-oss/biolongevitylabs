@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import Link from 'next/link';
 import { Ghost, ArrowLeft, Search } from 'lucide-react';
@@ -23,7 +25,7 @@ export default function NotFound() {
                 <div className="relative -mt-16 md:-mt-24 bg-white/50 dark:bg-slate-900/50 backdrop-blur-md p-8 rounded-3xl border border-slate-200/50 dark:border-slate-800/50 shadow-xl w-full">
                     <h2 className="text-slate-900 dark:text-white text-3xl md:text-4xl font-black leading-tight mb-4">Compound Not Found</h2>
                     <p className="text-slate-600 dark:text-slate-400 text-lg font-medium mb-10 max-w-lg mx-auto leading-relaxed">
-                        It seems the research material you're looking for has been moved, deprecated, or the link is broken.
+                        It seems the research material you&apos;re looking for has been moved, deprecated, or the link is broken.
                     </p>
 
                     <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">

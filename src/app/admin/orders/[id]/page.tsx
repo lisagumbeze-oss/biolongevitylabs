@@ -11,12 +11,38 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 
+interface OrderItem {
+    product_id: string;
+    product_name: string;
+    quantity: number;
+    price: number;
+    variation_id?: string;
+}
+
+interface AdminOrder {
+    id: string;
+    customer: string;
+    email: string;
+    total: string;
+    status: string;
+    payment_method: string;
+    payment_status: string;
+    full_items?: OrderItem[];
+    phone?: string;
+    shipping_address?: {
+        street: string;
+        city: string;
+        state: string;
+        zip: string;
+    };
+}
+
 export default function AdminOrderDetailsPage() {
     const params = useParams();
     const orderId = (params.id as string || '').replace('ORD-', '');
     const fullOrderId = `#ORD-${orderId}`;
 
-    const [order, setOrder] = useState<any>(null);
+    const [order, setOrder] = useState<AdminOrder | null>(null);
     const [loading, setLoading] = useState(true);
     const [needsVerification, setNeedsVerification] = useState(true);
 
@@ -25,12 +51,12 @@ export default function AdminOrderDetailsPage() {
             try {
                 const res = await fetch('/api/orders');
                 const data = await res.json();
-                const foundOrder = data.find((o: any) => o.id === fullOrderId || o.id === orderId);
+                const foundOrder = data.find((o: AdminOrder) => o.id === fullOrderId || o.id === orderId);
                 setOrder(foundOrder);
                 if (foundOrder) {
                     setNeedsVerification(foundOrder.payment_status === 'PENDING' || foundOrder.status === 'Pending');
                 }
-            } catch (error) {
+            } catch (error: unknown) {
                 console.error('Failed to fetch order details:', error);
             } finally {
                 setLoading(false);
@@ -150,7 +176,7 @@ export default function AdminOrderDetailsPage() {
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-slate-100 dark:divide-slate-800/50">
-                                    {(order.full_items || []).map((item: any, i: number) => (
+                                    {(order.full_items || []).map((item: OrderItem, i: number) => (
                                         <tr key={i} className="group hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
                                             <td className="px-8 py-6">
                                                 <div className="flex items-center gap-4">

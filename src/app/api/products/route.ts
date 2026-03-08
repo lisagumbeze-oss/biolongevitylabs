@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
+export const dynamic = 'force-dynamic';
 import fs from 'fs';
 import path from 'path';
 import { supabase } from '@/lib/supabase';
 
 const PRODUCTS_JSON = path.join(process.cwd(), 'src/data/products.json');
-const IS_SUPABASE_CONFIGURED = !!process.env.NEXT_PUBLIC_SUPABASE_URL && !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 function readProductsLocal() {
     if (!fs.existsSync(PRODUCTS_JSON)) return [];
@@ -12,13 +12,44 @@ function readProductsLocal() {
     return JSON.parse(content);
 }
 
-function writeProductsLocal(products: any[]) {
+function writeProductsLocal(products: unknown[]) {
     fs.writeFileSync(PRODUCTS_JSON, JSON.stringify(products, null, 4));
+}
+
+interface ProductRow {
+    id: string;
+    name: string;
+    price: number;
+    min_price: number | null;
+    max_price: number | null;
+    image_url: string;
+    category_name: string;
+    form: string;
+    description: string;
+    stock_status: string;
+    is_variable: boolean;
+    is_sale: boolean;
+    is_bestseller: boolean;
+    is_new: boolean;
+    product_variables?: VariableRow[];
+    product_variations?: VariationRow[];
+}
+
+interface VariableRow {
+    name: string;
+    options: string[];
+}
+
+interface VariationRow {
+    id: string;
+    attributes: Record<string, string | number | boolean>;
+    price: number;
+    stock_status: string;
 }
 
 export async function GET() {
     try {
-        if (IS_SUPABASE_CONFIGURED) {
+        if (supabase) {
             const { data, error } = await supabase
                 .from('products')
                 .select('*, product_variables(*), product_variations(*)');
@@ -26,7 +57,7 @@ export async function GET() {
             if (error) throw error;
 
             // Map Supabase schema back to frontend expected format
-            const products = data.map(p => ({
+            const products = (data as unknown as ProductRow[]).map((p: ProductRow) => ({
                 id: p.id,
                 name: p.name,
                 price: p.price,
@@ -41,11 +72,11 @@ export async function GET() {
                 isSale: p.is_sale,
                 isBestseller: p.is_bestseller,
                 isNew: p.is_new,
-                variables: p.product_variables?.map((v: any) => ({
+                variables: p.product_variables?.map((v: VariableRow) => ({
                     name: v.name,
                     options: v.options
                 })) || [],
-                variations: p.product_variations?.map((v: any) => ({
+                variations: p.product_variations?.map((v: VariationRow) => ({
                     id: v.id,
                     attributes: v.attributes,
                     price: v.price,
@@ -58,8 +89,8 @@ export async function GET() {
             const products = readProductsLocal();
             return NextResponse.json(products);
         }
-    } catch (error: any) {
-        console.error('API Error (GET):', error.message);
+    } catch (error: unknown) {
+        console.error('API Error (GET):', error instanceof Error ? error.message : String(error));
         return NextResponse.json({ error: 'Failed to fetch products' }, { status: 500 });
     }
 }
@@ -68,7 +99,7 @@ export async function POST(request: Request) {
     try {
         const newProduct = await request.json();
 
-        if (IS_SUPABASE_CONFIGURED) {
+        if (supabase) {
             // 1. Insert product
             const { error: pError } = await supabase.from('products').insert({
                 id: newProduct.id,
@@ -92,7 +123,7 @@ export async function POST(request: Request) {
             // 2. Insert variables
             if (newProduct.variables?.length) {
                 const { error: vError } = await supabase.from('product_variables').insert(
-                    newProduct.variables.map((v: any) => ({
+                    newProduct.variables.map((v: VariableRow) => ({
                         product_id: newProduct.id,
                         name: v.name,
                         options: v.options
@@ -104,12 +135,12 @@ export async function POST(request: Request) {
             // 3. Insert variations
             if (newProduct.variations?.length) {
                 const { error: varError } = await supabase.from('product_variations').insert(
-                    newProduct.variations.map((v: any) => ({
+                    newProduct.variations.map((v: VariationRow) => ({
                         id: v.id,
                         product_id: newProduct.id,
                         attributes: v.attributes,
                         price: v.price,
-                        stock_status: v.stockStatus
+                        stock_status: v.stock_status
                     }))
                 );
                 if (varError) throw varError;
@@ -122,8 +153,8 @@ export async function POST(request: Request) {
             writeProductsLocal(products);
             return NextResponse.json(newProduct, { status: 201 });
         }
-    } catch (error: any) {
-        console.error('API Error (POST):', error.message);
+    } catch (error: unknown) {
+        console.error('API Error (POST):', error instanceof Error ? error.message : String(error));
         return NextResponse.json({ error: 'Failed to add product' }, { status: 500 });
     }
 }
@@ -132,7 +163,7 @@ export async function PUT(request: Request) {
     try {
         const updatedProduct = await request.json();
 
-        if (IS_SUPABASE_CONFIGURED) {
+        if (supabase) {
             // 1. Update main product
             const { error: pError } = await supabase
                 .from('products')
@@ -162,7 +193,7 @@ export async function PUT(request: Request) {
 
             if (updatedProduct.variables?.length) {
                 await supabase.from('product_variables').insert(
-                    updatedProduct.variables.map((v: any) => ({
+                    updatedProduct.variables.map((v: VariableRow) => ({
                         product_id: updatedProduct.id,
                         name: v.name,
                         options: v.options
@@ -172,12 +203,12 @@ export async function PUT(request: Request) {
 
             if (updatedProduct.variations?.length) {
                 await supabase.from('product_variations').insert(
-                    updatedProduct.variations.map((v: any) => ({
+                    updatedProduct.variations.map((v: VariationRow) => ({
                         id: v.id,
                         product_id: updatedProduct.id,
                         attributes: v.attributes,
                         price: v.price,
-                        stock_status: v.stockStatus
+                        stock_status: v.stock_status
                     }))
                 );
             }
@@ -185,7 +216,7 @@ export async function PUT(request: Request) {
             return NextResponse.json(updatedProduct);
         } else {
             const products = readProductsLocal();
-            const index = products.findIndex((p: any) => p.id === updatedProduct.id);
+            const index = products.findIndex((p: { id: string }) => p.id === updatedProduct.id);
 
             if (index === -1) {
                 return NextResponse.json({ error: 'Product not found' }, { status: 404 });
@@ -195,8 +226,8 @@ export async function PUT(request: Request) {
             writeProductsLocal(products);
             return NextResponse.json(updatedProduct);
         }
-    } catch (error: any) {
-        console.error('API Error (PUT):', error.message);
+    } catch (error: unknown) {
+        console.error('API Error (PUT):', error instanceof Error ? error.message : String(error));
         return NextResponse.json({ error: 'Failed to update product' }, { status: 500 });
     }
 }
@@ -205,18 +236,18 @@ export async function DELETE(request: Request) {
     try {
         const { id } = await request.json();
 
-        if (IS_SUPABASE_CONFIGURED) {
+        if (supabase) {
             const { error } = await supabase.from('products').delete().eq('id', id);
             if (error) throw error;
             return NextResponse.json({ success: true });
         } else {
             const products = readProductsLocal();
-            const newProducts = products.filter((p: any) => p.id !== id);
+            const newProducts = products.filter((p: { id: string }) => p.id !== id);
             writeProductsLocal(newProducts);
             return NextResponse.json({ success: true });
         }
-    } catch (error: any) {
-        console.error('API Error (DELETE):', error.message);
+    } catch (error: unknown) {
+        console.error('API Error (DELETE):', error instanceof Error ? error.message : String(error));
         return NextResponse.json({ error: 'Failed to delete product' }, { status: 500 });
     }
 }

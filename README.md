@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# BioLongevity Labs - Peptides & Bioregulators Research Platform
 
-## Getting Started
+BioLongevity Labs is a premium, research-focused e-commerce platform built for the scientific community. It features a modern, high-performance architecture integrated with Supabase for data management and Vercel for deployment.
 
-First, run the development server:
+## 🚀 Key Features
+- **Dynamic Product Catalog**: Real-time product management with Supabase.
+- **Advanced Admin Dashboard**: Order tracking, sales metrics, and research-compliant management tools.
+- **Premium UI/UX**: Dark-mode first design with glassmorphism and smooth animations (Framer Motion).
+- **Secure Checkout**: Integrated checkout flow with support for research-compliant manual payment methods.
+- **Peptide Tools**: Includes laboratory utilities like a peptide reconstitution calculator.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 🛠 Tech Stack
+- **Framework**: Next.js 15+ (App Router)
+- **Styling**: Tailwind CSS (v4 compatible)
+- **Database**: Supabase (PostgreSQL)
+- **Animations**: Framer Motion & Lucide Icons
+- **Deployment**: Vercel
+
+## 📦 Getting Started
+
+### 1. Environment Configuration
+Create a `.env.local` file with the following variables:
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Install & Run
+```bash
+npm install
+npm run dev
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🚢 Deployment (Vercel + Supabase)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 1. Database Setup
+1. Create a new project in [Supabase](https://supabase.com).
+2. Go to the SQL Editor and run the schema found in `supabase_schema.sql`.
 
-## Learn More
+### 2. Data Migration
+To push your local product data to Supabase, run:
+```bash
+node scripts/migrate-to-supabase.js
+```
 
-To learn more about Next.js, take a look at the following resources:
+### 3. Vercel Push
+1. Push this code to a private GitHub repository.
+2. Connect the repository to [Vercel](https://vercel.com).
+3. Add the environment variables from step 1 in the Vercel dashboard.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## ⚖️ License
+Research use only. Not for human consumption.

@@ -38,7 +38,7 @@ export default function AdminSettingsPage() {
         { id: 5, name: '', iconUrl: '', instructions: '', enabled: false }
     ]);
 
-    const updatePaymentMethod = (index: number, field: keyof typeof paymentMethods[0], value: any) => {
+    const updatePaymentMethod = (index: number, field: keyof typeof paymentMethods[0], value: string | number | boolean) => {
         const newMethods = [...paymentMethods];
         newMethods[index] = { ...newMethods[index], [field]: value };
         setPaymentMethods(newMethods);
@@ -109,7 +109,7 @@ export default function AdminSettingsPage() {
                                         />
                                         <div className="flex flex-col flex-1 pr-16">
                                             <span className="text-base font-bold text-slate-900 dark:text-white">Automatic US Sales Tax</span>
-                                            <span className="text-sm text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">Automatically calculate and collect precise US sales tax based on the customer's exact location.</span>
+                                            <span className="text-sm text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">Automatically calculate and collect precise US sales tax based on the customer&apos;s exact location.</span>
                                         </div>
                                         <span className="bg-primary/10 text-primary text-xs font-bold px-3 py-1 rounded-lg absolute top-5 right-5">Recommended</span>
                                     </label>
@@ -150,7 +150,7 @@ export default function AdminSettingsPage() {
                                                     onChange={(e) => setFlatRate(e.target.value)}
                                                 />
                                             </div>
-                                            <p className="text-xs text-slate-500 dark:text-slate-400">Default rate applied if free shipping isn't met.</p>
+                                            <p className="text-xs text-slate-500 dark:text-slate-400">Default rate applied if free shipping isn&apos;t met.</p>
                                         </div>
                                         <div className="flex flex-col gap-2 relative">
                                             <label className="text-sm font-bold text-slate-900 dark:text-white" htmlFor="free_shipping">Free Shipping Threshold</label>
@@ -219,7 +219,7 @@ export default function AdminSettingsPage() {
                             </div>
 
                             {paymentMethods.map((method, index) => (
-                                <div key={method.id} className={`bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm transition-opacity ${!method.enabled && method.id > 3 ? 'opacity-60 grayscale-[50%]' : ''}`}>
+                                <div key={method.id} className={`bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm transition-opacity ${!method.enabled && method.id > 3 ? 'opacity-60 grayscale-50' : ''}`}>
                                     <div className="flex justify-between items-center mb-6 pb-4 border-b border-slate-100 dark:border-slate-800">
                                         <h3 className="text-slate-900 dark:text-white text-xl font-bold flex items-center gap-3">
                                             <span className="bg-primary/10 text-primary w-8 h-8 rounded-full flex items-center justify-center text-sm font-black">

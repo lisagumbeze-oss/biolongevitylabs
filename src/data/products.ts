@@ -35,3 +35,18 @@ export interface Product {
 
 import productsData from './products.json';
 export const products: Product[] = productsData as Product[];
+
+export const categories = [
+    "Peptide Vials",
+    "Peptide Capsules",
+    "Bioregulator Capsules",
+    "Bioregulator Creams",
+    "Bioregulator Vials"
+];
+
+export const forms = [
+    "Vial",
+    "Capsule",
+    "Cream",
+    "Solution"
+];

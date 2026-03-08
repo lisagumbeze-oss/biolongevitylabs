@@ -1,3 +1,4 @@
+import React from "react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -52,7 +53,9 @@ export default function RootLayout({
         className={`${inter.variable} font-sans antialiased min-h-screen flex flex-col bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300`}
       >
         <Providers>
-          <LoadingProgress />
+          <React.Suspense fallback={null}>
+            <LoadingProgress />
+          </React.Suspense>
           <ConsentModal />
           <Navbar />
           <main className="grow">

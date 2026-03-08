@@ -28,7 +28,7 @@ export default function ProductsManagement() {
             } else {
                 setProducts([]);
             }
-        } catch (error) {
+        } catch (error: unknown) {
             toast.error('Failed to load products');
         } finally {
             setLoading(false);
@@ -53,7 +53,7 @@ export default function ProductsManagement() {
             } else {
                 throw new Error();
             }
-        } catch (error) {
+        } catch (error: unknown) {
             toast.error('Failed to delete product');
         }
         setDeleteConfirm(null);
@@ -63,15 +63,15 @@ export default function ProductsManagement() {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
 
-        const productData: any = {
+        const productData: Partial<Product> & { id: string } = {
             id: editingProduct?.id || `prod_${Date.now()}`,
-            name: formData.get('name'),
+            name: formData.get('name') as string,
             price: parseFloat(formData.get('price') as string),
-            category: formData.get('category'),
-            form: formData.get('form'),
-            description: formData.get('description'),
-            image: formData.get('image'),
-            stockStatus: formData.get('stockStatus'),
+            category: formData.get('category') as Product['category'],
+            form: formData.get('form') as Product['form'],
+            description: formData.get('description') as string,
+            image: formData.get('image') as string,
+            stockStatus: formData.get('stockStatus') as Product['stockStatus'],
             isVariable: editingProduct?.isVariable || false,
             variables: editingProduct?.variables || [],
             variations: editingProduct?.variations || []
@@ -93,7 +93,7 @@ export default function ProductsManagement() {
             } else {
                 throw new Error();
             }
-        } catch (error) {
+        } catch (error: unknown) {
             toast.error('Failed to save product');
         }
     };
@@ -203,7 +203,7 @@ export default function ProductsManagement() {
                             {filteredProducts.length === 0 && (
                                 <tr>
                                     <td colSpan={5} className="px-6 py-12 text-center text-slate-500 dark:text-slate-400">
-                                        No products found matching "{searchTerm}"
+                                        No products found matching &quot;{searchTerm}&quot;
                                     </td>
                                 </tr>
                             )}
@@ -292,7 +292,7 @@ export default function ProductsManagement() {
 
             {/* Delete Confirmation Modal */}
             {deleteConfirm && (
-                <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 antialiased">
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 antialiased">
                     <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onClick={() => setDeleteConfirm(null)} />
                     <div className="bg-slate-900 border border-slate-800 w-full max-w-sm rounded-2xl shadow-2xl z-10 overflow-hidden relative flex flex-col p-6 text-center">
                         <div className="w-12 h-12 bg-red-400/10 rounded-full flex items-center justify-center mx-auto mb-4">

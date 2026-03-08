@@ -16,7 +16,8 @@ const ConsentModal = () => {
         const sessionConsent = sessionStorage.getItem('biolongevity_consent');
 
         if (!consent && !sessionConsent) {
-            setIsVisible(true);
+            const timer = setTimeout(() => setIsVisible(true), 0);
+            return () => clearTimeout(timer);
         }
     }, []);
 

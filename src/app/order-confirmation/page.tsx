@@ -7,12 +7,12 @@ import { useCart } from "@/store/useCart";
 
 export default function OrderConfirmationPage() {
     const { clearCart } = useCart();
-    const [orderId, setOrderId] = useState("");
+    const [orderId, setOrderId] = useState(() => {
+        const randomId = Math.floor(100000000 + Math.random() * 900000000);
+        return `#${randomId}`;
+    });
 
     useEffect(() => {
-        // Generate a random order ID for demo purposes
-        const randomId = Math.floor(100000000 + Math.random() * 900000000);
-        setOrderId(`#${randomId}`);
         // Safety check to ensure cart is cleared if not already
         clearCart();
     }, []);
@@ -41,7 +41,7 @@ export default function OrderConfirmationPage() {
 
                     <div className="max-w-md mx-auto space-y-6 mb-12">
                         <p className="text-lg text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
-                            Thank you for your purchase! We've received your order and it's currently <span className="text-primary font-bold italic">awaiting manual payment confirmation</span>.
+                            Thank you for your purchase! We&apos;ve received your order and it&apos;s currently <span className="text-primary font-bold italic">awaiting manual payment confirmation</span>.
                         </p>
 
                         <div className="bg-primary/5 border border-primary/10 p-6 rounded-2xl text-left flex gap-4">

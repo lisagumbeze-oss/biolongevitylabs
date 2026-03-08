@@ -39,20 +39,6 @@ export default function ProductDetailsView({ id }: Props) {
         return defaultOptions;
     });
 
-    useEffect(() => {
-        if (product) {
-            setSelectedImage(product.image);
-            const defaultOptions: Record<string, string> = {};
-            if (product.variables) {
-                product.variables.forEach(v => {
-                    if (v.options && v.options.length > 0) {
-                        defaultOptions[v.name] = v.options[0];
-                    }
-                });
-            }
-            setSelectedOptions(defaultOptions);
-        }
-    }, [product]);
 
     if (!product) {
         return (

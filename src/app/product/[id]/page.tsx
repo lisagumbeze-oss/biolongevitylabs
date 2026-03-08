@@ -29,5 +29,5 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ProductDetailsPage({ params }: Props) {
     const { id } = await params;
-    return <ProductDetailsView id={id} />;
+    return <ProductDetailsView id={id} key={id} />;
 }

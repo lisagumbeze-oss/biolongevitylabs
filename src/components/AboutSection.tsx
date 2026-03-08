@@ -91,7 +91,7 @@ const AboutSection = () => {
                             <div className="backdrop-blur-xl bg-white/10 dark:bg-black/40 border border-white/20 p-6 sm:p-8 rounded-2xl shadow-xl transform translate-y-4 group-hover:translate-y-0 transition-transform duration-700 ease-out">
                                 <div className="h-1 w-12 bg-primary mb-6 rounded-full" />
                                 <p className="text-white text-lg sm:text-xl font-medium leading-relaxed italic drop-shadow-sm">
-                                    "Committed to providing the foundational building blocks for tomorrow's anti-aging and performance breakthroughs."
+                                    &quot;Committed to providing the foundational building blocks for tomorrow&apos;s anti-aging and performance breakthroughs.&quot;
                                 </p>
                             </div>
                         </div>

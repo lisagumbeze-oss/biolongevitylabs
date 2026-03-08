@@ -10,7 +10,7 @@ export default function PaymentReceivedEmail1() {
                             {/* Header */}
                             <header className="flex items-center justify-center whitespace-nowrap border-b border-solid border-slate-100 px-10 py-6">
                                 <div className="flex items-center gap-4 text-slate-900">
-                                    <h2 className="text-xl font-bold leading-tight tracking-[-0.015em]">Streamlined E-commerce</h2>
+                                    <h2 className="text-xl font-bold leading-tight tracking-[-0.015em]">BioLongevity Labs</h2>
                                 </div>
                             </header>
 
@@ -25,10 +25,10 @@ export default function PaymentReceivedEmail1() {
                                     {/* Main Message */}
                                     <div className="flex w-full flex-col items-center gap-4 text-center">
                                         <h1 className="text-2xl font-bold leading-tight text-slate-900">
-                                            Thank you, we've received your payment!
+                                            Thank you, we&apos;ve received your payment!
                                         </h1>
                                         <p className="text-base font-normal leading-relaxed text-slate-600 max-w-[400px]">
-                                            Your order <strong>#1234</strong> is now in the 'Preparing for Shipment' stage.
+                                            Your order <strong>#1234</strong> is now in the &apos;Preparing for Shipment&apos; stage.
                                         </p>
 
                                         {/* Order Detail Box */}
@@ -63,7 +63,7 @@ export default function PaymentReceivedEmail1() {
                                 <div className="flex flex-wrap justify-center gap-4">
                                     {/* Social Links placeholders */}
                                 </div>
-                                <p className="text-slate-400 text-xs font-normal">© 2023 Streamlined E-commerce. All rights reserved.</p>
+                                <p className="text-slate-400 text-xs font-normal">© 2023 BioLongevity Labs. All rights reserved.</p>
                             </footer>
                         </div>
                     </div>

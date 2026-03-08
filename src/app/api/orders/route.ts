@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
+export const dynamic = 'force-dynamic';
 import fs from 'fs';
 import path from 'path';
 import { supabase } from '@/lib/supabase';
 
 const ORDERS_JSON = path.join(process.cwd(), 'src/data/orders.json');
-const IS_SUPABASE_CONFIGURED = !!process.env.NEXT_PUBLIC_SUPABASE_URL && !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 function readOrdersLocal() {
     if (!fs.existsSync(ORDERS_JSON)) return [];
@@ -12,13 +12,37 @@ function readOrdersLocal() {
     return JSON.parse(content);
 }
 
-function writeOrdersLocal(orders: any[]) {
+function writeOrdersLocal(orders: unknown[]) {
     fs.writeFileSync(ORDERS_JSON, JSON.stringify(orders, null, 4));
+}
+
+interface OrderRow {
+    id: string;
+    order_number: string;
+    created_at: string;
+    customer_name: string;
+    customer_email: string;
+    total_amount: number;
+    status: string;
+    shipping_address: Record<string, unknown>;
+    payment_method: string;
+    payment_status: string;
+    order_items?: OrderItemRow[];
+}
+
+interface OrderItemRow {
+    id?: string;
+    order_id?: string;
+    product_id: string;
+    variation_id?: string;
+    product_name: string;
+    quantity: number;
+    price: number;
 }
 
 export async function GET() {
     try {
-        if (IS_SUPABASE_CONFIGURED) {
+        if (supabase) {
             const { data, error } = await supabase
                 .from('orders')
                 .select('*, order_items(*)');
@@ -26,7 +50,7 @@ export async function GET() {
             if (error) throw error;
 
             // Map Supabase schema back to frontend expected format
-            const orders = data.map(o => ({
+            const orders = (data as unknown as OrderRow[]).map((o: OrderRow) => ({
                 id: o.order_number,
                 db_id: o.id, // Internal UUID
                 date: new Date(o.created_at).toISOString().split('T')[0],
@@ -46,8 +70,8 @@ export async function GET() {
             const orders = readOrdersLocal();
             return NextResponse.json(orders);
         }
-    } catch (error: any) {
-        console.error('API Error (GET Orders):', error.message);
+    } catch (error: unknown) {
+        console.error('API Error (GET Orders):', error instanceof Error ? error.message : String(error));
         return NextResponse.json({ error: 'Failed to fetch orders' }, { status: 500 });
     }
 }
@@ -56,7 +80,7 @@ export async function POST(request: Request) {
     try {
         const orderData = await request.json();
 
-        if (IS_SUPABASE_CONFIGURED) {
+        if (supabase) {
             // 1. Insert order
             const { data: order, error: oError } = await supabase
                 .from('orders')
@@ -78,8 +102,8 @@ export async function POST(request: Request) {
             // 2. Insert order items if provided
             if (orderData.full_items?.length) {
                 const { error: itemsError } = await supabase.from('order_items').insert(
-                    orderData.full_items.map((item: any) => ({
-                        order_id: order.id,
+                    orderData.full_items.map((item: OrderItemRow) => ({
+                        order_id: (order as unknown as OrderRow).id,
                         product_id: item.product_id,
                         variation_id: item.variation_id,
                         product_name: item.product_name,
@@ -97,8 +121,8 @@ export async function POST(request: Request) {
             writeOrdersLocal(orders);
             return NextResponse.json(orderData, { status: 201 });
         }
-    } catch (error: any) {
-        console.error('API Error (POST Order):', error.message);
+    } catch (error: unknown) {
+        console.error('API Error (POST Order):', error instanceof Error ? error.message : String(error));
         return NextResponse.json({ error: 'Failed to create order' }, { status: 500 });
     }
 }

@@ -52,7 +52,7 @@ export default function TermsPage() {
 
                 <div className="prose prose-slate dark:prose-invert max-w-none">
                     <p className="text-lg leading-relaxed text-slate-600 dark:text-slate-300 mb-10 font-medium font-serif">
-                        Welcome to BioLongevity Labs. Please read these Terms and Conditions ("Terms", "Terms and Conditions") carefully before using the BioLongevity Labs website (the "Service") operated by BioLongevity Labs LLC ("us", "we", or "our"). Your access to and use of the Service is conditioned on your acceptance of and compliance with these Terms.
+                        Welcome to BioLongevity Labs. Please read these Terms and Conditions (&quot;Terms&quot;, &quot;Terms and Conditions&quot;) carefully before using the BioLongevity Labs website (the &quot;Service&quot;) operated by BioLongevity Labs LLC (&quot;us&quot;, &quot;we&quot;, or &quot;our&quot;). Your access to and use of the Service is conditioned on your acceptance of and compliance with these Terms.
                     </p>
 
                     <section id="use-of-site" className="mb-16 scroll-mt-32">
@@ -65,14 +65,14 @@ export default function TermsPage() {
                                 By accessing this website, you agree to be bound by these website Terms and Conditions of Use, all applicable laws and regulations, and agree that you are responsible for compliance with any applicable local laws. If you do not agree with any of these terms, you are prohibited from using or accessing this site.
                             </p>
                             <p>
-                                Permission is granted to temporarily download one copy of the materials (information or software) on BioLongevity Labs' website for personal, non-commercial transitory viewing only. This is the grant of a license, not a transfer of title, and under this license you may not:
+                                Permission is granted to temporarily download one copy of the materials (information or software) on BioLongevity Labs&apos; website for personal, non-commercial transitory viewing only. This is the grant of a license, not a transfer of title, and under this license you may not:
                             </p>
                             <ul className="list-disc pl-6 space-y-2 mt-4 marker:text-primary">
                                 <li>modify or copy the materials;</li>
                                 <li>use the materials for any commercial purpose, or for any public display (commercial or non-commercial);</li>
-                                <li>attempt to decompile or reverse engineer any software contained on BioLongevity Labs' website;</li>
+                                <li>attempt to decompile or reverse engineer any software contained on BioLongevity Labs&apos; website;</li>
                                 <li>remove any copyright or other proprietary notations from the materials; or</li>
-                                <li>transfer the materials to another person or "mirror" the materials on any other server.</li>
+                                <li>transfer the materials to another person or &quot;mirror&quot; the materials on any other server.</li>
                             </ul>
                         </div>
                     </section>
@@ -104,7 +104,7 @@ export default function TermsPage() {
                         </h2>
                         <div className="text-slate-600 dark:text-slate-300 space-y-4 leading-relaxed">
                             <p>
-                                We use "cookies" on this site. A cookie is a piece of data stored on a site visitor's hard drive to help us improve your access to our site and identify repeat visitors to our site. Cookies can also enable us to track and target the interests of our users to enhance the experience on our site. Usage of a cookie is in no way linked to any personally identifiable information on our site.
+                                We use &quot;cookies&quot; on this site. A cookie is a piece of data stored on a site visitor&apos;s hard drive to help us improve your access to our site and identify repeat visitors to our site. Cookies can also enable us to track and target the interests of our users to enhance the experience on our site. Usage of a cookie is in no way linked to any personally identifiable information on our site.
                             </p>
                             <p>
                                 You can set your browser to refuse all or some browser cookies, or to alert you when websites set or access cookies. If you disable or refuse cookies, please note that some parts of this website may become inaccessible or not function properly.

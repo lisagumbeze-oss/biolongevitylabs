@@ -5,8 +5,18 @@ import { Search, Eye, Filter, Download, MoreVertical, Calendar } from 'lucide-re
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 
+interface AdminOrder {
+    id: string;
+    customer: string;
+    email: string;
+    status: string;
+    total: string;
+    date: string;
+    items: number;
+}
+
 export default function AdminOrdersPage() {
-    const [orders, setOrders] = React.useState<any[]>([]);
+    const [orders, setOrders] = React.useState<AdminOrder[]>([]);
     const [loading, setLoading] = React.useState(true);
     const [searchTerm, setSearchTerm] = React.useState('');
 
@@ -145,7 +155,7 @@ export default function AdminOrdersPage() {
                             <Search className="w-8 h-8 text-slate-300" />
                         </div>
                         <h4 className="text-lg font-black text-slate-900 dark:text-white">No orders found</h4>
-                        <p className="text-slate-500 dark:text-slate-400 mt-1 max-w-xs mx-auto text-sm">We couldn't find any orders matching your search. Try adjusting your filters.</p>
+                        <p className="text-slate-500 dark:text-slate-400 mt-1 max-w-xs mx-auto text-sm">We couldn&apos;t find any orders matching your search. Try adjusting your filters.</p>
                         <button
                             onClick={() => setSearchTerm('')}
                             className="mt-6 text-primary font-black text-sm hover:underline"

@@ -18,9 +18,7 @@ export default function PeptideCalculatorPage() {
 
     const [syringeSize, setSyringeSize] = useState<string>("1");
 
-    const [result, setResult] = useState<{ volumeToInject: number, syringeUnits: number, error: string | null } | null>(null);
-
-    const calculate = () => {
+    const result = React.useMemo(() => {
         const mass = peptideMass === "Other" ? parseFloat(customPeptideMass) : parseFloat(peptideMass);
         const volume = diluentVolume === "Other" ? parseFloat(customDiluentVolume) : parseFloat(diluentVolume);
 
@@ -35,25 +33,19 @@ export default function PeptideCalculatorPage() {
         const syringe = parseFloat(syringeSize);
 
         if (isNaN(mass) || isNaN(volume) || isNaN(dose) || isNaN(syringe) || mass <= 0 || volume <= 0 || dose <= 0) {
-            setResult({ volumeToInject: 0, syringeUnits: 0, error: "Please enter valid, positive numbers." });
-            return;
+            return { volumeToInject: 0, syringeUnits: 0, error: "Please enter valid, positive numbers." };
         }
 
         const concentration = mass / volume; // mg / mL
         const volumeToInject = dose / concentration; // mL
 
         if (volumeToInject > syringe) {
-            setResult({ volumeToInject: 0, syringeUnits: 0, error: `Volume to inject (${volumeToInject.toFixed(3)} mL) exceeds your ${syringe} mL syringe capacity.` });
-            return;
+            return { volumeToInject: 0, syringeUnits: 0, error: `Volume to inject (${volumeToInject.toFixed(3)} mL) exceeds your ${syringe} mL syringe capacity.` };
         }
 
         const syringeUnits = Math.round(volumeToInject * 100);
 
-        setResult({ volumeToInject, syringeUnits, error: null });
-    };
-
-    useEffect(() => {
-        calculate();
+        return { volumeToInject, syringeUnits, error: null };
     }, [peptideMass, customPeptideMass, diluentVolume, customDiluentVolume, targetDose, customTargetDose, customTargetDoseUnit, syringeSize]);
 
     return (

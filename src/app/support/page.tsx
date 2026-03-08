@@ -17,7 +17,7 @@ export default function ContactPage() {
                         Contact <span className="text-primary">Support</span>
                     </h1>
                     <p className="text-slate-600 dark:text-slate-400 text-lg font-medium leading-relaxed max-w-2xl">
-                        We're here to help with your research compound order or any scientific inquiries you may have. Need an immediate answer? Check our FAQs below.
+                        We&apos;re here to help with your research compound order or any scientific inquiries you may have. Need an immediate answer? Check our FAQs below.
                     </p>
                 </div>
 
@@ -136,7 +136,7 @@ export default function ContactPage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="bg-slate-50 dark:bg-slate-900/50 p-8 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-primary/50 transition-colors group">
                             <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3 group-hover:text-primary transition-colors">How can I track my order?</h3>
-                            <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed font-medium">Once your order ships, you'll receive a confirmation email with a tracking link. Guest users will receive tracking directly to their provided email address.</p>
+                            <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed font-medium">Once your order ships, you&apos;ll receive a confirmation email with a tracking link. Guest users will receive tracking directly to their provided email address.</p>
                         </div>
 
                         <div className="bg-slate-50 dark:bg-slate-900/50 p-8 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-primary/50 transition-colors group">
