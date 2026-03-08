@@ -198,7 +198,7 @@ export default function AdminSupportPage() {
                 </section>
 
                 {/* Right Pane: Order Details Context */}
-                <aside className="w-80 bg-white dark:bg-slate-900 flex flex-col shrink-0 overflow-y-auto hidden lg:flex">
+                <aside className="hidden lg:flex flex-col w-80 bg-white dark:bg-slate-900 shrink-0 overflow-y-auto">
                     <div className="p-6 border-b border-slate-200 dark:border-slate-800">
                         <h3 className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-4">Guest Order Context</h3>
                         <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-100 dark:border-slate-800">

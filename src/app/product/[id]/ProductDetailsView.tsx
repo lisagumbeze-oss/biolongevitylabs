@@ -133,7 +133,7 @@ export default function ProductDetailsView({ id }: Props) {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
                     {/* Sticky Image Section */}
                     <div className="lg:sticky lg:top-24 h-fit space-y-6">
-                        <div className="relative aspect-square rounded-[2rem] overflow-hidden bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-inner group">
+                        <div className="relative aspect-square rounded-4xl overflow-hidden bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-inner group">
                             <motion.img
                                 key={selectedImage}
                                 initial={{ opacity: 0 }}
@@ -196,7 +196,7 @@ export default function ProductDetailsView({ id }: Props) {
                                     </div>
                                     <span className="text-xs text-slate-900 dark:text-white font-black uppercase tracking-widest">4.88 (34 Reviews)</span>
                                 </div>
-                                <div className="h-4 w-[1px] bg-slate-200 dark:bg-slate-800 hidden sm:block"></div>
+                                <div className="h-4 w-px bg-slate-200 dark:bg-slate-800 hidden sm:block"></div>
                                 <div className="flex items-center gap-2">
                                     <span className="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
                                     <span className="text-xs text-primary dark:text-blue-400 font-bold uppercase tracking-widest">Ships worldwide</span>
@@ -251,14 +251,14 @@ export default function ProductDetailsView({ id }: Props) {
 
                             <div className="flex flex-col gap-4">
                                 <label className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-widest px-1">Quantity</label>
-                                <div className="flex items-center border border-slate-200 dark:border-slate-800 rounded-[1.5rem] h-14 bg-white dark:bg-slate-950 w-full sm:w-fit">
+                                <div className="flex items-center border border-slate-200 dark:border-slate-800 rounded-3xl h-14 bg-white dark:bg-slate-950 w-full sm:w-fit">
                                     <button
                                         onClick={() => setQuantity(Math.max(1, quantity - 1))}
                                         className="w-14 h-full flex items-center justify-center hover:text-primary transition-colors border-r border-slate-200 dark:border-slate-800"
                                     >
                                         <Minus className="w-4 h-4" />
                                     </button>
-                                    <span className="px-10 font-black text-lg min-w-[4rem] text-center">{quantity}</span>
+                                    <span className="px-10 font-black text-lg min-w-16 text-center">{quantity}</span>
                                     <button
                                         onClick={() => setQuantity(quantity + 1)}
                                         className="w-14 h-full flex items-center justify-center hover:text-primary transition-colors border-l border-slate-200 dark:border-slate-800"
@@ -271,14 +271,14 @@ export default function ProductDetailsView({ id }: Props) {
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <button
                                     onClick={handleAddToCart}
-                                    className="h-16 rounded-[1.5rem] bg-white dark:bg-slate-800 text-slate-900 dark:text-white border-2 border-slate-900 dark:border-slate-700 font-black flex items-center justify-center gap-3 hover:bg-slate-900 dark:hover:bg-white hover:text-white dark:hover:text-slate-900 transition-all active:scale-[0.98] uppercase tracking-widest text-[10px]"
+                                    className="h-16 rounded-3xl bg-white dark:bg-slate-800 text-slate-900 dark:text-white border-2 border-slate-900 dark:border-slate-700 font-black flex items-center justify-center gap-3 hover:bg-slate-900 dark:hover:bg-white hover:text-white dark:hover:text-slate-900 transition-all active:scale-[0.98] uppercase tracking-widest text-[10px]"
                                 >
                                     <ShoppingCart className="w-4 h-4" />
                                     Add to Cart
                                 </button>
                                 <button
                                     onClick={handleBuyNow}
-                                    className="h-16 rounded-[1.5rem] bg-primary text-white font-black flex items-center justify-center gap-3 hover:bg-sky-500 transition-all active:scale-[0.98] shadow-xl shadow-primary/20 uppercase tracking-widest text-[10px]"
+                                    className="h-16 rounded-3xl bg-primary text-white font-black flex items-center justify-center gap-3 hover:bg-sky-500 transition-all active:scale-[0.98] shadow-xl shadow-primary/20 uppercase tracking-widest text-[10px]"
                                 >
                                     <Zap className="w-4 h-4" />
                                     Buy Now
@@ -345,7 +345,7 @@ export default function ProductDetailsView({ id }: Props) {
                                     { title: "CAS Registry", content: "Uniquely identified compound with full structural validation and mass spectrometry reports.", icon: Info },
                                     { title: "Usage Policy", content: "Strictly for lab research. Not for human or therapeutic use. Waiver required for bulk orders.", icon: Lock }
                                 ].map((spec, i) => (
-                                    <div key={i} className="p-8 bg-slate-50 dark:bg-slate-900/50 rounded-[2rem] border border-slate-100 dark:border-slate-800 group hover:border-primary/30 transition-colors text-left">
+                                    <div key={i} className="p-8 bg-slate-50 dark:bg-slate-900/50 rounded-4xl border border-slate-100 dark:border-slate-800 group hover:border-primary/30 transition-colors text-left">
                                         <spec.icon className="w-8 h-8 text-primary/40 group-hover:text-primary transition-colors mb-6" />
                                         <h4 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-widest mb-3">{spec.title}</h4>
                                         <p className="text-sm text-slate-500 dark:text-slate-400 font-medium leading-relaxed">{spec.content}</p>

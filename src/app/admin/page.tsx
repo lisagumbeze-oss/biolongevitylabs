@@ -4,13 +4,48 @@ import React from 'react';
 import { TrendingUp, Users, PackageOpen, DollarSign, Activity, ArrowUpRight, ArrowDownRight, MoreHorizontal } from 'lucide-react';
 
 export default function AdminDashboardPage() {
-    // Mock Data for metrics
+    const [orders, setOrders] = React.useState<any[]>([]);
+    const [products, setProducts] = React.useState<any[]>([]);
+    const [loading, setLoading] = React.useState(true);
+
+    React.useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [ordersRes, productsRes] = await Promise.all([
+                    fetch('/api/orders'),
+                    fetch('/api/products')
+                ]);
+                const [ordersData, productsData] = await Promise.all([
+                    ordersRes.json(),
+                    productsRes.json()
+                ]);
+                setOrders(Array.isArray(ordersData) ? ordersData : []);
+                setProducts(Array.isArray(productsData) ? productsData : []);
+            } catch (error) {
+                console.error('Failed to fetch dashboard data:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, []);
+
+    // Calculate real metrics
+    const totalRevenue = orders
+        .filter(o => o.status === 'Completed' || o.status === 'Shipped')
+        .reduce((acc, o) => acc + parseFloat(o.total.replace('$', '')), 0);
+
+    const activeOrders = orders.filter(o => o.status === 'Pending' || o.status === 'Processing').length;
+    const totalProducts = products.length;
+
     const metrics = [
-        { title: 'Total Revenue', value: '$24,590.00', icon: DollarSign, trend: '+12.5%', trendUp: true, color: 'from-blue-500 to-cyan-400' },
-        { title: 'Active Orders', value: '142', icon: PackageOpen, trend: '+5.2%', trendUp: true, color: 'from-primary to-purple-500' },
-        { title: 'New Customers', value: '48', icon: Users, trend: '+18.1%', trendUp: true, color: 'from-primary to-blue-500' },
-        { title: 'Site Traffic', value: '12.4K', icon: Activity, trend: '-2.4%', trendUp: false, color: 'from-orange-400 to-pink-500' },
+        { title: 'Total Revenue', value: `$${totalRevenue.toLocaleString(undefined, { minimumFractionDigits: 2 })}`, icon: DollarSign, trend: '+12.5%', trendUp: true, color: 'from-blue-500 to-cyan-400' },
+        { title: 'Active Orders', value: activeOrders.toString(), icon: PackageOpen, trend: '+5.2%', trendUp: true, color: 'from-primary to-purple-500' },
+        { title: 'Total Products', value: totalProducts.toString(), icon: PackageOpen, trend: '+3.1%', trendUp: true, color: 'from-primary to-blue-500' },
+        { title: 'New Customers', value: '48', icon: Users, trend: '+18.1%', trendUp: true, color: 'from-orange-400 to-pink-500' },
     ];
+
+    const recentOrders = orders.slice(0, 5);
 
     return (
         <div className="space-y-8 animate-in fade-in duration-500">
@@ -75,17 +110,12 @@ export default function AdminDashboardPage() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {[
-                                    { id: '#ORD-001', name: 'Alex Johnson', status: 'Processing', total: '$149.00' },
-                                    { id: '#ORD-002', name: 'Sarah Williams', status: 'Shipped', total: '$258.00' },
-                                    { id: '#ORD-003', name: 'Michael Brown', status: 'Delivered', total: '$89.00' },
-                                    { id: '#ORD-004', name: 'Emily Davis', status: 'Pending', total: '$189.00' },
-                                ].map((order) => (
+                                {recentOrders.map((order) => (
                                     <tr key={order.id} className="border-b border-slate-100 dark:border-slate-800/50 hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
                                         <td className="px-6 py-4 font-bold text-slate-900 dark:text-white">{order.id}</td>
-                                        <td className="px-6 py-4 text-slate-600 dark:text-slate-300 font-medium">{order.name}</td>
+                                        <td className="px-6 py-4 text-slate-600 dark:text-slate-300 font-medium">{order.customer}</td>
                                         <td className="px-6 py-4">
-                                            <span className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${order.status === 'Delivered' ? 'bg-primary/10 text-primary dark:bg-primary/20 dark:text-blue-400' :
+                                            <span className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${order.status === 'Completed' ? 'bg-primary/10 text-primary dark:bg-primary/20 dark:text-blue-400' :
                                                 order.status === 'Shipped' ? 'bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400' :
                                                     order.status === 'Processing' ? 'bg-purple-100 text-purple-700 dark:bg-purple-500/20 dark:text-purple-400' :
                                                         'bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400'

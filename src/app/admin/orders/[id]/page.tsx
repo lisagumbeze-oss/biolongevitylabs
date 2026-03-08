@@ -13,11 +13,34 @@ import Image from 'next/image';
 
 export default function AdminOrderDetailsPage() {
     const params = useParams();
-    const orderId = params.id as string || 'ORD-89432';
+    const orderId = (params.id as string || '').replace('ORD-', '');
+    const fullOrderId = `#ORD-${orderId}`;
 
-    // Mock state for payment verification
+    const [order, setOrder] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
     const [needsVerification, setNeedsVerification] = useState(true);
-    const [verificationStatus, setVerificationStatus] = useState<'pending' | 'approved' | 'rejected'>('pending');
+
+    React.useEffect(() => {
+        const fetchOrder = async () => {
+            try {
+                const res = await fetch('/api/orders');
+                const data = await res.json();
+                const foundOrder = data.find((o: any) => o.id === fullOrderId || o.id === orderId);
+                setOrder(foundOrder);
+                if (foundOrder) {
+                    setNeedsVerification(foundOrder.payment_status === 'PENDING' || foundOrder.status === 'Pending');
+                }
+            } catch (error) {
+                console.error('Failed to fetch order details:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        if (orderId) fetchOrder();
+    }, [orderId, fullOrderId]);
+
+    if (loading) return <div className="p-20 text-center font-black animate-pulse">Loading Order Details...</div>;
+    if (!order) return <div className="p-20 text-center font-black">Order not found</div>;
 
     return (
         <div className="flex flex-col gap-6 max-w-7xl mx-auto w-full animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -76,7 +99,7 @@ export default function AdminOrderDetailsPage() {
                             </div>
                             <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
                                 <div className="space-y-4">
-                                    <div className="aspect-[4/3] bg-slate-50 dark:bg-slate-950 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center text-slate-400 relative group overflow-hidden">
+                                    <div className="aspect-4/3 bg-slate-50 dark:bg-slate-950 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center text-slate-400 relative group overflow-hidden">
                                         <FileText className="w-12 h-12 opacity-20 mb-2 group-hover:scale-110 transition-transform" />
                                         <p className="text-[10px] font-black uppercase tracking-widest">payment_receipt.jpg</p>
                                         <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
@@ -88,8 +111,8 @@ export default function AdminOrderDetailsPage() {
                                 <div className="flex flex-col justify-center gap-6">
                                     <div className="bg-slate-50 dark:bg-slate-800/50 p-6 rounded-2xl border border-slate-100 dark:border-slate-800">
                                         <p className="text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-1">Expected Amount</p>
-                                        <p className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter">$361.76</p>
-                                        <p className="text-xs font-bold text-primary mt-2">Manual Bank Transfer</p>
+                                        <p className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter">{order.total}</p>
+                                        <p className="text-xs font-bold text-primary mt-2">{order.payment_method}</p>
                                     </div>
                                     <div className="space-y-3">
                                         <button
@@ -114,7 +137,7 @@ export default function AdminOrderDetailsPage() {
                                 <PackageOpen className="w-5 h-5 text-slate-400" />
                                 Items List
                             </h3>
-                            <span className="bg-slate-200 dark:bg-slate-800 px-3 py-1 rounded-lg text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase">3 Items Ordered</span>
+                            <span className="bg-slate-200 dark:bg-slate-800 px-3 py-1 rounded-lg text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase">{order.full_items?.length || 0} Items Ordered</span>
                         </div>
                         <div className="p-0">
                             <table className="w-full text-left">
@@ -127,11 +150,7 @@ export default function AdminOrderDetailsPage() {
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-slate-100 dark:divide-slate-800/50">
-                                    {[
-                                        { name: 'BPC-157 (5mg)', sku: 'PEP-BPC-05', price: 49.99, qty: 2 },
-                                        { name: 'TB-500 (2mg)', sku: 'PEP-TB5-02', price: 39.99, qty: 1 },
-                                        { name: 'Bacteriostatic Water', sku: 'SUP-BAC-30', price: 14.99, qty: 1 },
-                                    ].map((item, i) => (
+                                    {(order.full_items || []).map((item: any, i: number) => (
                                         <tr key={i} className="group hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
                                             <td className="px-8 py-6">
                                                 <div className="flex items-center gap-4">
@@ -139,14 +158,14 @@ export default function AdminOrderDetailsPage() {
                                                         <ImageIcon className="w-6 h-6 opacity-30" />
                                                     </div>
                                                     <div>
-                                                        <p className="font-black text-slate-900 dark:text-white text-sm">{item.name}</p>
-                                                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter mt-1">SKU: {item.sku}</p>
+                                                        <p className="font-black text-slate-900 dark:text-white text-sm">{item.product_name}</p>
+                                                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter mt-1">ID: {item.product_id}</p>
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td className="px-8 py-6 text-center font-black text-slate-900 dark:text-white">x{item.qty}</td>
-                                            <td className="px-8 py-6 text-right font-bold text-slate-500 dark:text-slate-400">${item.price.toFixed(2)}</td>
-                                            <td className="px-8 py-6 text-right font-black text-slate-900 dark:text-white">${(item.price * item.qty).toFixed(2)}</td>
+                                            <td className="px-8 py-6 text-center font-black text-slate-900 dark:text-white">x{item.quantity}</td>
+                                            <td className="px-8 py-6 text-right font-bold text-slate-500 dark:text-slate-400">${item.price?.toFixed(2)}</td>
+                                            <td className="px-8 py-6 text-right font-black text-slate-900 dark:text-white">${(item.price * item.quantity).toFixed(2)}</td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -157,7 +176,7 @@ export default function AdminOrderDetailsPage() {
                             <div className="w-full max-w-xs space-y-4">
                                 <div className="flex justify-between text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">
                                     <span>Subtotal</span>
-                                    <span className="text-slate-900 dark:text-white">$154.96</span>
+                                    <span className="text-slate-900 dark:text-white">${(parseFloat(order.total.replace('$', '')) - 15).toFixed(2)}</span>
                                 </div>
                                 <div className="flex justify-between text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">
                                     <span>Shipping</span>
@@ -165,7 +184,7 @@ export default function AdminOrderDetailsPage() {
                                 </div>
                                 <div className="pt-4 border-t border-slate-200 dark:border-slate-800 flex justify-between items-center">
                                     <span className="font-black text-slate-900 dark:text-white text-lg">Order Total</span>
-                                    <span className="font-black text-3xl text-primary tracking-tighter">$169.96</span>
+                                    <span className="font-black text-3xl text-primary tracking-tighter">{order.total}</span>
                                 </div>
                             </div>
                         </div>
@@ -214,21 +233,21 @@ export default function AdminOrderDetailsPage() {
                         <div className="space-y-6">
                             <div className="flex items-center gap-4">
                                 <div className="w-12 h-12 rounded-2xl bg-primary text-white flex items-center justify-center font-black text-xl">
-                                    SJ
+                                    {order.customer?.split(' ').map((n: string) => n[0]).join('')}
                                 </div>
                                 <div>
-                                    <p className="font-black text-slate-900 dark:text-white">Sarah Jenkins</p>
+                                    <p className="font-black text-slate-900 dark:text-white">{order.customer}</p>
                                     <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">Guest Account</p>
                                 </div>
                             </div>
                             <div className="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-800">
                                 <div className="flex items-center gap-3 text-sm font-bold text-slate-600 dark:text-slate-400">
                                     <Mail className="w-4 h-4" />
-                                    sarah.j@example.com
+                                    {order.email}
                                 </div>
                                 <div className="flex items-center gap-3 text-sm font-bold text-slate-600 dark:text-slate-400">
                                     <Phone className="w-4 h-4" />
-                                    +1 (555) 867-5309
+                                    {order.phone || 'No phone provided'}
                                 </div>
                             </div>
                         </div>
@@ -245,9 +264,8 @@ export default function AdminOrderDetailsPage() {
                         </div>
                         <div className="space-y-4">
                             <p className="text-sm font-bold text-slate-600 dark:text-slate-300 leading-relaxed uppercase tracking-tighter">
-                                1234 Commerce Blvd<br />
-                                Suite 400<br />
-                                Austin, TX 78701<br />
+                                {order.shipping_address?.street}<br />
+                                {order.shipping_address?.city}, {order.shipping_address?.state} {order.shipping_address?.zip}<br />
                                 United States
                             </p>
                             <div className="pt-4 border-t border-slate-100 dark:border-slate-800">

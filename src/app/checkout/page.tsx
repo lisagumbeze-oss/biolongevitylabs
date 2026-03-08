@@ -48,11 +48,49 @@ export default function CheckoutPage() {
     const shipping = formData.shippingMethod === "express" ? 15.0 : 0.0;
     const total = subtotal + shipping;
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // In a real app, you'd send order to server here
-        clearCart();
-        router.push("/order-confirmation");
+
+        const orderId = `#ORD-${Math.floor(100000000 + Math.random() * 900000000)}`;
+
+        const orderData = {
+            id: orderId,
+            customer: `${formData.firstName} ${formData.lastName}`,
+            email: formData.email,
+            total: `$${total.toFixed(2)}`,
+            status: 'Pending',
+            items: items.reduce((acc, item) => acc + item.quantity, 0),
+            full_items: items.map(item => ({
+                product_id: item.id,
+                product_name: item.name,
+                quantity: item.quantity,
+                price: item.price
+                // variation_id can be added if your store supports it
+            })),
+            shipping_address: {
+                street: formData.address,
+                city: formData.city,
+                state: formData.state,
+                zip: formData.zipCode
+            },
+            payment_method: paymentMethods.find(pm => pm.id === selectedPayment)?.name || 'Transfer'
+        };
+
+        try {
+            const res = await fetch('/api/orders', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(orderData)
+            });
+
+            if (!res.ok) throw new Error('Failed to create order');
+
+            clearCart();
+            router.push("/order-confirmation");
+        } catch (error) {
+            console.error('Checkout error:', error);
+            // In a real app, show a toast or error message to user
+        }
     };
 
     if (items.length === 0) {
@@ -290,7 +328,7 @@ export default function CheckoutPage() {
                             <div className="max-h-[400px] overflow-y-auto pr-2 mb-8 space-y-6">
                                 {items.map((item) => (
                                     <div key={item.id} className="flex gap-5 items-center">
-                                        <div className="relative w-24 h-24 rounded-2xl bg-slate-50 dark:bg-slate-800 group overflow-hidden border border-slate-100 dark:border-slate-800 flex-shrink-0">
+                                        <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-800 shrink-0 overflow-hidden text-slate-400 flex items-center justify-center">
                                             <img src={item.image} alt={item.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                                             <div className="absolute top-1 right-1 w-6 h-6 bg-primary text-white text-[10px] font-black flex items-center justify-center rounded-full shadow-lg">
                                                 {item.quantity}

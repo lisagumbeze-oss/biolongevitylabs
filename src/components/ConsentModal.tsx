@@ -47,7 +47,7 @@ const ConsentModal = () => {
 
             <div className="bg-white dark:bg-slate-900 w-full max-w-lg rounded-2xl shadow-2xl z-10 overflow-hidden border border-slate-200 dark:border-slate-800 relative">
                 {/* Accent line */}
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-blue-500" />
+                <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-primary to-blue-500" />
 
                 <div className="p-8 sm:p-10 flex flex-col items-center text-center">
 
@@ -93,7 +93,7 @@ const ConsentModal = () => {
 
                     <div className="w-full space-y-4 pt-6 border-t border-slate-100 dark:border-slate-800 text-sm text-slate-600 dark:text-slate-400 text-left">
                         <label className="flex items-start gap-3 cursor-pointer group">
-                            <div className="flex-shrink-0 mt-0.5 relative flex items-center justify-center">
+                            <div className="shrink-0 mt-0.5 relative flex items-center justify-center">
                                 <input
                                     type="checkbox"
                                     checked={agreedToRUO}

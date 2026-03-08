@@ -9,7 +9,7 @@ export const metadata = {
 
 export default function ContactPage() {
     return (
-        <main className="flex-grow flex flex-col items-center py-16 px-4 md:px-10 lg:px-40 w-full mt-10">
+        <main className="grow flex flex-col items-center py-16 px-4 md:px-10 lg:px-40 w-full mt-10">
             <div className="max-w-[1200px] w-full flex flex-col gap-12">
 
                 <div className="flex flex-col gap-4 text-center md:text-left">

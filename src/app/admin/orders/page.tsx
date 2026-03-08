@@ -5,17 +5,25 @@ import { Search, Eye, Filter, Download, MoreVertical, Calendar } from 'lucide-re
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const MOCK_ORDERS = [
-    { id: '#ORD-383555172', date: '2026-03-03', customer: 'John Doe', email: 'john@example.com', total: '$149.00', status: 'Pending', items: 1 },
-    { id: '#ORD-383555171', date: '2026-03-02', customer: 'Sarah Williams', email: 'sarah@research.edu', total: '$428.00', status: 'Processing', items: 3 },
-    { id: '#ORD-383555170', date: '2026-03-01', customer: 'Dr. Michael Chen', email: 'm.chen@lab.org', total: '$89.00', status: 'Completed', items: 1 },
-    { id: '#ORD-383555169', date: '2026-02-28', customer: 'Emily Davis', email: 'emily@davis.com', total: '$189.00', status: 'Shipped', items: 1 },
-    { id: '#ORD-383555168', date: '2026-02-28', customer: 'James Wilson', email: 'jwilson@corp.com', total: '$550.00', status: 'Completed', items: 4 },
-];
-
 export default function AdminOrdersPage() {
-    const [orders, setOrders] = useState(MOCK_ORDERS);
-    const [searchTerm, setSearchTerm] = useState('');
+    const [orders, setOrders] = React.useState<any[]>([]);
+    const [loading, setLoading] = React.useState(true);
+    const [searchTerm, setSearchTerm] = React.useState('');
+
+    React.useEffect(() => {
+        const fetchOrders = async () => {
+            try {
+                const res = await fetch('/api/orders');
+                const data = await res.json();
+                setOrders(Array.isArray(data) ? data : []);
+            } catch (error) {
+                console.error('Failed to fetch orders:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchOrders();
+    }, []);
 
     const filteredOrders = orders.filter(order =>
         order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||

@@ -63,10 +63,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
     return (
         <motion.div
             whileHover={{ y: -4 }}
-            className="group bg-white dark:bg-slate-900 rounded-[2rem] overflow-hidden border border-slate-100 dark:border-slate-800 flex flex-col h-full hover:shadow-[0_20px_50px_rgba(0,0,0,0.05)] dark:hover:shadow-[0_20px_50px_rgba(0,0,0,0.3)] transition-all duration-500"
+            className="group bg-white dark:bg-slate-900 rounded-4xl overflow-hidden border border-slate-100 dark:border-slate-800 flex flex-col h-full hover:shadow-[0_20px_50px_rgba(0,0,0,0.05)] dark:hover:shadow-[0_20px_50px_rgba(0,0,0,0.3)] transition-all duration-500"
         >
             <Link href={`/product/${id}`} className="flex flex-col flex-1">
-                <div className="relative aspect-[1/1] bg-slate-50 dark:bg-slate-950 overflow-hidden m-4 rounded-[1.5rem]">
+                <div className="relative aspect-square bg-slate-50 dark:bg-slate-950 overflow-hidden m-4 rounded-3xl">
                     {image ? (
                         <Image
                             src={image}
@@ -98,7 +98,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
                     </div>
                 </div>
 
-                <div className="px-6 pb-6 pt-2 flex-grow flex flex-col">
+                <div className="px-6 pb-6 pt-2 grow flex flex-col">
                     <h3 className="text-lg font-black text-slate-900 dark:text-white line-clamp-2 mb-2 group-hover:text-primary transition-colors leading-tight tracking-tight">
                         {name}
                     </h3>

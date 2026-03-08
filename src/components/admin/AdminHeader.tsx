@@ -36,13 +36,13 @@ export default function AdminHeader() {
                     </button>
 
                     {isNotificationsOpen && (
-                        <div className="absolute right-0 mt-2 w-96 bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 overflow-hidden transform origin-top-right transition-all text-left">
-                            <div className="px-5 py-4 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50/50 dark:bg-slate-950/50">
+                        <div className="absolute right-0 mt-2 w-96 bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-800/50 overflow-hidden transform origin-top-right transition-all text-left">
+                            <div className="px-5 py-4 border-b border-slate-100 dark:border-slate-800/50 flex justify-between items-center bg-slate-50/50 dark:bg-slate-950/50">
                                 <h3 className="text-lg font-black tracking-tight text-slate-900 dark:text-white">Notifications</h3>
                                 <button className="text-sm text-primary hover:text-sky-500 font-bold">Mark all as read</button>
                             </div>
 
-                            <div className="flex border-b border-slate-100 dark:border-slate-800 px-5 gap-6 bg-slate-50/50 dark:bg-slate-950/50">
+                            <div className="flex border-b border-slate-100 dark:border-slate-800/50 px-5 gap-6 bg-slate-50/50 dark:bg-slate-950/50">
                                 <button className="flex flex-col items-center justify-center border-b-[3px] border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 pb-2 pt-3 font-bold transition-colors">
                                     <span className="text-sm">All</span>
                                 </button>

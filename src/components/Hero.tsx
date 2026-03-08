@@ -7,7 +7,7 @@ import { ArrowRight, FlaskConical, ShieldCheck, Zap } from "lucide-react";
 
 const Hero = () => {
     return (
-        <div className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 min-h-[90vh] flex items-center">
+        <div className="relative overflow-hidden bg-linear-to-br from-slate-950 via-slate-900 to-indigo-950 min-h-[90vh] flex items-center">
             {/* Animated Background Blobs */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 <motion.div
@@ -63,7 +63,7 @@ const Hero = () => {
                             className="text-5xl sm:text-6xl xl:text-7xl tracking-tight font-black text-white leading-[1.05] mb-6"
                         >
                             Buy Research
-                            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary via-violet-400 to-indigo-400">
+                            <span className="block text-transparent bg-clip-text bg-linear-to-r from-primary via-violet-400 to-indigo-400">
                                 Peptides for Sale
                             </span>
                             Online
@@ -127,14 +127,14 @@ const Hero = () => {
                         className="relative hidden lg:block"
                     >
                         {/* Glowing ring */}
-                        <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-primary/30 to-violet-500/20 blur-xl scale-105" />
-                        <div className="relative rounded-3xl overflow-hidden border border-white/10 shadow-2xl shadow-slate-900/60">
+                        <div className="absolute inset-0 rounded-3xl bg-linear-to-br from-primary/30 to-violet-500/20 blur-xl scale-105" />
+                        <div className="relative h-full w-full rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
                             <img
-                                className="w-full h-[480px] object-cover"
-                                src="/hero-peptides.jpg"
-                                alt="Research Peptides for Sale Online"
+                                src="https://images.unsplash.com/photo-1579154271451-bc00045e05df?auto=format&fit=crop&q=80"
+                                alt="Bio-Longevity Research"
+                                className="h-full w-full object-cover transform motion-safe:hover:scale-110 transition-transform duration-1000"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent" />
+                            <div className="absolute inset-0 bg-linear-to-t from-slate-900/60 via-transparent to-transparent" />
                         </div>
                     </motion.div>
                 </div>

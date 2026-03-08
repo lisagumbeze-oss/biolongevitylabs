@@ -30,7 +30,7 @@ export default function AboutPage() {
                         alt="BioLongevity Labs Research"
                         className="w-full h-full object-cover opacity-40 mix-blend-overlay"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/80 to-transparent" />
+                    <div className="absolute inset-0 bg-linear-to-t from-slate-900 via-slate-900/80 to-transparent" />
                 </div>
 
                 <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20 text-center">
@@ -44,7 +44,7 @@ export default function AboutPage() {
                             Our Mission & Vision
                         </div>
                         <h1 className="text-5xl md:text-7xl font-black text-white tracking-tight mb-8 drop-shadow-lg">
-                            Welcome to <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">BioLongevity Labs</span>
+                            Welcome to <span className="text-transparent bg-clip-text bg-linear-to-r from-primary to-blue-400">BioLongevity Labs</span>
                         </h1>
                         <p className="text-xl md:text-2xl text-slate-300 max-w-3xl mx-auto font-medium leading-relaxed">
                             Your Trusted Research Partner for premium peptides and bioregulators.
@@ -94,13 +94,13 @@ export default function AboutPage() {
                         <img
                             src="https://biolongevitylabs.com/wp-content/uploads/2025/05/AdobeStock_1456654778.jpg"
                             alt="State of the art lab facilities"
-                            className="w-full h-full object-cover aspect-square md:aspect-[4/3] transform group-hover:scale-105 transition-transform duration-700"
+                            className="w-full h-full object-cover aspect-square md:aspect-4/3 transform group-hover:scale-105 transition-transform duration-700"
                             onError={(e) => {
                                 // Fallback image if the scraped one fails to load
                                 (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1581093458791-9f3c3900df4b?auto=format&fit=crop&w=1200&q=80";
                             }}
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent" />
+                        <div className="absolute inset-0 bg-linear-to-t from-slate-900/80 to-transparent" />
                     </motion.div>
                 </motion.div>
 
