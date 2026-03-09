@@ -73,7 +73,7 @@
                 "attributes": {
                     "Quantity": "6-pairs"
                 },
-                "price": 2397,
+                "price": 4554,
                 "stockStatus": "Out of Stock"
             },
             {
@@ -81,7 +81,7 @@
                 "attributes": {
                     "Quantity": "12-pairs"
                 },
-                "price": 2397,
+                "price": 8629,
                 "stockStatus": "Out of Stock"
             },
             {
@@ -89,7 +89,7 @@
                 "attributes": {
                     "Quantity": "18-pairs"
                 },
-                "price": 2397,
+                "price": 12224,
                 "stockStatus": "Out of Stock"
             },
             {
@@ -97,7 +97,7 @@
                 "attributes": {
                     "Quantity": "24-pairs"
                 },
-                "price": 2397,
+                "price": 15340,
                 "stockStatus": "Out of Stock"
             },
             {
@@ -105,7 +105,7 @@
                 "attributes": {
                     "Quantity": "48-pairs"
                 },
-                "price": 2397,
+                "price": 24450,
                 "stockStatus": "Out of Stock"
             }
         ]
@@ -153,7 +153,7 @@
                 "attributes": {
                     "Quantity": "6-pairs"
                 },
-                "price": 2397,
+                "price": 4554,
                 "stockStatus": "Out of Stock"
             },
             {
@@ -161,7 +161,7 @@
                 "attributes": {
                     "Quantity": "12-pairs"
                 },
-                "price": 2397,
+                "price": 8629,
                 "stockStatus": "Out of Stock"
             },
             {
@@ -169,7 +169,7 @@
                 "attributes": {
                     "Quantity": "24-pairs"
                 },
-                "price": 2397,
+                "price": 12224,
                 "stockStatus": "Out of Stock"
             }
         ]
@@ -177,9 +177,9 @@
     {
         "id": "prod_219500",
         "name": "BioBam-15",
-        "price": 149.00,
-        "minPrice": 149.00,
-        "maxPrice": 149.00,
+        "price": 149,
+        "minPrice": 149,
+        "maxPrice": 149,
         "image": "https://mlavgymrtxzc.i.optimole.com/cb:572_.56b/w:auto/h:auto/q:mauto/f:best/https://biolongevitylabs.com/wp-content/uploads/2026/02/BioBAM-15.jpg",
         "gallery": [],
         "category": "Peptide Capsules",
@@ -194,9 +194,9 @@
     {
         "id": "prod_219499",
         "name": "BioRecharge",
-        "price": 129.00,
-        "minPrice": 129.00,
-        "maxPrice": 129.00,
+        "price": 129,
+        "minPrice": 129,
+        "maxPrice": 129,
         "image": "https://mlavgymrtxzc.i.optimole.com/cb:572_.56b/w:auto/h:auto/q:mauto/f:best/https://biolongevitylabs.com/wp-content/uploads/2026/02/BioRecharge.jpg",
         "gallery": [],
         "category": "Peptide Capsules",
@@ -270,9 +270,9 @@
     {
         "id": "prod_209938",
         "name": "SNAP-8 (10MG)",
-        "price": 89.00,
-        "minPrice": 89.00,
-        "maxPrice": 89.00,
+        "price": 89,
+        "minPrice": 89,
+        "maxPrice": 89,
         "image": "https://mlavgymrtxzc.i.optimole.com/cb:572_.56b/w:auto/h:auto/q:mauto/f:best/https://biolongevitylabs.com/wp-content/uploads/2026/01/SNAP-8.jpg",
         "gallery": [],
         "category": "Peptide Capsules",
