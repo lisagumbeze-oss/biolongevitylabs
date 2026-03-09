@@ -130,7 +130,7 @@ const Hero = () => {
                         <div className="absolute inset-0 rounded-3xl bg-linear-to-br from-primary/30 to-violet-500/20 blur-xl scale-105" />
                         <div className="relative h-full w-full rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
                             <img
-                                src="https://images.unsplash.com/photo-1579154271451-bc00045e05df?auto=format&fit=crop&q=80"
+                                src="/hero-peptides.jpg"
                                 alt="Bio-Longevity Research"
                                 className="h-full w-full object-cover transform motion-safe:hover:scale-110 transition-transform duration-1000"
                             />

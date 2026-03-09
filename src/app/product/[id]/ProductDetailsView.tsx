@@ -199,12 +199,11 @@ export default function ProductDetailsView({ id }: Props) {
                                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Sales Tax included at checkout</p>
                             </div>
 
-                            <div className="prose prose-slate dark:prose-invert max-w-none prose-h2:text-xl prose-h2:font-black prose-h2:uppercase prose-h2:tracking-widest prose-p:text-slate-600 dark:prose-p:text-slate-400 prose-p:leading-relaxed prose-table:border prose-table:border-slate-100 dark:prose-table:border-slate-800 prose-th:bg-slate-50 dark:prose-th:bg-slate-900 prose-th:p-2 prose-td:p-2">
-                                <div
-                                    className="whitespace-normal"
-                                    dangerouslySetInnerHTML={{ __html: product.description }}
-                                />
-                            </div>
+                            {/* Sub-description hint */}
+                            <p className="text-slate-500 dark:text-slate-400 font-medium leading-relaxed mb-8 flex items-center gap-2">
+                                <Info className="w-4 h-4 text-primary shrink-0" />
+                                <span className="text-xs uppercase tracking-widest font-black">Laboratory Research Chemical • Scroll down for full specifications</span>
+                            </p>
                         </div>
 
                         {/* Selection Controls */}
@@ -292,6 +291,64 @@ export default function ProductDetailsView({ id }: Props) {
                     </div>
                 </div>
 
+                {/* Product Description Full Width */}
+                <div className="mt-20 lg:mt-32 pt-20 border-t border-slate-100 dark:border-slate-800 animate-in fade-in slide-in-from-bottom-10 duration-1000">
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-20">
+                        <div className="lg:col-span-1">
+                            <h2 className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter mb-4 leading-none uppercase">Product Information</h2>
+                            <p className="text-sm font-bold text-slate-400 uppercase tracking-widest leading-loose max-w-xs">Detailed laboratory specifications, compound structure, and research applications.</p>
+
+                            <div className="mt-10 space-y-4">
+                                <div className="flex items-center gap-3 p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-100 dark:border-slate-800">
+                                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                                        <Beaker className="w-5 h-5" />
+                                    </div>
+                                    <div>
+                                        <p className="text-[10px] font-black uppercase text-slate-900 dark:text-white">Research Grade</p>
+                                        <p className="text-[9px] font-bold uppercase text-slate-500">HPLC 99%+ Purity</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-center gap-3 p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-100 dark:border-slate-800">
+                                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                                        <ShieldCheck className="w-5 h-5" />
+                                    </div>
+                                    <div>
+                                        <p className="text-[10px] font-black uppercase text-slate-900 dark:text-white">Verified Origin</p>
+                                        <p className="text-[9px] font-bold uppercase text-slate-500">GMP Manufactured</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="lg:col-span-2">
+                            <div
+                                className="prose prose-slate dark:prose-invert max-w-none 
+                                prose-h2:text-xl prose-h2:font-black prose-h2:uppercase prose-h2:tracking-widest prose-h2:mb-6 prose-h2:text-slate-900 dark:prose-h2:text-white
+                                prose-h3:text-sm prose-h3:font-bold prose-h3:uppercase prose-h3:tracking-widest prose-h3:mt-10 prose-h3:mb-4 prose-h3:text-primary dark:prose-h3:text-blue-400
+                                prose-p:text-slate-600 dark:prose-p:text-slate-300 prose-p:leading-relaxed prose-p:mb-6 prose-p:text-base
+                                prose-strong:text-slate-900 dark:prose-strong:text-white prose-strong:font-black
+                                prose-table:border-collapse prose-table:my-10 prose-table:shadow-sm prose-table:rounded-2xl prose-table:overflow-hidden 
+                                prose-th:bg-slate-50 dark:prose-th:bg-slate-900 prose-th:p-4 prose-th:text-xs prose-th:font-black prose-th:uppercase prose-th:tracking-widest prose-th:text-slate-900 dark:prose-th:text-white
+                                prose-td:p-4 prose-td:border prose-td:border-slate-100 dark:prose-td:border-slate-800 prose-td:text-sm prose-td:text-slate-600 dark:prose-td:text-slate-400 font-medium"
+                                dangerouslySetInnerHTML={{ __html: product.description }}
+                            />
+
+                            <div className="mt-16 p-8 bg-amber-50 dark:bg-amber-900/10 border border-amber-100 dark:border-amber-900/20 rounded-3xl">
+                                <div className="flex items-start gap-4">
+                                    <Info className="w-6 h-6 text-amber-600 dark:text-amber-500 shrink-0 mt-1" />
+                                    <div>
+                                        <h4 className="text-sm font-black text-amber-900 dark:text-amber-400 uppercase tracking-widest mb-2">Research Chemical Disclaimer</h4>
+                                        <p className="text-xs text-amber-800/70 dark:text-amber-500/70 leading-relaxed font-bold uppercase tracking-tight">
+                                            This product is intended for laboratory research use only. It is not for human consumption,
+                                            diagnostic, or therapeutic purposes. Handling should only be performed by qualified professionals.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 {/* Related Products */}
                 {relatedProducts.length > 0 && (
                     <div className="mt-40 pt-20 border-t border-slate-100 dark:border-slate-800">
@@ -341,7 +398,6 @@ export default function ProductDetailsView({ id }: Props) {
                         </div>
                     </div>
                 </div>
-
             </div>
 
             <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
