@@ -52,7 +52,7 @@ export async function GET() {
             const { data, error } = await supabase
                 .from('orders')
                 .select('*, order_items(*)')
-                .order('created_at', { ascending: true }); // Earliest first as requested
+                .order('created_at', { ascending: false }); // Most recent first as requested
 
             if (error) throw error;
 
@@ -81,7 +81,7 @@ export async function GET() {
             const sortedOrders = [...orders].sort((a, b) => {
                 const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
                 const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
-                return dateA - dateB;
+                return dateB - dateA;
             });
             return NextResponse.json(sortedOrders);
         }
