@@ -65,12 +65,11 @@ export default function RootLayout({
           <Footer />
         </Providers>
 
-        {/* Smartsupp Live Chat */}
         {process.env.NEXT_PUBLIC_SMARTSUPP_KEY && (
-          <Script id="smartsupp-script" strategy="afterInteractive">
+          <Script id="smartsupp-script" strategy="lazyOnload">
             {`
-              var _smartsupp = _smartsupp || {};
-              _smartsupp.key = '${process.env.NEXT_PUBLIC_SMARTSUPP_KEY}';
+              window._smartsupp = window._smartsupp || {};
+              window._smartsupp.key = '${process.env.NEXT_PUBLIC_SMARTSUPP_KEY}';
               window.smartsupp||(function(d) {
                 var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
                 s=d.getElementsByTagName('script')[0];c=d.createElement('script');

@@ -1,0 +1,31 @@
+{
+    "taxConfig": "auto",
+    "flatRate": "15.00",
+    "freeShippingThreshold": "149.00",
+    "paymentMethods": [
+        {
+            "id": "zelle",
+            "name": "Zelle",
+            "instructions": "Please send your payment to pay@biolongevitylabs.com via Zelle. Include your order number in the memo field.",
+            "enabled": true
+        },
+        {
+            "id": "venmo",
+            "name": "Venmo",
+            "instructions": "Send payment to Venmo username: @BioLongevityLabs. Please include your order ID.",
+            "enabled": true
+        },
+        {
+            "id": "cashapp",
+            "name": "Cash App",
+            "instructions": "Send payment to Cashtag: $BioLongevityLabs. Include your order number.",
+            "enabled": true
+        },
+        {
+            "id": "check",
+            "name": "Check / Money Order",
+            "instructions": "Make checks payable to BioLongevity Labs LLC. Mail to: F2 Nutrition Inc. 405 Rothrock Rd #106 Akron, OH 44321.",
+            "enabled": true
+        }
+    ]
+}

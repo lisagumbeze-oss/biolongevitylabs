@@ -204,7 +204,7 @@ export default function ProductDetailsView({ id }: Props) {
                                 </div>
                             </div>
 
-                            <h1 className="text-4xl sm:text-6xl font-black text-slate-900 dark:text-white mb-6 tracking-tight leading-[1.1]">
+                            <h1 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white mb-6 tracking-tight leading-[1.1]">
                                 {product.name}
                             </h1>
 
@@ -226,9 +226,9 @@ export default function ProductDetailsView({ id }: Props) {
 
                             <div className="flex flex-col gap-2 mb-10 text-left">
                                 <div className="flex items-baseline gap-4">
-                                    <span className="text-5xl sm:text-7xl font-black text-primary tracking-tighter">${displayPrice.toFixed(2)}</span>
+                                    <span className="text-4xl sm:text-4xl font-black text-primary tracking-tighter">${displayPrice.toFixed(2)}</span>
                                     {(!product.isVariable || selectedVariation) && (selectedVariation?.originalPrice ?? product.originalPrice) && (
-                                        <span className="text-2xl sm:text-3xl text-slate-300 line-through font-bold">${(selectedVariation?.originalPrice ?? product.originalPrice)?.toFixed(2)}</span>
+                                        <span className="text-2xl sm:text-2xl text-slate-300 line-through font-bold">${(selectedVariation?.originalPrice ?? product.originalPrice)?.toFixed(2)}</span>
                                     )}
                                 </div>
                                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Sales Tax included at checkout</p>
@@ -330,7 +330,7 @@ export default function ProductDetailsView({ id }: Props) {
                 <div className="mt-20 lg:mt-32 pt-20 border-t border-slate-100 dark:border-slate-800 animate-in fade-in slide-in-from-bottom-10 duration-1000">
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-20">
                         <div className="lg:col-span-1">
-                            <h2 className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter mb-4 leading-none uppercase">Product Information</h2>
+                            <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter mb-4 leading-none uppercase">Product Information</h2>
                             <p className="text-sm font-bold text-slate-400 uppercase tracking-widest leading-loose max-w-xs">Detailed laboratory specifications, compound structure, and research applications.</p>
 
                             <div className="mt-10 space-y-4">
@@ -389,7 +389,7 @@ export default function ProductDetailsView({ id }: Props) {
                     <div className="mt-40 pt-20 border-t border-slate-100 dark:border-slate-800">
                         <div className="flex flex-col md:flex-row justify-between items-end gap-6 mb-12">
                             <div className="text-left">
-                                <h2 className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter mb-4">Complete Your Research</h2>
+                                <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter mb-4">Complete Your Research</h2>
                                 <p className="text-slate-500 font-bold uppercase tracking-widest text-xs flex items-center gap-2">
                                     <Layers className="w-4 h-4 text-primary" />
                                     Synergistic compounds from the <span className="text-primary font-black">{product.category}</span> lineup
@@ -412,7 +412,7 @@ export default function ProductDetailsView({ id }: Props) {
                 <div className="mt-32 border-t border-slate-100 dark:border-slate-800 pt-20">
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-20">
                         <div className="lg:col-span-1 text-left">
-                            <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter mb-4 leading-none">Research Specification</h2>
+                            <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter mb-4 leading-none">Research Specification</h2>
                             <p className="text-sm font-bold text-slate-400 uppercase tracking-widest leading-loose">Comprehensive documentation for laboratory application and compound verification.</p>
                         </div>
                         <div className="lg:col-span-2 space-y-10">

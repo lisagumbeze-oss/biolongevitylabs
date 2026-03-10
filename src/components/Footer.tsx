@@ -53,6 +53,7 @@ const Footer = () => {
                     </div>
                     <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-8">
                         <Link href="/about" className="text-sm font-medium text-slate-500 hover:text-primary dark:text-slate-400 transition-colors">About Us</Link>
+                        <Link href="/shipping-and-payments" className="text-sm font-medium text-slate-500 hover:text-primary dark:text-slate-400 transition-colors">Shipping and Payments</Link>
                         <Link href="/support" className="text-sm font-medium text-slate-500 hover:text-primary dark:text-slate-400 transition-colors">Customer Service</Link>
                         <Link
                             href="/terms"

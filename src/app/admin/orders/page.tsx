@@ -1,18 +1,19 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Search, Eye, Filter, Download, MoreVertical, Calendar } from 'lucide-react';
+import { Search, Eye, Filter, Download, MoreVertical, Calendar, Trash2 } from 'lucide-react';
 import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
 
 interface AdminOrder {
     id: string;
     customer: string;
     email: string;
+    phone?: string;
     status: string;
     total: string;
     date: string;
     items: number;
+    payment_method?: string;
 }
 
 export default function AdminOrdersPage() {
@@ -35,11 +36,29 @@ export default function AdminOrdersPage() {
         fetchOrders();
     }, []);
 
+    const handleDeleteOrder = async (id: string) => {
+        if (!confirm('Are you sure you want to delete this order?')) return;
+        try {
+            const res = await fetch(`/api/orders?id=${encodeURIComponent(id)}`, { method: 'DELETE' });
+            if (res.ok) {
+                setOrders(prev => prev.filter(o => o.id !== id));
+            } else {
+                alert('Failed to delete order');
+            }
+        } catch (error) {
+            console.error('Failed to delete order:', error);
+        }
+    };
+
     const filteredOrders = orders.filter(order =>
-        order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        order.customer.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        order.email.toLowerCase().includes(searchTerm.toLowerCase())
+        (order.id?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+        (order.customer?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+        (order.email?.toLowerCase() || '').includes(searchTerm.toLowerCase())
     );
+
+    if (loading) {
+        return <div className="p-20 text-center font-black animate-pulse text-slate-400">Loading Orders...</div>;
+    }
 
     return (
         <div className="space-y-6 animate-in fade-in duration-500">
@@ -127,7 +146,7 @@ export default function AdminOrdersPage() {
                                     </td>
                                     <td className="px-6 py-6">
                                         <div className="font-black text-slate-900 dark:text-white text-sm">{order.total}</div>
-                                        <div className="text-[10px] text-slate-400 mt-1 font-bold uppercase tracking-tighter">Paid via Transfer</div>
+                                        <div className="text-[10px] text-slate-400 mt-1 font-bold uppercase tracking-tighter">Paid via {order.payment_method || 'Transfer'}</div>
                                     </td>
                                     <td className="px-6 py-6">
                                         <div className="flex items-center justify-end gap-2">
@@ -138,8 +157,12 @@ export default function AdminOrdersPage() {
                                                 <Eye className="w-3.5 h-3.5" />
                                                 Review
                                             </Link>
-                                            <button className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
-                                                <MoreVertical className="w-4 h-4" />
+                                            <button
+                                                onClick={() => handleDeleteOrder(order.id)}
+                                                className="p-2 text-slate-400 hover:text-red-500 transition-colors rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800"
+                                                title="Delete Order"
+                                            >
+                                                <Trash2 className="w-4 h-4" />
                                             </button>
                                         </div>
                                     </td>

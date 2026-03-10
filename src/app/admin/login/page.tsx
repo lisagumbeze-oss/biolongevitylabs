@@ -11,22 +11,30 @@ export default function AdminLoginPage() {
     const [loading, setLoading] = useState(false);
     const router = useRouter();
 
-    const handleLogin = (e: React.FormEvent) => {
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
 
-        // Simple hardcoded check for the demo/private lab environment
-        // In a real production app, this would use Supabase Auth
-        setTimeout(() => {
-            if (username === 'admin' && password === 'BioLabs2026!') {
+        try {
+            const res = await fetch('/api/admin/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            });
+
+            if (res.ok) {
                 localStorage.setItem('admin_auth', 'true');
                 toast.success('Successfully logged in');
                 router.push('/admin');
             } else {
-                toast.error('Invalid credentials');
+                const data = await res.json();
+                toast.error(data.error || 'Invalid credentials');
                 setLoading(false);
             }
-        }, 800);
+        } catch (error) {
+            toast.error('Server error');
+            setLoading(false);
+        }
     };
 
     return (

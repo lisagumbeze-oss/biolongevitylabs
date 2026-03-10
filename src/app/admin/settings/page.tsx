@@ -1,55 +1,125 @@
 "use client";
 
-import React, { useState } from 'react';
-import { Settings, Truck, Shield, CreditCard, Save, Link as LinkIcon, Info } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Settings, Truck, Shield, CreditCard, Save, Link as LinkIcon, Info, Lock, Eye, EyeOff, Loader2 } from 'lucide-react';
+
+interface PaymentMethod {
+    id: string;
+    name: string;
+    instructions: string;
+    enabled: boolean;
+}
+
+interface StoreSettings {
+    taxConfig: string;
+    flatRate: string;
+    freeShippingThreshold: string;
+    paymentMethods: PaymentMethod[];
+}
 
 export default function AdminSettingsPage() {
     const [activeTab, setActiveTab] = useState('shipping');
+    const [loading, setLoading] = useState(true);
+    const [saving, setSaving] = useState(false);
 
-    // Shipping State
-    const [taxConfig, setTaxConfig] = useState('auto');
-    const [flatRate, setFlatRate] = useState('9.99');
-    const [freeShippingThreshold, setFreeShippingThreshold] = useState('149.00');
+    // Store Settings State
+    const [settings, setSettings] = useState<StoreSettings>({
+        taxConfig: 'auto',
+        flatRate: '9.99',
+        freeShippingThreshold: '149.00',
+        paymentMethods: []
+    });
 
-    // Payment State
-    const [paymentMethods, setPaymentMethods] = useState([
-        {
-            id: 1,
-            name: 'Zelle Transfer',
-            iconUrl: '',
-            instructions: 'Please send payment to payments@biolongevitylabs.com via Zelle. Include your order number in the memo.',
-            enabled: true
-        },
-        {
-            id: 2,
-            name: 'CashApp',
-            iconUrl: '',
-            instructions: 'Send funds to $BioLongevs. Your order will be processed once verified.',
-            enabled: true
-        },
-        {
-            id: 3,
-            name: 'Bank Wire Transfer',
-            iconUrl: '',
-            instructions: 'Account Name: BioLongevity Labs LLC\nRouting: XXXXXX\nAccount: YYYYYYY',
-            enabled: false
-        },
-        { id: 4, name: '', iconUrl: '', instructions: '', enabled: false },
-        { id: 5, name: '', iconUrl: '', instructions: '', enabled: false }
-    ]);
+    // Password State
+    const [passwordData, setPasswordData] = useState({
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: ''
+    });
+    const [showPasswords, setShowPasswords] = useState(false);
 
-    const updatePaymentMethod = (index: number, field: keyof typeof paymentMethods[0], value: string | number | boolean) => {
-        const newMethods = [...paymentMethods];
-        newMethods[index] = { ...newMethods[index], [field]: value };
-        setPaymentMethods(newMethods);
+    useEffect(() => {
+        const fetchSettings = async () => {
+            try {
+                const res = await fetch('/api/settings');
+                const data = await res.json();
+                setSettings(data);
+            } catch (error) {
+                console.error('Failed to fetch settings:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchSettings();
+    }, []);
+
+    const handleSaveSettings = async () => {
+        setSaving(true);
+        try {
+            const res = await fetch('/api/settings', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(settings)
+            });
+            if (res.ok) {
+                alert('Settings saved successfully!');
+            } else {
+                alert('Failed to save settings.');
+            }
+        } catch (error) {
+            console.error('Save error:', error);
+        } finally {
+            setSaving(false);
+        }
     };
 
+    const handlePasswordChange = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (passwordData.newPassword !== passwordData.confirmPassword) {
+            alert('Passwords do not match');
+            return;
+        }
+
+        try {
+            const res = await fetch('/api/admin/change-password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    currentPassword: passwordData.currentPassword,
+                    newPassword: passwordData.newPassword
+                })
+            });
+
+            const data = await res.json();
+            if (res.ok) {
+                alert('Password updated successfully!');
+                setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+            } else {
+                alert(data.error || 'Failed to update password');
+            }
+        } catch (error) {
+            alert('Server error while updating password');
+        }
+    };
+
+    const updatePaymentMethod = (id: string, field: keyof PaymentMethod, value: string | boolean) => {
+        const newMethods = settings.paymentMethods.map(pm =>
+            pm.id === id ? { ...pm, [field]: value } : pm
+        );
+        setSettings({ ...settings, paymentMethods: newMethods });
+    };
+
+    if (loading) return <div className="p-20 text-center font-black animate-pulse text-slate-400 flex flex-col items-center gap-4">
+        <Loader2 className="w-8 h-8 animate-spin" />
+        Loading Store Settings...
+    </div>;
+
     return (
-        <div className="flex flex-col gap-8 max-w-5xl">
+        <div className="flex flex-col gap-8 max-w-5xl animate-in fade-in duration-500">
             {/* Page Header */}
             <div className="mb-2">
-                <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Store Settings</h1>
-                <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">Configure tax settings, shipping rates, and manual payment methods.</p>
+                <h1 className="text-3xl font-black tracking-tight text-slate-900 dark:text-white">Store Settings</h1>
+                <p className="text-sm text-slate-500 dark:text-slate-400 mt-2 font-medium">Configure tax settings, shipping rates, and payment methods.</p>
             </div>
 
             <div className="flex flex-col md:flex-row gap-8">
@@ -58,28 +128,28 @@ export default function AdminSettingsPage() {
                     <nav className="flex flex-col gap-2">
                         <button
                             onClick={() => setActiveTab('general')}
-                            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors w-full text-left ${activeTab === 'general' ? 'bg-primary/10 text-primary font-bold shadow-inner' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
+                            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors w-full text-left ${activeTab === 'general' ? 'bg-primary/10 text-primary font-black shadow-inner' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 font-bold'}`}
                         >
                             <Settings className="w-5 h-5" />
                             <span className="text-sm">General</span>
                         </button>
                         <button
                             onClick={() => setActiveTab('shipping')}
-                            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors w-full text-left ${activeTab === 'shipping' ? 'bg-primary/10 text-primary font-bold shadow-inner' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
+                            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors w-full text-left ${activeTab === 'shipping' ? 'bg-primary/10 text-primary font-black shadow-inner' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 font-bold'}`}
                         >
                             <Truck className="w-5 h-5" />
                             <span className="text-sm">Shipping & Tax</span>
                         </button>
                         <button
                             onClick={() => setActiveTab('payments')}
-                            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors w-full text-left ${activeTab === 'payments' ? 'bg-primary/10 text-primary font-bold shadow-inner' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
+                            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors w-full text-left ${activeTab === 'payments' ? 'bg-primary/10 text-primary font-black shadow-inner' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 font-bold'}`}
                         >
                             <CreditCard className="w-5 h-5" />
                             <span className="text-sm">Payments</span>
                         </button>
                         <button
                             onClick={() => setActiveTab('policies')}
-                            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors w-full text-left ${activeTab === 'policies' ? 'bg-primary/10 text-primary font-bold shadow-inner' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
+                            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors w-full text-left ${activeTab === 'policies' ? 'bg-primary/10 text-primary font-black shadow-inner' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 font-bold'}`}
                         >
                             <Shield className="w-5 h-5" />
                             <span className="text-sm">Policies</span>
@@ -89,111 +159,131 @@ export default function AdminSettingsPage() {
 
                 <div className="flex flex-col gap-8 flex-1">
 
+                    {/* --- GENERAL TAB (PASSWORD) --- */}
+                    {activeTab === 'general' && (
+                        <section className="bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden animate-in fade-in slide-in-from-bottom-2 duration-300">
+                            <div className="px-8 py-6 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50">
+                                <h2 className="text-xl font-black text-slate-900 dark:text-white">Admin Security</h2>
+                                <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 font-medium">Manage your administrative access credentials.</p>
+                            </div>
+                            <form onSubmit={handlePasswordChange} className="p-8 space-y-6">
+                                <div className="space-y-4">
+                                    <h3 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-widest flex items-center gap-2">
+                                        <Lock className="w-4 h-4 text-primary" />
+                                        Update Password
+                                    </h3>
+                                    <div className="grid grid-cols-1 gap-4">
+                                        <div className="flex flex-col gap-2 relative">
+                                            <label className="text-xs font-black text-slate-500 uppercase tracking-widest">Current Password</label>
+                                            <div className="relative">
+                                                <input
+                                                    required
+                                                    type={showPasswords ? "text" : "password"}
+                                                    value={passwordData.currentPassword}
+                                                    onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
+                                                    className="w-full pl-4 pr-12 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-primary font-bold shadow-inner"
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setShowPasswords(!showPasswords)}
+                                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-primary transition-colors"
+                                                >
+                                                    {showPasswords ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div className="flex flex-col gap-2">
+                                                <label className="text-xs font-black text-slate-500 uppercase tracking-widest">New Password</label>
+                                                <input
+                                                    required
+                                                    type={showPasswords ? "text" : "password"}
+                                                    value={passwordData.newPassword}
+                                                    onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
+                                                    className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-primary font-bold shadow-inner"
+                                                />
+                                            </div>
+                                            <div className="flex flex-col gap-2">
+                                                <label className="text-xs font-black text-slate-500 uppercase tracking-widest">Confirm Password</label>
+                                                <input
+                                                    required
+                                                    type={showPasswords ? "text" : "password"}
+                                                    value={passwordData.confirmPassword}
+                                                    onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
+                                                    className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-primary font-bold shadow-inner"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="flex justify-end pt-4">
+                                    <button
+                                        type="submit"
+                                        className="bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-8 py-3 rounded-xl font-black text-sm uppercase tracking-widest hover:brightness-110 transition-all shadow-lg active:scale-95"
+                                    >
+                                        Update Password
+                                    </button>
+                                </div>
+                            </form>
+                        </section>
+                    )}
+
                     {/* --- SHIPPING & TAX TAB --- */}
                     {activeTab === 'shipping' && (
                         <>
-                            {/* Tax Configuration Section */}
                             <section className="bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden animate-in fade-in slide-in-from-bottom-2 duration-300">
                                 <div className="px-8 py-6 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50">
-                                    <h2 className="text-xl font-bold text-slate-900 dark:text-white">Tax Configuration</h2>
-                                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Determine how sales tax is calculated at checkout.</p>
+                                    <h2 className="text-xl font-black text-slate-900 dark:text-white">Tax Configuration</h2>
+                                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 font-medium">Determine how sales tax is calculated at checkout.</p>
                                 </div>
                                 <div className="p-8 flex flex-col gap-4">
-                                    <label className={`flex items-start gap-4 rounded-2xl border p-5 cursor-pointer transition-all relative ${taxConfig === 'auto' ? 'border-primary bg-primary/5' : 'border-slate-200 dark:border-slate-800 hover:border-primary/50'}`}>
+                                    <label className={`flex items-start gap-4 rounded-2xl border p-5 cursor-pointer transition-all relative ${settings.taxConfig === 'auto' ? 'border-primary bg-primary/5' : 'border-slate-200 dark:border-slate-800 hover:border-primary/50'}`}>
                                         <input
                                             name="tax_config"
                                             type="radio"
-                                            checked={taxConfig === 'auto'}
-                                            onChange={() => setTaxConfig('auto')}
-                                            className="mt-0.5 w-5 h-5 text-primary bg-slate-100 dark:bg-slate-800 border-slate-300 dark:border-slate-700 focus:ring-primary focus:ring-2"
+                                            checked={settings.taxConfig === 'auto'}
+                                            onChange={() => setSettings({ ...settings, taxConfig: 'auto' })}
+                                            className="mt-0.5 w-5 h-5 text-primary border-slate-300 dark:border-slate-700 focus:ring-primary focus:ring-2"
                                         />
                                         <div className="flex flex-col flex-1 pr-16">
-                                            <span className="text-base font-bold text-slate-900 dark:text-white">Automatic US Sales Tax</span>
-                                            <span className="text-sm text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">Automatically calculate and collect precise US sales tax based on the customer&apos;s exact location.</span>
+                                            <span className="text-base font-black text-slate-900 dark:text-white">Automatic US Sales Tax</span>
+                                            <span className="text-sm text-slate-500 dark:text-slate-400 mt-1 leading-relaxed font-bold">Automatically calculate precise US sales tax based on location.</span>
                                         </div>
-                                        <span className="bg-primary/10 text-primary text-xs font-bold px-3 py-1 rounded-lg absolute top-5 right-5">Recommended</span>
-                                    </label>
-
-                                    <label className={`flex items-start gap-4 rounded-2xl border p-5 cursor-pointer transition-all ${taxConfig === 'manual' ? 'border-primary bg-primary/5' : 'border-slate-200 dark:border-slate-800 hover:border-primary/50'}`}>
-                                        <input
-                                            name="tax_config"
-                                            type="radio"
-                                            checked={taxConfig === 'manual'}
-                                            onChange={() => setTaxConfig('manual')}
-                                            className="mt-0.5 w-5 h-5 text-primary bg-slate-100 dark:bg-slate-800 border-slate-300 dark:border-slate-700 focus:ring-primary focus:ring-2"
-                                        />
-                                        <div className="flex flex-col flex-1">
-                                            <span className="text-base font-bold text-slate-900 dark:text-white">Manual State Tax Rates</span>
-                                            <span className="text-sm text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">Manually set specific flat tax rates for each US state. Requires manual updates when state laws change.</span>
-                                        </div>
+                                        <span className="bg-primary/10 text-primary text-[10px] font-black px-3 py-1 rounded-lg absolute top-5 right-5 uppercase">Recommended</span>
                                     </label>
                                 </div>
                             </section>
 
-                            {/* Shipping Rates Section */}
                             <section className="bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden animate-in fade-in slide-in-from-bottom-2 duration-300 delay-75">
                                 <div className="px-8 py-6 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50">
-                                    <h2 className="text-xl font-bold text-slate-900 dark:text-white">Shipping Rates & Carriers</h2>
-                                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Set flat shipping rates, offer free shipping, and select active carriers.</p>
+                                    <h2 className="text-xl font-black text-slate-900 dark:text-white">Shipping Rates</h2>
+                                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 font-medium">Set flat rates and free shipping thresholds.</p>
                                 </div>
-                                <div className="p-8 flex flex-col gap-10">
+                                <div className="p-8 flex flex-col gap-8">
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                                         <div className="flex flex-col gap-2 relative">
-                                            <label className="text-sm font-bold text-slate-900 dark:text-white" htmlFor="flat_rate">Standard Flat Rate</label>
+                                            <label className="text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">Standard Flat Rate</label>
                                             <div className="relative">
-                                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-500 font-medium">$</div>
+                                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-500 font-black">$</div>
                                                 <input
-                                                    className="pl-8 flex w-full min-w-0 flex-1 resize-none rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 h-12 shadow-inner transition-shadow"
-                                                    id="flat_rate"
+                                                    className="pl-8 flex w-full min-w-0 flex-1 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-primary border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 h-12 shadow-inner transition-shadow font-bold"
                                                     type="text"
-                                                    value={flatRate}
-                                                    onChange={(e) => setFlatRate(e.target.value)}
+                                                    value={settings.flatRate}
+                                                    onChange={(e) => setSettings({ ...settings, flatRate: e.target.value })}
                                                 />
                                             </div>
-                                            <p className="text-xs text-slate-500 dark:text-slate-400">Default rate applied if free shipping isn&apos;t met.</p>
                                         </div>
                                         <div className="flex flex-col gap-2 relative">
-                                            <label className="text-sm font-bold text-slate-900 dark:text-white" htmlFor="free_shipping">Free Shipping Threshold</label>
+                                            <label className="text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">Free Shipping Threshold</label>
                                             <div className="relative">
-                                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-500 font-medium">$</div>
+                                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-500 font-black">$</div>
                                                 <input
-                                                    className="pl-8 flex w-full min-w-0 flex-1 resize-none rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 h-12 shadow-inner transition-shadow"
-                                                    id="free_shipping"
+                                                    className="pl-8 flex w-full min-w-0 flex-1 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-primary border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 h-12 shadow-inner transition-shadow font-bold"
                                                     type="text"
-                                                    value={freeShippingThreshold}
-                                                    onChange={(e) => setFreeShippingThreshold(e.target.value)}
+                                                    value={settings.freeShippingThreshold}
+                                                    onChange={(e) => setSettings({ ...settings, freeShippingThreshold: e.target.value })}
                                                 />
                                             </div>
-                                            <p className="text-xs text-slate-500 dark:text-slate-400">Orders above this amount ship for free.</p>
-                                        </div>
-                                    </div>
-
-                                    <hr className="border-slate-100 dark:border-slate-800" />
-
-                                    {/* Carrier Selection */}
-                                    <div>
-                                        <h3 className="text-base font-bold text-slate-900 dark:text-white mb-4">Active US Carriers</h3>
-                                        <div className="space-y-4">
-                                            <label className="flex items-center gap-4 p-4 border border-slate-200 dark:border-slate-800 rounded-2xl bg-slate-50/50 dark:bg-slate-900/50 hover:border-primary/50 transition-colors cursor-pointer group">
-                                                <input type="checkbox" defaultChecked className="w-5 h-5 rounded text-primary bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-700 focus:ring-primary" />
-                                                <div className="flex items-center gap-4 flex-1">
-                                                    <div className="w-12 h-12 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-400 dark:text-slate-500 font-bold text-xs shadow-sm">USPS</div>
-                                                    <div>
-                                                        <p className="text-sm font-bold text-slate-900 dark:text-white">USPS Priority Mail</p>
-                                                        <p className="text-sm text-slate-500 dark:text-slate-400">Standard domestic delivery (2-3 days).</p>
-                                                    </div>
-                                                </div>
-                                            </label>
-                                            <label className="flex items-center gap-4 p-4 border border-slate-200 dark:border-slate-800 rounded-2xl bg-slate-50/50 dark:bg-slate-900/50 hover:border-primary/50 transition-colors cursor-pointer group">
-                                                <input type="checkbox" defaultChecked className="w-5 h-5 rounded text-primary bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-700 focus:ring-primary" />
-                                                <div className="flex items-center gap-4 flex-1">
-                                                    <div className="w-12 h-12 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-400 dark:text-slate-500 font-bold text-xs shadow-sm">FedEx</div>
-                                                    <div>
-                                                        <p className="text-sm font-bold text-slate-900 dark:text-white">FedEx Express</p>
-                                                        <p className="text-sm text-slate-500 dark:text-slate-400">Expedited and overnight options.</p>
-                                                    </div>
-                                                </div>
-                                            </label>
                                         </div>
                                     </div>
                                 </div>
@@ -210,96 +300,68 @@ export default function AdminSettingsPage() {
                                         <Info className="w-5 h-5 text-primary" />
                                     </div>
                                     <div>
-                                        <h3 className="font-bold text-slate-900 dark:text-white text-lg">Manual Payment Methods</h3>
-                                        <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
-                                            Configure up to 5 manual payment methods to offer customers at checkout. These allow direct purchases without automated gateways, ideal for high-risk research compounds.
+                                        <h3 className="font-black text-slate-900 dark:text-white text-lg">Payment Methods</h3>
+                                        <p className="text-sm text-slate-600 dark:text-slate-400 mt-1 font-medium">
+                                            Direct purchase methods ideal for research compounds.
                                         </p>
                                     </div>
                                 </div>
                             </div>
 
-                            {paymentMethods.map((method, index) => (
-                                <div key={method.id} className={`bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm transition-opacity ${!method.enabled && method.id > 3 ? 'opacity-60 grayscale-50' : ''}`}>
+                            {settings.paymentMethods.map((method) => (
+                                <div key={method.id} className={`bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm ${!method.enabled ? 'opacity-60 grayscale-50' : ''}`}>
                                     <div className="flex justify-between items-center mb-6 pb-4 border-b border-slate-100 dark:border-slate-800">
-                                        <h3 className="text-slate-900 dark:text-white text-xl font-bold flex items-center gap-3">
-                                            <span className="bg-primary/10 text-primary w-8 h-8 rounded-full flex items-center justify-center text-sm font-black">
-                                                {method.id}
-                                            </span>
-                                            Payment Method {method.id}
+                                        <h3 className="text-slate-900 dark:text-white text-xl font-black flex items-center gap-3">
+                                            <CreditCard className="w-6 h-6 text-primary" />
+                                            {method.name}
                                         </h3>
                                         <label className="relative inline-flex items-center cursor-pointer group">
                                             <input
                                                 type="checkbox"
                                                 className="sr-only peer"
                                                 checked={method.enabled}
-                                                onChange={(e) => updatePaymentMethod(index, 'enabled', e.target.checked)}
+                                                onChange={(e) => updatePaymentMethod(method.id, 'enabled', e.target.checked)}
                                             />
-                                            <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-800 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 dark:after:border-slate-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-slate-700 peer-checked:bg-primary"></div>
-                                            <span className="ml-3 text-sm font-bold text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors tracking-tight">Show on Checkout</span>
+                                            <div className="w-11 h-6 bg-slate-200 rounded-full peer dark:bg-slate-800 peer-checked:after:translate-x-full peer-checked:bg-primary after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
                                         </label>
                                     </div>
 
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                                        <label className="flex flex-col flex-1 gap-2">
-                                            <span className="text-sm font-bold text-slate-700 dark:text-slate-300">Method Name (e.g., Zelle, Wire)</span>
-                                            <input
-                                                className="form-input w-full rounded-xl text-slate-900 dark:text-white bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 focus:border-primary focus:ring-2 focus:ring-primary h-12 px-4 shadow-inner"
-                                                placeholder="Enter name"
-                                                value={method.name}
-                                                onChange={(e) => updatePaymentMethod(index, 'name', e.target.value)}
+                                    <div className="space-y-4">
+                                        <div className="flex flex-col gap-2">
+                                            <label className="text-xs font-black text-slate-500 uppercase tracking-widest">Instructions</label>
+                                            <textarea
+                                                className="w-full rounded-xl text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-primary min-h-[100px] p-4 shadow-inner font-bold"
+                                                value={method.instructions}
+                                                onChange={(e) => updatePaymentMethod(method.id, 'instructions', e.target.value)}
                                             />
-                                        </label>
-                                        <label className="flex flex-col flex-1 gap-2">
-                                            <span className="text-sm font-bold text-slate-700 dark:text-slate-300">Icon/Logo URL (Optional)</span>
-                                            <div className="relative">
-                                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                                    <LinkIcon className="text-slate-400 w-4 h-4" />
-                                                </div>
-                                                <input
-                                                    className="form-input w-full rounded-xl text-slate-900 dark:text-white bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 focus:border-primary focus:ring-2 focus:ring-primary h-12 pl-11 px-4 shadow-inner"
-                                                    placeholder="https://..."
-                                                    value={method.iconUrl}
-                                                    onChange={(e) => updatePaymentMethod(index, 'iconUrl', e.target.value)}
-                                                />
-                                            </div>
-                                        </label>
+                                        </div>
                                     </div>
-
-                                    <label className="flex flex-col w-full gap-2">
-                                        <span className="text-sm font-bold text-slate-700 dark:text-slate-300">Payment Instructions / Account Details</span>
-                                        <textarea
-                                            className="form-textarea w-full rounded-xl text-slate-900 dark:text-white bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 focus:border-primary focus:ring-2 focus:ring-primary min-h-[120px] p-4 shadow-inner resize-y"
-                                            placeholder="Enter instructions shown to the customer after selecting this method..."
-                                            value={method.instructions}
-                                            onChange={(e) => updatePaymentMethod(index, 'instructions', e.target.value)}
-                                        />
-                                    </label>
                                 </div>
                             ))}
                         </div>
                     )}
 
-                    {/* --- GENERAL / POLICIES TAB PLACEHOLDERS --- */}
-                    {(activeTab === 'general' || activeTab === 'policies') && (
+                    {/* --- POLICIES TAB --- */}
+                    {activeTab === 'policies' && (
                         <div className="flex flex-col items-center justify-center py-20 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 border-dashed animate-in fade-in duration-300">
-                            <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mb-4">
-                                {activeTab === 'general' ? <Settings className="w-8 h-8 text-slate-400" /> : <Shield className="w-8 h-8 text-slate-400" />}
-                            </div>
-                            <h3 className="text-lg font-bold text-slate-900 dark:text-white capitalize">{activeTab} Settings</h3>
-                            <p className="text-sm text-slate-500 dark:text-slate-400 mt-2 text-center max-w-sm">
-                                This section is currently under development. Selected configurations from other platforms will appear here soon.
-                            </p>
+                            <Shield className="w-12 h-12 text-slate-300 mb-4" />
+                            <h3 className="text-lg font-black text-slate-900 dark:text-white">Policies Management</h3>
+                            <p className="text-sm text-slate-500 mt-2 font-medium">Currently managed via platform CMS.</p>
                         </div>
                     )}
 
                     {/* Global Save Actions */}
-                    <div className="flex justify-end gap-4 pt-2 mb-10 sticky bottom-6 bg-background-light dark:bg-background-dark/80 backdrop-blur-md p-4 rounded-2xl border border-slate-200 dark:border-slate-800">
-                        <button className="px-6 py-3 text-sm font-bold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors shadow-sm">
+                    <div className="flex justify-end gap-4 pt-2 mb-10 sticky bottom-6 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl z-10">
+                        <button className="px-6 py-3 text-sm font-black text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-xl hover:bg-slate-50 transition-colors">
                             Cancel
                         </button>
-                        <button className="px-8 py-3 text-sm font-bold text-white bg-primary hover:bg-sky-500 rounded-xl transition-all shadow-lg shadow-primary/25 active:scale-95 flex items-center gap-2">
-                            <Save className="w-4 h-4" />
-                            Save Changes
+                        <button
+                            disabled={saving}
+                            onClick={handleSaveSettings}
+                            className="px-8 py-3 text-sm font-black text-white bg-primary hover:bg-sky-500 rounded-xl transition-all shadow-lg shadow-primary/25 active:scale-95 flex items-center gap-2 disabled:opacity-50"
+                        >
+                            {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+                            {saving ? 'Saving...' : 'Save Changes'}
                         </button>
                     </div>
                 </div>

@@ -25,6 +25,7 @@ interface OrderRow {
     created_at: string;
     customer_name: string;
     customer_email: string;
+    customer_phone?: string;
     total_amount: number;
     status: string;
     shipping_address: Record<string, unknown>;
@@ -48,7 +49,8 @@ export async function GET() {
         if (supabase) {
             const { data, error } = await supabase
                 .from('orders')
-                .select('*, order_items(*)');
+                .select('*, order_items(*)')
+                .order('created_at', { ascending: true }); // Earliest first as requested
 
             if (error) throw error;
 
@@ -59,6 +61,7 @@ export async function GET() {
                 date: new Date(o.created_at).toISOString().split('T')[0],
                 customer: o.customer_name,
                 email: o.customer_email,
+                phone: o.customer_phone,
                 total: `$${o.total_amount.toFixed(2)}`,
                 status: o.status.charAt(0).toUpperCase() + o.status.slice(1).toLowerCase(),
                 items: o.order_items?.length || 0,
@@ -71,7 +74,13 @@ export async function GET() {
             return NextResponse.json(orders);
         } else {
             const orders = readOrdersLocal();
-            return NextResponse.json(orders);
+            // Sort local orders as well (earliest first)
+            const sortedOrders = [...orders].sort((a, b) => {
+                const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
+                const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
+                return dateA - dateB;
+            });
+            return NextResponse.json(sortedOrders);
         }
     } catch (error: unknown) {
         console.error('API Error (GET Orders):', error instanceof Error ? error.message : String(error));
@@ -125,10 +134,10 @@ async function sendOrderEmails(orderData: any) {
                 total: totalNum,
                 paymentMethod: orderData.payment_method || 'Manual Transfer',
                 shippingAddress: {
-                    addressLine1: orderData.shipping_address?.address || '',
+                    addressLine1: orderData.shipping_address?.address || orderData.shipping_address?.street || '',
                     city: orderData.shipping_address?.city || '',
                     state: orderData.shipping_address?.state || '',
-                    zipCode: orderData.shipping_address?.zipCode || '',
+                    zipCode: orderData.shipping_address?.zipCode || orderData.shipping_address?.zip || '',
                     country: orderData.shipping_address?.country || 'USA'
                 }
             })
@@ -151,6 +160,7 @@ export async function POST(request: Request) {
                     order_number: orderData.id,
                     customer_name: orderData.customer,
                     customer_email: orderData.email,
+                    customer_phone: orderData.phone,
                     total_amount: parseFloat(orderData.total.replace('$', '')),
                     status: orderData.status.toUpperCase(),
                     shipping_address: orderData.shipping_address || {},
@@ -183,16 +193,50 @@ export async function POST(request: Request) {
             return NextResponse.json(order, { status: 201 });
         } else {
             const orders = readOrdersLocal();
-            orders.push(orderData);
+            const orderWithMeta = {
+                ...orderData,
+                created_at: new Date().toISOString()
+            };
+            orders.push(orderWithMeta);
             writeOrdersLocal(orders);
 
             // 3. Send Emails asynchronously
             sendOrderEmails(orderData);
 
-            return NextResponse.json(orderData, { status: 201 });
+            return NextResponse.json(orderWithMeta, { status: 201 });
         }
     } catch (error: unknown) {
         console.error('API Error (POST Order):', error instanceof Error ? error.message : String(error));
         return NextResponse.json({ error: 'Failed to create order' }, { status: 500 });
     }
 }
+
+export async function DELETE(request: Request) {
+    try {
+        const { searchParams } = new URL(request.url);
+        const orderId = searchParams.get('id');
+
+        if (!orderId) {
+            return NextResponse.json({ error: 'Order ID is required' }, { status: 400 });
+        }
+
+        if (supabase) {
+            const { error } = await supabase
+                .from('orders')
+                .delete()
+                .eq('order_number', orderId);
+
+            if (error) throw error;
+        } else {
+            const orders = readOrdersLocal();
+            const filteredOrders = orders.filter((o: any) => o.id !== orderId);
+            writeOrdersLocal(filteredOrders);
+        }
+
+        return NextResponse.json({ success: true });
+    } catch (error: unknown) {
+        console.error('API Error (DELETE Order):', error instanceof Error ? error.message : String(error));
+        return NextResponse.json({ error: 'Failed to delete order' }, { status: 500 });
+    }
+}
+

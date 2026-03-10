@@ -60,7 +60,6 @@ export default function AdminDashboardPage() {
         { title: 'Total Revenue', value: `$${totalRevenue.toLocaleString(undefined, { minimumFractionDigits: 2 })}`, icon: DollarSign, trend: '+12.5%', trendUp: true, color: 'from-blue-500 to-cyan-400' },
         { title: 'Active Orders', value: activeOrders.toString(), icon: PackageOpen, trend: '+5.2%', trendUp: true, color: 'from-primary to-purple-500' },
         { title: 'Total Products', value: totalProducts.toString(), icon: PackageOpen, trend: '+3.1%', trendUp: true, color: 'from-primary to-blue-500' },
-        { title: 'New Customers', value: '48', icon: Users, trend: '+18.1%', trendUp: true, color: 'from-orange-400 to-pink-500' },
     ];
 
     const recentOrders = orders.slice(0, 5);

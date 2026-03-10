@@ -7,9 +7,8 @@ import {
     ArrowLeft, Printer, Truck, PackageOpen, MonitorSmartphone, Cable,
     History, PersonStanding, CreditCard, StickyNote, Image as ImageIcon,
     ZoomIn, Download, FileText, Info, CheckCircle, XCircle, MoreVertical,
-    Clock, MapPin, Mail, Phone, ExternalLink
+    Clock, MapPin, Mail, Phone, ExternalLink, Edit
 } from 'lucide-react';
-import Image from 'next/image';
 
 interface OrderItem {
     product_id: string;
@@ -26,7 +25,7 @@ interface AdminOrder {
     total: string;
     status: string;
     payment_method: string;
-    payment_status: string;
+    payment_status?: string;
     full_items?: OrderItem[];
     phone?: string;
     shipping_address?: {
@@ -39,22 +38,30 @@ interface AdminOrder {
 
 export default function AdminOrderDetailsPage() {
     const params = useParams();
-    const orderId = (params.id as string || '').replace('ORD-', '');
-    const fullOrderId = `#ORD-${orderId}`;
+    const rawId = params.id as string || '';
+    // Handle both formats: #ORD-123 and ORD-123
+    const fullOrderId = rawId.startsWith('#') ? rawId : `#ORD-${rawId}`;
 
     const [order, setOrder] = useState<AdminOrder | null>(null);
     const [loading, setLoading] = useState(true);
     const [needsVerification, setNeedsVerification] = useState(true);
+    const [isEditing, setIsEditing] = useState(false);
 
     React.useEffect(() => {
         const fetchOrder = async () => {
             try {
                 const res = await fetch('/api/orders');
                 const data = await res.json();
-                const foundOrder = data.find((o: AdminOrder) => o.id === fullOrderId || o.id === orderId);
-                setOrder(foundOrder);
+                // Find order by full ID or partial ID
+                const foundOrder = data.find((o: AdminOrder) =>
+                    o.id === fullOrderId ||
+                    o.id === rawId ||
+                    o.id.replace('#', '') === rawId.replace('#', '')
+                );
+
                 if (foundOrder) {
-                    setNeedsVerification(foundOrder.payment_status === 'PENDING' || foundOrder.status === 'Pending');
+                    setOrder(foundOrder);
+                    setNeedsVerification(foundOrder.status === 'Pending');
                 }
             } catch (error: unknown) {
                 console.error('Failed to fetch order details:', error);
@@ -62,11 +69,32 @@ export default function AdminOrderDetailsPage() {
                 setLoading(false);
             }
         };
-        if (orderId) fetchOrder();
-    }, [orderId, fullOrderId]);
+        if (rawId) fetchOrder();
+    }, [rawId, fullOrderId]);
 
-    if (loading) return <div className="p-20 text-center font-black animate-pulse">Loading Order Details...</div>;
-    if (!order) return <div className="p-20 text-center font-black">Order not found</div>;
+    const handleUpdateStatus = async (newStatus: string) => {
+        if (!order) return;
+        try {
+            // This would normally be a PUT request to update the order
+            console.log('Updating status to:', newStatus);
+            setOrder({ ...order, status: newStatus });
+            if (newStatus !== 'Pending') setNeedsVerification(false);
+            alert(`Order status updated to ${newStatus}`);
+        } catch (error) {
+            console.error('Failed to update status:', error);
+        }
+    };
+
+    if (loading) return <div className="p-20 text-center font-black animate-pulse text-slate-400">Loading Order Details...</div>;
+    if (!order) return (
+        <div className="p-20 text-center">
+            <h2 className="text-2xl font-black text-slate-900 dark:text-white mb-4">Order Not Found</h2>
+            <p className="text-slate-500 mb-8">We couldn't find an order with ID: {fullOrderId}</p>
+            <Link href="/admin/orders" className="bg-primary text-white px-6 py-3 rounded-xl font-bold">
+                Back to Orders
+            </Link>
+        </div>
+    );
 
     return (
         <div className="flex flex-col gap-6 max-w-7xl mx-auto w-full animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -79,12 +107,12 @@ export default function AdminOrderDetailsPage() {
                             Orders
                         </Link>
                         <span>/</span>
-                        <span className="text-slate-900 dark:text-white">{orderId}</span>
+                        <span className="text-slate-900 dark:text-white">{order.id}</span>
                     </div>
                     <h1 className="text-4xl font-black tracking-tighter text-slate-900 dark:text-white flex items-center gap-3">
-                        Order #{orderId.replace('ORD-', '')}
+                        Order {order.id}
                         <span className={`px-3 py-1 rounded-xl text-[10px] font-black uppercase tracking-wider border ${needsVerification ? 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400 border-amber-200 dark:border-amber-800' : 'bg-primary/10 text-primary dark:bg-primary/20 dark:text-blue-400 border-primary/20 dark:border-primary/50'}`}>
-                            {needsVerification ? 'Pending Review' : 'Payment Verified'}
+                            {order.status}
                         </span>
                     </h1>
                 </div>
@@ -92,15 +120,19 @@ export default function AdminOrderDetailsPage() {
                     <button className="p-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-50 transition-all shadow-sm">
                         <Printer className="w-5 h-5" />
                     </button>
+                    <button
+                        onClick={() => setIsEditing(!isEditing)}
+                        className={`flex items-center gap-2 px-6 py-3 rounded-xl font-black text-sm transition-all shadow-lg ${isEditing ? 'bg-slate-800 text-white' : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700'}`}
+                    >
+                        <Edit className="w-4 h-4" />
+                        {isEditing ? 'Cancel Editing' : 'Edit Order'}
+                    </button>
                     {!needsVerification && (
-                        <Link href={`/admin/orders/${orderId}/shipping`} className="flex items-center gap-2 bg-primary hover:bg-sky-500 text-white px-6 py-3 rounded-xl font-black text-sm transition-all shadow-lg shadow-primary/20">
+                        <button className="flex items-center gap-2 bg-primary hover:bg-sky-500 text-white px-6 py-3 rounded-xl font-black text-sm transition-all shadow-lg shadow-primary/20">
                             <Truck className="w-4 h-4" />
                             Ship Order
-                        </Link>
+                        </button>
                     )}
-                    <button className="p-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-50 transition-all shadow-sm">
-                        <MoreVertical className="w-5 h-5" />
-                    </button>
                 </div>
             </div>
 
@@ -118,39 +150,27 @@ export default function AdminOrderDetailsPage() {
                                         <Info className="w-6 h-6" />
                                     </div>
                                     <div>
-                                        <h2 className="font-black text-xl text-amber-900 dark:text-amber-400 tracking-tight">Review Payment Proof</h2>
+                                        <h2 className="font-black text-xl text-amber-900 dark:text-amber-400 tracking-tight">Review Payment Status</h2>
                                         <p className="text-amber-700/70 dark:text-amber-500/50 text-xs font-bold uppercase tracking-wider">Action required to process order</p>
                                     </div>
                                 </div>
                             </div>
-                            <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
-                                <div className="space-y-4">
-                                    <div className="aspect-4/3 bg-slate-50 dark:bg-slate-950 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center text-slate-400 relative group overflow-hidden">
-                                        <FileText className="w-12 h-12 opacity-20 mb-2 group-hover:scale-110 transition-transform" />
-                                        <p className="text-[10px] font-black uppercase tracking-widest">payment_receipt.jpg</p>
-                                        <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
-                                            <button className="p-3 bg-white rounded-full text-slate-900 hover:scale-110 transition-transform"><ZoomIn className="w-5 h-5" /></button>
-                                            <button className="p-3 bg-white rounded-full text-slate-900 hover:scale-110 transition-transform"><Download className="w-5 h-5" /></button>
-                                        </div>
-                                    </div>
+                            <div className="p-8 flex flex-col md:flex-row gap-8 items-center justify-between">
+                                <div className="bg-slate-50 dark:bg-slate-800/50 p-6 rounded-2xl border border-slate-100 dark:border-slate-800 w-full md:w-auto">
+                                    <p className="text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-1">Expected Amount</p>
+                                    <p className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter">{order.total}</p>
+                                    <p className="text-xs font-bold text-primary mt-2">{order.payment_method}</p>
                                 </div>
-                                <div className="flex flex-col justify-center gap-6">
-                                    <div className="bg-slate-50 dark:bg-slate-800/50 p-6 rounded-2xl border border-slate-100 dark:border-slate-800">
-                                        <p className="text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-1">Expected Amount</p>
-                                        <p className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter">{order.total}</p>
-                                        <p className="text-xs font-bold text-primary mt-2">{order.payment_method}</p>
-                                    </div>
-                                    <div className="space-y-3">
-                                        <button
-                                            onClick={() => setNeedsVerification(false)}
-                                            className="w-full bg-primary hover:bg-sky-500 text-white py-4 rounded-xl font-black text-sm transition-all shadow-lg shadow-primary/20 active:scale-[0.98]"
-                                        >
-                                            Approve Payment
-                                        </button>
-                                        <button className="w-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 py-4 rounded-xl font-black text-sm transition-all">
-                                            Reject & Contact
-                                        </button>
-                                    </div>
+                                <div className="flex gap-4 w-full md:w-auto">
+                                    <button
+                                        onClick={() => handleUpdateStatus('Processing')}
+                                        className="flex-1 bg-primary hover:bg-sky-500 text-white px-8 py-4 rounded-xl font-black text-sm transition-all shadow-lg shadow-primary/20 active:scale-[0.98]"
+                                    >
+                                        Verify & Process
+                                    </button>
+                                    <button className="flex-1 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-8 py-4 rounded-xl font-black text-sm transition-all">
+                                        Mark as Failed
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -165,7 +185,7 @@ export default function AdminOrderDetailsPage() {
                             </h3>
                             <span className="bg-slate-200 dark:bg-slate-800 px-3 py-1 rounded-lg text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase">{order.full_items?.length || 0} Items Ordered</span>
                         </div>
-                        <div className="p-0">
+                        <div className="p-0 overflow-x-auto">
                             <table className="w-full text-left">
                                 <thead className="bg-white dark:bg-slate-900/50 border-b border-slate-100 dark:border-slate-800">
                                     <tr className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
@@ -200,17 +220,17 @@ export default function AdminOrderDetailsPage() {
                         {/* Financials Summary */}
                         <div className="p-8 bg-slate-50/50 dark:bg-slate-900/50 border-t border-slate-100 dark:border-slate-800 flex justify-end">
                             <div className="w-full max-w-xs space-y-4">
-                                <div className="flex justify-between text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">
+                                <div className="flex justify-between text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">
                                     <span>Subtotal</span>
-                                    <span className="text-slate-900 dark:text-white">${(parseFloat(order.total.replace('$', '')) - 15).toFixed(2)}</span>
+                                    <span className="text-slate-900 dark:text-white">${(parseFloat(order.total.replace('$', '')) - (order.status === 'Express' ? 15 : 0)).toFixed(2)}</span>
                                 </div>
-                                <div className="flex justify-between text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">
+                                <div className="flex justify-between text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">
                                     <span>Shipping</span>
-                                    <span className="text-slate-900 dark:text-white">$15.00</span>
+                                    <span className="text-slate-900 dark:text-white">{parseFloat(order.total.replace('$', '')) > 200 ? 'FREE' : '$15.00'}</span>
                                 </div>
                                 <div className="pt-4 border-t border-slate-200 dark:border-slate-800 flex justify-between items-center">
                                     <span className="font-black text-slate-900 dark:text-white text-lg">Order Total</span>
-                                    <span className="font-black text-3xl text-primary tracking-tighter">{order.total}</span>
+                                    <span className="font-black text-4xl text-primary tracking-tighter">{order.total}</span>
                                 </div>
                             </div>
                         </div>
@@ -224,19 +244,21 @@ export default function AdminOrderDetailsPage() {
                         </h3>
                         <div className="relative pl-8 space-y-8 before:absolute before:inset-y-0 before:left-3 before:w-0.5 before:bg-slate-100 dark:before:bg-slate-800">
                             <div className="relative flex gap-6">
-                                <div className={`absolute -left-10 w-6 h-6 rounded-full border-4 border-white dark:border-slate-900 flex items-center justify-center ${needsVerification ? 'bg-amber-500' : 'bg-primary zoom-in shadow-[0_0_10px_rgba(19,127,236,0.3)]'}`}>
+                                <div className={`absolute -left-10 w-6 h-6 rounded-full border-4 border-white dark:border-slate-900 flex items-center justify-center ${needsVerification ? 'bg-amber-500' : 'bg-primary shadow-[0_0_10px_rgba(19,127,236,0.3)]'}`}>
                                     {needsVerification ? <Clock className="w-2.5 h-2.5 text-white" /> : <CheckCircle className="w-2.5 h-2.5 text-white" />}
                                 </div>
                                 <div>
-                                    <p className="font-black text-sm text-slate-900 dark:text-white">{needsVerification ? 'Awaiting Payment Approval' : 'Payment Verified'}</p>
-                                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-bold italic">Process managed by System Admin</p>
+                                    <p className="font-black text-sm text-slate-900 dark:text-white">{order.status}</p>
+                                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-bold italic">Latest update via Admin Panel</p>
                                 </div>
                             </div>
                             <div className="relative flex gap-6 opacity-50">
-                                <div className="absolute -left-10 w-6 h-6 rounded-full bg-slate-200 dark:bg-slate-800 border-4 border-white dark:border-slate-900" />
+                                <div className="absolute -left-10 w-6 h-6 rounded-full bg-slate-200 dark:bg-slate-800 border-4 border-white dark:border-slate-900 flex items-center justify-center">
+                                    <CheckCircle className="w-2.5 h-2.5 text-slate-400" />
+                                </div>
                                 <div>
-                                    <p className="font-black text-sm text-slate-600 dark:text-slate-400">Order Placed</p>
-                                    <p className="text-xs text-slate-400 font-bold mt-1">Oct 24, 2026 • 10:45 AM</p>
+                                    <p className="font-black text-sm text-slate-600 dark:text-slate-400">Order Received</p>
+                                    <p className="text-xs text-slate-400 font-bold mt-1">Confirmed by Customer</p>
                                 </div>
                             </div>
                         </div>
@@ -258,7 +280,7 @@ export default function AdminOrderDetailsPage() {
                         </div>
                         <div className="space-y-6">
                             <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 rounded-2xl bg-primary text-white flex items-center justify-center font-black text-xl">
+                                <div className="w-12 h-12 rounded-2xl bg-primary text-white flex items-center justify-center font-black text-xl uppercase">
                                     {order.customer?.split(' ').map((n: string) => n[0]).join('')}
                                 </div>
                                 <div>
@@ -267,11 +289,11 @@ export default function AdminOrderDetailsPage() {
                                 </div>
                             </div>
                             <div className="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-800">
-                                <div className="flex items-center gap-3 text-sm font-bold text-slate-600 dark:text-slate-400">
+                                <div className="flex items-center gap-3 text-sm font-bold text-slate-600 dark:text-slate-400 group cursor-pointer hover:text-primary transition-colors">
                                     <Mail className="w-4 h-4" />
                                     {order.email}
                                 </div>
-                                <div className="flex items-center gap-3 text-sm font-bold text-slate-600 dark:text-slate-400">
+                                <div className="flex items-center gap-3 text-sm font-bold text-slate-600 dark:text-slate-400 group cursor-pointer hover:text-primary transition-colors">
                                     <Phone className="w-4 h-4" />
                                     {order.phone || 'No phone provided'}
                                 </div>
@@ -289,34 +311,29 @@ export default function AdminOrderDetailsPage() {
                             <button className="text-[10px] font-black uppercase text-primary tracking-widest hover:underline">Edit</button>
                         </div>
                         <div className="space-y-4">
-                            <p className="text-sm font-bold text-slate-600 dark:text-slate-300 leading-relaxed uppercase tracking-tighter">
+                            <p className="text-sm font-black text-slate-600 dark:text-slate-300 leading-relaxed uppercase tracking-tight">
                                 {order.shipping_address?.street}<br />
                                 {order.shipping_address?.city}, {order.shipping_address?.state} {order.shipping_address?.zip}<br />
                                 United States
                             </p>
-                            <div className="pt-4 border-t border-slate-100 dark:border-slate-800">
-                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Selected Method</p>
-                                <div className="flex items-center gap-3 bg-slate-50 dark:bg-slate-800 p-3 rounded-xl border border-slate-100 dark:border-slate-700">
-                                    <Truck className="w-4 h-4 text-primary" />
-                                    <span className="text-xs font-black text-slate-800 dark:text-white">USPS Priority Mail</span>
-                                </div>
-                            </div>
                         </div>
                     </div>
 
-                    {/* Manual Billing Card */}
+                    {/* Billing Method Card */}
                     <div className="bg-slate-900 dark:bg-white rounded-3xl p-8 shadow-xl">
                         <div className="flex items-center gap-3 mb-6">
                             <div className="w-10 h-10 rounded-xl bg-white/10 dark:bg-slate-900/10 flex items-center justify-center text-white dark:text-slate-900">
                                 <CreditCard className="w-5 h-5" />
                             </div>
-                            <h3 className="text-lg font-black text-white dark:text-slate-900">Payment</h3>
+                            <h3 className="text-lg font-black text-white dark:text-slate-900">Billing</h3>
                         </div>
-                        <div className="space-y-2">
-                            <p className="text-white/60 dark:text-slate-500 text-[10px] font-black uppercase tracking-widest">Manual Method</p>
-                            <p className="text-xl font-black text-white dark:text-slate-900">Direct Bank Transfer</p>
-                            <div className="inline-flex mt-4 px-3 py-1 bg-white/10 dark:bg-slate-900/10 rounded-lg text-[10px] font-black text-white dark:text-slate-900 uppercase tracking-widest">
-                                Transaction Pending
+                        <div className="space-y-4">
+                            <div>
+                                <p className="text-white/60 dark:text-slate-500 text-[10px] font-black uppercase tracking-widest">Payment Method</p>
+                                <p className="text-xl font-black text-white dark:text-slate-900">{order.payment_method}</p>
+                            </div>
+                            <div className={`inline-flex px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest border ${needsVerification ? 'bg-amber-500/20 text-amber-400 border-amber-500/30' : 'bg-green-500/20 text-green-400 border-green-500/30'}`}>
+                                {needsVerification ? 'Transaction Pending' : 'Paid & Confirmed'}
                             </div>
                         </div>
                     </div>
@@ -331,7 +348,7 @@ export default function AdminOrderDetailsPage() {
                             className="w-full bg-white dark:bg-slate-900 border border-amber-200 dark:border-amber-800 rounded-2xl p-4 text-xs font-bold text-slate-800 dark:text-slate-200 placeholder:text-amber-900/30 min-h-[120px] focus:ring-2 focus:ring-amber-500 outline-none transition-all"
                             placeholder="Add internal notes for this order..."
                         />
-                        <button className="w-full mt-4 bg-amber-900 dark:bg-amber-800 text-white py-3 rounded-xl font-black text-xs uppercase tracking-widest hover:brightness-110 transition-all">
+                        <button className="w-full mt-4 bg-amber-900 dark:bg-amber-800 text-white py-3 rounded-xl font-black text-xs uppercase tracking-widest hover:brightness-110 transition-all font-black">
                             Save Note
                         </button>
                     </div>

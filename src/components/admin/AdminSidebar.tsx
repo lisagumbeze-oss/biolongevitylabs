@@ -6,12 +6,10 @@ import { usePathname } from 'next/navigation';
 import {
     LayoutDashboard,
     ShoppingCart,
-    Users,
     Settings,
     LogOut,
     Package,
     Archive,
-    MessageSquare,
     Activity
 } from 'lucide-react';
 
@@ -23,8 +21,6 @@ const AdminSidebar = () => {
         { name: 'Products', href: '/admin/products', icon: Package },
         { name: 'Inventory', href: '/admin/inventory', icon: Archive },
         { name: 'Orders', href: '/admin/orders', icon: ShoppingCart },
-        { name: 'Customers', href: '/admin/customers', icon: Users },
-        { name: 'Support', href: '/admin/support', icon: MessageSquare },
         { name: 'Settings', href: '/admin/settings', icon: Settings },
     ];
 

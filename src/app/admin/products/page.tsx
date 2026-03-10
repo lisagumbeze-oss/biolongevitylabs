@@ -12,6 +12,29 @@ export default function ProductsManagement() {
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [editingProduct, setEditingProduct] = useState<Product | null>(null);
     const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
+    const [editVariations, setEditVariations] = useState<{ id: number, option: string, price: number }[]>([]);
+
+    const handleOpenEditModal = (product: Product) => {
+        setEditingProduct(product);
+        if (product.isVariable && product.variations && product.variables) {
+            const varName = product.variables[0]?.name || "Option";
+            const mapped = product.variations.map(v => ({
+                id: v.id,
+                option: v.attributes[varName] || Object.values(v.attributes)[0] || '',
+                price: v.price || product.price
+            }));
+            setEditVariations(mapped);
+        } else {
+            setEditVariations([]);
+        }
+        setIsAddModalOpen(true);
+    };
+
+    const handleOpenAddModal = () => {
+        setEditingProduct(null);
+        setEditVariations([]);
+        setIsAddModalOpen(true);
+    };
 
     // Fetch products on load
     useEffect(() => {
@@ -63,6 +86,14 @@ export default function ProductsManagement() {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
 
+        const isVariable = editVariations.length > 0;
+        const variables = isVariable ? [{ name: "Option", options: editVariations.map(v => v.option) }] : [];
+        const variations = isVariable ? editVariations.map((v, i) => ({
+            id: v.id || Date.now() + i,
+            attributes: { "Option": v.option },
+            price: v.price
+        })) : [];
+
         const productData: Partial<Product> & { id: string } = {
             id: editingProduct?.id || `prod_${Date.now()}`,
             name: formData.get('name') as string,
@@ -72,9 +103,9 @@ export default function ProductsManagement() {
             description: formData.get('description') as string,
             image: formData.get('image') as string,
             stockStatus: formData.get('stockStatus') as Product['stockStatus'],
-            isVariable: editingProduct?.isVariable || false,
-            variables: editingProduct?.variables || [],
-            variations: editingProduct?.variations || []
+            isVariable: isVariable,
+            variables: variables,
+            variations: variations
         };
 
         try {
@@ -115,7 +146,7 @@ export default function ProductsManagement() {
                     <p className="text-sm text-slate-400 mt-1">Manage your {products.length} products, pricing, and variations.</p>
                 </div>
                 <button
-                    onClick={() => setIsAddModalOpen(true)}
+                    onClick={handleOpenAddModal}
                     className="flex items-center gap-2 px-4 py-2 bg-primary hover:bg-sky-500 text-white text-sm font-medium rounded-xl transition-colors shadow-lg shadow-primary/20"
                 >
                     <Plus className="w-4 h-4" />
@@ -185,7 +216,7 @@ export default function ProductsManagement() {
                                     <td className="px-6 py-4">
                                         <div className="flex items-center justify-end gap-2">
                                             <button
-                                                onClick={() => setEditingProduct(product)}
+                                                onClick={() => handleOpenEditModal(product)}
                                                 className="p-2 text-slate-400 hover:text-primary hover:bg-primary/10 rounded-lg transition-colors" title="Edit"
                                             >
                                                 <Edit2 className="w-4 h-4" />
@@ -274,12 +305,64 @@ export default function ProductsManagement() {
                                     <textarea name="description" defaultValue={editingProduct?.description || ''} className="flex w-full rounded-xl border border-slate-700 bg-slate-800 text-white p-4 min-h-[100px] focus:ring-2 focus:ring-primary focus:border-primary" placeholder="Product details..."></textarea>
                                 </div>
 
-                                {editingProduct?.isVariable && (
-                                    <div className="p-4 bg-primary/5 border border-primary/20 rounded-xl">
-                                        <h3 className="text-sm font-bold text-primary uppercase mb-2">Variable Product Note</h3>
-                                        <p className="text-xs text-slate-400">This product has variations (e.g. different counts or weights). Individual variation prices are currently managed in the source file. Use this editor for base info.</p>
-                                    </div>
-                                )}
+                                <div className="flex flex-col gap-4 p-4 mt-2 bg-slate-800/50 rounded-xl border border-slate-700 w-full">
+                                    <h3 className="text-sm font-bold text-slate-300 flex justify-between items-center">
+                                        Options & Variations
+                                        <button
+                                            type="button"
+                                            onClick={() => setEditVariations([...editVariations, { id: Date.now(), option: '', price: editingProduct?.price || 0 }])}
+                                            className="flex items-center gap-1 text-xs text-primary hover:text-sky-400 bg-primary/10 px-2 py-1 rounded"
+                                        >
+                                            <Plus className="w-3 h-3" /> Add Option
+                                        </button>
+                                    </h3>
+
+                                    {editVariations.length === 0 ? (
+                                        <p className="text-xs text-slate-500">No variations added. Product will use the base price.</p>
+                                    ) : (
+                                        <div className="flex flex-col gap-3">
+                                            {editVariations.map((v, index) => (
+                                                <div key={v.id} className="flex gap-3 items-center">
+                                                    <div className="flex-1">
+                                                        <input
+                                                            value={v.option}
+                                                            onChange={(e) => {
+                                                                const newVars = [...editVariations];
+                                                                newVars[index].option = e.target.value;
+                                                                setEditVariations(newVars);
+                                                            }}
+                                                            placeholder="Option (e.g. 5mg, 30 Count)"
+                                                            className="w-full rounded-lg border border-slate-700 bg-slate-900 text-white h-9 px-3 text-sm focus:ring-1 focus:ring-primary focus:border-primary"
+                                                            required
+                                                        />
+                                                    </div>
+                                                    <div className="w-24">
+                                                        <input
+                                                            type="number"
+                                                            step="0.01"
+                                                            value={v.price}
+                                                            onChange={(e) => {
+                                                                const newVars = [...editVariations];
+                                                                newVars[index].price = parseFloat(e.target.value);
+                                                                setEditVariations(newVars);
+                                                            }}
+                                                            placeholder="Price"
+                                                            className="w-full rounded-lg border border-slate-700 bg-slate-900 text-white h-9 px-3 text-sm focus:ring-1 focus:ring-primary focus:border-primary"
+                                                            required
+                                                        />
+                                                    </div>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setEditVariations(editVariations.filter((_, i) => i !== index))}
+                                                        className="p-1.5 text-slate-500 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-colors"
+                                                    >
+                                                        <Trash2 className="w-4 h-4" />
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
                             </form>
                         </div>
                         <div className="p-6 border-t border-slate-800 bg-slate-900/95 sticky bottom-0 z-20 flex justify-end gap-3">

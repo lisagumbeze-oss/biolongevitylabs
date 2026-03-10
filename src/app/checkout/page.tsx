@@ -1,42 +1,35 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useCart } from "@/store/useCart";
-import { Lock, Truck, CreditCard, ChevronRight, Info, CheckCircle2, ShieldCheck, MapPin, Mail, User } from "lucide-react";
+import { Lock, Truck, CreditCard, ChevronRight, Info, CheckCircle2, ShieldCheck, MapPin, Mail, User, Phone } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-const paymentMethods = [
-    {
-        id: "zelle",
-        name: "Zelle",
-        instructions: "Please send your payment to pay@biolongevitylabs.com via Zelle. Include your order number in the memo field."
-    },
-    {
-        id: "venmo",
-        name: "Venmo",
-        instructions: "Send payment to Venmo username: @BioLongevityLabs. Please include your order ID."
-    },
-    {
-        id: "cashapp",
-        name: "Cash App",
-        instructions: "Send payment to Cashtag: $BioLongevityLabs. Include your order number."
-    },
-    {
-        id: "check",
-        name: "Check / Money Order",
-        instructions: "Make checks payable to BioLongevity Labs LLC. Mail to: 123 Research Way, Suite 100, Austin, TX 78701."
-    }
-];
+interface PaymentMethod {
+    id: string;
+    name: string;
+    instructions: string;
+    enabled: boolean;
+}
+
+interface StoreSettings {
+    taxConfig: string;
+    flatRate: string;
+    freeShippingThreshold: string;
+    paymentMethods: PaymentMethod[];
+}
 
 export default function CheckoutPage() {
     const { items, clearCart } = useCart();
     const router = useRouter();
-    const [selectedPayment, setSelectedPayment] = useState(paymentMethods[0].id);
+    const [settings, setSettings] = useState<StoreSettings | null>(null);
+    const [selectedPayment, setSelectedPayment] = useState("");
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
         email: "",
+        phone: "",
         address: "",
         city: "",
         state: "",
@@ -44,9 +37,28 @@ export default function CheckoutPage() {
         shippingMethod: "standard"
     });
 
+    useEffect(() => {
+        const fetchSettings = async () => {
+            try {
+                const res = await fetch('/api/settings');
+                const data = await res.json();
+                setSettings(data);
+                const firstEnabled = data.paymentMethods.find((pm: PaymentMethod) => pm.enabled);
+                if (firstEnabled) setSelectedPayment(firstEnabled.id);
+            } catch (error) {
+                console.error('Failed to fetch settings:', error);
+            }
+        };
+        fetchSettings();
+    }, []);
+
     const subtotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
-    const shipping = formData.shippingMethod === "express" ? 15.0 : 0.0;
-    const total = subtotal + shipping;
+    const shippingRate = settings ? parseFloat(settings.flatRate) : 15.0;
+    const freeThreshold = settings ? parseFloat(settings.freeShippingThreshold) : 149.0;
+
+    const isFreeShipping = subtotal >= freeThreshold;
+    const shippingPrice = (formData.shippingMethod === "express" || !isFreeShipping) ? shippingRate : 0.0;
+    const total = subtotal + shippingPrice;
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -57,6 +69,7 @@ export default function CheckoutPage() {
             id: orderId,
             customer: `${formData.firstName} ${formData.lastName}`,
             email: formData.email,
+            phone: formData.phone,
             total: `$${total.toFixed(2)}`,
             status: 'Pending',
             items: items.reduce((acc, item) => acc + item.quantity, 0),
@@ -65,7 +78,6 @@ export default function CheckoutPage() {
                 product_name: item.name,
                 quantity: item.quantity,
                 price: item.price
-                // variation_id can be added if your store supports it
             })),
             shipping_address: {
                 street: formData.address,
@@ -73,7 +85,7 @@ export default function CheckoutPage() {
                 state: formData.state,
                 zip: formData.zipCode
             },
-            payment_method: paymentMethods.find(pm => pm.id === selectedPayment)?.name || 'Transfer'
+            payment_method: settings?.paymentMethods.find(pm => pm.id === selectedPayment)?.name || 'Transfer'
         };
 
         try {
@@ -86,10 +98,10 @@ export default function CheckoutPage() {
             if (!res.ok) throw new Error('Failed to create order');
 
             clearCart();
-            router.push("/order-confirmation");
+            // Pass the generated order ID to the confirmation page
+            router.push(`/order-confirmation?id=${encodeURIComponent(orderId)}`);
         } catch (error) {
             console.error('Checkout error:', error);
-            // In a real app, show a toast or error message to user
         }
     };
 
@@ -107,6 +119,8 @@ export default function CheckoutPage() {
             </div>
         );
     }
+
+    const availablePayments = settings?.paymentMethods.filter(pm => pm.enabled) || [];
 
     return (
         <div className="bg-background min-h-screen transition-colors">
@@ -135,7 +149,6 @@ export default function CheckoutPage() {
                 </div>
 
                 <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-                    {/* Main Form Area */}
                     <div className="lg:col-span-7 space-y-10">
                         {/* Shipping Section */}
                         <section className="bg-white dark:bg-slate-900 rounded-2xl p-8 shadow-sm border border-slate-100 dark:border-slate-800 transition-all">
@@ -174,18 +187,34 @@ export default function CheckoutPage() {
                                 </div>
                             </div>
 
-                            <div className="flex flex-col gap-2 mb-6">
-                                <label className="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider">Email (Order Tracking)</label>
-                                <div className="relative">
-                                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                                    <input
-                                        required
-                                        className="w-full pl-11 pr-4 py-3.5 rounded-xl border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
-                                        placeholder="john.doe@example.com"
-                                        type="email"
-                                        value={formData.email}
-                                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                    />
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                <div className="flex flex-col gap-2">
+                                    <label className="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider">Email Address</label>
+                                    <div className="relative">
+                                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                                        <input
+                                            required
+                                            className="w-full pl-11 pr-4 py-3.5 rounded-xl border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                                            placeholder="john.doe@example.com"
+                                            type="email"
+                                            value={formData.email}
+                                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="flex flex-col gap-2">
+                                    <label className="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider">Phone Number</label>
+                                    <div className="relative">
+                                        <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                                        <input
+                                            required
+                                            className="w-full pl-11 pr-4 py-3.5 rounded-xl border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                                            placeholder="(555) 000-0000"
+                                            type="tel"
+                                            value={formData.phone}
+                                            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                                        />
+                                    </div>
                                 </div>
                             </div>
 
@@ -257,7 +286,7 @@ export default function CheckoutPage() {
                                                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">3-5 Business Days</p>
                                             </div>
                                         </div>
-                                        <span className="font-bold text-primary">Free</span>
+                                        <span className="font-bold text-primary">{isFreeShipping ? "Free" : `$${shippingRate.toFixed(2)}`}</span>
                                     </label>
                                     <label className={`flex items-center justify-between p-5 border-2 rounded-2xl cursor-pointer transition-all ${formData.shippingMethod === "express" ? "border-primary bg-primary/5" : "border-slate-100 dark:border-slate-800 hover:border-slate-200 dark:hover:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800/50"}`}>
                                         <div className="flex items-center gap-4">
@@ -273,13 +302,12 @@ export default function CheckoutPage() {
                                                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">1-2 Business Days</p>
                                             </div>
                                         </div>
-                                        <span className="font-bold text-slate-900 dark:text-white">$15.00</span>
+                                        <span className="font-bold text-slate-900 dark:text-white">${shippingRate.toFixed(2)}</span>
                                     </label>
                                 </div>
                             </div>
                         </section>
 
-                        {/* Payment Section */}
                         <section className="bg-white dark:bg-slate-900 rounded-2xl p-8 shadow-sm border border-slate-100 dark:border-slate-800 transition-all">
                             <h2 className="text-slate-900 dark:text-white text-xl font-bold mb-2 flex items-center gap-3">
                                 <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
@@ -287,10 +315,10 @@ export default function CheckoutPage() {
                                 </div>
                                 Manual Payment Selection
                             </h2>
-                            <p className="text-slate-500 dark:text-slate-400 text-sm mb-8 ml-13 font-medium">Research-compliant payment steps follow order review.</p>
+                            <p className="text-slate-500 dark:text-slate-400 text-sm mb-8 font-medium">Research-compliant payment steps follow order review.</p>
 
                             <div className="flex flex-col gap-4">
-                                {paymentMethods.map((pm) => (
+                                {availablePayments.map((pm) => (
                                     <div key={pm.id} className={`border-2 rounded-2xl overflow-hidden transition-all ${selectedPayment === pm.id ? "border-primary" : "border-slate-100 dark:border-slate-800"}`}>
                                         <label className={`flex items-center gap-4 p-5 cursor-pointer transition-colors ${selectedPayment === pm.id ? "bg-primary/5" : "hover:bg-slate-50 dark:hover:bg-slate-800/50"}`}>
                                             <input
@@ -320,7 +348,6 @@ export default function CheckoutPage() {
                         </section>
                     </div>
 
-                    {/* Sidebar Area */}
                     <div className="lg:col-span-5">
                         <div className="bg-white dark:bg-slate-900 rounded-2xl p-8 shadow-lg border border-slate-100 dark:border-slate-800 sticky top-24">
                             <h2 className="text-slate-900 dark:text-white text-2xl font-black mb-10 tracking-tight">Order Summary</h2>
@@ -328,8 +355,8 @@ export default function CheckoutPage() {
                             <div className="max-h-[400px] overflow-y-auto pr-2 mb-8 space-y-6">
                                 {items.map((item) => (
                                     <div key={item.id} className="flex gap-5 items-center">
-                                        <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-800 shrink-0 overflow-hidden text-slate-400 flex items-center justify-center">
-                                            <img src={item.image} alt={item.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                                        <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-800 shrink-0 overflow-hidden text-slate-400 flex items-center justify-center relative">
+                                            <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                                             <div className="absolute top-1 right-1 w-6 h-6 bg-primary text-white text-[10px] font-black flex items-center justify-center rounded-full shadow-lg">
                                                 {item.quantity}
                                             </div>
@@ -351,7 +378,7 @@ export default function CheckoutPage() {
                                 </div>
                                 <div className="flex justify-between items-center text-slate-500 dark:text-slate-400">
                                     <span className="text-sm font-bold uppercase tracking-widest">Shipping</span>
-                                    <span className="font-bold text-slate-900 dark:text-white">{shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}</span>
+                                    <span className="font-bold text-slate-900 dark:text-white">{shippingPrice === 0 ? "Free" : `$${shippingPrice.toFixed(2)}`}</span>
                                 </div>
                                 <div className="pt-6 border-t border-slate-100 dark:border-slate-800 flex justify-between items-end">
                                     <span className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-tighter">Grand Total</span>

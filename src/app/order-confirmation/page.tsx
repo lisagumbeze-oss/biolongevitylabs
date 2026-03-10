@@ -1,21 +1,30 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { CheckCircle2, ArrowRight, ShoppingBag, Mail, ExternalLink } from "lucide-react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useCart } from "@/store/useCart";
 
-export default function OrderConfirmationPage() {
+function OrderConfirmationContent() {
     const { clearCart } = useCart();
-    const [orderId, setOrderId] = useState(() => {
-        const randomId = Math.floor(100000000 + Math.random() * 900000000);
-        return `#${randomId}`;
-    });
+    const searchParams = useSearchParams();
+    const [orderId, setOrderId] = useState("");
 
     useEffect(() => {
-        // Safety check to ensure cart is cleared if not already
+        // Clear cart first
         clearCart();
-    }, []);
+
+        // Get order ID from URL params
+        const id = searchParams.get("id");
+        if (id) {
+            setOrderId(id);
+        } else {
+            // Fallback if no ID in URL
+            const randomId = Math.floor(100000000 + Math.random() * 900000000);
+            setOrderId(`#ORD-${randomId}`);
+        }
+    }, [searchParams, clearCart]);
 
     return (
         <div className="min-h-[80vh] flex items-center justify-center p-4 bg-background transition-colors">
@@ -87,5 +96,13 @@ export default function OrderConfirmationPage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function OrderConfirmationPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center font-black animate-pulse text-slate-400">Loading Order Confirmation...</div>}>
+            <OrderConfirmationContent />
+        </Suspense>
     );
 }
