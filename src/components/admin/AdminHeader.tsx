@@ -25,7 +25,7 @@ export default function AdminHeader() {
     }, []);
 
     const markAllAsRead = () => {
-        const pendingIds = orders.filter(o => o.status === 'Pending').map(o => o.id);
+        const pendingIds = orders.filter(o => o.status === 'Pending' || o.status === 'Pending Payments').map(o => o.id);
         const next = Array.from(new Set([...readOrders, ...pendingIds]));
         setReadOrders(next);
         localStorage.setItem('admin_read_orders', JSON.stringify(next));
@@ -40,7 +40,7 @@ export default function AdminHeader() {
     };
 
     const allNotifications = orders.slice(0, 10);
-    const unreadNotifications = orders.filter(o => o.status === 'Pending' && !readOrders.includes(o.id));
+    const unreadNotifications = orders.filter(o => (o.status === 'Pending' || o.status === 'Pending Payments') && !readOrders.includes(o.id));
     const displayList = activeTab === 'Unread' ? unreadNotifications : allNotifications;
 
     return (
@@ -104,7 +104,7 @@ export default function AdminHeader() {
 
                             <div className="max-h-[400px] overflow-y-auto">
                                 {displayList.map((order, i) => {
-                                    const isUnread = order.status === 'Pending' && !readOrders.includes(order.id);
+                                    const isUnread = (order.status === 'Pending' || order.status === 'Pending Payments') && !readOrders.includes(order.id);
                                     return (
                                         <div key={order.id} className={`flex gap-4 p-5 transition-colors border-t border-slate-100 dark:border-slate-800 ${isUnread ? 'bg-primary/5 hover:bg-primary/10 border-l-4 border-l-primary' : 'hover:bg-slate-50 dark:hover:bg-slate-800/50 opacity-70'}`}>
                                             <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${isUnread ? 'bg-primary/10 text-primary' : 'bg-slate-100 dark:bg-slate-800 text-slate-400'}`}>
@@ -112,9 +112,9 @@ export default function AdminHeader() {
                                             </div>
                                             <div className="flex-1">
                                                 <div className="flex justify-between items-start mb-1">
-                                                    <p className="font-bold text-slate-900 dark:text-white">Order {order.id.startsWith('#') ? order.id : `#${order.id}`} {order.status === 'Pending' ? '' : order.status}</p>
+                                                    <p className="font-bold text-slate-900 dark:text-white">Order {order.id.startsWith('#') ? order.id : `#${order.id}`} {order.status === 'Pending' || order.status === 'Pending Payments' ? '' : order.status}</p>
                                                     <span className={`text-[10px] font-black uppercase px-2 py-0.5 rounded ${isUnread ? 'text-primary bg-primary/10' : 'text-slate-500 bg-slate-100 dark:bg-slate-800 text-slate-400'}`}>
-                                                        {order.status === 'Pending' ? 'Action Required' : 'Processed'}
+                                                        {order.status === 'Pending' || order.status === 'Pending Payments' ? 'Action Required' : 'Processed'}
                                                     </span>
                                                 </div>
                                                 <p className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-2">{order.email}</p>

@@ -75,7 +75,15 @@ export default function AdminOrderDetailsPage() {
     const handleUpdateStatus = async (newStatus: string) => {
         if (!order) return;
         try {
-            const paymentStatus = newStatus === 'Processing' ? 'PAID' : (newStatus === 'Failed' ? 'FAILED' : order.payment_status);
+            // Default mapping
+            let paymentStatus = order.payment_status;
+            if (newStatus === 'Processing' || newStatus === 'Payment Confirmed' || newStatus === 'Shipped') {
+                paymentStatus = 'PAID';
+            } else if (newStatus === 'Failed') {
+                paymentStatus = 'FAILED';
+            } else if (newStatus === 'Pending Payments') {
+                paymentStatus = 'PENDING';
+            }
 
             const res = await fetch('/api/orders', {
                 method: 'PUT',
@@ -90,7 +98,11 @@ export default function AdminOrderDetailsPage() {
             if (!res.ok) throw new Error('Failed to update order');
 
             setOrder({ ...order, status: newStatus, payment_status: paymentStatus });
-            if (newStatus !== 'Pending') setNeedsVerification(false);
+            if (newStatus !== 'Pending' && newStatus !== 'Pending Payments') {
+                setNeedsVerification(false);
+            } else {
+                setNeedsVerification(true);
+            }
             alert(`Order status updated to ${newStatus}. Customer has been notified.`);
         } catch (error) {
             console.error('Failed to update status:', error);
@@ -140,8 +152,18 @@ export default function AdminOrderDetailsPage() {
                         <Edit className="w-4 h-4" />
                         {isEditing ? 'Cancel Editing' : 'Edit Order'}
                     </button>
-                    {!needsVerification && (
-                        <button className="flex items-center gap-2 bg-primary hover:bg-sky-500 text-white px-6 py-3 rounded-xl font-black text-sm transition-all shadow-lg shadow-primary/20">
+                    <button
+                        onClick={() => handleUpdateStatus('Failed')}
+                        className="flex items-center gap-2 bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 px-6 py-3 rounded-xl font-black text-sm transition-all shadow-lg shadow-rose-500/10 hover:bg-rose-200 dark:hover:bg-rose-900/50"
+                    >
+                        <XCircle className="w-4 h-4" />
+                        Mark as Failed
+                    </button>
+                    {!needsVerification && order.status !== 'Shipped' && (
+                        <button
+                            onClick={() => handleUpdateStatus('Shipped')}
+                            className="flex items-center gap-2 bg-primary hover:bg-sky-500 text-white px-6 py-3 rounded-xl font-black text-sm transition-all shadow-lg shadow-primary/20"
+                        >
                             <Truck className="w-4 h-4" />
                             Ship Order
                         </button>
@@ -174,19 +196,22 @@ export default function AdminOrderDetailsPage() {
                                     <p className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter">{order.total}</p>
                                     <p className="text-xs font-bold text-primary mt-2">{order.payment_method}</p>
                                 </div>
-                                <div className="flex gap-4 w-full md:w-auto">
-                                    <button
-                                        onClick={() => handleUpdateStatus('Processing')}
-                                        className="flex-1 bg-primary hover:bg-sky-500 text-white px-8 py-4 rounded-xl font-black text-sm transition-all shadow-lg shadow-primary/20 active:scale-[0.98]"
-                                    >
-                                        Verify & Process
-                                    </button>
-                                    <button
-                                        onClick={() => handleUpdateStatus('Failed')}
-                                        className="flex-1 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-8 py-4 rounded-xl font-black text-sm transition-all hover:bg-rose-100 hover:text-rose-600 dark:hover:bg-rose-900/30 dark:hover:text-rose-400"
-                                    >
-                                        Mark as Failed
-                                    </button>
+                                <div className="flex gap-4 w-full md:w-auto mt-4 md:mt-0">
+                                    <div className="flex flex-col gap-2 w-full">
+                                        <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Update Status</label>
+                                        <select
+                                            className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-primary outline-none"
+                                            value={order.status}
+                                            onChange={(e) => handleUpdateStatus(e.target.value)}
+                                        >
+                                            <option value="Pending">Pending</option>
+                                            <option value="Pending Payments">Pending Payments</option>
+                                            <option value="Processing">Processing</option>
+                                            <option value="Payment Confirmed">Payment Confirmed</option>
+                                            <option value="Shipped">Shipped</option>
+                                            <option value="Failed">Failed</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                         </div>

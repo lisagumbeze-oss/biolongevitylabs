@@ -190,8 +190,12 @@ export async function POST(request: Request) {
                 if (itemsError) throw itemsError;
             }
 
-            // 3. Send Emails asynchronously (don't block the response)
-            sendOrderEmails(orderData);
+            // 3. Send Emails asynchronously (but awaited to avoid Vercel killing the process)
+            try {
+                await sendOrderEmails(orderData);
+            } catch (emailErr) {
+                console.error('Email failed but order created:', emailErr);
+            }
 
             return NextResponse.json(order, { status: 201 });
         } else {
@@ -204,7 +208,11 @@ export async function POST(request: Request) {
             writeOrdersLocal(orders);
 
             // 3. Send Emails asynchronously
-            sendOrderEmails(orderData);
+            try {
+                await sendOrderEmails(orderData);
+            } catch (emailErr) {
+                console.error('Email failed but local order created:', emailErr);
+            }
 
             return NextResponse.json(orderWithMeta, { status: 201 });
         }
@@ -267,6 +275,14 @@ async function sendStatusUpdateEmail(orderData: any) {
                 react: OrderCancellationEmail({ orderId: orderData.id })
             });
             console.log(`Order cancellation email sent for ${orderData.id}`);
+        } else if (orderData.status === 'Shipped') {
+            await resend.emails.send({
+                from: 'BioLongevity Labs <orders@biolongevitylabs.com>',
+                to: [orderData.email],
+                subject: `Your Order ${orderData.id} Has Shipped!`,
+                html: `<p>Your order has shipped. Your shipping and tracking details will be updated shortly.</p>`
+            });
+            console.log(`Order shipped email sent for ${orderData.id}`);
         }
     } catch (error) {
         console.error('Failed to send status update email:', error);
@@ -309,9 +325,13 @@ export async function PUT(request: Request) {
             }
         }
 
-        // Send status email asynchronously
+        // Send status email asynchronously (but await it)
         if (updatedOrder && (status || payment_status)) {
-            sendStatusUpdateEmail(updatedOrder);
+            try {
+                await sendStatusUpdateEmail(updatedOrder);
+            } catch (emailErr) {
+                console.error('Status email failed:', emailErr);
+            }
         }
 
         return NextResponse.json({ success: true, order: updatedOrder });
