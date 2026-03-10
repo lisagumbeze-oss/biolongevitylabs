@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://biolongevitylabs.com",
+    url: "https://biolongevitylabss.com",
     siteName: "BioLongevity Labs",
     title: "BioLongevity Labs | Premium Research Compounds",
     description: "Highest purity research peptides and biotechnology solutions.",
