@@ -111,7 +111,7 @@ async function sendOrderEmails(orderData: any) {
 
         // Send to Customer
         await resend.emails.send({
-            from: 'BioLongevity Labs <orders@biolongevitylabs.com>',
+            from: 'BioLongevity Labs <support@biolongevitylabss.com>',
             to: [orderData.email],
             subject: `Order Confirmation ${orderData.id}`,
             react: OrderReceiptEmail({
@@ -126,7 +126,7 @@ async function sendOrderEmails(orderData: any) {
 
         // Send to Admin
         await resend.emails.send({
-            from: 'BioLongevity Labs <orders@biolongevitylabs.com>',
+            from: 'BioLongevity Labs <support@biolongevitylabss.com>',
             to: ['support@biolongevitylabss.com'],
             subject: `New Order Received ${orderData.id}`,
             react: AdminOrderNotificationEmail({
@@ -261,7 +261,7 @@ async function sendStatusUpdateEmail(orderData: any) {
     try {
         if (orderData.status === 'Processing' || orderData.payment_status === 'PAID') {
             await resend.emails.send({
-                from: 'BioLongevity Labs <orders@biolongevitylabs.com>',
+                from: 'BioLongevity Labs <support@biolongevitylabss.com>',
                 to: [orderData.email],
                 subject: `Payment Received - Order ${orderData.id}`,
                 react: PaymentReceivedEmail1({ orderId: orderData.id })
@@ -269,7 +269,7 @@ async function sendStatusUpdateEmail(orderData: any) {
             console.log(`Payment success email sent for ${orderData.id}`);
         } else if (orderData.status === 'Failed' || orderData.payment_status === 'FAILED') {
             await resend.emails.send({
-                from: 'BioLongevity Labs <orders@biolongevitylabs.com>',
+                from: 'BioLongevity Labs <support@biolongevitylabss.com>',
                 to: [orderData.email],
                 subject: `Order Canceled - ${orderData.id}`,
                 react: OrderCancellationEmail({ orderId: orderData.id })
@@ -277,7 +277,7 @@ async function sendStatusUpdateEmail(orderData: any) {
             console.log(`Order cancellation email sent for ${orderData.id}`);
         } else if (orderData.status === 'Shipped') {
             await resend.emails.send({
-                from: 'BioLongevity Labs <orders@biolongevitylabs.com>',
+                from: 'BioLongevity Labs <support@biolongevitylabss.com>',
                 to: [orderData.email],
                 subject: `Your Order ${orderData.id} Has Shipped!`,
                 html: `<p>Your order has shipped. Your shipping and tracking details will be updated shortly.</p>`
