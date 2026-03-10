@@ -2,12 +2,12 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { products } from "@/data/products";
+import { Product } from "@/data/products";
 import { useCart } from "@/store/useCart";
 import {
     ShoppingCart, Truck, ShieldCheck, RotateCcw, ChevronLeft,
     Minus, Plus, Star, ChevronRight, Zap, Heart, Share2,
-    CheckCircle2, Info, Package, Beaker, Layers, Lock, ArrowRight
+    CheckCircle2, Info, Package, Beaker, Layers, Lock, ArrowRight, Loader2
 } from "lucide-react";
 import Link from "next/link";
 import CartDrawer from "@/components/CartDrawer";
@@ -21,24 +21,59 @@ interface Props {
 
 export default function ProductDetailsView({ id }: Props) {
     const router = useRouter();
-    const product = products.find((p) => p.id === id);
+    const [product, setProduct] = useState<Product | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [allProducts, setAllProducts] = useState<Product[]>([]);
+
     const addItem = useCart((state) => state.addItem);
     const [quantity, setQuantity] = useState(1);
     const [isCartOpen, setIsCartOpen] = useState(false);
-    const [selectedImage, setSelectedImage] = useState(product?.image || "");
+    const [selectedImage, setSelectedImage] = useState("");
 
-    const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>(() => {
-        const defaultOptions: Record<string, string> = {};
-        if (product?.variables) {
-            product.variables.forEach(v => {
-                if (v.options && v.options.length > 0) {
-                    defaultOptions[v.name] = v.options[0];
+    const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
+
+    useEffect(() => {
+        const fetchProduct = async () => {
+            try {
+                const response = await fetch('/api/products');
+                if (response.ok) {
+                    const data = await response.json();
+                    setAllProducts(data);
+                    const found = data.find((p: Product) => p.id === id);
+                    if (found) {
+                        setProduct(found);
+                        setSelectedImage(found.image || "");
+
+                        // Set default options
+                        const defaultOptions: Record<string, string> = {};
+                        if (found.variables) {
+                            found.variables.forEach((v: any) => {
+                                if (v.options && v.options.length > 0) {
+                                    defaultOptions[v.name] = v.options[0];
+                                }
+                            });
+                        }
+                        setSelectedOptions(defaultOptions);
+                    }
                 }
-            });
-        }
-        return defaultOptions;
-    });
+            } catch (error) {
+                console.error('Error fetching product:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
 
+        fetchProduct();
+    }, [id]);
+
+    if (isLoading) {
+        return (
+            <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
+                <Loader2 className="w-10 h-10 text-primary animate-spin mb-4" />
+                <p className="text-slate-500 font-bold uppercase tracking-widest text-xs">Loading Product Details...</p>
+            </div>
+        );
+    }
 
     if (!product) {
         return (
@@ -99,7 +134,7 @@ export default function ProductDetailsView({ id }: Props) {
 
     const displayImages = [product.image, ...(product.gallery || [])].filter((val, i, arr) => val && arr.indexOf(val) === i);
 
-    const relatedProducts = products
+    const relatedProducts = allProducts
         .filter(p => p.category === product.category && p.id !== product.id)
         .slice(0, 4);
 

@@ -29,7 +29,7 @@ export default function ContactPage() {
                     <div className="flex flex-col gap-8 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl p-8 sm:p-10 rounded-3xl shadow-2xl shadow-slate-200/50 dark:shadow-slate-900/50 border border-slate-200 dark:border-slate-800">
                         <div>
                             <h2 className="text-2xl font-bold leading-tight tracking-tight mb-2 text-slate-900 dark:text-white">Send us a message</h2>
-                            <p className="text-slate-600 dark:text-slate-400 text-sm font-medium">Please provide your Order ID if inquiring about a specific purchase.</p>
+                            <p className="text-slate-600 dark:text-slate-400 text-sm font-medium">Please provide your contact details so our team can reach out.</p>
                         </div>
 
                         <form className="flex flex-col gap-6">
@@ -56,12 +56,12 @@ export default function ContactPage() {
                             </div>
 
                             <div className="flex flex-col gap-2">
-                                <label className="text-sm font-bold text-slate-900 dark:text-white" htmlFor="orderId">Order ID (Optional)</label>
+                                <label className="text-sm font-bold text-slate-900 dark:text-white" htmlFor="phone">Phone Number</label>
                                 <input
                                     className="flex w-full min-w-0 flex-1 resize-none rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 h-12 px-4 shadow-inner transition-shadow"
-                                    id="orderId"
-                                    placeholder="e.g. #ORD-12345"
-                                    type="text"
+                                    id="phone"
+                                    placeholder="+1 (555) 000-0000"
+                                    type="tel"
                                 />
                             </div>
 
@@ -97,24 +97,17 @@ export default function ContactPage() {
                                 </div>
                                 <div className="flex flex-col">
                                     <p className="text-sm font-bold text-slate-900 dark:text-white mb-1 uppercase tracking-wider">Address</p>
-                                    <p className="text-base font-medium text-slate-600 dark:text-slate-400">BioLongevity Labs Headquarters<br />100 Research Parkway<br />San Diego, CA 92121</p>
+                                    <p className="text-base font-medium text-slate-600 dark:text-slate-400">F2 Nutrition Inc.<br />405 Rothrock Rd #106<br />Akron, OH 44321</p>
                                 </div>
 
-                                <div className="flex items-start justify-center text-white bg-primary w-10 h-10 rounded-xl shadow-md">
-                                    <Phone className="w-5 h-5 m-auto" />
-                                </div>
-                                <div className="flex flex-col">
-                                    <p className="text-sm font-bold text-slate-900 dark:text-white mb-1 uppercase tracking-wider">Phone</p>
-                                    <p className="text-base font-medium text-slate-600 dark:text-slate-400">1-800-BIO-LABS</p>
-                                    <p className="text-xs font-bold text-primary mt-2 bg-primary/10 inline-block px-2 py-1 rounded w-max">Mon-Fri 9am-5pm PST</p>
-                                </div>
+
 
                                 <div className="flex items-start justify-center text-white bg-primary w-10 h-10 rounded-xl shadow-md">
                                     <Mail className="w-5 h-5 m-auto" />
                                 </div>
                                 <div className="flex flex-col">
                                     <p className="text-sm font-bold text-slate-900 dark:text-white mb-1 uppercase tracking-wider">Email</p>
-                                    <a className="text-base font-semibold text-primary hover:text-sky-400 transition-colors" href="mailto:support@biolongevitylabs.com">support@biolongevitylabs.com</a>
+                                    <a className="text-base font-semibold text-primary hover:text-sky-400 transition-colors" href="mailto:support@biolongevitylabss.com">support@biolongevitylabss.com</a>
                                 </div>
 
                             </div>

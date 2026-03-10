@@ -3,6 +3,9 @@ export const dynamic = 'force-dynamic';
 import fs from 'fs';
 import path from 'path';
 import { supabase } from '@/lib/supabase';
+import { Resend } from 'resend';
+import OrderReceiptEmail from '@/components/emails/OrderReceiptEmail';
+import AdminOrderNotificationEmail from '@/components/emails/AdminOrderNotificationEmail';
 
 const ORDERS_JSON = path.join(process.cwd(), 'src/data/orders.json');
 
@@ -76,6 +79,66 @@ export async function GET() {
     }
 }
 
+async function sendOrderEmails(orderData: any) {
+    if (!process.env.RESEND_API_KEY) {
+        console.warn('RESEND_API_KEY is not set. Skipping emails.');
+        return;
+    }
+
+    const resend = new Resend(process.env.RESEND_API_KEY);
+
+    try {
+        const totalNum = parseFloat(orderData.total.replace('$', ''));
+        const items = (orderData.full_items || orderData.items || []).map((item: any) => ({
+            id: item.product_id || item.id,
+            name: item.name || item.product_name || 'Product',
+            price: item.price || 0,
+            quantity: item.quantity || 1,
+            variationString: item.variationString || item.variation_name || ''
+        }));
+
+        // Send to Customer
+        await resend.emails.send({
+            from: 'BioLongevity Labs <orders@biolongevitylabs.com>',
+            to: [orderData.email],
+            subject: `Order Confirmation ${orderData.id}`,
+            react: OrderReceiptEmail({
+                orderId: orderData.id,
+                customerName: orderData.customer,
+                customerEmail: orderData.email,
+                items,
+                total: totalNum,
+                paymentMethod: orderData.payment_method || 'Manual Transfer'
+            })
+        });
+
+        // Send to Admin
+        await resend.emails.send({
+            from: 'BioLongevity Labs <orders@biolongevitylabs.com>',
+            to: ['support@biolongevitylabss.com'],
+            subject: `New Order Received ${orderData.id}`,
+            react: AdminOrderNotificationEmail({
+                orderId: orderData.id,
+                customerName: orderData.customer,
+                customerEmail: orderData.email,
+                items,
+                total: totalNum,
+                paymentMethod: orderData.payment_method || 'Manual Transfer',
+                shippingAddress: {
+                    addressLine1: orderData.shipping_address?.address || '',
+                    city: orderData.shipping_address?.city || '',
+                    state: orderData.shipping_address?.state || '',
+                    zipCode: orderData.shipping_address?.zipCode || '',
+                    country: orderData.shipping_address?.country || 'USA'
+                }
+            })
+        });
+        console.log(`Order emails sent successfully for ${orderData.id}`);
+    } catch (emailError) {
+        console.error('Failed to send order emails:', emailError);
+    }
+}
+
 export async function POST(request: Request) {
     try {
         const orderData = await request.json();
@@ -102,11 +165,11 @@ export async function POST(request: Request) {
             // 2. Insert order items if provided
             if (orderData.full_items?.length) {
                 const { error: itemsError } = await supabase.from('order_items').insert(
-                    orderData.full_items.map((item: OrderItemRow) => ({
+                    orderData.full_items.map((item: any) => ({
                         order_id: (order as unknown as OrderRow).id,
-                        product_id: item.product_id,
+                        product_id: item.product_id || item.id,
                         variation_id: item.variation_id,
-                        product_name: item.product_name,
+                        product_name: item.product_name || item.name,
                         quantity: item.quantity,
                         price: item.price
                     }))
@@ -114,11 +177,18 @@ export async function POST(request: Request) {
                 if (itemsError) throw itemsError;
             }
 
+            // 3. Send Emails asynchronously (don't block the response)
+            sendOrderEmails(orderData);
+
             return NextResponse.json(order, { status: 201 });
         } else {
             const orders = readOrdersLocal();
             orders.push(orderData);
             writeOrdersLocal(orders);
+
+            // 3. Send Emails asynchronously
+            sendOrderEmails(orderData);
+
             return NextResponse.json(orderData, { status: 201 });
         }
     } catch (error: unknown) {

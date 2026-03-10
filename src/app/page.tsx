@@ -4,11 +4,9 @@ import React, { useState, useEffect, useCallback } from "react";
 import Hero from "@/components/Hero";
 import ProductCard from "@/components/ProductCard";
 import AboutSection from "@/components/AboutSection";
-import { Truck, ShieldCheck, Award, Droplets, ChevronLeft, ChevronRight } from "lucide-react";
-import { products } from "@/data/products";
+import { Truck, ShieldCheck, Award, Droplets, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import { Product } from "@/data/products";
 import { motion, AnimatePresence } from "framer-motion";
-
-const carouselProducts = products.slice(0, 10);
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -26,10 +24,31 @@ const staggerContainer = {
 };
 
 export default function Home() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+
+  const carouselProducts = products.slice(0, 10);
   const totalProducts = carouselProducts.length;
   const visibleCount = 4;
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('/api/products');
+        if (response.ok) {
+          const data = await response.json();
+          setProducts(data);
+        }
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchProducts();
+  }, []);
 
   const nextSlide = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % totalProducts);
@@ -41,13 +60,14 @@ export default function Home() {
 
   // Auto-slide every 3 seconds
   useEffect(() => {
-    if (isPaused) return;
+    if (isPaused || totalProducts === 0) return;
     const interval = setInterval(nextSlide, 3000);
     return () => clearInterval(interval);
-  }, [isPaused, nextSlide]);
+  }, [isPaused, nextSlide, totalProducts]);
 
   // Get the visible products (wrapping around)
   const getVisibleProducts = () => {
+    if (totalProducts === 0) return [];
     const visible = [];
     for (let i = 0; i < visibleCount; i++) {
       visible.push(carouselProducts[(currentIndex + i) % totalProducts]);
@@ -93,26 +113,33 @@ export default function Home() {
 
         {/* Carousel */}
         <div
-          className="relative overflow-hidden"
+          className="relative overflow-hidden min-h-[400px]"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
-          <AnimatePresence mode="popLayout">
-            <motion.div
-              key={currentIndex}
-              initial={{ x: 80, opacity: 0.5 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: -80, opacity: 0 }}
-              transition={{ duration: 0.5, ease: "easeInOut" }}
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
-            >
-              {getVisibleProducts().map((product) => (
-                <div key={product.id}>
-                  <ProductCard {...product} />
-                </div>
-              ))}
-            </motion.div>
-          </AnimatePresence>
+          {isLoading ? (
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
+              <Loader2 className="w-8 h-8 text-primary animate-spin" />
+              <p className="text-slate-500 font-bold uppercase tracking-widest text-xs">Loading Featured Products...</p>
+            </div>
+          ) : (
+            <AnimatePresence mode="popLayout">
+              <motion.div
+                key={currentIndex}
+                initial={{ x: 80, opacity: 0.5 }}
+                animate={{ x: 0, opacity: 1 }}
+                exit={{ x: -80, opacity: 0 }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
+              >
+                {getVisibleProducts().map((product) => (
+                  <div key={product.id}>
+                    <ProductCard {...product} />
+                  </div>
+                ))}
+              </motion.div>
+            </AnimatePresence>
+          )}
         </div>
 
         {/* Pagination Dots */}
@@ -122,8 +149,8 @@ export default function Home() {
               key={i}
               onClick={() => { setCurrentIndex(i); setIsPaused(true); setTimeout(() => setIsPaused(false), 5000); }}
               className={`h-2 rounded-full transition-all duration-300 ${i === currentIndex
-                  ? "w-8 bg-primary shadow-lg shadow-primary/40"
-                  : "w-2 bg-slate-300 dark:bg-slate-600 hover:bg-primary/50"
+                ? "w-8 bg-primary shadow-lg shadow-primary/40"
+                : "w-2 bg-slate-300 dark:bg-slate-600 hover:bg-primary/50"
                 }`}
               aria-label={`Go to slide ${i + 1}`}
             />

@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import ProductCard from "@/components/ProductCard";
-import { products } from "@/data/products";
-import { Search, ArrowUpDown, Package, SlidersHorizontal, X } from "lucide-react";
+import { Product } from "@/data/products";
+import { Search, ArrowUpDown, Package, SlidersHorizontal, X, Loader2 } from "lucide-react";
 
 const categories = [
     "All",
@@ -15,9 +15,31 @@ const categories = [
 ];
 
 export default function ShopPage() {
+    const [products, setProducts] = useState<Product[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState("");
     const [activeCategory, setActiveCategory] = useState("All");
     const [sortBy, setSortBy] = useState("featured");
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const response = await fetch('/api/products');
+                if (response.ok) {
+                    const data = await response.json();
+                    setProducts(data);
+                } else {
+                    console.error('Failed to fetch products');
+                }
+            } catch (error) {
+                console.error('Error fetching products:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchProducts();
+    }, []);
 
     const clearFilters = () => {
         setActiveCategory("All");
@@ -36,11 +58,24 @@ export default function ShopPage() {
                 return matchesSearch && matchesCategory;
             })
             .sort((a, b) => {
-                if (sortBy === "price-low") return a.price - b.price;
-                if (sortBy === "price-high") return b.price - a.price;
-                return 0;
+                const priceA = a.isVariable && a.minPrice ? a.minPrice : a.price;
+                const priceB = b.isVariable && b.minPrice ? b.minPrice : b.price;
+                if (sortBy === "price-low") return priceA - priceB;
+                if (sortBy === "price-high") return priceB - priceA;
+                return 0; // "featured" maintains original or DB order roughly
             });
-    }, [searchQuery, activeCategory, sortBy]);
+    }, [products, searchQuery, activeCategory, sortBy]);
+
+    if (isLoading) {
+        return (
+            <div className="bg-white dark:bg-slate-950 min-h-screen transition-colors flex items-center justify-center">
+                <div className="flex flex-col items-center gap-4">
+                    <Loader2 className="w-10 h-10 text-primary animate-spin" />
+                    <p className="text-slate-500 font-bold uppercase tracking-widest text-xs">Loading Live Inventory...</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="bg-white dark:bg-slate-950 min-h-screen transition-colors">
@@ -65,8 +100,8 @@ export default function ShopPage() {
                                 key={cat}
                                 onClick={() => setActiveCategory(cat)}
                                 className={`px-5 py-2.5 rounded-full text-sm font-semibold whitespace-nowrap transition-all duration-200 ${activeCategory === cat
-                                        ? "bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-md"
-                                        : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700"
+                                    ? "bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-md"
+                                    : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700"
                                     }`}
                             >
                                 {cat}

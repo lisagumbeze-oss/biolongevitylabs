@@ -74,6 +74,31 @@ const Footer = () => {
                         </button>
                     </div>
                 </div>
+
+                {/* Verified Supplier Banner */}
+                <div className="mt-12 flex justify-center">
+                    <Link
+                        href="https://researchacademy.institute/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group flex flex-col sm:flex-row items-center gap-4 bg-slate-50 hover:bg-white dark:bg-slate-800/50 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-primary/50 dark:hover:border-primary/50 transition-all rounded-2xl p-4 md:px-8 shadow-sm hover:shadow-md max-w-lg w-full"
+                    >
+                        <div className="shrink-0 bg-white p-2 rounded-xl shadow-sm border border-slate-100 dark:border-slate-600">
+                            {/* Standard text fallback if logo is unavailable, but an img tag would be ideal */}
+                            <div className="font-serif font-black text-slate-800 text-lg leading-none flex flex-col text-center">
+                                <span>RESEARCH</span>
+                                <span className="text-xs text-slate-500 tracking-widest">ACADEMY</span>
+                            </div>
+                        </div>
+                        <div className="flex flex-col text-center sm:text-left">
+                            <span className="text-xs font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-1">Proud Member</span>
+                            <span className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2 justify-center sm:justify-start">
+                                <ShieldCheck className="w-5 h-5 text-emerald-500" />
+                                Verified Supplier
+                            </span>
+                        </div>
+                    </Link>
+                </div>
                 <div className="mt-8 border-t border-slate-200 dark:border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center">
                     <p className="text-sm text-slate-400 text-center md:text-left font-medium">
                         © {new Date().getFullYear()} BioLongevity Labs. All rights reserved.
