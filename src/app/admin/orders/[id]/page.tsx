@@ -176,46 +176,48 @@ export default function AdminOrderDetailsPage() {
                 {/* Left Column: Order Details */}
                 <div className="lg:col-span-2 space-y-8">
 
-                    {/* PAYMENT VERIFICATION MODULE */}
-                    {needsVerification && (
-                        <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-xl border-2 border-amber-500/20 overflow-hidden">
-                            <div className="bg-amber-500/10 px-8 py-6 flex items-center justify-between border-b border-amber-500/10">
-                                <div className="flex items-center gap-4">
-                                    <div className="w-12 h-12 bg-amber-500/20 rounded-2xl flex items-center justify-center text-amber-600">
-                                        <Info className="w-6 h-6" />
-                                    </div>
-                                    <div>
-                                        <h2 className="font-black text-xl text-amber-900 dark:text-amber-400 tracking-tight">Review Payment Status</h2>
-                                        <p className="text-amber-700/70 dark:text-amber-500/50 text-xs font-bold uppercase tracking-wider">Action required to process order</p>
-                                    </div>
+                    {/* ORDER STATUS MODULE */}
+                    <div className={`bg-white dark:bg-slate-900 rounded-3xl shadow-xl border-2 overflow-hidden ${needsVerification ? 'border-amber-500/20' : 'border-slate-200 dark:border-slate-800'}`}>
+                        <div className={`px-8 py-6 flex items-center justify-between border-b ${needsVerification ? 'bg-amber-500/10 border-amber-500/10' : 'bg-slate-50 dark:bg-slate-800/50 border-slate-100 dark:border-slate-800'}`}>
+                            <div className="flex items-center gap-4">
+                                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${needsVerification ? 'bg-amber-500/20 text-amber-600' : 'bg-primary/10 text-primary'}`}>
+                                    <Info className="w-6 h-6" />
                                 </div>
-                            </div>
-                            <div className="p-8 flex flex-col md:flex-row gap-8 items-center justify-between">
-                                <div className="bg-slate-50 dark:bg-slate-800/50 p-6 rounded-2xl border border-slate-100 dark:border-slate-800 w-full md:w-auto">
-                                    <p className="text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-1">Expected Amount</p>
-                                    <p className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter">{order.total}</p>
-                                    <p className="text-xs font-bold text-primary mt-2">{order.payment_method}</p>
-                                </div>
-                                <div className="flex gap-4 w-full md:w-auto mt-4 md:mt-0">
-                                    <div className="flex flex-col gap-2 w-full">
-                                        <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Update Status</label>
-                                        <select
-                                            className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-primary outline-none"
-                                            value={order.status}
-                                            onChange={(e) => handleUpdateStatus(e.target.value)}
-                                        >
-                                            <option value="Pending">Pending</option>
-                                            <option value="Pending Payments">Pending Payments</option>
-                                            <option value="Processing">Processing</option>
-                                            <option value="Payment Confirmed">Payment Confirmed</option>
-                                            <option value="Shipped">Shipped</option>
-                                            <option value="Failed">Failed</option>
-                                        </select>
-                                    </div>
+                                <div>
+                                    <h2 className={`font-black text-xl tracking-tight ${needsVerification ? 'text-amber-900 dark:text-amber-400' : 'text-slate-900 dark:text-white'}`}>
+                                        {needsVerification ? 'Review Payment Status' : 'Manage Order Status'}
+                                    </h2>
+                                    <p className={`text-xs font-bold uppercase tracking-wider ${needsVerification ? 'text-amber-700/70 dark:text-amber-500/50' : 'text-slate-500 dark:text-slate-400'}`}>
+                                        {needsVerification ? 'Action required to process order' : 'Update the current stage of this order'}
+                                    </p>
                                 </div>
                             </div>
                         </div>
-                    )}
+                        <div className="p-8 flex flex-col md:flex-row gap-8 items-center justify-between">
+                            <div className="bg-slate-50 dark:bg-slate-800/50 p-6 rounded-2xl border border-slate-100 dark:border-slate-800 w-full md:w-auto">
+                                <p className="text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-1">Expected Amount</p>
+                                <p className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter">{order.total}</p>
+                                <p className="text-xs font-bold text-primary mt-2">{order.payment_method}</p>
+                            </div>
+                            <div className="flex gap-4 w-full md:w-auto mt-4 md:mt-0">
+                                <div className="flex flex-col gap-2 w-full">
+                                    <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Update Status</label>
+                                    <select
+                                        className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-bold text-slate-900 dark:text-white focus:ring-2 focus:ring-primary outline-none"
+                                        value={order.status}
+                                        onChange={(e) => handleUpdateStatus(e.target.value)}
+                                    >
+                                        <option value="Pending">Pending</option>
+                                        <option value="Pending Payments">Pending Payments</option>
+                                        <option value="Processing">Processing</option>
+                                        <option value="Payment Confirmed">Payment Confirmed</option>
+                                        <option value="Shipped">Shipped</option>
+                                        <option value="Failed">Failed</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     {/* Order Items Section */}
                     <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
