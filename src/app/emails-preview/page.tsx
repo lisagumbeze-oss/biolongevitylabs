@@ -19,14 +19,14 @@ export default function EmailsPreview() {
             <div>
                 <h2 className="text-white text-xl mb-4 font-semibold">2. Order Cancellation</h2>
                 <div className="border-4 border-slate-700 rounded-2xl overflow-hidden scale-90 origin-top h-[800px] overflow-y-auto">
-                    <OrderCancellationEmail />
+                    <OrderCancellationEmail orderId="ORD-PREVIEW-1234" />
                 </div>
             </div>
 
             <div>
                 <h2 className="text-white text-xl mb-4 font-semibold">3. Payment Received - Success</h2>
                 <div className="border-4 border-slate-700 rounded-2xl overflow-hidden scale-90 origin-top h-[800px] overflow-y-auto">
-                    <PaymentReceivedEmail1 />
+                    <PaymentReceivedEmail1 orderId="ORD-PREVIEW-1234" />
                 </div>
             </div>
 
