@@ -1,6 +1,10 @@
 import React from 'react';
 
-export default function PaymentReceivedEmail1() {
+interface PaymentReceivedProps {
+    orderId: string;
+}
+
+export default function PaymentReceivedEmail1({ orderId = "1234" }: PaymentReceivedProps) {
     return (
         <div className="bg-slate-50 font-sans text-slate-900 flex items-center justify-center min-h-screen p-4">
             <div className="relative flex h-auto w-full flex-col bg-white shadow-xl rounded-xl overflow-hidden max-w-[600px] border border-slate-200">
@@ -28,7 +32,7 @@ export default function PaymentReceivedEmail1() {
                                             Thank you, we&apos;ve received your payment!
                                         </h1>
                                         <p className="text-base font-normal leading-relaxed text-slate-600 max-w-[400px]">
-                                            Your order <strong>#1234</strong> is now in the &apos;Preparing for Shipment&apos; stage.
+                                            Your order <strong>{orderId.startsWith('#') ? orderId : `#${orderId}`}</strong> is now in the &apos;Preparing for Shipment&apos; stage.
                                         </p>
 
                                         {/* Order Detail Box */}

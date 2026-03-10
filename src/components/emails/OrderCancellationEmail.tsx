@@ -1,6 +1,10 @@
 import React from 'react';
 
-export default function OrderCancellationEmail() {
+interface OrderCancellationProps {
+    orderId: string;
+}
+
+export default function OrderCancellationEmail({ orderId = "1234" }: OrderCancellationProps) {
     return (
         <div className="bg-slate-50 font-sans text-slate-900 min-h-screen flex items-center justify-center p-4">
             <div className="w-full max-w-[600px] bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden">
@@ -17,7 +21,7 @@ export default function OrderCancellationEmail() {
                     </div>
 
                     <h1 className="text-3xl font-bold mb-2">Order Canceled</h1>
-                    <p className="text-lg font-medium text-slate-600 mb-6">Your Order #1234 has been canceled</p>
+                    <p className="text-lg font-medium text-slate-600 mb-6">Your Order {orderId.startsWith('#') ? orderId : `#${orderId}`} has been canceled</p>
 
                     <div className="bg-slate-50 rounded-lg p-5 w-full mb-8 text-left border border-slate-100">
                         <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider mb-2">Reason for Cancellation</h3>

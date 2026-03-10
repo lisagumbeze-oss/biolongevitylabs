@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import { Plus, Search, Filter, MoreVertical, Edit2, Trash2, Tag, Copy, Loader2, ExternalLink } from 'lucide-react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { Plus, Search, Filter, MoreVertical, Edit2, Trash2, Tag, Copy, Loader2, ExternalLink, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { Product } from '@/data/products';
 
@@ -14,8 +14,18 @@ export default function ProductsManagement() {
     const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
     const [editVariations, setEditVariations] = useState<{ id: number, option: string, price: number }[]>([]);
 
+    type SortKey = 'name' | 'category' | 'form' | 'price' | 'stockStatus';
+    const [sortConfig, setSortConfig] = useState<{ key: SortKey; direction: 'asc' | 'desc' } | null>(null);
+
+    const [mainImageUrl, setMainImageUrl] = useState('');
+    const [galleryUrls, setGalleryUrls] = useState<string[]>([]);
+    const [uploadingImage, setUploadingImage] = useState(false);
+
     const handleOpenEditModal = (product: Product) => {
         setEditingProduct(product);
+        setMainImageUrl(product.image || '');
+        setGalleryUrls(product.gallery || []);
+
         if (product.isVariable && product.variations && product.variables) {
             const varName = product.variables[0]?.name || "Option";
             const mapped = product.variations.map(v => ({
@@ -32,8 +42,44 @@ export default function ProductsManagement() {
 
     const handleOpenAddModal = () => {
         setEditingProduct(null);
+        setMainImageUrl('');
+        setGalleryUrls([]);
         setEditVariations([]);
         setIsAddModalOpen(true);
+    };
+
+    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, isGallery: boolean) => {
+        const files = e.target.files;
+        if (!files || files.length === 0) return;
+
+        if (isGallery && galleryUrls.length + files.length > 5) {
+            toast.error('Maximum 5 gallery images allowed');
+            return;
+        }
+
+        setUploadingImage(true);
+        const formData = new FormData();
+        Array.from(files).forEach(f => formData.append('files', f));
+
+        try {
+            const res = await fetch('/api/upload', { method: 'POST', body: formData });
+            const data = await res.json();
+
+            if (!res.ok) throw new Error(data.error || 'Upload failed');
+
+            if (isGallery) {
+                setGalleryUrls(prev => [...prev, ...data.urls].slice(0, 5));
+            } else {
+                setMainImageUrl(data.urls[0]);
+            }
+            toast.success('Image(s) uploaded');
+        } catch (error: any) {
+            toast.error(error.message || 'Failed to upload image');
+        } finally {
+            setUploadingImage(false);
+            // clear input just in case
+            if (e.target) e.target.value = '';
+        }
     };
 
     // Fetch products on load
@@ -62,6 +108,33 @@ export default function ProductsManagement() {
         product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         product.category.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+    const handleSort = (key: SortKey) => {
+        let direction: 'asc' | 'desc' = 'asc';
+        if (sortConfig && sortConfig.key === key && sortConfig.direction === 'asc') {
+            direction = 'desc';
+        }
+        setSortConfig({ key, direction });
+    };
+
+    const sortedProducts = useMemo(() => {
+        let sortableProducts = [...filteredProducts];
+        if (sortConfig !== null) {
+            sortableProducts.sort((a, b) => {
+                const aValue = a[sortConfig.key] ?? '';
+                const bValue = b[sortConfig.key] ?? '';
+
+                if (aValue < bValue) {
+                    return sortConfig.direction === 'asc' ? -1 : 1;
+                }
+                if (aValue > bValue) {
+                    return sortConfig.direction === 'asc' ? 1 : -1;
+                }
+                return 0;
+            });
+        }
+        return sortableProducts;
+    }, [filteredProducts, sortConfig]);
 
     const handleDelete = async (id: string) => {
         try {
@@ -101,7 +174,8 @@ export default function ProductsManagement() {
             category: formData.get('category') as Product['category'],
             form: formData.get('form') as Product['form'],
             description: formData.get('description') as string,
-            image: formData.get('image') as string,
+            image: mainImageUrl || (formData.get('image') as string),
+            gallery: galleryUrls,
             stockStatus: formData.get('stockStatus') as Product['stockStatus'],
             isVariable: isVariable,
             variables: variables,
@@ -174,15 +248,23 @@ export default function ProductsManagement() {
                     <table className="w-full text-sm text-left">
                         <thead className="text-xs text-slate-500 dark:text-slate-400 uppercase bg-slate-50 dark:bg-slate-900/50 font-bold border-b border-slate-200 dark:border-slate-800">
                             <tr>
-                                <th className="px-6 py-4">Product</th>
-                                <th className="px-6 py-4">Category / Form</th>
-                                <th className="px-6 py-4">Base Price</th>
-                                <th className="px-6 py-4">Status</th>
+                                <th className="px-6 py-4 cursor-pointer hover:text-slate-700 dark:hover:text-slate-200 transition-colors" onClick={() => handleSort('name')}>
+                                    <div className="flex items-center gap-1">Product {sortConfig?.key === 'name' ? (sortConfig.direction === 'asc' ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />) : <ArrowUpDown className="w-3 h-3 opacity-30" />}</div>
+                                </th>
+                                <th className="px-6 py-4 cursor-pointer hover:text-slate-700 dark:hover:text-slate-200 transition-colors" onClick={() => handleSort('category')}>
+                                    <div className="flex items-center gap-1">Category / Form {sortConfig?.key === 'category' ? (sortConfig.direction === 'asc' ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />) : <ArrowUpDown className="w-3 h-3 opacity-30" />}</div>
+                                </th>
+                                <th className="px-6 py-4 cursor-pointer hover:text-slate-700 dark:hover:text-slate-200 transition-colors" onClick={() => handleSort('price')}>
+                                    <div className="flex items-center gap-1">Base Price {sortConfig?.key === 'price' ? (sortConfig.direction === 'asc' ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />) : <ArrowUpDown className="w-3 h-3 opacity-30" />}</div>
+                                </th>
+                                <th className="px-6 py-4 cursor-pointer hover:text-slate-700 dark:hover:text-slate-200 transition-colors" onClick={() => handleSort('stockStatus')}>
+                                    <div className="flex items-center gap-1">Status {sortConfig?.key === 'stockStatus' ? (sortConfig.direction === 'asc' ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />) : <ArrowUpDown className="w-3 h-3 opacity-30" />}</div>
+                                </th>
                                 <th className="px-6 py-4 text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {filteredProducts.map((product) => (
+                            {sortedProducts.map((product) => (
                                 <tr key={product.id} className="border-b border-slate-100 dark:border-slate-800/50 hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
                                     <td className="px-6 py-4">
                                         <div className="flex items-center gap-4">
@@ -296,9 +378,52 @@ export default function ProductsManagement() {
                                         </select>
                                     </div>
                                 </div>
-                                <div className="flex flex-col gap-2 w-full">
-                                    <label className="text-sm font-bold text-slate-300">Image URL</label>
-                                    <input name="image" defaultValue={editingProduct?.image || ''} className="flex w-full rounded-xl border border-slate-700 bg-slate-800 text-white h-11 px-4 focus:ring-2 focus:ring-primary focus:border-primary" type="text" placeholder="https://..." />
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+                                    <div className="flex flex-col gap-2 w-full">
+                                        <label className="text-sm font-bold text-slate-300">
+                                            Main Image {uploadingImage && <Loader2 className="inline w-3 h-3 animate-spin text-primary" />}
+                                        </label>
+                                        <div className="flex gap-2 items-center">
+                                            {mainImageUrl && <img src={mainImageUrl} alt="Main" className="w-11 h-11 rounded object-cover border border-slate-700 shrink-0" />}
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                onChange={(e) => handleFileUpload(e, false)}
+                                                className="flex-1 rounded-xl border border-slate-700 bg-slate-800 text-white p-2 text-sm file:mr-4 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-bold file:bg-primary file:text-white hover:file:bg-sky-500 cursor-pointer"
+                                            />
+                                        </div>
+                                        <input name="image" value={mainImageUrl} onChange={(e) => setMainImageUrl(e.target.value)} className="w-full rounded-xl border border-slate-700 bg-slate-800 text-white h-9 px-4 text-xs focus:ring-2 focus:ring-primary focus:border-primary mt-1" type="text" placeholder="Or enter Image URL https://..." />
+                                    </div>
+
+                                    <div className="flex flex-col gap-2 w-full">
+                                        <label className="text-sm font-bold text-slate-300 flex justify-between text-slate-300">
+                                            <span>Gallery Images <span className="text-slate-500 font-normal ml-1">(Max 5)</span></span>
+                                            <span className="text-xs text-primary bg-primary/10 px-2 py-0.5 rounded">{galleryUrls.length}/5</span>
+                                        </label>
+
+                                        <div className="flex gap-2 flex-wrap">
+                                            {galleryUrls.map((url, i) => (
+                                                <div key={i} className="relative group w-11 h-11 rounded-lg border border-slate-700 overflow-hidden shrink-0 bg-slate-800">
+                                                    <img src={url} className="w-full h-full object-cover" />
+                                                    <button type="button" onClick={() => setGalleryUrls(prev => prev.filter((_, idx) => idx !== i))} className="absolute inset-0 bg-red-500/90 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-[1px]">
+                                                        <Trash2 className="w-4 h-4" />
+                                                    </button>
+                                                </div>
+                                            ))}
+
+                                            {galleryUrls.length < 5 && (
+                                                <div className="flex-1 min-w-[120px]">
+                                                    <input
+                                                        type="file"
+                                                        accept="image/*"
+                                                        multiple
+                                                        onChange={(e) => handleFileUpload(e, true)}
+                                                        className="w-full h-11 rounded-xl border border-slate-700 bg-slate-800 text-white p-2 text-sm file:mr-4 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-bold file:bg-slate-700 file:text-white hover:file:bg-slate-600 cursor-pointer"
+                                                    />
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
                                 </div>
                                 <div className="flex flex-col gap-2 w-full">
                                     <label className="text-sm font-bold text-slate-300">Description</label>

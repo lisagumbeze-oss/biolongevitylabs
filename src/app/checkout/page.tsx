@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useCart } from "@/store/useCart";
-import { Lock, Truck, CreditCard, ChevronRight, Info, CheckCircle2, ShieldCheck, MapPin, Mail, User, Phone } from "lucide-react";
+import { Lock, Truck, CreditCard, ChevronRight, Info, CheckCircle2, ShieldCheck, MapPin, Mail, User, Phone, Tag } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -13,10 +13,28 @@ interface PaymentMethod {
     enabled: boolean;
 }
 
+interface Coupon {
+    id: string;
+    code: string;
+    type: 'percentage' | 'fixed_amount';
+    value: number;
+    minCartAmount: number;
+    usageCount: number;
+    active: boolean;
+}
+
+interface ShippingZone {
+    standardRate: string;
+    priorityRate: string;
+    freeShippingThreshold: string;
+}
+
 interface StoreSettings {
     taxConfig: string;
-    flatRate: string;
-    freeShippingThreshold: string;
+    shipping: {
+        usa: ShippingZone;
+        international: ShippingZone;
+    };
     paymentMethods: PaymentMethod[];
 }
 
@@ -34,8 +52,15 @@ export default function CheckoutPage() {
         city: "",
         state: "",
         zipCode: "",
+        country: "USA",
         shippingMethod: "standard"
     });
+
+    // Coupons state
+    const [coupons, setCoupons] = useState<Coupon[]>([]);
+    const [couponCode, setCouponCode] = useState("");
+    const [appliedCoupon, setAppliedCoupon] = useState<Coupon | null>(null);
+    const [couponError, setCouponError] = useState("");
 
     useEffect(() => {
         const fetchSettings = async () => {
@@ -45,6 +70,9 @@ export default function CheckoutPage() {
                 setSettings(data);
                 const firstEnabled = data.paymentMethods.find((pm: PaymentMethod) => pm.enabled);
                 if (firstEnabled) setSelectedPayment(firstEnabled.id);
+
+                const couponsRes = await fetch('/api/coupons');
+                setCoupons(await couponsRes.json());
             } catch (error) {
                 console.error('Failed to fetch settings:', error);
             }
@@ -53,12 +81,49 @@ export default function CheckoutPage() {
     }, []);
 
     const subtotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
-    const shippingRate = settings ? parseFloat(settings.flatRate) : 15.0;
-    const freeThreshold = settings ? parseFloat(settings.freeShippingThreshold) : 149.0;
+    const shippingZone = formData.country === "USA" ? settings?.shipping.usa : settings?.shipping.international;
+    const standardRate = shippingZone ? parseFloat(shippingZone.standardRate) : 15.0;
+    const priorityRate = shippingZone ? parseFloat(shippingZone.priorityRate) : 45.0;
+    const freeThreshold = shippingZone ? parseFloat(shippingZone.freeShippingThreshold) : 149.0;
 
     const isFreeShipping = subtotal >= freeThreshold;
-    const shippingPrice = (formData.shippingMethod === "express" || !isFreeShipping) ? shippingRate : 0.0;
-    const total = subtotal + shippingPrice;
+
+    let shippingPrice = 0.0;
+    if (formData.shippingMethod === "express") {
+        shippingPrice = priorityRate;
+    } else {
+        shippingPrice = isFreeShipping ? 0.0 : standardRate;
+    }
+
+    let discount = 0;
+    if (appliedCoupon) {
+        if (appliedCoupon.type === 'percentage') {
+            discount = subtotal * (appliedCoupon.value / 100);
+        } else {
+            discount = appliedCoupon.value;
+        }
+    }
+
+    const total = Math.max(0, subtotal - discount) + shippingPrice;
+
+    const handleApplyCoupon = () => {
+        setCouponError("");
+        const c = coupons.find(c => c.code.toUpperCase() === couponCode.toUpperCase());
+        if (!c) {
+            setCouponError("Invalid coupon code.");
+            return;
+        }
+        if (!c.active) {
+            setCouponError("This coupon is currently inactive.");
+            return;
+        }
+        if (subtotal < c.minCartAmount) {
+            setCouponError(`Minimum cart amount for this coupon is $${c.minCartAmount.toFixed(2)}.`);
+            return;
+        }
+        setAppliedCoupon(c);
+        setCouponCode("");
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -96,6 +161,15 @@ export default function CheckoutPage() {
             });
 
             if (!res.ok) throw new Error('Failed to create order');
+
+            // Track coupon usage
+            if (appliedCoupon) {
+                fetch('/api/coupons', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ...appliedCoupon, usageCount: (appliedCoupon.usageCount || 0) + 1 })
+                }).catch(console.error);
+            }
 
             clearCart();
             // Pass the generated order ID to the confirmation page
@@ -230,7 +304,19 @@ export default function CheckoutPage() {
                                 />
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                                <div className="flex flex-col gap-2 md:col-span-1">
+                                    <label className="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider">Country</label>
+                                    <select
+                                        required
+                                        className="w-full px-4 py-3.5 rounded-xl border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all appearance-none"
+                                        value={formData.country}
+                                        onChange={(e) => setFormData({ ...formData, country: e.target.value })}
+                                    >
+                                        <option value="USA">United States</option>
+                                        <option value="International">International</option>
+                                    </select>
+                                </div>
                                 <div className="flex flex-col gap-2 md:col-span-1">
                                     <label className="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider">City</label>
                                     <input
@@ -254,7 +340,7 @@ export default function CheckoutPage() {
                                     />
                                 </div>
                                 <div className="flex flex-col gap-2 md:col-span-1">
-                                    <label className="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider">ZIP Code</label>
+                                    <label className="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider">ZIP</label>
                                     <input
                                         required
                                         className="w-full px-4 py-3.5 rounded-xl border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
@@ -282,11 +368,13 @@ export default function CheckoutPage() {
                                                 className="w-5 h-5 text-primary focus:ring-primary border-slate-300 dark:border-slate-600 bg-transparent"
                                             />
                                             <div>
-                                                <p className="font-bold text-slate-900 dark:text-white">Standard Delivery</p>
+                                                <p className="font-bold text-slate-900 dark:text-white">
+                                                    {isFreeShipping ? "Free Standard Shipping" : "Standard Delivery"}
+                                                </p>
                                                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">3-5 Business Days</p>
                                             </div>
                                         </div>
-                                        <span className="font-bold text-primary">{isFreeShipping ? "Free" : `$${shippingRate.toFixed(2)}`}</span>
+                                        <span className="font-bold text-primary">{isFreeShipping ? "Free" : `$${standardRate.toFixed(2)}`}</span>
                                     </label>
                                     <label className={`flex items-center justify-between p-5 border-2 rounded-2xl cursor-pointer transition-all ${formData.shippingMethod === "express" ? "border-primary bg-primary/5" : "border-slate-100 dark:border-slate-800 hover:border-slate-200 dark:hover:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800/50"}`}>
                                         <div className="flex items-center gap-4">
@@ -302,7 +390,7 @@ export default function CheckoutPage() {
                                                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">1-2 Business Days</p>
                                             </div>
                                         </div>
-                                        <span className="font-bold text-slate-900 dark:text-white">${shippingRate.toFixed(2)}</span>
+                                        <span className="font-bold text-slate-900 dark:text-white">${priorityRate.toFixed(2)}</span>
                                     </label>
                                 </div>
                             </div>
@@ -376,6 +464,12 @@ export default function CheckoutPage() {
                                     <span className="text-sm font-bold uppercase tracking-widest">Subtotal</span>
                                     <span className="font-bold text-slate-900 dark:text-white text-lg">${subtotal.toFixed(2)}</span>
                                 </div>
+                                {appliedCoupon && (
+                                    <div className="flex justify-between items-center text-emerald-500">
+                                        <span className="text-sm font-bold uppercase tracking-widest">Discount ({appliedCoupon.code})</span>
+                                        <span className="font-bold">-${discount.toFixed(2)}</span>
+                                    </div>
+                                )}
                                 <div className="flex justify-between items-center text-slate-500 dark:text-slate-400">
                                     <span className="text-sm font-bold uppercase tracking-widest">Shipping</span>
                                     <span className="font-bold text-slate-900 dark:text-white">{shippingPrice === 0 ? "Free" : `$${shippingPrice.toFixed(2)}`}</span>
@@ -384,6 +478,36 @@ export default function CheckoutPage() {
                                     <span className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-tighter">Grand Total</span>
                                     <span className="text-4xl font-black text-primary drop-shadow-sm">${total.toFixed(2)}</span>
                                 </div>
+                            </div>
+
+                            <div className="border-t border-slate-100 dark:border-slate-800 pt-8 mt-8">
+                                <h3 className="text-slate-900 dark:text-white font-bold mb-4 flex items-center gap-2">
+                                    <Tag className="w-5 h-5 text-primary" />
+                                    Promo Code
+                                </h3>
+                                <div className="flex gap-2">
+                                    <input
+                                        type="text"
+                                        value={couponCode}
+                                        onChange={e => setCouponCode(e.target.value)}
+                                        placeholder="Enter discount code"
+                                        className="flex-1 px-4 py-3 rounded-xl border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all uppercase placeholder-normal font-bold"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={handleApplyCoupon}
+                                        className="bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 px-6 py-3 rounded-xl font-bold hover:bg-slate-800 dark:hover:bg-white transition-colors uppercase tracking-widest text-xs"
+                                    >
+                                        Apply
+                                    </button>
+                                </div>
+                                {couponError && <p className="text-rose-500 text-xs font-bold mt-2">{couponError}</p>}
+                                {appliedCoupon && (
+                                    <div className="flex justify-between items-center text-emerald-600 dark:text-emerald-400 text-sm font-bold mt-4 p-4 bg-emerald-50 dark:bg-emerald-500/10 rounded-xl border border-emerald-100 dark:border-emerald-500/20">
+                                        <span>Coupon '{appliedCoupon.code}' applied!</span>
+                                        <button type="button" onClick={() => setAppliedCoupon(null)} className="text-emerald-700 dark:text-emerald-300 hover:opacity-80 transition-opacity">Remove</button>
+                                    </div>
+                                )}
                             </div>
 
                             <div className="mt-10">

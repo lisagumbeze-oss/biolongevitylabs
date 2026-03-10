@@ -6,6 +6,8 @@ import { supabase } from '@/lib/supabase';
 import { Resend } from 'resend';
 import OrderReceiptEmail from '@/components/emails/OrderReceiptEmail';
 import AdminOrderNotificationEmail from '@/components/emails/AdminOrderNotificationEmail';
+import PaymentReceivedEmail1 from '@/components/emails/PaymentReceivedEmail1';
+import OrderCancellationEmail from '@/components/emails/OrderCancellationEmail';
 
 const ORDERS_JSON = path.join(process.cwd(), 'src/data/orders.json');
 
@@ -59,6 +61,7 @@ export async function GET() {
                 id: o.order_number,
                 db_id: o.id, // Internal UUID
                 date: new Date(o.created_at).toISOString().split('T')[0],
+                created_at: o.created_at,
                 customer: o.customer_name,
                 email: o.customer_email,
                 phone: o.customer_phone,
@@ -237,6 +240,84 @@ export async function DELETE(request: Request) {
     } catch (error: unknown) {
         console.error('API Error (DELETE Order):', error instanceof Error ? error.message : String(error));
         return NextResponse.json({ error: 'Failed to delete order' }, { status: 500 });
+    }
+}
+
+async function sendStatusUpdateEmail(orderData: any) {
+    if (!process.env.RESEND_API_KEY) {
+        console.warn('RESEND_API_KEY is not set. Skipping emails.');
+        return;
+    }
+    const resend = new Resend(process.env.RESEND_API_KEY);
+
+    try {
+        if (orderData.status === 'Processing' || orderData.payment_status === 'PAID') {
+            await resend.emails.send({
+                from: 'BioLongevity Labs <orders@biolongevitylabs.com>',
+                to: [orderData.email],
+                subject: `Payment Received - Order ${orderData.id}`,
+                react: PaymentReceivedEmail1({ orderId: orderData.id })
+            });
+            console.log(`Payment success email sent for ${orderData.id}`);
+        } else if (orderData.status === 'Failed' || orderData.payment_status === 'FAILED') {
+            await resend.emails.send({
+                from: 'BioLongevity Labs <orders@biolongevitylabs.com>',
+                to: [orderData.email],
+                subject: `Order Canceled - ${orderData.id}`,
+                react: OrderCancellationEmail({ orderId: orderData.id })
+            });
+            console.log(`Order cancellation email sent for ${orderData.id}`);
+        }
+    } catch (error) {
+        console.error('Failed to send status update email:', error);
+    }
+}
+
+export async function PUT(request: Request) {
+    try {
+        const updateData = await request.json();
+        const { id, status, payment_status } = updateData;
+
+        if (!id) return NextResponse.json({ error: 'Order ID required' }, { status: 400 });
+
+        let updatedOrder = null;
+
+        if (supabase) {
+            const updateObj: any = {};
+            if (status) updateObj.status = status;
+            if (payment_status) updateObj.payment_status = payment_status;
+
+            const { data, error } = await supabase
+                .from('orders')
+                .update(updateObj)
+                .eq('order_number', id)
+                .select()
+                .single();
+
+            if (error) throw error;
+            updatedOrder = data;
+        } else {
+            const orders = readOrdersLocal();
+            const index = orders.findIndex((o: any) => o.id === id);
+            if (index > -1) {
+                if (status) orders[index].status = status;
+                if (payment_status) orders[index].payment_status = payment_status;
+                updatedOrder = orders[index];
+                writeOrdersLocal(orders);
+            } else {
+                return NextResponse.json({ error: 'Order not found' }, { status: 404 });
+            }
+        }
+
+        // Send status email asynchronously
+        if (updatedOrder && (status || payment_status)) {
+            sendStatusUpdateEmail(updatedOrder);
+        }
+
+        return NextResponse.json({ success: true, order: updatedOrder });
+    } catch (error: unknown) {
+        console.error('API Error (PUT Order):', error instanceof Error ? error.message : String(error));
+        return NextResponse.json({ error: 'Failed to update order' }, { status: 500 });
     }
 }
 

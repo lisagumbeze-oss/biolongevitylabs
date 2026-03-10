@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Settings, Truck, Shield, CreditCard, Save, Link as LinkIcon, Info, Lock, Eye, EyeOff, Loader2 } from 'lucide-react';
+import { Settings, Truck, Shield, CreditCard, Save, Link as LinkIcon, Info, Lock, Eye, EyeOff, Loader2, Plus, Trash2 } from 'lucide-react';
 
 interface PaymentMethod {
     id: string;
@@ -10,10 +10,18 @@ interface PaymentMethod {
     enabled: boolean;
 }
 
+interface ShippingZone {
+    standardRate: string;
+    priorityRate: string;
+    freeShippingThreshold: string;
+}
+
 interface StoreSettings {
     taxConfig: string;
-    flatRate: string;
-    freeShippingThreshold: string;
+    shipping: {
+        usa: ShippingZone;
+        international: ShippingZone;
+    };
     paymentMethods: PaymentMethod[];
 }
 
@@ -25,8 +33,10 @@ export default function AdminSettingsPage() {
     // Store Settings State
     const [settings, setSettings] = useState<StoreSettings>({
         taxConfig: 'auto',
-        flatRate: '9.99',
-        freeShippingThreshold: '149.00',
+        shipping: {
+            usa: { standardRate: '15.00', priorityRate: '45.00', freeShippingThreshold: '149.00' },
+            international: { standardRate: '55.00', priorityRate: '85.00', freeShippingThreshold: '299.00' }
+        },
         paymentMethods: []
     });
 
@@ -107,6 +117,21 @@ export default function AdminSettingsPage() {
             pm.id === id ? { ...pm, [field]: value } : pm
         );
         setSettings({ ...settings, paymentMethods: newMethods });
+    };
+
+    const addPaymentMethod = () => {
+        const newMethod: PaymentMethod = {
+            id: `method_${Date.now()}`,
+            name: 'New Payment Method',
+            instructions: '',
+            enabled: false
+        };
+        setSettings({ ...settings, paymentMethods: [...settings.paymentMethods, newMethod] });
+    };
+
+    const deletePaymentMethod = (id: string) => {
+        if (!confirm('Are you sure you want to delete this payment method?')) return;
+        setSettings({ ...settings, paymentMethods: settings.paymentMethods.filter(pm => pm.id !== id) });
     };
 
     if (loading) return <div className="p-20 text-center font-black animate-pulse text-slate-400 flex flex-col items-center gap-4">
@@ -256,11 +281,11 @@ export default function AdminSettingsPage() {
 
                             <section className="bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden animate-in fade-in slide-in-from-bottom-2 duration-300 delay-75">
                                 <div className="px-8 py-6 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50">
-                                    <h2 className="text-xl font-black text-slate-900 dark:text-white">Shipping Rates</h2>
-                                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 font-medium">Set flat rates and free shipping thresholds.</p>
+                                    <h2 className="text-xl font-black text-slate-900 dark:text-white">USA Shipping Rates</h2>
+                                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 font-medium">Set flat rates and thresholds for domestic orders.</p>
                                 </div>
                                 <div className="p-8 flex flex-col gap-8">
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
                                         <div className="flex flex-col gap-2 relative">
                                             <label className="text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">Standard Flat Rate</label>
                                             <div className="relative">
@@ -268,8 +293,20 @@ export default function AdminSettingsPage() {
                                                 <input
                                                     className="pl-8 flex w-full min-w-0 flex-1 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-primary border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 h-12 shadow-inner transition-shadow font-bold"
                                                     type="text"
-                                                    value={settings.flatRate}
-                                                    onChange={(e) => setSettings({ ...settings, flatRate: e.target.value })}
+                                                    value={settings.shipping?.usa?.standardRate || ''}
+                                                    onChange={(e) => setSettings({ ...settings, shipping: { ...settings.shipping, usa: { ...settings.shipping.usa, standardRate: e.target.value } } })}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="flex flex-col gap-2 relative">
+                                            <label className="text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">Priority Express Rate</label>
+                                            <div className="relative">
+                                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-500 font-black">$</div>
+                                                <input
+                                                    className="pl-8 flex w-full min-w-0 flex-1 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-primary border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 h-12 shadow-inner transition-shadow font-bold"
+                                                    type="text"
+                                                    value={settings.shipping?.usa?.priorityRate || ''}
+                                                    onChange={(e) => setSettings({ ...settings, shipping: { ...settings.shipping, usa: { ...settings.shipping.usa, priorityRate: e.target.value } } })}
                                                 />
                                             </div>
                                         </div>
@@ -280,8 +317,55 @@ export default function AdminSettingsPage() {
                                                 <input
                                                     className="pl-8 flex w-full min-w-0 flex-1 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-primary border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 h-12 shadow-inner transition-shadow font-bold"
                                                     type="text"
-                                                    value={settings.freeShippingThreshold}
-                                                    onChange={(e) => setSettings({ ...settings, freeShippingThreshold: e.target.value })}
+                                                    value={settings.shipping?.usa?.freeShippingThreshold || ''}
+                                                    onChange={(e) => setSettings({ ...settings, shipping: { ...settings.shipping, usa: { ...settings.shipping.usa, freeShippingThreshold: e.target.value } } })}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section className="bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden animate-in fade-in slide-in-from-bottom-2 duration-300 delay-100">
+                                <div className="px-8 py-6 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50">
+                                    <h2 className="text-xl font-black text-slate-900 dark:text-white">Outside USA Shipping Rates</h2>
+                                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 font-medium">Set flat rates and thresholds for international orders.</p>
+                                </div>
+                                <div className="p-8 flex flex-col gap-8">
+                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+                                        <div className="flex flex-col gap-2 relative">
+                                            <label className="text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">Standard Flat Rate</label>
+                                            <div className="relative">
+                                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-500 font-black">$</div>
+                                                <input
+                                                    className="pl-8 flex w-full min-w-0 flex-1 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-primary border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 h-12 shadow-inner transition-shadow font-bold"
+                                                    type="text"
+                                                    value={settings.shipping?.international?.standardRate || ''}
+                                                    onChange={(e) => setSettings({ ...settings, shipping: { ...settings.shipping, international: { ...settings.shipping.international, standardRate: e.target.value } } })}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="flex flex-col gap-2 relative">
+                                            <label className="text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">Priority Express Rate</label>
+                                            <div className="relative">
+                                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-500 font-black">$</div>
+                                                <input
+                                                    className="pl-8 flex w-full min-w-0 flex-1 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-primary border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 h-12 shadow-inner transition-shadow font-bold"
+                                                    type="text"
+                                                    value={settings.shipping?.international?.priorityRate || ''}
+                                                    onChange={(e) => setSettings({ ...settings, shipping: { ...settings.shipping, international: { ...settings.shipping.international, priorityRate: e.target.value } } })}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="flex flex-col gap-2 relative">
+                                            <label className="text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">Free Shipping Threshold</label>
+                                            <div className="relative">
+                                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-500 font-black">$</div>
+                                                <input
+                                                    className="pl-8 flex w-full min-w-0 flex-1 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-primary border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 h-12 shadow-inner transition-shadow font-bold"
+                                                    type="text"
+                                                    value={settings.shipping?.international?.freeShippingThreshold || ''}
+                                                    onChange={(e) => setSettings({ ...settings, shipping: { ...settings.shipping, international: { ...settings.shipping.international, freeShippingThreshold: e.target.value } } })}
                                                 />
                                             </div>
                                         </div>
@@ -294,7 +378,7 @@ export default function AdminSettingsPage() {
                     {/* --- PAYMENTS TAB --- */}
                     {activeTab === 'payments' && (
                         <div className="animate-in fade-in slide-in-from-bottom-2 duration-300 flex flex-col gap-6">
-                            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 mb-2">
+                            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 mb-2 flex justify-between items-center flex-wrap gap-4">
                                 <div className="flex items-start gap-4">
                                     <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
                                         <Info className="w-5 h-5 text-primary" />
@@ -306,24 +390,46 @@ export default function AdminSettingsPage() {
                                         </p>
                                     </div>
                                 </div>
+                                <button
+                                    onClick={addPaymentMethod}
+                                    className="bg-primary hover:bg-sky-500 text-white px-5 py-2.5 rounded-xl text-sm font-black transition-all shadow-md active:scale-95 flex items-center gap-2 whitespace-nowrap"
+                                >
+                                    <Plus className="w-4 h-4" />
+                                    Add Method
+                                </button>
                             </div>
 
                             {settings.paymentMethods.map((method) => (
-                                <div key={method.id} className={`bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm ${!method.enabled ? 'opacity-60 grayscale-50' : ''}`}>
-                                    <div className="flex justify-between items-center mb-6 pb-4 border-b border-slate-100 dark:border-slate-800">
-                                        <h3 className="text-slate-900 dark:text-white text-xl font-black flex items-center gap-3">
-                                            <CreditCard className="w-6 h-6 text-primary" />
-                                            {method.name}
-                                        </h3>
-                                        <label className="relative inline-flex items-center cursor-pointer group">
+                                <div key={method.id} className={`bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm transition-all duration-300 ${!method.enabled ? 'opacity-60 grayscale-50' : ''}`}>
+                                    <div className="flex justify-between items-center mb-6 pb-4 border-b border-slate-100 dark:border-slate-800 flex-wrap gap-4">
+                                        <div className="flex items-center gap-3 flex-1 min-w-[200px] mr-4">
+                                            <CreditCard className="w-6 h-6 text-primary shrink-0" />
                                             <input
-                                                type="checkbox"
-                                                className="sr-only peer"
-                                                checked={method.enabled}
-                                                onChange={(e) => updatePaymentMethod(method.id, 'enabled', e.target.checked)}
+                                                type="text"
+                                                value={method.name}
+                                                onChange={(e) => updatePaymentMethod(method.id, 'name', e.target.value)}
+                                                className="text-slate-900 dark:text-white text-xl font-black bg-transparent border-b border-transparent hover:border-slate-200 dark:hover:border-slate-700 focus:border-primary focus:outline-none w-full transition-colors p-1 pr-4 -ml-1 placeholder-slate-300 dark:placeholder-slate-700"
+                                                placeholder="Payment Method Name"
                                             />
-                                            <div className="w-11 h-6 bg-slate-200 rounded-full peer dark:bg-slate-800 peer-checked:after:translate-x-full peer-checked:bg-primary after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
-                                        </label>
+                                        </div>
+                                        <div className="flex items-center gap-6">
+                                            <label className="relative inline-flex items-center cursor-pointer group">
+                                                <input
+                                                    type="checkbox"
+                                                    className="sr-only peer"
+                                                    checked={method.enabled}
+                                                    onChange={(e) => updatePaymentMethod(method.id, 'enabled', e.target.checked)}
+                                                />
+                                                <div className="w-11 h-6 bg-slate-200 rounded-full peer dark:bg-slate-800 peer-checked:after:translate-x-full peer-checked:bg-primary after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
+                                            </label>
+                                            <button
+                                                onClick={() => deletePaymentMethod(method.id)}
+                                                className="text-slate-400 hover:text-red-500 transition-colors p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-500/10"
+                                                title="Delete Method"
+                                            >
+                                                <Trash2 className="w-5 h-5" />
+                                            </button>
+                                        </div>
                                     </div>
 
                                     <div className="space-y-4">

@@ -8,8 +8,10 @@ function readSettings() {
     if (!fs.existsSync(SETTINGS_JSON)) {
         return {
             taxConfig: "auto",
-            flatRate: "15.00",
-            freeShippingThreshold: "149.00",
+            shipping: {
+                usa: { standardRate: "15.00", priorityRate: "45.00", freeShippingThreshold: "149.00" },
+                international: { standardRate: "55.00", priorityRate: "85.00", freeShippingThreshold: "299.00" }
+            },
             paymentMethods: []
         };
     }

@@ -75,13 +75,26 @@ export default function AdminOrderDetailsPage() {
     const handleUpdateStatus = async (newStatus: string) => {
         if (!order) return;
         try {
-            // This would normally be a PUT request to update the order
-            console.log('Updating status to:', newStatus);
-            setOrder({ ...order, status: newStatus });
+            const paymentStatus = newStatus === 'Processing' ? 'PAID' : (newStatus === 'Failed' ? 'FAILED' : order.payment_status);
+
+            const res = await fetch('/api/orders', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    id: order.id,
+                    status: newStatus,
+                    payment_status: paymentStatus
+                })
+            });
+
+            if (!res.ok) throw new Error('Failed to update order');
+
+            setOrder({ ...order, status: newStatus, payment_status: paymentStatus });
             if (newStatus !== 'Pending') setNeedsVerification(false);
-            alert(`Order status updated to ${newStatus}`);
+            alert(`Order status updated to ${newStatus}. Customer has been notified.`);
         } catch (error) {
             console.error('Failed to update status:', error);
+            alert('Failed to update order status.');
         }
     };
 
@@ -168,7 +181,10 @@ export default function AdminOrderDetailsPage() {
                                     >
                                         Verify & Process
                                     </button>
-                                    <button className="flex-1 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-8 py-4 rounded-xl font-black text-sm transition-all">
+                                    <button
+                                        onClick={() => handleUpdateStatus('Failed')}
+                                        className="flex-1 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-8 py-4 rounded-xl font-black text-sm transition-all hover:bg-rose-100 hover:text-rose-600 dark:hover:bg-rose-900/30 dark:hover:text-rose-400"
+                                    >
                                         Mark as Failed
                                     </button>
                                 </div>

@@ -10,7 +10,8 @@ import {
     LogOut,
     Package,
     Archive,
-    Activity
+    Activity,
+    Tag
 } from 'lucide-react';
 
 const AdminSidebar = () => {
@@ -19,7 +20,7 @@ const AdminSidebar = () => {
     const navigation = [
         { name: 'Overview', href: '/admin', icon: LayoutDashboard },
         { name: 'Products', href: '/admin/products', icon: Package },
-        { name: 'Inventory', href: '/admin/inventory', icon: Archive },
+        { name: 'Coupons', href: '/admin/coupons', icon: Tag },
         { name: 'Orders', href: '/admin/orders', icon: ShoppingCart },
         { name: 'Settings', href: '/admin/settings', icon: Settings },
     ];
