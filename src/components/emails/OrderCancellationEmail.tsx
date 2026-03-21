@@ -10,7 +10,7 @@ export default function OrderCancellationEmail({ orderId = "1234" }: OrderCancel
             <div className="w-full max-w-[600px] bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden">
                 <header className="flex items-center justify-between px-8 py-6 border-b border-slate-200 bg-slate-50">
                     <div className="flex items-center gap-3">
-                        <h2 className="text-xl font-bold tracking-tight">Streamlined Store</h2>
+                        <h2 className="text-xl font-bold tracking-tight">BioLongevity Labs</h2>
                     </div>
                     <a href="#" className="text-sm font-medium text-slate-600">Shop Now</a>
                 </header>
@@ -44,7 +44,7 @@ export default function OrderCancellationEmail({ orderId = "1234" }: OrderCancel
 
                 <footer className="px-8 py-6 border-t border-slate-200 bg-slate-50 text-center text-xs text-slate-500">
                     <p className="mb-2">This is an automated message, please do not reply directly to this email.</p>
-                    <p>© 2024 Streamlined E-commerce. All rights reserved.</p>
+                    <p>© {new Date().getFullYear()} BioLongevity Labs. All rights reserved.</p>
                     <div className="mt-3 flex justify-center gap-4">
                         <a href="#" className="hover:text-slate-900">Privacy Policy</a>
                         <a href="#" className="hover:text-slate-900">Terms of Service</a>

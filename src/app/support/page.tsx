@@ -1,13 +1,44 @@
-import React from 'react';
-import Link from 'next/link';
-import { HelpCircle, Mail, MapPin, Phone, MessageSquare } from 'lucide-react';
+"use client";
 
-export const metadata = {
-    title: 'Contact Support & FAQ | BioLongevity Labs',
-    description: 'Get help with your order or browse our frequently asked questions.',
-};
+import React, { useState } from 'react';
+import Link from 'next/link';
+import { HelpCircle, Mail, MapPin, MessageSquare, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function ContactPage() {
+    const [formData, setFormData] = useState({ name: '', email: '', phone: '', message: '' });
+    const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+    const [errorMessage, setErrorMessage] = useState('');
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setFormData(prev => ({ ...prev, [e.target.id]: e.target.value }));
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setStatus('loading');
+        setErrorMessage('');
+
+        try {
+            const res = await fetch('/api/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData),
+            });
+
+            if (!res.ok) {
+                const data = await res.json();
+                throw new Error(data.error || 'Failed to send message');
+            }
+
+            setStatus('success');
+            setFormData({ name: '', email: '', phone: '', message: '' });
+        } catch (err: any) {
+            setStatus('error');
+            setErrorMessage(err.message || 'Something went wrong. Please try again.');
+        }
+    };
+
     return (
         <main className="grow flex flex-col items-center py-16 px-4 md:px-10 lg:px-40 w-full mt-10">
             <div className="max-w-[1200px] w-full flex flex-col gap-12">
@@ -32,52 +63,109 @@ export default function ContactPage() {
                             <p className="text-slate-600 dark:text-slate-400 text-sm font-medium">Please provide your contact details so our team can reach out.</p>
                         </div>
 
-                        <form className="flex flex-col gap-6">
+                        {/* Success / Error Banners */}
+                        <AnimatePresence>
+                            {status === 'success' && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: -10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    className="flex items-center gap-3 p-5 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-2xl"
+                                >
+                                    <CheckCircle className="w-6 h-6 text-emerald-500 shrink-0" />
+                                    <div>
+                                        <p className="text-emerald-800 dark:text-emerald-300 font-bold text-sm">Message sent successfully!</p>
+                                        <p className="text-emerald-600 dark:text-emerald-400 text-xs mt-0.5">Our team will get back to you within 24 hours.</p>
+                                    </div>
+                                </motion.div>
+                            )}
+                            {status === 'error' && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: -10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    className="flex items-center gap-3 p-5 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-2xl"
+                                >
+                                    <AlertCircle className="w-6 h-6 text-red-500 shrink-0" />
+                                    <div>
+                                        <p className="text-red-800 dark:text-red-300 font-bold text-sm">Failed to send message</p>
+                                        <p className="text-red-600 dark:text-red-400 text-xs mt-0.5">{errorMessage}</p>
+                                    </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+
+                        <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
                             <div className="flex flex-col gap-2 relative">
                                 <label className="text-sm font-bold text-slate-900 dark:text-white" htmlFor="name">Name</label>
                                 <input
-                                    className="peer flex w-full min-w-0 flex-1 resize-none rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 h-12 px-4 shadow-inner transition-shadow"
+                                    className="peer flex w-full min-w-0 flex-1 resize-none rounded-xl text-base text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 h-14 px-5 shadow-inner transition-shadow"
                                     id="name"
                                     placeholder="Jane Doe"
                                     required
                                     type="text"
+                                    value={formData.name}
+                                    onChange={handleChange}
+                                    disabled={status === 'loading'}
                                 />
                             </div>
 
                             <div className="flex flex-col gap-2">
                                 <label className="text-sm font-bold text-slate-900 dark:text-white" htmlFor="email">Email Address</label>
                                 <input
-                                    className="flex w-full min-w-0 flex-1 resize-none rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 h-12 px-4 shadow-inner transition-shadow"
+                                    className="flex w-full min-w-0 flex-1 resize-none rounded-xl text-base text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 h-14 px-5 shadow-inner transition-shadow"
                                     id="email"
                                     placeholder="jane@example.com"
                                     required
                                     type="email"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    disabled={status === 'loading'}
                                 />
                             </div>
 
                             <div className="flex flex-col gap-2">
                                 <label className="text-sm font-bold text-slate-900 dark:text-white" htmlFor="phone">Phone Number</label>
                                 <input
-                                    className="flex w-full min-w-0 flex-1 resize-none rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 h-12 px-4 shadow-inner transition-shadow"
+                                    className="flex w-full min-w-0 flex-1 resize-none rounded-xl text-base text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 h-14 px-5 shadow-inner transition-shadow"
                                     id="phone"
                                     placeholder="+1 (555) 000-0000"
                                     type="tel"
+                                    value={formData.phone}
+                                    onChange={handleChange}
+                                    disabled={status === 'loading'}
                                 />
                             </div>
 
                             <div className="flex flex-col gap-2">
                                 <label className="text-sm font-bold text-slate-900 dark:text-white" htmlFor="message">Message</label>
                                 <textarea
-                                    className="flex w-full min-w-0 flex-1 resize-y rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 min-h-[140px] p-4 shadow-inner transition-shadow"
+                                    className="flex w-full min-w-0 flex-1 resize-y rounded-xl text-base text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 min-h-[180px] p-5 shadow-inner transition-shadow"
                                     id="message"
                                     placeholder="How can we help you regarding your research?"
                                     required
+                                    value={formData.message}
+                                    onChange={handleChange}
+                                    disabled={status === 'loading'}
                                 ></textarea>
                             </div>
 
-                            <button className="flex w-full sm:w-auto cursor-pointer items-center justify-center rounded-xl h-14 px-8 bg-primary hover:bg-sky-500 text-white text-base font-bold transition-all shadow-lg shadow-primary/25 active:scale-[0.98] gap-2 mt-4">
-                                <MessageSquare className="w-5 h-5" />
-                                Send Message
+                            <button
+                                type="submit"
+                                disabled={status === 'loading'}
+                                className="flex w-full sm:w-auto cursor-pointer items-center justify-center rounded-xl h-14 px-8 bg-primary hover:bg-sky-500 text-white text-base font-bold transition-all shadow-lg shadow-primary/25 active:scale-[0.98] gap-2 mt-4 disabled:opacity-60 disabled:cursor-not-allowed"
+                            >
+                                {status === 'loading' ? (
+                                    <>
+                                        <Loader2 className="w-5 h-5 animate-spin" />
+                                        Sending...
+                                    </>
+                                ) : (
+                                    <>
+                                        <MessageSquare className="w-5 h-5" />
+                                        Send Message
+                                    </>
+                                )}
                             </button>
                         </form>
                     </div>

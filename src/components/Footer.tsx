@@ -43,7 +43,7 @@ const Footer = () => {
                     <div className="flex justify-center md:justify-start mb-6 md:mb-0">
                         <Link href="/" className="flex items-center">
                             <Image
-                                src="https://biolongevitylabs.com/wp-content/uploads/2025/01/BLL-logo-full-HR.webp"
+                                src="https://biolongevitylabss.com/wp-content/uploads/2025/01/BLL-logo-full-HR.webp"
                                 alt="BioLongevity Labs Logo"
                                 width={200}
                                 height={34}

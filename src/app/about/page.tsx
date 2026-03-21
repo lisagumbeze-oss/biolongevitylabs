@@ -26,7 +26,7 @@ export default function AboutPage() {
             <section className="relative overflow-hidden mb-24">
                 <div className="absolute inset-0 bg-slate-900">
                     <img
-                        src="https://biolongevitylabs.com/wp-content/uploads/2024/12/Bg1-ABOUT-US.jpg"
+                        src="https://biolongevitylabss.com/wp-content/uploads/2024/12/Bg1-ABOUT-US.jpg"
                         alt="BioLongevity Labs Research"
                         className="w-full h-full object-cover opacity-40 mix-blend-overlay"
                     />
@@ -92,7 +92,7 @@ export default function AboutPage() {
 
                     <motion.div variants={fadeInUp} className="relative rounded-3xl overflow-hidden shadow-2xl group border border-slate-200 dark:border-slate-700">
                         <img
-                            src="https://biolongevitylabs.com/wp-content/uploads/2025/05/AdobeStock_1456654778.jpg"
+                            src="https://biolongevitylabss.com/wp-content/uploads/2025/05/AdobeStock_1456654778.jpg"
                             alt="State of the art lab facilities"
                             className="w-full h-full object-cover aspect-square md:aspect-4/3 transform group-hover:scale-105 transition-transform duration-700"
                             onError={(e) => {

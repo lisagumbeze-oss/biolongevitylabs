@@ -328,7 +328,15 @@ export async function PUT(request: Request) {
         // Send status email asynchronously (but await it)
         if (updatedOrder && (status || payment_status)) {
             try {
-                await sendStatusUpdateEmail(updatedOrder);
+                // Normalize field names for the email function
+                // Supabase returns customer_email/order_number, local uses email/id
+                const emailData = {
+                    id: (updatedOrder as any).order_number || (updatedOrder as any).id || id,
+                    email: (updatedOrder as any).customer_email || (updatedOrder as any).email,
+                    status: (updatedOrder as any).status || status,
+                    payment_status: (updatedOrder as any).payment_status || payment_status,
+                };
+                await sendStatusUpdateEmail(emailData);
             } catch (emailErr) {
                 console.error('Status email failed:', emailErr);
             }

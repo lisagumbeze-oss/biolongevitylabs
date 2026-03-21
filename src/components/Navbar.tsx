@@ -31,7 +31,7 @@ const Navbar = () => {
                     <div className="shrink-0 flex items-center">
                         <Link href="/" className="flex items-center">
                             <Image
-                                src="https://biolongevitylabs.com/wp-content/uploads/2025/01/BLL-logo-full-HR.webp"
+                                src="https://biolongevitylabss.com/wp-content/uploads/2025/01/BLL-logo-full-HR.webp"
                                 alt="BioLongevity Labs Logo"
                                 width={220}
                                 height={38}
