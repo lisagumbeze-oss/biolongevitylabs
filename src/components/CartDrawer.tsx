@@ -6,13 +6,10 @@ import { useCart } from "@/store/useCart";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 
-interface CartDrawerProps {
-    isOpen: boolean;
-    onClose: () => void;
-}
-
-const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
-    const { items, removeItem, updateQuantity } = useCart();
+const CartDrawer: React.FC = () => {
+    const { items, removeItem, updateQuantity, isCartOpen, setIsCartOpen } = useCart();
+    const isOpen = isCartOpen;
+    const onClose = () => setIsCartOpen(false);
 
     // Lock body scroll when open
     useEffect(() => {

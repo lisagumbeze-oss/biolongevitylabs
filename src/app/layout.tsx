@@ -43,6 +43,9 @@ export const metadata: Metadata = {
   }
 };
 
+import BottomNav from "@/components/BottomNav";
+import CartDrawer from "@/components/CartDrawer";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -59,9 +62,11 @@ export default function RootLayout({
           </React.Suspense>
           <ConsentModal />
           <Navbar />
-          <main className="grow">
+          <main className="grow pb-24 md:pb-0">
             {children}
           </main>
+          <BottomNav />
+          <CartDrawer />
           <Footer />
         </Providers>
 

@@ -17,9 +17,9 @@ const resourceLinks = [
 
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [isCartOpen, setIsCartOpen] = useState(false);
     const [isResourcesOpen, setIsResourcesOpen] = useState(false);
     const resourcesRef = useRef<HTMLDivElement>(null);
+    const { isCartOpen, setIsCartOpen } = useCart();
     const items = useCart((state) => state.items);
     const cartCount = items.reduce((acc, item) => acc + item.quantity, 0);
 
@@ -140,8 +140,6 @@ const Navbar = () => {
                     </motion.div>
                 )}
             </AnimatePresence>
-
-            <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
         </header>
     );
 };

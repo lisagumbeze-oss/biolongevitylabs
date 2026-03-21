@@ -17,12 +17,16 @@ interface CartStore {
     updateQuantity: (id: string, quantity: number) => void;
     clearCart: () => void;
     total: number;
+    isCartOpen: boolean;
+    setIsCartOpen: (open: boolean) => void;
 }
 
 export const useCart = create<CartStore>()(
     persist(
         (set, get) => ({
             items: [],
+            isCartOpen: false,
+            setIsCartOpen: (open: boolean) => set({ isCartOpen: open }),
             addItem: (product) => {
                 const items = get().items;
                 const existingItem = items.find((item) => item.id === product.id);
@@ -59,6 +63,10 @@ export const useCart = create<CartStore>()(
         }),
         {
             name: 'cart-storage',
+            partialize: (state) =>
+                Object.fromEntries(
+                    Object.entries(state).filter(([key]) => !['isCartOpen'].includes(key))
+                ) as CartStore,
         }
     )
 );
