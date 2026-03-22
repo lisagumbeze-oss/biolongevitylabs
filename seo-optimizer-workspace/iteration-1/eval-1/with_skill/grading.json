@@ -1,0 +1,20 @@
+{
+  "pass": true,
+  "expectations": [
+    {
+      "text": "Includes customized title targeting primary keywords",
+      "passed": true,
+      "evidence": "Title is 'Peptide Research Support | BioLongevity Labs'"
+    },
+    {
+      "text": "Includes OpenGraph structure",
+      "passed": true,
+      "evidence": "Export includes nested 'openGraph' object with title, description, url, siteName, images."
+    },
+    {
+      "text": "Includes Twitter Card structure",
+      "passed": true,
+      "evidence": "Export includes nested 'twitter' object with card, title, description, images."
+    }
+  ]
+}

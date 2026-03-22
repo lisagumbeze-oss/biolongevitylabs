@@ -1,0 +1,6 @@
+{
+  "eval_id": 2,
+  "eval_name": "schema-markup-injection",
+  "prompt": "Implement JSON-LD Product schema for the product detail page (src/app/product/[id]/page.tsx). Ensure it dynamically includes the product name and price if possible, or provide a template for it.",
+  "assertions": []
+}

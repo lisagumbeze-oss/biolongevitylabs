@@ -1,0 +1,26 @@
+{
+  "skill_name": "seo-optimizer",
+  "evals": [
+    {
+      "id": 0,
+      "name": "technical-audit",
+      "prompt": "Run a full technical SEO audit on the codebase using your specialized script and identify any missing metadata or alt tags in the src/ directory.",
+      "expected_output": "The skill should execute seo_audit.py, list the findings (missing alt tags, metadata, etc.), and provide a high-level summary of the site's technical SEO health.",
+      "files": []
+    },
+    {
+      "id": 1,
+      "name": "on-page-optimization",
+      "prompt": "Optimize the SEO for the support page (src/app/support/page.tsx). Add a proper metadata export with a compelling title and description targeting 'peptide research support' and 'Biolongevity Labs'.",
+      "expected_output": "The skill should modify src/app/support/page.tsx to include an exported metadata object that follows best practices (50-60 char title, 150-160 char description).",
+      "files": ["src/app/support/page.tsx"]
+    },
+    {
+      "id": 2,
+      "name": "schema-markup-injection",
+      "prompt": "Implement JSON-LD Product schema for the product detail page (src/app/product/[id]/page.tsx). Ensure it dynamically includes the product name and price if possible, or provide a template for it.",
+      "expected_output": "The skill should add a JSON-LD script block with @context schema.org and @type Product to the product detail page component.",
+      "files": ["src/app/product/[id]/page.tsx"]
+    }
+  ]
+}

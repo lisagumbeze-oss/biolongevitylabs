@@ -44,7 +44,7 @@ export default function ContactPage() {
             <div className="max-w-[1200px] w-full flex flex-col gap-12">
 
                 <div className="flex flex-col gap-4 text-center md:text-left">
-                    <h1 className="text-4xl md:text-5xl font-black leading-tight tracking-tight text-slate-900 dark:text-white">
+                    <h1 className="text-4xl md:text-5xl font-black leading-tight tracking-tight text-white mb-4">
                         Contact <span className="text-primary">Support</span>
                     </h1>
                     <p className="text-slate-600 dark:text-slate-400 text-lg font-medium leading-relaxed max-w-2xl">
@@ -99,7 +99,7 @@ export default function ContactPage() {
                             <div className="flex flex-col gap-2 relative">
                                 <label className="text-sm font-bold text-slate-900 dark:text-white" htmlFor="name">Name</label>
                                 <input
-                                    className="peer flex w-full min-w-0 flex-1 resize-none rounded-xl text-base text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 h-14 px-5 shadow-inner transition-shadow"
+                                    className="peer flex w-full min-w-0 flex-1 resize-none rounded-xl text-base text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 h-24 px-5 shadow-inner transition-shadow"
                                     id="name"
                                     placeholder="Jane Doe"
                                     required
@@ -113,7 +113,7 @@ export default function ContactPage() {
                             <div className="flex flex-col gap-2">
                                 <label className="text-sm font-bold text-slate-900 dark:text-white" htmlFor="email">Email Address</label>
                                 <input
-                                    className="flex w-full min-w-0 flex-1 resize-none rounded-xl text-base text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 h-14 px-5 shadow-inner transition-shadow"
+                                    className="flex w-full min-w-0 flex-1 resize-none rounded-xl text-base text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 h-24 px-5 shadow-inner transition-shadow"
                                     id="email"
                                     placeholder="jane@example.com"
                                     required
@@ -127,7 +127,7 @@ export default function ContactPage() {
                             <div className="flex flex-col gap-2">
                                 <label className="text-sm font-bold text-slate-900 dark:text-white" htmlFor="phone">Phone Number</label>
                                 <input
-                                    className="flex w-full min-w-0 flex-1 resize-none rounded-xl text-base text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 h-14 px-5 shadow-inner transition-shadow"
+                                    className="flex w-full min-w-0 flex-1 resize-none rounded-xl text-base text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 h-24 px-5 shadow-inner transition-shadow"
                                     id="phone"
                                     placeholder="+1 (555) 000-0000"
                                     type="tel"
@@ -172,32 +172,48 @@ export default function ContactPage() {
 
                     {/* Information & Social */}
                     <div className="flex flex-col gap-12">
-                        <div className="flex flex-col gap-8">
-                            <h2 className="text-3xl font-bold leading-tight tracking-tight text-slate-900 dark:text-white relative inline-block">
+                        <div className="flex flex-col gap-6">
+                            <motion.h2 
+                                initial={{ opacity: 0, x: -20 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                className="text-3xl font-bold leading-tight tracking-tight text-slate-900 dark:text-white relative inline-block mb-4"
+                            >
                                 Contact Information
                                 <span className="absolute -bottom-2 left-0 w-12 h-1 bg-primary rounded-full"></span>
-                            </h2>
+                            </motion.h2>
 
-                            <div className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-8 bg-white dark:bg-slate-900 p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                            <div className="flex flex-col gap-6">
+                                {/* Address Card */}
+                                <motion.div 
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.5 }}
+                                    className="grid grid-cols-[auto_1fr] gap-x-6 items-start bg-white dark:bg-slate-900 p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow"
+                                >
+                                    <div className="flex items-center justify-center text-white bg-primary w-10 h-10 rounded-xl shadow-md">
+                                        <MapPin className="w-5 h-5" />
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <p className="text-sm font-bold text-slate-900 dark:text-white mb-2 uppercase tracking-wider">Address</p>
+                                        <p className="text-base font-medium text-slate-600 dark:text-slate-400">F2 Nutrition Inc.<br />405 Rothrock Rd #106<br />Akron, OH 44321</p>
+                                    </div>
+                                </motion.div>
 
-                                <div className="flex items-start justify-center text-white bg-primary w-10 h-10 rounded-xl shadow-md">
-                                    <MapPin className="w-5 h-5 m-auto" />
-                                </div>
-                                <div className="flex flex-col">
-                                    <p className="text-sm font-bold text-slate-900 dark:text-white mb-1 uppercase tracking-wider">Address</p>
-                                    <p className="text-base font-medium text-slate-600 dark:text-slate-400">F2 Nutrition Inc.<br />405 Rothrock Rd #106<br />Akron, OH 44321</p>
-                                </div>
-
-
-
-                                <div className="flex items-start justify-center text-white bg-primary w-10 h-10 rounded-xl shadow-md">
-                                    <Mail className="w-5 h-5 m-auto" />
-                                </div>
-                                <div className="flex flex-col">
-                                    <p className="text-sm font-bold text-slate-900 dark:text-white mb-1 uppercase tracking-wider">Email</p>
-                                    <a className="text-base font-semibold text-primary hover:text-sky-400 transition-colors" href="mailto:support@biolongevitylabss.com">support@biolongevitylabss.com</a>
-                                </div>
-
+                                {/* Email Card */}
+                                <motion.div 
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.5, delay: 0.1 }}
+                                    className="grid grid-cols-[auto_1fr] gap-x-6 items-start bg-white dark:bg-slate-900 p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow"
+                                >
+                                    <div className="flex items-center justify-center text-white bg-primary w-10 h-10 rounded-xl shadow-md">
+                                        <Mail className="w-5 h-5" />
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <p className="text-sm font-bold text-slate-900 dark:text-white mb-2 uppercase tracking-wider">Email</p>
+                                        <a className="text-base font-bold text-primary hover:text-sky-600 transition-colors" href="mailto:support@biolongevitylabss.com">support@biolongevitylabss.com</a>
+                                    </div>
+                                </motion.div>
                             </div>
                         </div>
                     </div>
@@ -210,7 +226,7 @@ export default function ContactPage() {
                             <HelpCircle className="w-7 h-7" />
                         </div>
                         <div>
-                            <h2 className="text-3xl font-black leading-tight tracking-tight text-slate-900 dark:text-white">Frequently Asked Questions</h2>
+                            <h2 className="text-3xl font-black leading-tight tracking-tight text-white uppercase">Frequently Asked Questions</h2>
                         </div>
                     </div>
 

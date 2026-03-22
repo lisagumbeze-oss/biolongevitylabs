@@ -27,17 +27,20 @@ const Navbar = () => {
         <header className="bg-white dark:bg-slate-900 shadow-sm sticky top-0 z-50 transition-colors border-b border-slate-100 dark:border-slate-800">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-20 gap-6">
-                    {/* Logo */}
                     <div className="shrink-0 flex items-center">
-                        <Link href="/" className="flex items-center">
-                            <Image
-                                src="https://biolongevitylabss.com/wp-content/uploads/2025/01/BLL-logo-full-HR.webp"
-                                alt="BioLongevity Labs Logo"
-                                width={220}
-                                height={38}
-                                className="object-contain dark:brightness-150 transition-all"
-                                priority
-                            />
+                        <Link href="/" className="flex items-center gap-3 group">
+                            <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center border border-primary/20 group-hover:bg-primary/20 transition-all">
+                                <Image
+                                    src="/favicon.png"
+                                    alt="B"
+                                    width={24}
+                                    height={24}
+                                    className="object-contain"
+                                />
+                            </div>
+                            <span className="text-xl font-black tracking-tight text-slate-900 dark:text-white uppercase">
+                                BioLongevity <span className="text-primary italic">Labs</span>
+                            </span>
                         </Link>
                     </div>
 

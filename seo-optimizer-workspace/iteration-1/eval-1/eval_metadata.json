@@ -1,0 +1,6 @@
+{
+  "eval_id": 1,
+  "eval_name": "on-page-optimization",
+  "prompt": "Optimize the SEO for the support page (src/app/support/page.tsx). Add a proper metadata export with a compelling title and description targeting 'peptide research support' and 'Biolongevity Labs'.",
+  "assertions": []
+}

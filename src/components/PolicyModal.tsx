@@ -47,7 +47,7 @@ const PolicyModal: React.FC<PolicyModalProps> = ({ isOpen, onClose, title, conte
                     >
                         {/* Header */}
                         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50">
-                            <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 italic tracking-tight">
+                            <h2 className="text-xl font-bold text-primary italic tracking-tight">
                                 {title}
                             </h2>
                             <button
@@ -63,10 +63,10 @@ const PolicyModal: React.FC<PolicyModalProps> = ({ isOpen, onClose, title, conte
                             <div className="prose prose-slate dark:prose-invert max-w-none">
                                 {content.split('\n').map((line, i) => {
                                     if (line.startsWith('## ')) {
-                                        return <h2 key={i} className="text-2xl font-bold mt-8 mb-4">{line.replace('## ', '')}</h2>;
+                                        return <h2 key={i} className="text-2xl font-bold mt-8 mb-4 text-primary">{line.replace('## ', '')}</h2>;
                                     }
                                     if (line.startsWith('### ')) {
-                                        return <h3 key={i} className="text-xl font-bold mt-6 mb-3">{line.replace('### ', '')}</h3>;
+                                        return <h3 key={i} className="text-xl font-bold mt-6 mb-3 text-primary">{line.replace('### ', '')}</h3>;
                                     }
                                     if (line.startsWith('#### ')) {
                                         return <h4 key={i} className="text-lg font-bold mt-4 mb-2">{line.replace('#### ', '')}</h4>;
@@ -79,7 +79,7 @@ const PolicyModal: React.FC<PolicyModalProps> = ({ isOpen, onClose, title, conte
                                     // Handle bold text in paragraphs
                                     const parts = line.split(/(\*\*.*?\*\*)/g);
                                     return (
-                                        <p key={i} className="mb-4 text-slate-600 dark:text-slate-300 leading-relaxed">
+                                        <p key={i} className="mb-4 text-slate-900 leading-relaxed font-medium">
                                             {parts.map((part, j) => {
                                                 if (part.startsWith('**') && part.endsWith('**')) {
                                                     return <strong key={j}>{part.slice(2, -2)}</strong>;

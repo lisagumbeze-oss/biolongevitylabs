@@ -1,0 +1,6 @@
+{
+  "eval_id": 0,
+  "eval_name": "technical-audit",
+  "prompt": "Run a full technical SEO audit on the codebase using your specialized script and identify any missing metadata or alt tags in the src/ directory.",
+  "assertions": []
+}

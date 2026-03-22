@@ -1,0 +1,20 @@
+{
+  "pass": true,
+  "expectations": [
+    {
+      "text": "Report includes a check for Missing Alt Tags",
+      "passed": true,
+      "evidence": "Report explicitly states 'Image Alt Tags: The main navbar logo img is missing alt text.'"
+    },
+    {
+      "text": "Report includes a check for Missing Metadata",
+      "passed": true,
+      "evidence": "Report states 'Meta Descriptions: Present via OG tags, but should be supplemented with standard meta description tags'"
+    },
+    {
+      "text": "Report is formatted properly",
+      "passed": true,
+      "evidence": "Report uses clear markdown headers and lists."
+    }
+  ]
+}

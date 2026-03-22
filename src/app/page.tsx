@@ -89,7 +89,7 @@ export default function Home() {
         <div className="flex items-center justify-between mb-10">
           <motion.h2
             variants={fadeInUp}
-            className="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100 border-l-4 border-primary pl-4"
+            className="text-3xl font-bold tracking-tight text-white dark:text-slate-100 border-l-4 border-primary pl-4"
           >
             Featured Research Products
           </motion.h2>

@@ -78,6 +78,11 @@ export default function RootLayout({
               __html: `
                 window._smartsupp = window._smartsupp || {};
                 window._smartsupp.key = '${process.env.NEXT_PUBLIC_SMARTSUPP_KEY}';
+                // Move widget up on mobile to avoid BottomNav
+                if (window.innerWidth < 768) {
+                  window._smartsupp.offsetY = 100;
+                  window._smartsupp.offsetX = 20;
+                }
                 window.smartsupp||(function(d) {
                   var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
                   s=d.getElementsByTagName('script')[0];c=d.createElement('script');

@@ -1,0 +1,20 @@
+{
+  "pass": false,
+  "expectations": [
+    {
+      "text": "Report includes a check for Missing Alt Tags",
+      "passed": true,
+      "evidence": "Report states 'Logo Alt Text: Missing alt attribute on the primary logo.'"
+    },
+    {
+      "text": "Report includes a check for Missing Metadata",
+      "passed": true,
+      "evidence": "Report notes 'Metadata: Duplicate titles and descriptions across all pages.'"
+    },
+    {
+      "text": "Report is formatted properly",
+      "passed": false,
+      "evidence": "Report is very brief, lacks the detailed contextual breakdown seen in the skill-driven version."
+    }
+  ]
+}

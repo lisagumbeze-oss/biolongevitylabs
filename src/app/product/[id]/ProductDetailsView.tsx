@@ -10,7 +10,6 @@ import {
     CheckCircle2, Info, Package, Beaker, Layers, Lock, ArrowRight, Loader2
 } from "lucide-react";
 import Link from "next/link";
-import CartDrawer from "@/components/CartDrawer";
 import ProductCard from "@/components/ProductCard";
 import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
@@ -25,9 +24,8 @@ export default function ProductDetailsView({ id }: Props) {
     const [isLoading, setIsLoading] = useState(true);
     const [allProducts, setAllProducts] = useState<Product[]>([]);
 
-    const addItem = useCart((state) => state.addItem);
+    const { addItem, setIsCartOpen } = useCart((state) => ({ addItem: state.addItem, setIsCartOpen: state.setIsCartOpen }));
     const [quantity, setQuantity] = useState(1);
-    const [isCartOpen, setIsCartOpen] = useState(false);
     const [selectedImage, setSelectedImage] = useState("");
 
     const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
@@ -434,8 +432,6 @@ export default function ProductDetailsView({ id }: Props) {
                     </div>
                 </div>
             </div>
-
-            <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
         </div>
     );
 }

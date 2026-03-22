@@ -41,14 +41,19 @@ const Footer = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                 <div className="md:flex md:items-center md:justify-between">
                     <div className="flex justify-center md:justify-start mb-6 md:mb-0">
-                        <Link href="/" className="flex items-center">
-                            <Image
-                                src="https://biolongevitylabss.com/wp-content/uploads/2025/01/BLL-logo-full-HR.webp"
-                                alt="BioLongevity Labs Logo"
-                                width={200}
-                                height={34}
-                                className="object-contain dark:brightness-150 transition-all opacity-90 hover:opacity-100"
-                            />
+                        <Link href="/" className="flex items-center gap-3 group">
+                            <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center border border-primary/20 group-hover:bg-primary/20 transition-all">
+                                <Image
+                                    src="/favicon.png"
+                                    alt="B"
+                                    width={20}
+                                    height={20}
+                                    className="object-contain opacity-80"
+                                />
+                            </div>
+                            <span className="text-lg font-black tracking-tight text-slate-900 dark:text-white uppercase">
+                                BioLongevity <span className="text-primary italic">Labs</span>
+                            </span>
                         </Link>
                     </div>
                     <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-8">

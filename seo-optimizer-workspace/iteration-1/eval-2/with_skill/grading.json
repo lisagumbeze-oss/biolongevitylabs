@@ -1,0 +1,20 @@
+{
+  "pass": true,
+  "expectations": [
+    {
+      "text": "Valid JSON-LD Schema syntax",
+      "passed": true,
+      "evidence": "Generates a proper JSON string with @context and @type."
+    },
+    {
+      "text": "Dynamic data injection mapping",
+      "passed": true,
+      "evidence": "Uses dynamic attributes like `product.name`, `product.description`, and builds nested 'offers' schema."
+    },
+    {
+      "text": "Usage of Next.js dangerouslySetInnerHTML",
+      "passed": true,
+      "evidence": "Returns `<script type=\"application/ld+json\" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />`"
+    }
+  ]
+}

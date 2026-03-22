@@ -1,0 +1,20 @@
+{
+  "pass": false,
+  "expectations": [
+    {
+      "text": "Valid JSON-LD Schema syntax",
+      "passed": true,
+      "evidence": "Generates a proper JSON string with @context and @type."
+    },
+    {
+      "text": "Dynamic data injection mapping",
+      "passed": false,
+      "evidence": "Uses static placeholder strings like 'Product Name' and 'Product Description' instead of dynamic server variables."
+    },
+    {
+      "text": "Usage of Next.js dangerouslySetInnerHTML",
+      "passed": false,
+      "evidence": "Simply wraps the stringified output in `<script>` tags which can cause escaping issues in React."
+    }
+  ]
+}
