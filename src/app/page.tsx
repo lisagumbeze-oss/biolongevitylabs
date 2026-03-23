@@ -171,7 +171,7 @@ export default function Home() {
               <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mb-6 text-primary border-2 border-primary/20 group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all duration-300 transform group-hover:scale-110 shadow-sm">
                 <ShieldCheck className="w-10 h-10" />
               </div>
-              <h3 className="text-xl font-bold text-slate-900 dark:text-slate-100">99%+ Purity Guarantee</h3>
+              <h3 className="text-xl font-bold text-white dark:text-slate-100 uppercase tracking-tight">99%+ Purity Guarantee</h3>
               <p className="mt-3 text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
                 Research-grade peptides with verified potency. Each product includes certificates of analysis.
               </p>
@@ -181,7 +181,7 @@ export default function Home() {
               <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mb-6 text-primary border-2 border-primary/20 group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all duration-300 transform group-hover:scale-110 shadow-sm">
                 <Award className="w-10 h-10" />
               </div>
-              <h3 className="text-xl font-bold text-slate-900 dark:text-slate-100">GMP Manufacturing<br />Standards</h3>
+              <h3 className="text-xl font-bold text-white dark:text-slate-100 uppercase tracking-tight">GMP Manufacturing Standards</h3>
               <p className="mt-3 text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
                 Synthesized in USA-registered facilities following Good Manufacturing Practices. Full chain of custody documentation.
               </p>
@@ -191,7 +191,7 @@ export default function Home() {
               <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mb-6 text-primary border-2 border-primary/20 group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all duration-300 transform group-hover:scale-110 shadow-sm">
                 <Truck className="w-10 h-10" />
               </div>
-              <h3 className="text-xl font-bold text-slate-900 dark:text-slate-100">Best In Class Fulfillment</h3>
+              <h3 className="text-xl font-bold text-white dark:text-slate-100 uppercase tracking-tight">Best In Class Fulfillment</h3>
               <p className="mt-3 text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
                 Same-day shipping on orders before 12 PM PT. Free standard domestic shipping on orders over $400.
               </p>
@@ -201,7 +201,7 @@ export default function Home() {
               <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mb-6 text-primary border-2 border-primary/20 group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all duration-300 transform group-hover:scale-110 shadow-sm">
                 <Droplets className="w-10 h-10" />
               </div>
-              <h3 className="text-xl font-bold text-slate-900 dark:text-slate-100">Zero Fillers or Additives</h3>
+              <h3 className="text-xl font-bold text-white dark:text-slate-100 uppercase tracking-tight">Zero Fillers or Additives</h3>
               <p className="mt-3 text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
                 Pure active compounds only. Independently verified composition for reliable in vitro studies.
               </p>
