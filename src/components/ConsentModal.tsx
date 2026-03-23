@@ -66,9 +66,9 @@ const ConsentModal = () => {
                     </div>
 
                     <div className="space-y-6 w-full mb-8">
-                        <h3 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+                        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
                             Are you 21 years of age or older?
-                        </h3>
+                        </h2>
 
                         {error && (
                             <div className="p-3 rounded-lg bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 text-red-600 dark:text-red-400 text-sm font-medium">

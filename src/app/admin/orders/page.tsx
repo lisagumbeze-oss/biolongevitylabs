@@ -177,7 +177,7 @@ export default function AdminOrdersPage() {
                         <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4">
                             <Search className="w-8 h-8 text-slate-300" />
                         </div>
-                        <h4 className="text-lg font-black text-slate-900 dark:text-white">No orders found</h4>
+                        <h2 className="text-lg font-black text-slate-900 dark:text-white">No orders found</h2>
                         <p className="text-slate-500 dark:text-slate-400 mt-1 max-w-xs mx-auto text-sm">We couldn&apos;t find any orders matching your search. Try adjusting your filters.</p>
                         <button
                             onClick={() => setSearchTerm('')}

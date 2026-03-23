@@ -28,7 +28,7 @@ export default function PaymentReceivedEmail2() {
                                         </p>
 
                                         <div className="bg-amber-50 rounded-lg p-6 w-full mt-4 border border-amber-200 text-left">
-                                            <h3 className="text-sm font-semibold text-amber-900 mb-3 uppercase tracking-wider">Manual Payment Instructions</h3>
+                                            <h2 className="text-sm font-semibold text-amber-900 mb-3 uppercase tracking-wider">Manual Payment Instructions</h2>
                                             <div className="flex flex-col gap-3">
                                                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center text-sm border-b border-amber-200/50 pb-2 gap-1 sm:gap-0">
                                                     <span className="text-amber-700">Zelle:</span>

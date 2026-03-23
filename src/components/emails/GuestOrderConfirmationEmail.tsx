@@ -64,7 +64,7 @@ export default function GuestOrderConfirmationEmail() {
                     <div className="bg-amber-50 border border-amber-200 rounded-xl p-6 mt-2">
                         <div className="flex items-start gap-4">
                             <div>
-                                <h4 className="text-slate-900 font-bold text-lg mb-2">Manual Bank Transfer / Zelle</h4>
+                                <h3 className="text-slate-900 font-bold text-lg mb-2">Manual Bank Transfer / Zelle</h3>
                                 <p className="text-slate-600 mb-4 leading-relaxed">Please transfer the total amount of <strong>$303.98</strong> to the following account to complete your order. Your order will be shipped once payment is confirmed.</p>
 
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-white p-4 rounded-lg border border-slate-200">

@@ -179,7 +179,7 @@ export default function ShopPage() {
                         <div className="w-20 h-20 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mb-6">
                             <Search className="w-10 h-10 text-slate-300 dark:text-slate-600" />
                         </div>
-                        <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">No products found</h3>
+                        <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-2">No products found</h2>
                         <p className="text-slate-500 dark:text-slate-400 max-w-xs mx-auto mb-6">
                             Try adjusting your filters or search terms to find what you&apos;re looking for.
                         </p>

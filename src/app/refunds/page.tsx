@@ -97,10 +97,10 @@ export default function RefundsAndRUOPage() {
                         </p>
 
                         <div className="bg-white dark:bg-slate-950 p-6 sm:p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-                            <h4 className="font-bold text-lg mb-4 flex items-center gap-3">
+                            <h3 className="font-bold text-lg mb-4 flex items-center gap-3">
                                 <Scale className="w-5 h-5 text-primary" />
                                 Buyer Legal Responsibilities
-                            </h4>
+                            </h3>
                             <ul className="space-y-4">
                                 <li className="flex items-start gap-3">
                                     <span className="w-1.5 h-1.5 rounded-full bg-primary mt-2 shrink-0" />

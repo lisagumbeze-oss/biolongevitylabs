@@ -93,6 +93,45 @@ export default function RootLayout({
             }}
           />
         )}
+
+        {/* Global JSON-LD Schema */}
+        <Script
+          id="organization-schema"
+          type="application/ld+json"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "BioLongevity Labs",
+              "url": "https://biolongevitylabss.com",
+              "logo": "https://biolongevitylabss.com/logo.png",
+              "sameAs": [
+                "https://twitter.com/biolongevitylabs",
+                "https://facebook.com/biolongevitylabs"
+              ]
+            })
+          }}
+        />
+
+        <Script
+          id="website-schema"
+          type="application/ld+json"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              "name": "BioLongevity Labs",
+              "url": "https://biolongevitylabss.com",
+              "potentialAction": {
+                "@type": "SearchAction",
+                "target": "https://biolongevitylabss.com/shop?search={search_term_string}",
+                "query-input": "required name=search_term_string"
+              }
+            })
+          }}
+        />
       </body>
     </html>
   );

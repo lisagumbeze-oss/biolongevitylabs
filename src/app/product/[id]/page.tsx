@@ -29,5 +29,40 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ProductDetailsPage({ params }: Props) {
     const { id } = await params;
-    return <ProductDetailsView id={id} key={id} />;
+    const product = products.find((p) => p.id === id);
+
+    if (!product) return <ProductDetailsView id={id} key={id} />;
+
+    return (
+        <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "Product",
+                        "name": product.name,
+                        "image": product.image.startsWith("http") ? product.image : `https://biolongevitylabss.com${product.image}`,
+                        "description": product.description,
+                        "brand": {
+                            "@type": "Brand",
+                            "name": "BioLongevity Labs"
+                        },
+                        "offers": {
+                            "@type": "Offer",
+                            "url": `https://biolongevitylabss.com/product/${product.id}`,
+                            "priceCurrency": "USD",
+                            "price": product.isVariable && product.minPrice ? product.minPrice : product.price,
+                            "availability": "https://schema.org/InStock",
+                            "seller": {
+                                "@type": "Organization",
+                                "name": "BioLongevity Labs"
+                            }
+                        }
+                    })
+                }}
+            />
+            <ProductDetailsView id={id} key={id} />
+        </>
+    );
 }

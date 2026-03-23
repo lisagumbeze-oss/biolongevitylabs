@@ -57,7 +57,7 @@ const AboutSection = () => {
                                     <Beaker className="w-6 h-6" />
                                 </div>
                                 <div>
-                                    <h4 className="font-black text-slate-900 dark:text-white uppercase tracking-tight text-lg italic">Pharmaceutical Grade</h4>
+                                    <h3 className="font-black text-slate-900 dark:text-white uppercase tracking-tight text-lg italic">Pharmaceutical Grade</h3>
                                     <p className="text-slate-600 dark:text-slate-400 text-sm font-medium leading-relaxed">99% pure research compounds synthesized in ISO-certified laboratories.</p>
                                 </div>
                             </motion.div>
@@ -66,7 +66,7 @@ const AboutSection = () => {
                                     <ShieldCheck className="w-6 h-6" />
                                 </div>
                                 <div>
-                                    <h4 className="text-xl font-black text-slate-900 dark:text-white mb-2 tracking-tight group-hover:text-primary transition-colors">Trusted by Researchers</h4>
+                                    <h3 className="text-xl font-black text-slate-900 dark:text-white mb-2 tracking-tight group-hover:text-primary transition-colors">Trusted by Researchers</h3>
                                     <p className="text-slate-500 dark:text-slate-400 leading-relaxed">Our compounds are sourced and synthesized under total quality control, meeting regulatory standards for academic research.</p>
                                 </div>
                             </motion.div>

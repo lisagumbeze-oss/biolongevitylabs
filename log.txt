@@ -1,0 +1,52 @@
+Starting SEO Audit on: C:\Users\User\Desktop\Biolongevity Labs\src
+
+Audit Complete. Found 42 potential issues.
+
+--- Metadata Issues ---
+- Missing metadata export in page: C:\Users\User\Desktop\Biolongevity Labs\src\app\page.tsx
+- Missing metadata export in page: C:\Users\User\Desktop\Biolongevity Labs\src\app\about\page.tsx
+- Missing metadata export in page: C:\Users\User\Desktop\Biolongevity Labs\src\app\access-denied\page.tsx
+- Missing metadata export in page: C:\Users\User\Desktop\Biolongevity Labs\src\app\admin\page.tsx
+- Missing metadata export in page: C:\Users\User\Desktop\Biolongevity Labs\src\app\admin\coupons\page.tsx
+- Missing metadata export in page: C:\Users\User\Desktop\Biolongevity Labs\src\app\admin\login\page.tsx
+- Missing metadata export in page: C:\Users\User\Desktop\Biolongevity Labs\src\app\admin\orders\page.tsx
+- Missing metadata export in page: C:\Users\User\Desktop\Biolongevity Labs\src\app\admin\orders\[id]\page.tsx
+- Missing metadata export in page: C:\Users\User\Desktop\Biolongevity Labs\src\app\admin\orders\[id]\shipping\page.tsx
+- Missing metadata export in page: C:\Users\User\Desktop\Biolongevity Labs\src\app\admin\products\page.tsx
+- Missing metadata export in page: C:\Users\User\Desktop\Biolongevity Labs\src\app\admin\settings\page.tsx
+- Missing metadata export in page: C:\Users\User\Desktop\Biolongevity Labs\src\app\checkout\page.tsx
+- Missing metadata export in page: C:\Users\User\Desktop\Biolongevity Labs\src\app\emails-preview\page.tsx
+- Missing metadata export in page: C:\Users\User\Desktop\Biolongevity Labs\src\app\order-confirmation\page.tsx
+- Missing metadata export in page: C:\Users\User\Desktop\Biolongevity Labs\src\app\peptide-guide\page.tsx
+- Missing metadata export in page: C:\Users\User\Desktop\Biolongevity Labs\src\app\research\page.tsx
+- Missing metadata export in page: C:\Users\User\Desktop\Biolongevity Labs\src\app\research\[slug]\page.tsx
+- Missing metadata export in page: C:\Users\User\Desktop\Biolongevity Labs\src\app\resources\peptide-calculator\page.tsx
+- Missing metadata export in page: C:\Users\User\Desktop\Biolongevity Labs\src\app\shop\page.tsx
+- Missing metadata export in page: C:\Users\User\Desktop\Biolongevity Labs\src\app\support\page.tsx
+
+--- Alt Tag Issues ---
+- app\admin\orders\[id]\page.tsx: Missing or empty alt tag in Next.js Image: <ImageIcon className="w-6 h-6 opacity-30" />
+- app\admin\products\page.tsx: Missing or empty alt tag in: <img src={url} className="w-full h-full object-cover" />
+
+--- Heading Issues ---
+- app\about\page.tsx: Header level skipped: H1 to H4
+- app\about\page.tsx: Header level skipped: H2 to H4
+- app\admin\page.tsx: Header level skipped: H1 to H3
+- app\admin\orders\page.tsx: Header level skipped: H1 to H4
+- app\checkout\page.tsx: Multiple H1 tags found (2)
+- app\checkout\page.tsx: Header level skipped: H2 to H4
+- app\order-confirmation\page.tsx: Header level skipped: H1 to H4
+- app\product\[id]\ProductDetailsView.tsx: Multiple H1 tags found (2)
+- app\product\[id]\ProductDetailsView.tsx: Header level skipped: H2 to H4
+- app\product\[id]\ProductDetailsView.tsx: Header level skipped: H2 to H4
+- app\refunds\page.tsx: Header level skipped: H2 to H4
+- app\research\[slug]\page.tsx: Multiple H1 tags found (2)
+- app\research\[slug]\page.tsx: Header level skipped: H1 to H3
+- app\shop\page.tsx: Header level skipped: H1 to H3
+- components\ConsentModal.tsx: Header level skipped: H1 to H3
+- components\emails\GuestOrderConfirmationEmail.tsx: Header level skipped: H2 to H4
+- components\emails\OrderCancellationEmail.tsx: Header level skipped: H1 to H3
+- components\emails\PaymentReceivedEmail2.tsx: Header level skipped: H1 to H3
+- data\peptideCalculator.ts: Header level skipped: H1 to H3
+- data\peptideGuide.ts: Multiple H1 tags found (2)
+

@@ -76,7 +76,7 @@ export default function ProductDetailsView({ id }: Props) {
     if (!product) {
         return (
             <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
-                <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-4">Product Not Found</h1>
+                <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-4">Product Not Found</h2>
                 <p className="text-slate-600 dark:text-slate-400 mb-8">The product you are looking for does not exist or has been removed.</p>
                 <Link href="/shop" className="bg-primary text-white px-8 py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors">
                     Back to Shop
@@ -370,7 +370,7 @@ export default function ProductDetailsView({ id }: Props) {
                                 <div className="flex items-start gap-4">
                                     <Info className="w-6 h-6 text-amber-600 dark:text-amber-500 shrink-0 mt-1" />
                                     <div>
-                                        <h4 className="text-sm font-black text-amber-900 dark:text-amber-400 uppercase tracking-widest mb-2">Research Chemical Disclaimer</h4>
+                                        <h3 className="text-sm font-black text-amber-900 dark:text-amber-400 uppercase tracking-widest mb-2">Research Chemical Disclaimer</h3>
                                         <p className="text-xs text-amber-800/70 dark:text-amber-500/70 leading-relaxed font-bold uppercase tracking-tight">
                                             This product is intended for laboratory research use only. It is not for human consumption,
                                             diagnostic, or therapeutic purposes. Handling should only be performed by qualified professionals.
@@ -423,7 +423,7 @@ export default function ProductDetailsView({ id }: Props) {
                                 ].map((spec, i) => (
                                     <div key={i} className="p-8 bg-slate-50 dark:bg-slate-900/50 rounded-4xl border border-slate-100 dark:border-slate-800 group hover:border-primary/30 transition-colors text-left">
                                         <spec.icon className="w-8 h-8 text-primary/40 group-hover:text-primary transition-colors mb-6" />
-                                        <h4 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-widest mb-3">{spec.title}</h4>
+                                        <h3 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-widest mb-3">{spec.title}</h3>
                                         <p className="text-sm text-slate-500 dark:text-slate-400 font-medium leading-relaxed">{spec.content}</p>
                                     </div>
                                 ))}

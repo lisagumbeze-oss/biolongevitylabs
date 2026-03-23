@@ -404,7 +404,7 @@ export default function ProductsManagement() {
                                         <div className="flex gap-2 flex-wrap">
                                             {galleryUrls.map((url, i) => (
                                                 <div key={i} className="relative group w-11 h-11 rounded-lg border border-slate-700 overflow-hidden shrink-0 bg-slate-800">
-                                                    <img src={url} className="w-full h-full object-cover" />
+                                                    <img src={url} alt={`Gallery image ${i + 1}`} className="w-full h-full object-cover" />
                                                     <button type="button" onClick={() => setGalleryUrls(prev => prev.filter((_, idx) => idx !== i))} className="absolute inset-0 bg-red-500/90 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-[1px]">
                                                         <Trash2 className="w-4 h-4" />
                                                     </button>

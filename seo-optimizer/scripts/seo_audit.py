@@ -11,14 +11,14 @@ def get_files(directory, extensions):
 def audit_alt_tags(content):
     errors = []
     # Check for <img tags without alt or with empty alt
-    img_matches = re.finditer(r'<img[^>]*>', content)
+    img_matches = re.finditer(r'<img\s[^>]*>', content)
     for match in img_matches:
         img_tag = match.group(0)
         if 'alt=' not in img_tag or re.search(r'alt=["\']\s*["\']', img_tag):
             errors.append(f"Missing or empty alt tag in: {img_tag}")
     
     # Check for <Image components (Next.js)
-    next_img_matches = re.finditer(r'<Image[^>]*>', content)
+    next_img_matches = re.finditer(r'<Image\s[^>]*>', content)
     for match in next_img_matches:
         img_tag = match.group(0)
         if 'alt=' not in img_tag or re.search(r'alt=["\']\s*["\']', img_tag):
@@ -29,13 +29,23 @@ def audit_metadata(file_path, content):
     if not file_path.endswith('page.tsx'):
         return []
     
-    if 'export const metadata' not in content and 'generateMetadata' not in content:
-        return [f"Missing metadata export in page: {file_path}"]
-    return []
+    if 'export const metadata' in content or 'generateMetadata' in content:
+        return []
+        
+    # Check if layout.tsx exists in the same directory and has metadata
+    dir_name = os.path.dirname(file_path)
+    layout_path = os.path.join(dir_name, 'layout.tsx')
+    if os.path.exists(layout_path):
+        with open(layout_path, 'r', encoding='utf-8') as f:
+            layout_content = f.read()
+            if 'export const metadata' in layout_content or 'generateMetadata' in layout_content:
+                return []
+                
+    return [f"Missing metadata export in page: {file_path}"]
 
 def audit_headings(content):
     errors = []
-    headings = re.findall(r'<h([1-6])[^>]*>(.*?)</h\1>', content, re.DOTALL)
+    headings = re.findall(r'<(?:motion\.)?h([1-6])[^>]*>(.*?)</(?:motion\.)?h\1>', content, re.DOTALL)
     if not headings:
         return []
     

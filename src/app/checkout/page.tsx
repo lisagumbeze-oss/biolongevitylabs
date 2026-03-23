@@ -185,7 +185,7 @@ export default function CheckoutPage() {
                 <div className="w-20 h-20 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mb-6">
                     <CheckCircle2 className="w-10 h-10 text-slate-300" />
                 </div>
-                <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-4">Your cart is empty</h1>
+                <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-4">Your cart is empty</h2>
                 <p className="text-slate-600 dark:text-slate-400 mb-8">Add some research products to your cart before checking out.</p>
                 <Link href="/shop" className="bg-primary text-white px-8 py-3 rounded-xl font-bold hover:bg-primary/90 transition-all shadow-lg shadow-primary/20">
                     Start Shopping
@@ -450,9 +450,9 @@ export default function CheckoutPage() {
                                             </div>
                                         </div>
                                         <div className="flex-1">
-                                            <h4 className="font-bold text-slate-900 dark:text-white line-clamp-2 text-sm leading-snug">
+                                            <h3 className="font-bold text-slate-900 dark:text-white line-clamp-2 text-sm leading-snug">
                                                 {item.name}
-                                            </h4>
+                                            </h3>
                                             <p className="text-xs font-black text-primary mt-1">${(item.price * item.quantity).toFixed(2)}</p>
                                         </div>
                                     </div>

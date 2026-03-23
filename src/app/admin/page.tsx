@@ -85,7 +85,7 @@ export default function AdminDashboardPage() {
                         <div className="flex justify-between items-start">
                             <div>
                                 <p className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{metric.title}</p>
-                                <h3 className="text-3xl font-black text-slate-900 dark:text-white mt-2 tracking-tight">{metric.value}</h3>
+                                <p className="text-3xl font-black text-slate-900 dark:text-white mt-2 tracking-tight">{metric.value}</p>
                             </div>
                             <div className={`p-3 rounded-xl bg-gradient-to-br ${metric.color} text-white shadow-lg shadow-current/20`}>
                                 <metric.icon className="w-5 h-5" />
@@ -113,7 +113,7 @@ export default function AdminDashboardPage() {
                 {/* Recent Orders Preview */}
                 <div className="lg:col-span-2 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
                     <div className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center bg-slate-50 dark:bg-slate-900/50">
-                        <h3 className="text-lg font-black text-slate-900 dark:text-white">Recent Orders</h3>
+                        <h2 className="text-lg font-black text-slate-900 dark:text-white">Recent Orders</h2>
                         <button className="text-sm font-black text-primary hover:underline transition-all">View All Orders</button>
                     </div>
                     <div className="overflow-x-auto">
@@ -151,7 +151,7 @@ export default function AdminDashboardPage() {
                 {/* Top Selling Products */}
                 <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col">
                     <div className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center bg-slate-50 dark:bg-slate-900/50">
-                        <h3 className="text-lg font-black text-slate-900 dark:text-white">Top Sellers</h3>
+                        <h2 className="text-lg font-black text-slate-900 dark:text-white">Top Sellers</h2>
                         <button className="p-2 text-slate-400 hover:text-primary transition-colors">
                             <MoreHorizontal className="w-5 h-5" />
                         </button>

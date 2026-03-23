@@ -1,3 +1,4 @@
+import { Metadata } from 'next';
 import React from 'react';
 import GuestOrderConfirmationEmail from '@/components/emails/GuestOrderConfirmationEmail';
 import OrderCancellationEmail from '@/components/emails/OrderCancellationEmail';
@@ -40,3 +41,7 @@ export default function EmailsPreview() {
         </div>
     );
 }
+export const metadata: Metadata = {
+  title: "Emails Preview" + " | BioLongevity Labs",
+  description: "Preview email templates.",
+};

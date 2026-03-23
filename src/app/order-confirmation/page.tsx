@@ -58,7 +58,7 @@ function OrderConfirmationContent() {
                                 <Mail className="w-5 h-5" />
                             </div>
                             <div>
-                                <h4 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider mb-1">Check Your Inbox</h4>
+                                <h2 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider mb-1">Check Your Inbox</h2>
                                 <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">
                                     We sent a confirmation email with detailed instructions for your selected payment method.
                                 </p>

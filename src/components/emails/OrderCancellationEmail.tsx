@@ -24,7 +24,7 @@ export default function OrderCancellationEmail({ orderId = "1234" }: OrderCancel
                     <p className="text-lg font-medium text-slate-600 mb-6">Your Order {orderId.startsWith('#') ? orderId : `#${orderId}`} has been canceled</p>
 
                     <div className="bg-slate-50 rounded-lg p-5 w-full mb-8 text-left border border-slate-100">
-                        <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider mb-2">Reason for Cancellation</h3>
+                        <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider mb-2">Reason for Cancellation</h2>
                         <p className="text-slate-600">Payment was not received within the required 24-hour timeframe. As a guest checkout, unpaid orders are automatically released.</p>
                     </div>
 

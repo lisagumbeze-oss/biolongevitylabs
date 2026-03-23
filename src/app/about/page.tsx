@@ -79,12 +79,12 @@ export default function AboutPage() {
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                             <motion.div variants={fadeInUp} className="bg-slate-50 dark:bg-slate-800/50 p-6 rounded-2xl border border-slate-100 dark:border-slate-700/50">
                                 <FlaskConical className="w-8 h-8 text-primary mb-4" />
-                                <h4 className="text-lg font-bold text-slate-900 dark:text-white mb-2">99%+ Purity</h4>
+                                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">99%+ Purity</h3>
                                 <p className="text-sm text-slate-500 dark:text-slate-400">Meticulously formulated for maximum research efficacy.</p>
                             </motion.div>
                             <motion.div variants={fadeInUp} className="bg-slate-50 dark:bg-slate-800/50 p-6 rounded-2xl border border-slate-100 dark:border-slate-700/50">
                                 <Award className="w-8 h-8 text-blue-500 mb-4" />
-                                <h4 className="text-lg font-bold text-slate-900 dark:text-white mb-2">US Manufactured</h4>
+                                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">US Manufactured</h3>
                                 <p className="text-sm text-slate-500 dark:text-slate-400">Produced in state-of-the-art facilities in the United States.</p>
                             </motion.div>
                         </div>
@@ -123,7 +123,7 @@ export default function AboutPage() {
                         <motion.div variants={fadeInUp} className="flex gap-4">
                             <CheckCircle2 className="w-6 h-6 text-primary shrink-0 mt-1" />
                             <div>
-                                <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Unmatched Quality</h4>
+                                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Unmatched Quality</h3>
                                 <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
                                     Our products are manufactured under stringent quality standards, including Good Manufacturing Practices (GMP) and rigorous third-party testing for purity, and consistency.
                                 </p>
@@ -133,7 +133,7 @@ export default function AboutPage() {
                         <motion.div variants={fadeInUp} className="flex gap-4">
                             <CheckCircle2 className="w-6 h-6 text-primary shrink-0 mt-1" />
                             <div>
-                                <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Comprehensive Product Range</h4>
+                                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Comprehensive Product Range</h3>
                                 <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
                                     We offer an extensive catalog of products, including standard formulations and advanced blends to meet your research requirements.
                                 </p>
@@ -143,7 +143,7 @@ export default function AboutPage() {
                         <motion.div variants={fadeInUp} className="flex gap-4">
                             <CheckCircle2 className="w-6 h-6 text-primary shrink-0 mt-1" />
                             <div>
-                                <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Expert Guidance and Support</h4>
+                                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Expert Guidance and Support</h3>
                                 <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
                                     We pride ourselves on building lasting relationships. Our dedicated customer service team is available to guide you through every step, from product selection to post-delivery support.
                                 </p>
@@ -153,7 +153,7 @@ export default function AboutPage() {
                         <motion.div variants={fadeInUp} className="flex gap-4">
                             <CheckCircle2 className="w-6 h-6 text-primary shrink-0 mt-1" />
                             <div>
-                                <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Fast and Reliable Shipping</h4>
+                                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Fast and Reliable Shipping</h3>
                                 <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
                                     We deliver quickly and efficiently to ensure you have what you need when you need it. Orders over $400 include free shipping, making access to premium peptides and bioregulators even easier.
                                 </p>

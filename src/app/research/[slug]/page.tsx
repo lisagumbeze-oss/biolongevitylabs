@@ -11,8 +11,8 @@ import { motion } from "framer-motion";
 // Very simple markdown parser for the included data
 const parseMarkdown = (text: string) => {
     let html = text
-        .replace(/^# (.*$)/gim, '<h1 class="text-4xl md:text-5xl font-black text-slate-900 dark:text-white mt-12 mb-6 tracking-tight">$1</h1>')
-        .replace(/^## (.*$)/gim, '<h2 class="text-3xl font-bold text-slate-900 dark:text-white mt-12 mb-6">$1</h2>')
+        .replace(/^# (.*$)/gim, '<h2 class="text-3xl md:text-4xl font-black text-slate-900 dark:text-white mt-12 mb-6 tracking-tight">$1</h2>')
+        .replace(/^## (.*$)/gim, '<h3 class="text-2xl font-bold text-slate-900 dark:text-white mt-10 mb-5">$1</h3>')
         .replace(/\*\*(.*)\*\*/gim, '<strong>$1</strong>')
         .replace(/\*(.*)\*/gim, '<em>$1</em>')
         .replace(/^\* (.*$)/gim, '<li class="ml-6 list-disc mb-2">$1</li>')
@@ -39,6 +39,35 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
 
     return (
         <div className="bg-background min-h-screen">
+            {/* Article Schema */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "Article",
+                        "headline": post.title,
+                        "image": [
+                            post.imageUrl.startsWith("http") ? post.imageUrl : `https://biolongevitylabss.com${post.imageUrl}`
+                        ],
+                        "datePublished": post.date,
+                        "author": {
+                            "@type": "Person",
+                            "name": post.author
+                        },
+                        "publisher": {
+                            "@type": "Organization",
+                            "name": "BioLongevity Labs",
+                            "logo": {
+                                "@type": "ImageObject",
+                                "url": "https://biolongevitylabss.com/logo.png"
+                            }
+                        },
+                        "description": post.excerpt
+                    })
+                }}
+            />
+
             {/* Post Header Hero */}
             <div className="relative h-[60vh] min-h-[500px] w-full mt-20">
                 <Image
@@ -119,7 +148,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
                             <div className="w-24 h-24 rounded-full bg-primary/20 mx-auto mb-6 flex items-center justify-center text-primary border border-primary/20">
                                 <User className="w-10 h-10" />
                             </div>
-                            <h3 className="text-xl font-black text-slate-900 dark:text-white mb-2">{post.author}</h3>
+                            <h2 className="text-xl font-black text-slate-900 dark:text-white mb-2">{post.author}</h2>
                             <p className="text-slate-600 dark:text-slate-400 font-medium mb-6">
                                 Senior scientific reviewer and content editor at BioLongevity Labs.
                             </p>
@@ -130,7 +159,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
 
                         {/* Newsletter Mini */}
                         <div className="bg-gradient-to-br from-primary/10 to-blue-500/10 dark:from-primary/20 dark:to-blue-500/20 rounded-3xl p-8 border border-primary/20">
-                            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3">Newsletter</h3>
+                            <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-3">Newsletter</h2>
                             <p className="text-slate-600 dark:text-slate-400 font-medium mb-6 text-sm">
                                 Get exclusive research updates delivered weekly.
                             </p>
