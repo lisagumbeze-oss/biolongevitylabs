@@ -12,9 +12,6 @@ function OrderConfirmationContent() {
     const [orderId, setOrderId] = useState("");
 
     useEffect(() => {
-        // Clear cart first
-        clearCart();
-
         // Get order ID from URL params
         const id = searchParams.get("id");
         if (id) {
