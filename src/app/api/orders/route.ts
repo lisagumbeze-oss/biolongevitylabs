@@ -1,9 +1,10 @@
 import { NextResponse } from 'next/server';
+import React from 'react';
 export const dynamic = 'force-dynamic';
 import fs from 'fs';
 import path from 'path';
 import { supabase } from '@/lib/supabase';
-import { Resend } from 'resend';
+import { sendEmail } from '@/lib/mail';
 import OrderReceiptEmail from '@/components/emails/OrderReceiptEmail';
 import AdminOrderNotificationEmail from '@/components/emails/AdminOrderNotificationEmail';
 import PaymentReceivedEmail1 from '@/components/emails/PaymentReceivedEmail1';
@@ -92,12 +93,10 @@ export async function GET() {
 }
 
 async function sendOrderEmails(orderData: any) {
-    if (!process.env.RESEND_API_KEY) {
-        console.warn('RESEND_API_KEY is not set. Skipping emails.');
+    if (!process.env.SMTP_HOST) {
+        console.warn('SMTP_HOST is not set. Skipping emails.');
         return;
     }
-
-    const resend = new Resend(process.env.RESEND_API_KEY);
 
     try {
         const totalNum = parseFloat(orderData.total.replace('$', ''));
@@ -120,11 +119,10 @@ async function sendOrderEmails(orderData: any) {
         });
 
         // Send to Customer
-        await resend.emails.send({
-            from: 'BioLongevity Labs <support@biolongevitylabss.com>',
-            to: [orderData.email],
+        await sendEmail({
+            to: orderData.email,
             subject: `Order Confirmation ${orderData.id}`,
-            react: OrderReceiptEmail({
+            react: React.createElement(OrderReceiptEmail, {
                 orderId: orderData.id,
                 customerName: orderData.customer,
                 customerEmail: orderData.email,
@@ -135,11 +133,10 @@ async function sendOrderEmails(orderData: any) {
         });
 
         // Send to Admin
-        await resend.emails.send({
-            from: 'BioLongevity Labs <support@biolongevitylabss.com>',
-            to: ['support@biolongevitylabss.com'],
+        await sendEmail({
+            to: process.env.SMTP_FROM_EMAIL || 'support@biolongevitylabss.com',
             subject: `New Order Received ${orderData.id}`,
-            react: AdminOrderNotificationEmail({
+            react: React.createElement(AdminOrderNotificationEmail, {
                 orderId: orderData.id,
                 customerName: orderData.customer,
                 customerEmail: orderData.email,
@@ -296,35 +293,37 @@ export async function DELETE(request: Request) {
 }
 
 async function sendStatusUpdateEmail(orderData: any) {
-    if (!process.env.RESEND_API_KEY) {
-        console.warn('RESEND_API_KEY is not set. Skipping emails.');
+    if (!process.env.SMTP_HOST) {
+        console.warn('SMTP_HOST is not set. Skipping emails.');
         return;
     }
-    const resend = new Resend(process.env.RESEND_API_KEY);
 
     try {
         if (orderData.status === 'Processing' || orderData.payment_status === 'PAID') {
-            await resend.emails.send({
-                from: 'BioLongevity Labs <support@biolongevitylabss.com>',
-                to: [orderData.email],
+            await sendEmail({
+                to: orderData.email,
                 subject: `Payment Received - Order ${orderData.id}`,
-                react: PaymentReceivedEmail1({ orderId: orderData.id })
+                react: React.createElement(PaymentReceivedEmail1, { orderId: orderData.id })
             });
             console.log(`Payment success email sent for ${orderData.id}`);
         } else if (orderData.status === 'Failed' || orderData.payment_status === 'FAILED') {
-            await resend.emails.send({
-                from: 'BioLongevity Labs <support@biolongevitylabss.com>',
-                to: [orderData.email],
+            await sendEmail({
+                to: orderData.email,
                 subject: `Order Canceled - ${orderData.id}`,
-                react: OrderCancellationEmail({ orderId: orderData.id })
+                react: React.createElement(OrderCancellationEmail, { orderId: orderData.id })
             });
             console.log(`Order cancellation email sent for ${orderData.id}`);
         } else if (orderData.status === 'Shipped') {
-            await resend.emails.send({
-                from: 'BioLongevity Labs <support@biolongevitylabss.com>',
-                to: [orderData.email],
-                subject: `Your Order ${orderData.id} Has Shipped!`,
-                html: `<p>Your order has shipped. Your shipping and tracking details will be updated shortly.</p>`
+            await sendEmail({
+                to: orderData.email,
+                subject: `Order Shipped - ${orderData.id}`,
+                html: `
+                    <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+                        <h2 style="color: #1a1a1a;">Your BioLongevity Labs Order Has Shipped!</h2>
+                        <p>Good news! Your order <strong>${orderData.id}</strong> is on its way.</p>
+                        <p>Thank you for choosing BioLongevity Labs.</p>
+                    </div>
+                `
             });
             console.log(`Order shipped email sent for ${orderData.id}`);
         }

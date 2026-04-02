@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { Resend } from 'resend';
+import { sendEmail } from '@/lib/mail';
 
 export async function POST(request: Request) {
     try {
@@ -12,13 +12,10 @@ export async function POST(request: Request) {
             );
         }
 
-        // Send via Resend if API key is set
-        if (process.env.RESEND_API_KEY) {
-            const resend = new Resend(process.env.RESEND_API_KEY);
-
-            await resend.emails.send({
-                from: 'BioLongevity Labs <support@biolongevitylabss.com>',
-                to: ['support@biolongevitylabss.com'],
+        // Send via SMTP if configured
+        if (process.env.SMTP_HOST) {
+            await sendEmail({
+                to: process.env.SMTP_FROM_EMAIL || 'support@biolongevitylabss.com',
                 replyTo: email,
                 subject: `New Contact Form Message from ${name}`,
                 html: `
@@ -55,10 +52,10 @@ export async function POST(request: Request) {
                 `,
             });
         } else {
-            console.warn('RESEND_API_KEY not set. Contact form email not sent.');
+            console.warn('SMTP_HOST not set. Contact form email not sent.');
             // Still return success — we don't want to show an error to the user
             // The message data is logged for backup
-            console.log('Contact form submission:', { name, email, phone, message });
+            console.log('Contact form submission (dry run):', { name, email, phone, message });
         }
 
         return NextResponse.json({ success: true });
