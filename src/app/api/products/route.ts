@@ -57,32 +57,42 @@ export async function GET() {
             if (error) throw error;
 
             // Map Supabase schema back to frontend expected format
-            const products = (data as unknown as ProductRow[]).map((p: ProductRow) => ({
-                id: p.id,
-                name: p.name,
-                price: p.price,
-                minPrice: p.min_price,
-                maxPrice: p.max_price,
-                image: p.image_url,
-                category: p.category_name,
-                form: p.form,
-                description: p.description,
-                stockStatus: p.stock_status,
-                isVariable: p.is_variable,
-                isSale: p.is_sale,
-                isBestseller: p.is_bestseller,
-                isNew: p.is_new,
-                variables: p.product_variables?.map((v: VariableRow) => ({
-                    name: v.name,
-                    options: v.options
-                })) || [],
-                variations: p.product_variations?.map((v: VariationRow) => ({
-                    id: v.id,
-                    attributes: v.attributes,
-                    price: v.price,
-                    stockStatus: v.stock_status
-                })) || []
-            }));
+            const products = (data as unknown as ProductRow[]).map((p: ProductRow) => {
+                const variationPrices = (p.product_variations || [])
+                    .map((v: VariationRow) => Number(v.price))
+                    .filter((n: number) => !isNaN(n) && n > 0);
+
+                // Use stored min/max if set, otherwise derive from variations on-the-fly
+                const minPrice = p.min_price ?? (variationPrices.length > 0 ? Math.min(...variationPrices) : null);
+                const maxPrice = p.max_price ?? (variationPrices.length > 0 ? Math.max(...variationPrices) : null);
+
+                return {
+                    id: p.id,
+                    name: p.name,
+                    price: p.price,
+                    minPrice,
+                    maxPrice,
+                    image: p.image_url,
+                    category: p.category_name,
+                    form: p.form,
+                    description: p.description,
+                    stockStatus: p.stock_status,
+                    isVariable: p.is_variable,
+                    isSale: p.is_sale,
+                    isBestseller: p.is_bestseller,
+                    isNew: p.is_new,
+                    variables: p.product_variables?.map((v: VariableRow) => ({
+                        name: v.name,
+                        options: v.options
+                    })) || [],
+                    variations: p.product_variations?.map((v: VariationRow) => ({
+                        id: v.id,
+                        attributes: v.attributes,
+                        price: v.price,
+                        stockStatus: v.stock_status
+                    })) || []
+                };
+            });
 
             return NextResponse.json(products);
         } else {

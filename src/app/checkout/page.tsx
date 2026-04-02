@@ -189,7 +189,8 @@ export default function CheckoutPage() {
 
             if (!res.ok) {
                 const errorData = await res.json();
-                throw new Error(errorData.error || 'Failed to create order');
+                const detail = errorData.detail ? `\n\nDetail: ${errorData.detail}` : '';
+                throw new Error((errorData.error || 'Failed to create order') + detail);
             }
 
             // Track coupon usage
