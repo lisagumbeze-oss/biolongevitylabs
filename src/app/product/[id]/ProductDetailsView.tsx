@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Product } from "@/data/products";
+import { researchPosts } from "@/data/researchPosts";
 import { useCart } from "@/store/useCart";
 import {
     ShoppingCart, Truck, ShieldCheck, RotateCcw, ChevronLeft,
@@ -24,7 +25,8 @@ export default function ProductDetailsView({ id }: Props) {
     const [isLoading, setIsLoading] = useState(true);
     const [allProducts, setAllProducts] = useState<Product[]>([]);
 
-    const { addItem, setIsCartOpen } = useCart((state) => ({ addItem: state.addItem, setIsCartOpen: state.setIsCartOpen }));
+    const addItem = useCart((state) => state.addItem);
+    const setIsCartOpen = useCart((state) => state.setIsCartOpen);
     const [quantity, setQuantity] = useState(1);
     const [selectedImage, setSelectedImage] = useState("");
 
@@ -64,6 +66,39 @@ export default function ProductDetailsView({ id }: Props) {
         fetchProduct();
     }, [id]);
 
+    const displayImages = React.useMemo(() => {
+        if (!product) return [];
+        return [product.image, ...(product.gallery || [])].filter((val, i, arr) => val && arr.indexOf(val) === i);
+    }, [product]);
+
+    const displayPrice = React.useMemo(() => {
+        if (!product) return 0;
+        return selectedVariation?.price ?? product.price ?? 0;
+    }, [selectedVariation, product]);
+
+    const originalPrice = React.useMemo(() => {
+        if (!product) return undefined;
+        return selectedVariation?.originalPrice ?? product.originalPrice;
+    }, [selectedVariation, product]);
+
+    const relatedProducts = React.useMemo(() => {
+        if (!product) return [];
+        return allProducts
+            .filter(p => (p.category === product.category && p.id !== product.id) || p.category.includes("Peptide"))
+            .slice(0, 4);
+    }, [allProducts, product]);
+
+    const relatedResearch = React.useMemo(() => {
+        if (!product) return [];
+        return researchPosts
+            .filter(p =>
+                p.category.toLowerCase().includes(product.category.toLowerCase()) ||
+                p.title.toLowerCase().includes(product.name.toLowerCase().split(' ')[0]) ||
+                product.description.toLowerCase().includes(p.title.toLowerCase().split(' ')[0])
+            )
+            .slice(0, 2);
+    }, [product]);
+
     if (isLoading) {
         return (
             <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
@@ -84,57 +119,6 @@ export default function ProductDetailsView({ id }: Props) {
             </div>
         );
     }
-
-    const normalizeString = (str: string) => (str || '').toLowerCase().replace(/[^a-z0-9]/g, '');
-
-    const selectedVariation = product.variations?.find(v => {
-        return Object.entries(selectedOptions).every(([key, value]) => {
-            const varValue = v.attributes[key] || v.attributes[key.toLowerCase()] || '';
-            const normVar = normalizeString(varValue);
-            const normVal = normalizeString(value);
-            return normVar === normVal || normVal.includes(normVar) || normVar.includes(normVal);
-        });
-    });
-
-    const displayPrice = selectedVariation?.price ?? product.price ?? 0;
-    const originalPrice = selectedVariation?.originalPrice ?? product.originalPrice;
-
-    const handleAddToCart = () => {
-        const cartItemId = selectedVariation ? selectedVariation.id.toString() : (Object.keys(selectedOptions).length > 0
-            ? `${product.id}-${Object.values(selectedOptions).sort().join('-')}`
-            : product.id);
-
-        addItem({
-            id: cartItemId,
-            name: product.name,
-            price: displayPrice,
-            image: product.image,
-            selectedOptions: { ...selectedOptions }
-        }, quantity);
-        setIsCartOpen(true);
-        toast.success("Added to cart!");
-    };
-
-    const handleBuyNow = () => {
-        const cartItemId = selectedVariation ? selectedVariation.id.toString() : (Object.keys(selectedOptions).length > 0
-            ? `${product.id}-${Object.values(selectedOptions).sort().join('-')}`
-            : product.id);
-
-        addItem({
-            id: cartItemId,
-            name: product.name,
-            price: displayPrice,
-            image: product.image,
-            selectedOptions: { ...selectedOptions }
-        }, quantity);
-        router.push('/checkout');
-    };
-
-    const displayImages = [product.image, ...(product.gallery || [])].filter((val, i, arr) => val && arr.indexOf(val) === i);
-
-    const relatedProducts = allProducts
-        .filter(p => p.category === product.category && p.id !== product.id)
-        .slice(0, 4);
 
     return (
         <div className="bg-white dark:bg-slate-950 min-h-screen transition-colors pb-20 overflow-x-hidden">
@@ -324,8 +308,42 @@ export default function ProductDetailsView({ id }: Props) {
                     </div>
                 </div>
 
+                {/* Internal Linking: Related Research */}
+                {relatedResearch.length > 0 && (
+                    <div className="mt-20 lg:mt-32 pt-20 border-t border-slate-100 dark:border-slate-800">
+                        <div className="max-w-4xl text-left">
+                            <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter mb-6 uppercase">Scientific Validation & Research</h2>
+                            <p className="text-sm font-bold text-slate-400 uppercase tracking-widest leading-loose mb-10">
+                                Explore the data. Our research compounds are backed by peer-reviewed literature and comprehensive scientific analysis.
+                            </p>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            {relatedResearch.map((post) => (
+                                <Link
+                                    key={post.id}
+                                    href={`/research/${post.slug}`}
+                                    aria-label={`Read research article about ${post.title}`}
+                                    className="group flex flex-col sm:flex-row gap-6 p-6 bg-slate-50 dark:bg-slate-900/50 rounded-4xl border border-slate-100 dark:border-slate-800 hover:border-primary/50 transition-all hover:shadow-xl"
+                                >
+                                    <div className="w-full sm:w-32 h-32 shrink-0 rounded-2xl overflow-hidden relative bg-slate-200 dark:bg-slate-800">
+                                        <img src={post.imageUrl} alt={post.title} className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                                    </div>
+                                    <div className="flex flex-col justify-center text-left">
+                                        <span className="text-[10px] font-black uppercase tracking-widest text-primary mb-2 italic">{post.category}</span>
+                                        <h3 className="text-lg font-black text-slate-900 dark:text-white leading-tight group-hover:text-primary transition-colors mb-2 line-clamp-2">{post.title}</h3>
+                                        <span className="text-xs font-bold text-slate-400 uppercase tracking-tighter flex items-center gap-2">
+                                            Read Full Study
+                                            <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                                        </span>
+                                    </div>
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
                 {/* Product Description Full Width */}
-                <div className="mt-20 lg:mt-32 pt-20 border-t border-slate-100 dark:border-slate-800 animate-in fade-in slide-in-from-bottom-10 duration-1000">
+                <div className="mt-20 lg:mt-32 pt-20 border-t border-slate-100 dark:border-slate-800 animate-in fade-in slide-in-from-bottom-10 duration-1000 text-left">
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-20">
                         <div className="lg:col-span-1">
                             <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter mb-4 leading-none uppercase">Product Information</h2>
@@ -371,7 +389,7 @@ export default function ProductDetailsView({ id }: Props) {
                                     <Info className="w-6 h-6 text-amber-600 dark:text-amber-500 shrink-0 mt-1" />
                                     <div>
                                         <h3 className="text-sm font-black text-amber-900 dark:text-amber-400 uppercase tracking-widest mb-2">Research Chemical Disclaimer</h3>
-                                        <p className="text-xs text-amber-800/70 dark:text-amber-500/70 leading-relaxed font-bold uppercase tracking-tight">
+                                        <p className="text-xs text-amber-800/70 dark:text-amber-500/70 leading-relaxed font-bold uppercase tracking-tight text-left">
                                             This product is intended for laboratory research use only. It is not for human consumption,
                                             diagnostic, or therapeutic purposes. Handling should only be performed by qualified professionals.
                                         </p>
@@ -384,7 +402,7 @@ export default function ProductDetailsView({ id }: Props) {
 
                 {/* Related Products */}
                 {relatedProducts.length > 0 && (
-                    <div className="mt-40 pt-20 border-t border-slate-100 dark:border-slate-800">
+                    <div className="mt-40 pt-20 border-t border-slate-100 dark:border-slate-800 text-left">
                         <div className="flex flex-col md:flex-row justify-between items-end gap-6 mb-12">
                             <div className="text-left">
                                 <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter mb-4">Complete Your Research</h2>
@@ -407,7 +425,7 @@ export default function ProductDetailsView({ id }: Props) {
                 )}
 
                 {/* Tabs / Info Sections */}
-                <div className="mt-32 border-t border-slate-100 dark:border-slate-800 pt-20">
+                <div className="mt-32 border-t border-slate-100 dark:border-slate-800 pt-20 text-left">
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-20">
                         <div className="lg:col-span-1 text-left">
                             <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter mb-4 leading-none">Research Specification</h2>

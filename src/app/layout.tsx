@@ -15,6 +15,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://biolongevitylabss.com"),
   title: {
     default: "BioLongevity Labs | Premium Research Compounds",
     template: "%s | BioLongevity Labs"
@@ -27,20 +28,32 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://biolongevitylabss.com",
     siteName: "BioLongevity Labs",
-    title: "BioLongevity Labs | Premium Research Compounds",
-    description: "Highest purity research peptides and biotechnology solutions.",
-    images: ["/og-image.jpg"],
+    title: "BioLongevity Labs | Premium Research Peptides & Bioregulators",
+    description: "Highest purity BPC-157, TB-500, and advanced research compounds. 99%+ purity, US-manufactured, and lab-tested for scientific excellence.",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "BioLongevity Labs - Premium Research Compounds",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "BioLongevity Labs | Premium Research Compounds",
-    description: "Highest purity research peptides and biotechnology solutions.",
-    images: ["/og-image.jpg"],
+    site: "@biolongevity",
+    creator: "@biolongevity",
+    title: "BioLongevity Labs | Premium Research Peptides",
+    description: "Empowering breakthrough research with highest purity peptides and bioregulators.",
+    images: ["/og-image.png"],
   },
   robots: {
     index: true,
     follow: true,
-  }
+  },
+  alternates: {
+    canonical: "/",
+  },
 };
 
 import BottomNav from "@/components/BottomNav";

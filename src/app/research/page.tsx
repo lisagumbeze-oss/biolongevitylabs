@@ -14,6 +14,30 @@ export default function ResearchPage() {
 
     return (
         <div className="bg-background min-h-screen">
+            {/* Breadcrumb Schema */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "BreadcrumbList",
+                        "itemListElement": [
+                            {
+                                "@type": "ListItem",
+                                "position": 1,
+                                "name": "Home",
+                                "item": "https://biolongevitylabss.com/"
+                            },
+                            {
+                                "@type": "ListItem",
+                                "position": 2,
+                                "name": "Research",
+                                "item": "https://biolongevitylabss.com/research"
+                            }
+                        ]
+                    })
+                }}
+            />
             {/* Header Section */}
             <section className="bg-slate-900 dark:bg-slate-950 py-24 relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-transparent opacity-50"></div>
@@ -40,13 +64,14 @@ export default function ResearchPage() {
                     {featuredPost && (
                         <div className="mb-20">
                             <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-8 border-b border-slate-200 dark:border-slate-800 pb-4">Latest Research</h2>
-                            <Link href={`/research/${featuredPost.slug}`} className="group block">
+                            <Link href={`/research/${featuredPost.slug}`} aria-label={`Read full research article: ${featuredPost.title}`} className="group block">
                                 <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center bg-white dark:bg-slate-900 rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-none hover:shadow-2xl hover:border-primary/50 transition-all duration-300">
                                     <div className="relative h-64 md:h-full min-h-[400px] overflow-hidden">
                                         <Image
                                             src={featuredPost.imageUrl}
                                             alt={featuredPost.title}
                                             fill
+                                            priority
                                             className="object-cover group-hover:scale-105 transition-transform duration-700"
                                         />
                                         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-60"></div>
@@ -87,7 +112,7 @@ export default function ResearchPage() {
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ delay: i * 0.1 }}
                                     >
-                                        <Link href={`/research/${post.slug}`} className="group block h-full">
+                                        <Link href={`/research/${post.slug}`} aria-label={`Read more about ${post.title}`} className="group block h-full">
                                             <div className="bg-white dark:bg-slate-900 rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-800 hover:border-primary/50 dark:hover:border-primary/50 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 h-full flex flex-col">
                                                 <div className="relative h-56 w-full overflow-hidden">
                                                     <Image

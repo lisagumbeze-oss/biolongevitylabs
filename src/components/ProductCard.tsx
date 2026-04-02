@@ -137,6 +137,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
                 {isVariable ? (
                     <Link
                         href={`/product/${id}`}
+                        aria-label={`Learn more about ${name}`}
                         className="w-full bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white hover:bg-primary hover:text-white py-4 rounded-2xl font-black transition-all duration-300 flex justify-center items-center gap-2 active:scale-[0.98] text-[10px] uppercase tracking-widest border border-slate-100 dark:border-slate-700 hover:border-transparent"
                     >
                         Learn More
@@ -145,6 +146,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
                 ) : (
                     <button
                         onClick={handleAddToCart}
+                        aria-label={`Add ${name} to cart`}
                         className="w-full bg-slate-900 dark:bg-slate-700 text-white hover:bg-primary py-4 rounded-2xl font-black transition-all duration-300 flex justify-center items-center gap-2 active:scale-[0.98] text-[10px] uppercase tracking-widest shadow-lg shadow-slate-900/5 hover:shadow-primary/20"
                     >
                         <ShoppingCart className="w-3.5 h-3.5" />

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Calendar, User, Tag, Share2, Bookmark } from "lucide-react";
 import { researchPosts } from "@/data/researchPosts";
+import { products } from "@/data/products";
 import { motion } from "framer-motion";
 
 // Very simple markdown parser for the included data
@@ -28,17 +29,51 @@ const parseMarkdown = (text: string) => {
     return { __html: html };
 };
 
-export default function BlogPostPage({ params }: { params: { slug: string } }) {
-    const post = researchPosts.find(p => p.slug === params.slug);
+export default function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
+    const resolvedParams = React.use(params);
+    const post = researchPosts.find(p => p.slug === resolvedParams.slug);
 
     if (!post) {
         notFound();
     }
 
     const otherPosts = researchPosts.filter(p => p.id !== post.id).slice(0, 3);
+    const relatedProducts = products.filter(p => p.category.toLowerCase().includes(post.category.toLowerCase().split(' ')[0])).slice(0, 2);
 
     return (
         <div className="bg-background min-h-screen">
+            {/* Article Schema */}
+            {/* Breadcrumb Schema */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "BreadcrumbList",
+                        "itemListElement": [
+                            {
+                                "@type": "ListItem",
+                                "position": 1,
+                                "name": "Home",
+                                "item": "https://biolongevitylabss.com/"
+                            },
+                            {
+                                "@type": "ListItem",
+                                "position": 2,
+                                "name": "Research",
+                                "item": "https://biolongevitylabss.com/research"
+                            },
+                            {
+                                "@type": "ListItem",
+                                "position": 3,
+                                "name": post.title,
+                                "item": `https://biolongevitylabss.com/research/${post.slug}`
+                            }
+                        ]
+                    })
+                }}
+            />
+
             {/* Article Schema */}
             <script
                 type="application/ld+json"
@@ -172,6 +207,32 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
                                 Subscribe
                             </button>
                         </div>
+
+                        {/* Related Products Sidebar */}
+                        {relatedProducts.length > 0 && (
+                            <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-sm">
+                                <h3 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-widest mb-6 flex items-center gap-2">
+                                    <Tag className="w-4 h-4 text-primary" />
+                                    Related Compounds
+                                </h3>
+                                <div className="space-y-6">
+                                    {relatedProducts.map(p => (
+                                        <Link key={p.id} href={`/product/${p.id}`} className="flex items-center gap-4 group/prod">
+                                            <div className="w-16 h-16 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 overflow-hidden p-2 shrink-0">
+                                                <img src={p.image} alt={p.name} className="w-full h-full object-contain group-hover/prod:scale-110 transition-transform" />
+                                            </div>
+                                            <div className="flex flex-col min-w-0">
+                                                <h4 className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-tight line-clamp-2 leading-tight group-hover/prod:text-primary transition-colors">{p.name}</h4>
+                                                <p className="text-[10px] font-bold text-primary mt-1">${p.price.toFixed(2)}</p>
+                                            </div>
+                                        </Link>
+                                    ))}
+                                </div>
+                                <Link href="/shop" className="block text-center mt-8 text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-primary transition-colors italic">
+                                    Browse Full Catalog →
+                                </Link>
+                            </div>
+                        )}
                     </aside>
                 </div>
             </div>

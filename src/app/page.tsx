@@ -79,20 +79,21 @@ export default function Home() {
     <div className="flex flex-col">
       <Hero />
 
-      <motion.section
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
-        variants={staggerContainer}
-        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full"
-      >
-        <div className="flex items-center justify-between mb-10">
-          <motion.h2
-            variants={fadeInUp}
-            className="text-3xl font-bold tracking-tight text-white dark:text-slate-100 border-l-4 border-primary pl-4"
-          >
-            Featured Research Products
-          </motion.h2>
+      <section className="py-24 bg-slate-50 dark:bg-slate-900/50 border-t border-slate-100 dark:border-slate-800 transition-colors">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={staggerContainer}
+          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full"
+        >
+          <div className="flex items-center justify-between mb-10">
+            <motion.h2
+              variants={fadeInUp}
+              className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white border-l-4 border-primary pl-4"
+            >
+              Featured Research Products
+            </motion.h2>
           <div className="flex items-center gap-2">
             <button
               onClick={() => { prevSlide(); setIsPaused(true); setTimeout(() => setIsPaused(false), 5000); }}
@@ -156,9 +157,10 @@ export default function Home() {
             />
           ))}
         </div>
-      </motion.section>
+        </motion.div>
+      </section>
 
-      <section className="bg-primary/5 dark:bg-slate-800/50 border-t border-b border-primary/10 dark:border-slate-700/50 py-20 transition-colors overflow-hidden">
+      <section className="bg-white dark:bg-slate-900/50 border-t border-b border-slate-100 dark:border-slate-800 py-24 transition-colors overflow-hidden">
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -171,7 +173,7 @@ export default function Home() {
               <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mb-6 text-primary border-2 border-primary/20 group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all duration-300 transform group-hover:scale-110 shadow-sm">
                 <ShieldCheck className="w-10 h-10" />
               </div>
-              <h3 className="text-xl font-bold text-white dark:text-slate-100 uppercase tracking-tight">99%+ Purity Guarantee</h3>
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white uppercase tracking-tight">99%+ Purity Guarantee</h3>
               <p className="mt-3 text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
                 Research-grade peptides with verified potency. Each product includes certificates of analysis.
               </p>
@@ -181,7 +183,7 @@ export default function Home() {
               <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mb-6 text-primary border-2 border-primary/20 group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all duration-300 transform group-hover:scale-110 shadow-sm">
                 <Award className="w-10 h-10" />
               </div>
-              <h3 className="text-xl font-bold text-white dark:text-slate-100 uppercase tracking-tight">GMP Manufacturing Standards</h3>
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white uppercase tracking-tight">GMP Manufacturing Standards</h3>
               <p className="mt-3 text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
                 Synthesized in USA-registered facilities following Good Manufacturing Practices. Full chain of custody documentation.
               </p>
@@ -191,7 +193,7 @@ export default function Home() {
               <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mb-6 text-primary border-2 border-primary/20 group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all duration-300 transform group-hover:scale-110 shadow-sm">
                 <Truck className="w-10 h-10" />
               </div>
-              <h3 className="text-xl font-bold text-white dark:text-slate-100 uppercase tracking-tight">Best In Class Fulfillment</h3>
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white uppercase tracking-tight">Best In Class Fulfillment</h3>
               <p className="mt-3 text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
                 Same-day shipping on orders before 12 PM PT. Free standard domestic shipping on orders over $400.
               </p>
@@ -201,7 +203,7 @@ export default function Home() {
               <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mb-6 text-primary border-2 border-primary/20 group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all duration-300 transform group-hover:scale-110 shadow-sm">
                 <Droplets className="w-10 h-10" />
               </div>
-              <h3 className="text-xl font-bold text-white dark:text-slate-100 uppercase tracking-tight">Zero Fillers or Additives</h3>
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white uppercase tracking-tight">Zero Fillers or Additives</h3>
               <p className="mt-3 text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
                 Pure active compounds only. Independently verified composition for reliable in vitro studies.
               </p>

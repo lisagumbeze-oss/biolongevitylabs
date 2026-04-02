@@ -13,10 +13,8 @@ export default function ShippingAndPaymentsPage() {
 
                 {/* Header */}
                 <div className="flex flex-col gap-4 text-center">
-                    <h1 className="text-4xl md:text-5xl font-black leading-tight tracking-tight text-slate-900 dark:text-white">
                     <h1 className="text-4xl md:text-5xl font-black leading-tight tracking-tight text-white">
                         Shipping & <span className="text-primary">Payments</span>
-                    </h1>
                     </h1>
                     <p className="text-slate-600 dark:text-slate-400 text-lg font-medium leading-relaxed max-w-2xl mx-auto">
                         Everything you need to know about our fast, secure shipping protocols and payment options. Let us handle the logistics so you can focus on the research.

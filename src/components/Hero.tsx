@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { ArrowRight, FlaskConical, ShieldCheck, Zap } from "lucide-react";
 
 const Hero = () => {
@@ -86,6 +87,7 @@ const Hero = () => {
                         >
                             <Link
                                 href="/shop"
+                                aria-label="Shop our full peptide catalog"
                                 className="group inline-flex items-center gap-2 px-8 py-4 bg-primary hover:bg-primary/90 text-white font-black rounded-2xl transition-all shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:scale-105 text-base"
                             >
                                 Shop Catalog
@@ -93,6 +95,7 @@ const Hero = () => {
                             </Link>
                             <Link
                                 href="/shop?filter=deals"
+                                aria-label="View current research peptide deals"
                                 className="inline-flex items-center gap-2 px-8 py-4 bg-white/10 hover:bg-white/15 border border-white/10 text-white font-bold rounded-2xl transition-all text-base"
                             >
                                 View Deals
@@ -128,11 +131,13 @@ const Hero = () => {
                     >
                         {/* Glowing ring */}
                         <div className="absolute inset-0 rounded-3xl bg-linear-to-br from-primary/30 to-violet-500/20 blur-xl scale-105" />
-                        <div className="relative h-full w-full rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
-                            <img
+                        <div className="relative h-full w-full rounded-2xl overflow-hidden border border-white/10 shadow-2xl min-h-[500px]">
+                            <Image
                                 src="/hero-peptides.jpg"
                                 alt="Bio-Longevity Research"
-                                className="h-full w-full object-cover transform motion-safe:hover:scale-110 transition-transform duration-1000"
+                                fill
+                                priority
+                                className="object-cover transform motion-safe:hover:scale-110 transition-transform duration-1000"
                             />
                             <div className="absolute inset-0 bg-linear-to-t from-slate-900/60 via-transparent to-transparent" />
                         </div>

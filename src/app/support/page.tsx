@@ -41,6 +41,74 @@ export default function ContactPage() {
 
     return (
         <main className="grow flex flex-col items-center py-16 px-4 md:px-10 lg:px-40 w-full mt-10">
+            {/* FAQ Schema */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "FAQPage",
+                        "mainEntity": [
+                            {
+                                "@type": "Question",
+                                "name": "How can I track my order?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "Once your order ships, you'll receive a confirmation email with a tracking link. Guest users will receive tracking directly to their provided email address."
+                                }
+                            },
+                            {
+                                "@type": "Question",
+                                "name": "What is your refund policy?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "Due to the sensitive nature of research compounds, RUO items are strictly non-refundable once shipped to ensure absolute purity and prevent contamination risks. See our policies page for details."
+                                }
+                            },
+                            {
+                                "@type": "Question",
+                                "name": "Do I need an account to buy?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "No, you can check out securely as a guest. We respect your privacy. All necessary order details and purity certifications will be sent directly to your email."
+                                }
+                            },
+                            {
+                                "@type": "Question",
+                                "name": "Are these products for human use?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "No. All BioLongevity Labs products are strictly sold for laboratory Research Use Only (RUO). They are not intended for human or animal consumption."
+                                }
+                            }
+                        ]
+                    })
+                }}
+            />
+            {/* Breadcrumb Schema */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "BreadcrumbList",
+                        "itemListElement": [
+                            {
+                                "@type": "ListItem",
+                                "position": 1,
+                                "name": "Home",
+                                "item": "https://biolongevitylabss.com/"
+                            },
+                            {
+                                "@type": "ListItem",
+                                "position": 2,
+                                "name": "Support",
+                                "item": "https://biolongevitylabss.com/support"
+                            }
+                        ]
+                    })
+                }}
+            />
             <div className="max-w-[1200px] w-full flex flex-col gap-12">
 
                 <div className="flex flex-col gap-4 text-center md:text-left">
@@ -226,7 +294,7 @@ export default function ContactPage() {
                             <HelpCircle className="w-7 h-7" />
                         </div>
                         <div>
-                            <h2 className="text-3xl font-black leading-tight tracking-tight text-white uppercase">Frequently Asked Questions</h2>
+                            <h2 className="text-3xl font-black leading-tight tracking-tight text-slate-900 dark:text-white uppercase">Frequently Asked Questions</h2>
                         </div>
                     </div>
 

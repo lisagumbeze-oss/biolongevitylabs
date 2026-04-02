@@ -1,6 +1,7 @@
 "use client";
 
 import React from 'react';
+import Image from 'next/image';
 import { Microscope, Activity, Shield, Sparkles, Beaker, ShieldCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -47,7 +48,7 @@ const AboutSection = () => {
                             <span className="text-[10px] font-black uppercase tracking-widest text-primary italic">Pioneering the Future</span>
                         </motion.div>
 
-                        <motion.h2 variants={fadeInUp} className="text-4xl md:text-6xl font-black tracking-tighter text-white leading-[0.9] mb-8">
+                        <motion.h2 variants={fadeInUp} className="text-4xl md:text-6xl font-black tracking-tighter text-slate-900 dark:text-white leading-[0.9] mb-8">
                             Redefining Human <span className="text-primary italic">Potential</span> Through Science.
                         </motion.h2>
 
@@ -81,9 +82,10 @@ const AboutSection = () => {
                         {/* 
                             Using a high-quality relevant Unsplash image representing a modern lab environment.
                         */}
-                        <img
+                        <Image
                             src="https://images.unsplash.com/photo-1579154235821-f0967969324d?auto=format&fit=crop&w=1200&q=80"
                             alt="Laboratory Research"
+                            fill
                             className="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-all duration-1000 ease-out"
                         />
                         <div className="absolute inset-0 bg-linear-to-t from-slate-950/80 via-transparent to-transparent pointer-events-none" />

@@ -5,7 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/admin/', '/api/', '/cart', '/checkout', '/payment/'],
+      disallow: ['/admin/', '/api/', '/cart', '/checkout', '/payment/', '/search'],
     },
     sitemap: 'https://biolongevitylabss.com/sitemap.xml',
   };

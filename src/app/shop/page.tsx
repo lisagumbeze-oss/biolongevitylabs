@@ -79,6 +79,30 @@ export default function ShopPage() {
 
     return (
         <div className="bg-white dark:bg-slate-950 min-h-screen transition-colors">
+            {/* Breadcrumb Schema */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "BreadcrumbList",
+                        "itemListElement": [
+                            {
+                                "@type": "ListItem",
+                                "position": 1,
+                                "name": "Home",
+                                "item": "https://biolongevitylabss.com/"
+                            },
+                            {
+                                "@type": "ListItem",
+                                "position": 2,
+                                "name": "Shop",
+                                "item": "https://biolongevitylabss.com/shop"
+                            }
+                        ]
+                    })
+                }}
+            />
             <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-20">
 
                 {/* Page Header */}

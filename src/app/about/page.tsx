@@ -1,6 +1,7 @@
 "use client";
 
 import React from 'react';
+import Image from 'next/image';
 import { Microscope, Activity, Shield, CheckCircle2, FlaskConical, Award } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -22,12 +23,38 @@ const staggerContainer = {
 export default function AboutPage() {
     return (
         <div className="bg-white dark:bg-slate-900 min-h-screen pt-24 pb-20">
+            {/* Breadcrumb Schema */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "BreadcrumbList",
+                        "itemListElement": [
+                            {
+                                "@type": "ListItem",
+                                "position": 1,
+                                "name": "Home",
+                                "item": "https://biolongevitylabss.com/"
+                            },
+                            {
+                                "@type": "ListItem",
+                                "position": 2,
+                                "name": "About",
+                                "item": "https://biolongevitylabss.com/about"
+                            }
+                        ]
+                    })
+                }}
+            />
             {/* Hero Section for About */}
             <section className="relative overflow-hidden mb-24">
                 <div className="absolute inset-0 bg-slate-900">
-                    <img
+                    <Image
                         src="https://biolongevitylabss.com/wp-content/uploads/2024/12/Bg1-ABOUT-US.jpg"
                         alt="BioLongevity Labs Research"
+                        fill
+                        priority
                         className="w-full h-full object-cover opacity-40 mix-blend-overlay"
                     />
                     <div className="absolute inset-0 bg-linear-to-t from-slate-900 via-slate-900/80 to-transparent" />

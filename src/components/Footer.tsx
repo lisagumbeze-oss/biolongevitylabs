@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Beaker, ShieldCheck, Truck, Award, Lock } from "lucide-react";
+import { Beaker, ShieldCheck, Truck, Award, Lock, Twitter, Instagram, Linkedin, Facebook } from "lucide-react";
 import PolicyModal from "./PolicyModal";
 import { privacyPolicy, ruoPolicy } from "@/data/policies";
 
@@ -41,7 +41,7 @@ const Footer = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                 <div className="md:flex md:items-center md:justify-between">
                     <div className="flex justify-center md:justify-start mb-6 md:mb-0">
-                        <Link href="/" className="flex items-center gap-3 group">
+                        <Link href="/" aria-label="BioLongevity Labs Home" className="flex items-center gap-3 group">
                             <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center border border-primary/20 group-hover:bg-primary/20 transition-all">
                                 <Image
                                     src="/favicon.png"
@@ -81,29 +81,66 @@ const Footer = () => {
                     </div>
                 </div>
 
-                {/* Verified Supplier Banner */}
-                <div className="mt-12 flex justify-center">
-                    <Link
-                        href="https://researchacademy.institute/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group flex flex-col sm:flex-row items-center gap-4 bg-slate-50 hover:bg-white dark:bg-slate-800/50 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-primary/50 dark:hover:border-primary/50 transition-all rounded-2xl p-4 md:px-8 shadow-sm hover:shadow-md max-w-lg w-full"
-                    >
-                        <div className="shrink-0 bg-white p-2 rounded-xl shadow-sm border border-slate-100 dark:border-slate-600">
-                            {/* Standard text fallback if logo is unavailable, but an img tag would be ideal */}
-                            <div className="font-serif font-black text-slate-800 text-lg leading-none flex flex-col text-center">
-                                <span>RESEARCH</span>
-                                <span className="text-xs text-slate-500 tracking-widest">ACADEMY</span>
+                {/* Social Links & Verified Supplier Section */}
+                <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8 items-center border-t border-slate-100 dark:border-slate-800 pt-12">
+                    <div className="flex flex-col items-center md:items-start gap-6">
+                        <div className="flex items-center gap-4">
+                            <Link
+                                href="https://twitter.com/biolongevity"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="Follow us on X (Twitter)"
+                                className="w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-white transition-all border border-slate-100 dark:border-slate-700 hover:border-primary"
+                            >
+                                <Twitter className="w-5 h-5" />
+                            </Link>
+                            <Link
+                                href="https://instagram.com/biolongevity"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="Follow us on Instagram"
+                                className="w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-white transition-all border border-slate-100 dark:border-slate-700 hover:border-primary"
+                            >
+                                <Instagram className="w-5 h-5" />
+                            </Link>
+                            <Link
+                                href="https://facebook.com/biolongevity"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="Follow us on Facebook"
+                                className="w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-white transition-all border border-slate-100 dark:border-slate-700 hover:border-primary"
+                            >
+                                <Facebook className="w-5 h-5" />
+                            </Link>
+                        </div>
+                        <p className="text-xs text-slate-400 font-medium max-w-sm text-center md:text-left">
+                            Join our community of precision researchers. Stay updated with the latest in biotechnology and peptide science.
+                        </p>
+                    </div>
+
+                    <div className="flex justify-center md:justify-end">
+                        <Link
+                            href="https://researchacademy.institute/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="Visit Research Academy Institute Website"
+                            className="group flex flex-col sm:flex-row items-center gap-4 bg-slate-50 hover:bg-white dark:bg-slate-800/50 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-primary/50 dark:hover:border-primary/50 transition-all rounded-2xl p-4 md:px-8 shadow-sm hover:shadow-md w-full max-w-md"
+                        >
+                            <div className="shrink-0 bg-white p-2 rounded-xl shadow-sm border border-slate-100 dark:border-slate-600">
+                                <div className="font-serif font-black text-slate-800 text-lg leading-none flex flex-col text-center">
+                                    <span>RESEARCH</span>
+                                    <span className="text-xs text-slate-500 tracking-widest">ACADEMY</span>
+                                </div>
                             </div>
-                        </div>
-                        <div className="flex flex-col text-center sm:text-left">
-                            <span className="text-xs font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-1">Proud Member</span>
-                            <span className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2 justify-center sm:justify-start">
-                                <ShieldCheck className="w-5 h-5 text-emerald-500" />
-                                Verified Supplier
-                            </span>
-                        </div>
-                    </Link>
+                            <div className="flex flex-col text-center sm:text-left">
+                                <span className="text-xs font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-1">Proud Member</span>
+                                <span className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2 justify-center sm:justify-start">
+                                    <ShieldCheck className="w-5 h-5 text-emerald-500" />
+                                    Verified Supplier
+                                </span>
+                            </div>
+                        </Link>
+                    </div>
                 </div>
                 <div className="mt-8 border-t border-slate-200 dark:border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center">
                     <p className="text-sm text-slate-400 text-center md:text-left font-medium">
