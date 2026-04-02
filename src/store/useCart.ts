@@ -73,10 +73,9 @@ export const useCart = create<CartStore>()(
             onRehydrateStorage: () => (state) => {
                 state?.setHasHydrated(true);
             },
-            partialize: (state) =>
-                Object.fromEntries(
-                    Object.entries(state).filter(([key]) => !['_hasHydrated', 'isCartOpen'].includes(key))
-                ) as CartStore,
+            partialize: (state) => ({ 
+                items: state.items 
+            }),
         }
     )
 );
