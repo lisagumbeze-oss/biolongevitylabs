@@ -19,6 +19,8 @@ interface CartStore {
     total: number;
     isCartOpen: boolean;
     setIsCartOpen: (open: boolean) => void;
+    _hasHydrated: boolean;
+    setHasHydrated: (state: boolean) => void;
 }
 
 export const useCart = create<CartStore>()(
@@ -26,6 +28,8 @@ export const useCart = create<CartStore>()(
         (set, get) => ({
             items: [],
             isCartOpen: false,
+            _hasHydrated: false,
+            setHasHydrated: (state) => set({ _hasHydrated: state }),
             setIsCartOpen: (open: boolean) => set({ isCartOpen: open }),
             addItem: (product, quantity = 1) => {
                 const items = get().items;
@@ -66,9 +70,12 @@ export const useCart = create<CartStore>()(
         }),
         {
             name: 'cart-storage',
+            onRehydrateStorage: () => (state) => {
+                state?.setHasHydrated(true);
+            },
             partialize: (state) =>
                 Object.fromEntries(
-                    Object.entries(state).filter(([key]) => !['isCartOpen'].includes(key))
+                    Object.entries(state).filter(([key]) => !['_hasHydrated', 'isCartOpen'].includes(key))
                 ) as CartStore,
         }
     )

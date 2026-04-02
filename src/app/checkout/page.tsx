@@ -39,10 +39,11 @@ interface StoreSettings {
 }
 
 export default function CheckoutPage() {
-    const { items, clearCart } = useCart();
+    const { items, clearCart, _hasHydrated } = useCart();
     const router = useRouter();
     const [settings, setSettings] = useState<StoreSettings | null>(null);
     const [selectedPayment, setSelectedPayment] = useState("");
+    const [isPending, setIsPending] = useState(false);
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
@@ -127,7 +128,9 @@ export default function CheckoutPage() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (isPending) return;
 
+        setIsPending(true);
         const orderId = `#ORD-${Math.floor(100000000 + Math.random() * 900000000)}`;
 
         const orderData = {
@@ -142,13 +145,15 @@ export default function CheckoutPage() {
                 product_id: item.id,
                 product_name: item.name,
                 quantity: item.quantity,
-                price: item.price
+                price: item.price,
+                selectedOptions: item.selectedOptions
             })),
             shipping_address: {
                 street: formData.address,
                 city: formData.city,
                 state: formData.state,
-                zip: formData.zipCode
+                zip: formData.zipCode,
+                country: formData.country
             },
             payment_method: settings?.paymentMethods.find(pm => pm.id === selectedPayment)?.name || 'Transfer'
         };
@@ -160,7 +165,10 @@ export default function CheckoutPage() {
                 body: JSON.stringify(orderData)
             });
 
-            if (!res.ok) throw new Error('Failed to create order');
+            if (!res.ok) {
+                const errorData = await res.json();
+                throw new Error(errorData.error || 'Failed to create order');
+            }
 
             // Track coupon usage
             if (appliedCoupon) {
@@ -174,10 +182,22 @@ export default function CheckoutPage() {
             clearCart();
             // Pass the generated order ID to the confirmation page
             router.push(`/order-confirmation?id=${encodeURIComponent(orderId)}`);
-        } catch (error) {
+        } catch (error: any) {
             console.error('Checkout error:', error);
+            alert(`Checkout Error: ${error.message || 'Something went wrong. Please try again.'}`);
+        } finally {
+            setIsPending(false);
         }
     };
+
+    if (!_hasHydrated) {
+        return (
+            <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
+                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary"></div>
+                <p className="mt-4 text-slate-500 font-bold uppercase tracking-widest text-xs">Loading your cart...</p>
+            </div>
+        );
+    }
 
     if (items.length === 0) {
         return (
@@ -513,10 +533,20 @@ export default function CheckoutPage() {
                             <div className="mt-10">
                                 <button
                                     type="submit"
-                                    className="w-full bg-primary text-white font-black py-5 rounded-2xl flex items-center justify-center gap-3 hover:bg-primary/95 transition-all shadow-xl shadow-primary/25 active:scale-[0.98] text-lg uppercase tracking-widest"
+                                    disabled={isPending}
+                                    className={`w-full bg-primary text-white font-black py-5 rounded-2xl flex items-center justify-center gap-3 transition-all shadow-xl shadow-primary/25 active:scale-[0.98] text-lg uppercase tracking-widest ${isPending ? "opacity-70 cursor-not-allowed" : "hover:bg-primary/95"}`}
                                 >
-                                    Confirm Order
-                                    <ChevronRight className="w-6 h-6" />
+                                    {isPending ? (
+                                        <>
+                                            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                                            Processing...
+                                        </>
+                                    ) : (
+                                        <>
+                                            Confirm Order
+                                            <ChevronRight className="w-6 h-6" />
+                                        </>
+                                    )}
                                 </button>
                             </div>
 

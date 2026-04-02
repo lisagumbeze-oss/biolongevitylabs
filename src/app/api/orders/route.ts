@@ -101,13 +101,23 @@ async function sendOrderEmails(orderData: any) {
 
     try {
         const totalNum = parseFloat(orderData.total.replace('$', ''));
-        const items = (orderData.full_items || orderData.items || []).map((item: any) => ({
-            id: item.product_id || item.id,
-            name: item.name || item.product_name || 'Product',
-            price: item.price || 0,
-            quantity: item.quantity || 1,
-            variationString: item.variationString || item.variation_name || ''
-        }));
+        const items = (orderData.full_items || orderData.items || []).map((item: any) => {
+            let variationString = item.variationString || item.variation_name || '';
+            
+            if (!variationString && item.selectedOptions) {
+                variationString = Object.entries(item.selectedOptions)
+                    .map(([key, value]) => `${key}: ${value}`)
+                    .join(', ');
+            }
+
+            return {
+                id: item.product_id || item.id,
+                name: item.name || item.product_name || 'Product',
+                price: item.price || 0,
+                quantity: item.quantity || 1,
+                variationString
+            };
+        });
 
         // Send to Customer
         await resend.emails.send({
@@ -190,7 +200,8 @@ export async function POST(request: Request) {
                 if (itemsError) throw itemsError;
             }
 
-            // 3. Send Emails asynchronously (but awaited to avoid Vercel killing the process)
+            // 3. Send Emails (Awaiting to ensure completion in serverless context)
+            // But we wrap in a promise to allow future optimization if needed
             try {
                 await sendOrderEmails(orderData);
             } catch (emailErr) {
