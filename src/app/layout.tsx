@@ -58,6 +58,7 @@ export const metadata: Metadata = {
 
 import BottomNav from "@/components/BottomNav";
 import CartDrawer from "@/components/CartDrawer";
+import { KeepAlive } from "@/components/KeepAlive";
 
 export default function RootLayout({
   children,
@@ -70,6 +71,7 @@ export default function RootLayout({
         className={`${inter.variable} font-sans antialiased min-h-screen flex flex-col bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300`}
       >
         <Providers>
+          <KeepAlive />
           <React.Suspense fallback={null}>
             <LoadingProgress />
           </React.Suspense>

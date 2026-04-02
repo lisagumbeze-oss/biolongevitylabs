@@ -2,25 +2,31 @@ export async function register() {
   if (process.env.NEXT_RUNTIME === 'nodejs') {
     const isProd = process.env.NODE_ENV === 'production';
     
-    // Only run in production to avoid unnecessary pings during development
+    // Always log that instrumentation is at least attempting to start
+    console.log(`[Instrumentation] Registering server-side hooks (Mode: ${process.env.NODE_ENV})`);
+
+    // Only run the pinger in production to avoid cluttering dev logs
     if (!isProd) return;
 
-    // Use RENDER_EXTERNAL_URL from Render env, fallback to provided site URL
     const baseUrl = process.env.RENDER_EXTERNAL_URL || 'https://biolongevitylabss.com';
     const pingUrl = `${baseUrl}/api/ping`;
     
     console.log(`[Keep-Alive] Initializing auto-ping for: ${pingUrl}`);
     
-    // Ping immediately on start
-    fetch(pingUrl).catch(err => console.error('[Keep-Alive] Initial ping failed:', err));
+    // Immediate ping to verify connectivity on boot
+    fetch(pingUrl)
+      .then(r => console.log(`[Keep-Alive] Initial boot ping success: ${r.status}`))
+      .catch(err => console.error('[Keep-Alive] Initial boot ping failed:', err.message));
 
-    // Then ping every 5 minutes (300,000 ms)
+    // Ping every 5 minutes
     setInterval(async () => {
       try {
+        const start = Date.now();
         const response = await fetch(pingUrl);
-        console.log(`[Keep-Alive] Ping sent to ${pingUrl}. Status: ${response.status}`);
-      } catch (error) {
-        console.error('[Keep-Alive] Ping failed:', error);
+        const duration = Date.now() - start;
+        console.log(`[Keep-Alive] Ping SUCCESS | Status: ${response.status} | Duration: ${duration}ms | URL: ${pingUrl}`);
+      } catch (error: any) {
+        console.error(`[Keep-Alive] Ping FAILED | Error: ${error.message} | URL: ${pingUrl}`);
       }
     }, 5 * 60 * 1000);
   }
