@@ -167,10 +167,17 @@ export default function ProductsManagement() {
             price: v.price
         })) : [];
 
+        // Auto-calculate min/max price from variations so the shop card shows the correct range
+        const variationPrices = variations.map(v => v.price).filter(p => typeof p === 'number' && !isNaN(p));
+        const minPrice = isVariable && variationPrices.length > 0 ? Math.min(...variationPrices) : null;
+        const maxPrice = isVariable && variationPrices.length > 0 ? Math.max(...variationPrices) : null;
+
         const productData: Partial<Product> & { id: string } = {
             id: editingProduct?.id || `prod_${Date.now()}`,
             name: formData.get('name') as string,
             price: parseFloat(formData.get('price') as string),
+            minPrice,
+            maxPrice,
             category: formData.get('category') as Product['category'],
             form: formData.get('form') as Product['form'],
             description: formData.get('description') as string,

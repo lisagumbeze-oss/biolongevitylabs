@@ -292,17 +292,17 @@ export default function ProductDetailsView({ id }: Props) {
 
                             <div className="flex flex-col gap-4">
                                 <label className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-widest px-1">Quantity</label>
-                                <div className="flex items-center border border-slate-200 dark:border-slate-800 rounded-3xl h-14 bg-white dark:bg-slate-950 w-full sm:w-fit">
+                            <div className="flex items-center border border-slate-200 dark:border-slate-800 rounded-3xl h-14 bg-white dark:bg-slate-950 w-full sm:w-fit">
                                     <button
                                         onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                                        className="w-14 h-full flex items-center justify-center hover:text-primary transition-colors border-r border-slate-200 dark:border-slate-800"
+                                        className="w-14 h-full flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-colors border-r border-slate-200 dark:border-slate-800"
                                     >
                                         <Minus className="w-4 h-4" />
                                     </button>
-                                    <span className="px-10 font-black text-lg min-w-16 text-center">{quantity}</span>
+                                    <span className="px-10 font-black text-lg min-w-16 text-center text-slate-900 dark:text-white">{quantity}</span>
                                     <button
                                         onClick={() => setQuantity(quantity + 1)}
-                                        className="w-14 h-full flex items-center justify-center hover:text-primary transition-colors border-l border-slate-200 dark:border-slate-800"
+                                        className="w-14 h-full flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-colors border-l border-slate-200 dark:border-slate-800"
                                     >
                                         <Plus className="w-4 h-4" />
                                     </button>
