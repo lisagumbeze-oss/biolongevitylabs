@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useCart } from "@/store/useCart";
 import { Lock, Truck, CreditCard, ChevronRight, Info, CheckCircle2, ShieldCheck, MapPin, Mail, User, Phone, Tag } from "lucide-react";
 import Link from "next/link";
@@ -39,8 +39,29 @@ interface StoreSettings {
 }
 
 export default function CheckoutPage() {
-    const { items, clearCart, _hasHydrated } = useCart();
+    const { items, clearCart, _hasHydrated, getTotal } = useCart();
     const router = useRouter();
+    const [isMounted, setIsMounted] = useState(false);
+    const hydrationTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const [hydrationGaveUp, setHydrationGaveUp] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+        // Safety net: if hydration hasn't fired in 2.5s, show the page anyway
+        hydrationTimeout.current = setTimeout(() => {
+            setHydrationGaveUp(true);
+        }, 2500);
+        return () => {
+            if (hydrationTimeout.current) clearTimeout(hydrationTimeout.current);
+        };
+    }, []);
+
+    // Clear the timeout once hydrated
+    useEffect(() => {
+        if (_hasHydrated && hydrationTimeout.current) {
+            clearTimeout(hydrationTimeout.current);
+        }
+    }, [_hasHydrated]);
     const [settings, setSettings] = useState<StoreSettings | null>(null);
     const [selectedPayment, setSelectedPayment] = useState("");
     const [isPending, setIsPending] = useState(false);
@@ -81,7 +102,7 @@ export default function CheckoutPage() {
         fetchSettings();
     }, []);
 
-    const subtotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    const subtotal = getTotal();
     const shippingZone = formData.country === "USA" ? settings?.shipping.usa : settings?.shipping.international;
     const standardRate = shippingZone ? parseFloat(shippingZone.standardRate) : 15.0;
     const priorityRate = shippingZone ? parseFloat(shippingZone.priorityRate) : 45.0;
@@ -106,6 +127,7 @@ export default function CheckoutPage() {
     }
 
     const total = Math.max(0, subtotal - discount) + shippingPrice;
+    const isReady = isMounted && (_hasHydrated || hydrationGaveUp);
 
     const handleApplyCoupon = () => {
         setCouponError("");
@@ -190,7 +212,7 @@ export default function CheckoutPage() {
         }
     };
 
-    if (!_hasHydrated) {
+    if (!isReady) {
         return (
             <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
                 <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary"></div>

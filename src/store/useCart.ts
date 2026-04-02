@@ -1,7 +1,7 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
 
-interface CartItem {
+export interface CartItem {
     id: string;
     name: string;
     price: number;
@@ -12,70 +12,84 @@ interface CartItem {
 
 interface CartStore {
     items: CartItem[];
-    addItem: (product: Omit<CartItem, 'quantity'>, quantity?: number) => void;
-    removeItem: (id: string) => void;
-    updateQuantity: (id: string, quantity: number) => void;
-    clearCart: () => void;
-    total: number;
-    isCartOpen: boolean;
-    setIsCartOpen: (open: boolean) => void;
     _hasHydrated: boolean;
+    isCartOpen: boolean;
     setHasHydrated: (state: boolean) => void;
+    setIsCartOpen: (open: boolean) => void;
+    addItem: (product: Omit<CartItem, 'quantity'>, quantity?: number) => void;
+    removeItem: (id: string, selectedOptions?: { [key: string]: string }) => void;
+    updateQuantity: (id: string, quantity: number, selectedOptions?: { [key: string]: string }) => void;
+    clearCart: () => void;
+    getTotal: () => number;
 }
 
 export const useCart = create<CartStore>()(
     persist(
         (set, get) => ({
             items: [],
-            isCartOpen: false,
             _hasHydrated: false,
+            isCartOpen: false,
             setHasHydrated: (state) => set({ _hasHydrated: state }),
-            setIsCartOpen: (open: boolean) => set({ isCartOpen: open }),
+            setIsCartOpen: (open) => set({ isCartOpen: open }),
+
             addItem: (product, quantity = 1) => {
                 const items = get().items;
-                const existingItem = items.find((item) => 
-                    item.id === product.id && 
-                    JSON.stringify(item.selectedOptions) === JSON.stringify(product.selectedOptions)
+                const existingIndex = items.findIndex((item) =>
+                    item.id === product.id &&
+                    JSON.stringify(item.selectedOptions ?? {}) === JSON.stringify(product.selectedOptions ?? {})
                 );
 
-                if (existingItem) {
-                    set({
-                        items: items.map((item) =>
-                            (item.id === product.id && JSON.stringify(item.selectedOptions) === JSON.stringify(product.selectedOptions))
-                                ? { ...item, quantity: item.quantity + quantity }
-                                : item
-                        ),
-                    });
+                if (existingIndex >= 0) {
+                    const updated = [...items];
+                    updated[existingIndex] = {
+                        ...updated[existingIndex],
+                        quantity: updated[existingIndex].quantity + quantity,
+                    };
+                    set({ items: updated });
                 } else {
                     set({ items: [...items, { ...product, quantity }] });
                 }
             },
-            removeItem: (id) => {
-                set({ items: get().items.filter((item) => item.id !== id) });
-            },
-            updateQuantity: (id, quantity) => {
+
+            removeItem: (id, selectedOptions) => {
                 set({
-                    items: get().items.map((item) =>
-                        item.id === id ? { ...item, quantity: Math.max(0, quantity) } : item
-                    ),
+                    items: get().items.filter((item) => {
+                        if (item.id !== id) return true;
+                        if (selectedOptions !== undefined) {
+                            return JSON.stringify(item.selectedOptions ?? {}) !== JSON.stringify(selectedOptions ?? {});
+                        }
+                        return false;
+                    }),
                 });
             },
-            clearCart: () => set({ items: [] }),
-            get total() {
-                return get().items.reduce(
-                    (acc, item) => acc + item.price * item.quantity,
-                    0
-                );
+
+            updateQuantity: (id, quantity, selectedOptions) => {
+                set({
+                    items: get().items.map((item) => {
+                        if (item.id !== id) return item;
+                        if (selectedOptions !== undefined &&
+                            JSON.stringify(item.selectedOptions ?? {}) !== JSON.stringify(selectedOptions ?? {})) {
+                            return item;
+                        }
+                        return { ...item, quantity: Math.max(1, quantity) };
+                    }),
+                });
             },
+
+            clearCart: () => set({ items: [] }),
+
+            getTotal: () =>
+                get().items.reduce((acc, item) => acc + item.price * item.quantity, 0),
         }),
         {
-            name: 'cart-storage',
+            name: 'biolongevity-cart-v2',
+            storage: createJSONStorage(() => localStorage),
             onRehydrateStorage: () => (state) => {
-                state?.setHasHydrated(true);
+                if (state) {
+                    state.setHasHydrated(true);
+                }
             },
-            partialize: (state) => ({ 
-                items: state.items 
-            }),
+            partialize: (state) => ({ items: state.items }),
         }
     )
 );
