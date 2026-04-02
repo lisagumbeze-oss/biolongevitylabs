@@ -27,6 +27,7 @@ interface OrderRow {
     created_at: string;
     customer_name: string;
     customer_email: string;
+    customer_phone?: string;
     total_amount: number;
     status: string;
     shipping_address: Record<string, unknown>;
@@ -63,6 +64,7 @@ export async function GET() {
                 created_at: o.created_at,
                 customer: o.customer_name,
                 email: o.customer_email,
+                phone: o.customer_phone,
                 total: `$${o.total_amount.toFixed(2)}`,
                 status: o.status.charAt(0).toUpperCase() + o.status.slice(1).toLowerCase(),
                 items: o.order_items?.length || 0,
@@ -172,6 +174,7 @@ export async function POST(request: Request) {
                 order_number: orderData.id,
                 customer_name: orderData.customer,
                 customer_email: orderData.email,
+                customer_phone: orderData.phone || null,
                 total_amount: parseFloat((orderData.total || '$0').replace('$', '')),
                 status: 'PENDING',
                 shipping_address: orderData.shipping_address || {},
