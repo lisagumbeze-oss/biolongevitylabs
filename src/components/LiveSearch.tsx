@@ -37,7 +37,7 @@ export default function LiveSearch() {
                     <Search className="w-5 h-5 text-slate-400 group-focus-within:text-primary transition-colors" />
                 </div>
                 <input
-                    className="block w-full pl-12 pr-10 py-3 border border-slate-200 dark:border-slate-700 rounded-2xl leading-5 bg-slate-50 dark:bg-slate-800/50 text-foreground placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary sm:text-sm transition-all shadow-inner"
+                    className="block w-full pl-12 pr-10 py-3 border border-slate-200 dark:border-slate-700 rounded-2xl leading-5 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary sm:text-sm transition-all shadow-inner"
                     placeholder="Search research products..."
                     type="text"
                     value={query}
