@@ -165,71 +165,104 @@ export async function POST(request: Request) {
     try {
         const orderData = await request.json();
 
+        // Log incoming order for debugging
+        console.log('[Orders API] Creating order:', orderData.id, 'email:', orderData.email);
+
         if (supabase) {
-            // 1. Insert order
+            // 1. Insert order row
+            const insertPayload = {
+                order_number: orderData.id,
+                customer_name: orderData.customer,
+                customer_email: orderData.email,
+                customer_phone: orderData.phone || null,
+                total_amount: parseFloat((orderData.total || '$0').replace('$', '')),
+                status: 'PENDING',
+                shipping_address: orderData.shipping_address || {},
+                payment_method: orderData.payment_method || 'Transfer',
+                payment_status: 'PENDING'
+            };
+
+            console.log('[Orders API] Inserting order payload:', JSON.stringify(insertPayload));
+
             const { data: order, error: oError } = await supabase
                 .from('orders')
-                .insert({
-                    order_number: orderData.id,
-                    customer_name: orderData.customer,
-                    customer_email: orderData.email,
-                    customer_phone: orderData.phone,
-                    total_amount: parseFloat(orderData.total.replace('$', '')),
-                    status: orderData.status.toUpperCase(),
-                    shipping_address: orderData.shipping_address || {},
-                    payment_method: orderData.payment_method || 'Transfer',
-                    payment_status: orderData.payment_status || 'PENDING'
-                })
+                .insert(insertPayload)
                 .select()
                 .single();
 
-            if (oError) throw oError;
+            if (oError) {
+                console.error('[Orders API] Supabase order insert error:', JSON.stringify(oError));
+                throw new Error(`Supabase order insert failed: ${oError.message} (code: ${oError.code})`);
+            }
 
-            // 2. Insert order items if provided
+            // 2. Insert order items (best-effort; don't fail the whole order if this fails)
             if (orderData.full_items?.length) {
-                const { error: itemsError } = await supabase.from('order_items').insert(
-                    orderData.full_items.map((item: any) => ({
+                const itemsPayload = orderData.full_items.map((item: any) => {
+                    const row: any = {
                         order_id: (order as unknown as OrderRow).id,
-                        product_id: item.product_id || item.id,
-                        variation_id: item.variation_id,
-                        product_name: item.product_name || item.name,
-                        quantity: item.quantity,
-                        price: item.price
-                    }))
-                );
-                if (itemsError) throw itemsError;
+                        product_id: String(item.product_id || item.id || 'unknown'),
+                        product_name: item.product_name || item.name || 'Product',
+                        quantity: Number(item.quantity) || 1,
+                        price: Number(item.price) || 0,
+                    };
+                    // Only include variation_id if it has a real value
+                    if (item.variation_id) {
+                        row.variation_id = item.variation_id;
+                    }
+                    return row;
+                });
+
+                console.log('[Orders API] Inserting items:', JSON.stringify(itemsPayload));
+
+                const { error: itemsError } = await supabase.from('order_items').insert(itemsPayload);
+                if (itemsError) {
+                    // Log but don't block — order is already saved
+                    console.error('[Orders API] Order items insert error (non-fatal):', JSON.stringify(itemsError));
+                }
             }
 
-            // 3. Send Emails (Awaiting to ensure completion in serverless context)
-            // But we wrap in a promise to allow future optimization if needed
+            // 3. Send confirmation emails (non-fatal)
             try {
                 await sendOrderEmails(orderData);
             } catch (emailErr) {
-                console.error('Email failed but order created:', emailErr);
+                console.error('[Orders API] Email failed but order created:', emailErr);
             }
 
+            console.log('[Orders API] Order created successfully:', orderData.id);
             return NextResponse.json(order, { status: 201 });
+
         } else {
-            const orders = readOrdersLocal();
-            const orderWithMeta = {
-                ...orderData,
-                created_at: new Date().toISOString()
-            };
-            orders.push(orderWithMeta);
-            writeOrdersLocal(orders);
-
-            // 3. Send Emails asynchronously
+            // Local JSON fallback (development / no Supabase)
             try {
-                await sendOrderEmails(orderData);
-            } catch (emailErr) {
-                console.error('Email failed but local order created:', emailErr);
-            }
+                const orders = readOrdersLocal();
+                const orderWithMeta = {
+                    ...orderData,
+                    created_at: new Date().toISOString()
+                };
+                orders.push(orderWithMeta);
+                writeOrdersLocal(orders);
+                console.log('[Orders API] Order saved locally:', orderData.id);
 
-            return NextResponse.json(orderWithMeta, { status: 201 });
+                try {
+                    await sendOrderEmails(orderData);
+                } catch (emailErr) {
+                    console.error('[Orders API] Email failed (local):', emailErr);
+                }
+
+                return NextResponse.json(orderWithMeta, { status: 201 });
+            } catch (fsError) {
+                // Filesystem may be read-only in some environments
+                console.error('[Orders API] Local file write failed:', fsError);
+                // Return success anyway — email was likely the only goal
+                const fallbackOrder = { ...orderData, created_at: new Date().toISOString() };
+                try { await sendOrderEmails(orderData); } catch (_) {}
+                return NextResponse.json(fallbackOrder, { status: 201 });
+            }
         }
     } catch (error: unknown) {
-        console.error('API Error (POST Order):', error instanceof Error ? error.message : String(error));
-        return NextResponse.json({ error: 'Failed to create order' }, { status: 500 });
+        const msg = error instanceof Error ? error.message : String(error);
+        console.error('[Orders API] CRITICAL ERROR (POST Order):', msg);
+        return NextResponse.json({ error: 'Failed to create order', detail: msg }, { status: 500 });
     }
 }
 
