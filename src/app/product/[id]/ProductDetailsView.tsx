@@ -66,6 +66,45 @@ export default function ProductDetailsView({ id }: Props) {
         fetchProduct();
     }, [id]);
 
+    const selectedVariation = React.useMemo(() => {
+        if (!product || !product.variations || !product.isVariable) return null;
+
+        return product.variations.find(v => {
+            return Object.entries(selectedOptions).every(([name, value]) => {
+                return v.attributes[name] === value;
+            });
+        });
+    }, [product, selectedOptions]);
+
+    const handleAddToCart = () => {
+        if (!product) return;
+
+        addItem({
+            id: product.id,
+            name: product.name,
+            price: displayPrice,
+            image: selectedImage || product.image,
+            selectedOptions: Object.keys(selectedOptions).length > 0 ? selectedOptions : undefined
+        }, quantity);
+
+        toast.success(`${product.name} added to cart`);
+        setIsCartOpen(true);
+    };
+
+    const handleBuyNow = () => {
+        if (!product) return;
+
+        addItem({
+            id: product.id,
+            name: product.name,
+            price: displayPrice,
+            image: selectedImage || product.image,
+            selectedOptions: Object.keys(selectedOptions).length > 0 ? selectedOptions : undefined
+        }, quantity);
+
+        router.push('/checkout');
+    };
+
     const displayImages = React.useMemo(() => {
         if (!product) return [];
         return [product.image, ...(product.gallery || [])].filter((val, i, arr) => val && arr.indexOf(val) === i);
