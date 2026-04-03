@@ -6,16 +6,18 @@ import React from 'react';
 const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
     port: parseInt(process.env.SMTP_PORT || '465'),
-    secure: process.env.SMTP_PORT === '465', // true for 465, false for other ports
+    secure: true, // Port 465 strictly requires SSL/TLS
     auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
     },
-    connectionTimeout: 20000, // 20 seconds
-    greetingTimeout: 20000,
+    connectionTimeout: 30000, // 30 seconds
+    greetingTimeout: 30000,
     tls: {
         rejectUnauthorized: false, // For shared hosting servers
     },
+    debug: true,
+    logger: true,
 });
 
 interface SendEmailOptions {
