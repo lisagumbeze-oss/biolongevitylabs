@@ -180,12 +180,17 @@ export default function CheckoutPage() {
             payment_method: settings?.paymentMethods.find(pm => pm.id === selectedPayment)?.name || 'Transfer'
         };
 
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+
         try {
             const res = await fetch('/api/orders', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(orderData)
+                body: JSON.stringify(orderData),
+                signal: controller.signal
             });
+            clearTimeout(timeoutId);
 
             if (!res.ok) {
                 const errorData = await res.json();
@@ -286,6 +291,7 @@ export default function CheckoutPage() {
                                             className="w-full pl-11 pr-4 py-3.5 rounded-xl border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
                                             placeholder="John"
                                             type="text"
+                                            autoComplete="given-name"
                                             value={formData.firstName}
                                             onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                                         />
@@ -298,6 +304,7 @@ export default function CheckoutPage() {
                                         className="w-full px-4 py-3.5 rounded-xl border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
                                         placeholder="Doe"
                                         type="text"
+                                        autoComplete="family-name"
                                         value={formData.lastName}
                                         onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
                                     />
@@ -314,6 +321,7 @@ export default function CheckoutPage() {
                                             className="w-full pl-11 pr-4 py-3.5 rounded-xl border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
                                             placeholder="john.doe@example.com"
                                             type="email"
+                                            autoComplete="email"
                                             value={formData.email}
                                             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                         />
@@ -328,6 +336,7 @@ export default function CheckoutPage() {
                                             className="w-full pl-11 pr-4 py-3.5 rounded-xl border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
                                             placeholder="(555) 000-0000"
                                             type="tel"
+                                            autoComplete="tel"
                                             value={formData.phone}
                                             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                                         />
@@ -342,6 +351,7 @@ export default function CheckoutPage() {
                                     className="w-full px-4 py-3.5 rounded-xl border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
                                     placeholder="123 Science Way"
                                     type="text"
+                                    autoComplete="street-address"
                                     value={formData.address}
                                     onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                                 />
@@ -353,6 +363,7 @@ export default function CheckoutPage() {
                                     <select
                                         required
                                         className="w-full px-4 py-3.5 rounded-xl border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all appearance-none"
+                                        autoComplete="country-name"
                                         value={formData.country}
                                         onChange={(e) => setFormData({ ...formData, country: e.target.value })}
                                     >
@@ -367,6 +378,7 @@ export default function CheckoutPage() {
                                         className="w-full px-4 py-3.5 rounded-xl border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
                                         placeholder="Austin"
                                         type="text"
+                                        autoComplete="address-level2"
                                         value={formData.city}
                                         onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                                     />
@@ -378,6 +390,7 @@ export default function CheckoutPage() {
                                         className="w-full px-4 py-3.5 rounded-xl border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
                                         placeholder="Texas"
                                         type="text"
+                                        autoComplete="address-level1"
                                         value={formData.state}
                                         onChange={(e) => setFormData({ ...formData, state: e.target.value })}
                                     />
@@ -389,6 +402,7 @@ export default function CheckoutPage() {
                                         className="w-full px-4 py-3.5 rounded-xl border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
                                         placeholder="78701"
                                         type="text"
+                                        autoComplete="postal-code"
                                         value={formData.zipCode}
                                         onChange={(e) => setFormData({ ...formData, zipCode: e.target.value })}
                                     />

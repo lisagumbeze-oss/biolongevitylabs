@@ -35,10 +35,10 @@ export async function POST(request: Request) {
         }
 
         return NextResponse.json({ success: true });
-    } catch (error: unknown) {
-        console.error('Contact form error:', error instanceof Error ? error.message : String(error));
+    } catch (error: any) {
+        console.error('[Contact API] Failed to send email:', error?.message || error);
         return NextResponse.json(
-            { error: 'Failed to send message. Please try again later.' },
+            { error: `Failed to send message: ${error?.message || 'Unknown error'}` },
             { status: 500 }
         );
     }

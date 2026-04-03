@@ -112,7 +112,7 @@ export default function ContactPage() {
             <div className="max-w-[1200px] w-full flex flex-col gap-12">
 
                 <div className="flex flex-col gap-4 text-center md:text-left">
-                    <h1 className="text-4xl md:text-5xl font-black leading-tight tracking-tight text-white mb-4">
+                    <h1 className="text-4xl md:text-5xl font-black leading-tight tracking-tight text-white mb-2">
                         Contact <span className="text-primary">Support</span>
                     </h1>
                     <p className="text-slate-600 dark:text-slate-400 text-lg font-medium leading-relaxed max-w-2xl">
@@ -167,11 +167,12 @@ export default function ContactPage() {
                             <div className="flex flex-col gap-2 relative">
                                 <label className="text-sm font-bold text-slate-900 dark:text-white" htmlFor="name">Name</label>
                                 <input
-                                    className="peer flex w-full min-w-0 flex-1 resize-none rounded-xl text-base text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 h-24 px-5 shadow-inner transition-shadow"
+                                    className="peer flex w-full min-w-0 flex-1 resize-none rounded-xl text-base text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 h-14 px-5 shadow-inner transition-shadow"
                                     id="name"
                                     placeholder="Jane Doe"
                                     required
                                     type="text"
+                                    autoComplete="name"
                                     value={formData.name}
                                     onChange={handleChange}
                                     disabled={status === 'loading'}
@@ -181,11 +182,12 @@ export default function ContactPage() {
                             <div className="flex flex-col gap-2">
                                 <label className="text-sm font-bold text-slate-900 dark:text-white" htmlFor="email">Email Address</label>
                                 <input
-                                    className="flex w-full min-w-0 flex-1 resize-none rounded-xl text-base text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 h-24 px-5 shadow-inner transition-shadow"
+                                    className="flex w-full min-w-0 flex-1 resize-none rounded-xl text-base text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 h-14 px-5 shadow-inner transition-shadow"
                                     id="email"
                                     placeholder="jane@example.com"
                                     required
                                     type="email"
+                                    autoComplete="email"
                                     value={formData.email}
                                     onChange={handleChange}
                                     disabled={status === 'loading'}
@@ -195,10 +197,11 @@ export default function ContactPage() {
                             <div className="flex flex-col gap-2">
                                 <label className="text-sm font-bold text-slate-900 dark:text-white" htmlFor="phone">Phone Number</label>
                                 <input
-                                    className="flex w-full min-w-0 flex-1 resize-none rounded-xl text-base text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 h-24 px-5 shadow-inner transition-shadow"
+                                    className="flex w-full min-w-0 flex-1 resize-none rounded-xl text-base text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 h-14 px-5 shadow-inner transition-shadow"
                                     id="phone"
                                     placeholder="+1 (555) 000-0000"
                                     type="tel"
+                                    autoComplete="tel"
                                     value={formData.phone}
                                     onChange={handleChange}
                                     disabled={status === 'loading'}
@@ -244,7 +247,7 @@ export default function ContactPage() {
                             <motion.h2 
                                 initial={{ opacity: 0, x: -20 }}
                                 whileInView={{ opacity: 1, x: 0 }}
-                                className="text-3xl font-bold leading-tight tracking-tight text-slate-900 dark:text-white relative inline-block mb-4"
+                                className="text-3xl font-bold leading-tight tracking-tight text-white relative inline-block mb-4"
                             >
                                 Contact Information
                                 <span className="absolute -bottom-2 left-0 w-12 h-1 bg-primary rounded-full"></span>
@@ -294,7 +297,7 @@ export default function ContactPage() {
                             <HelpCircle className="w-7 h-7" />
                         </div>
                         <div>
-                            <h2 className="text-3xl font-black leading-tight tracking-tight text-slate-900 dark:text-white uppercase">Frequently Asked Questions</h2>
+                            <h2 className="text-3xl font-black leading-tight tracking-tight text-white uppercase">Frequently Asked Questions</h2>
                         </div>
                     </div>
 
