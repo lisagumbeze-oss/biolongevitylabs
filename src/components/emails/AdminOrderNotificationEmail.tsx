@@ -1,18 +1,7 @@
 import React from 'react';
-import {
-    Html,
-    Body,
-    Head,
-    Heading,
-    Container,
-    Preview,
-    Section,
-    Text,
-    Tailwind,
-    Row,
-    Column,
-    Hr
-} from '@react-email/components';
+import { Text, Heading, Section, Row, Column } from '@react-email/components';
+import EmailLayout from './shared/EmailLayout';
+import { OrderTable, InfoBlock } from './shared/EmailComponents';
 
 interface AdminOrderNotificationEmailProps {
     orderId: string;
@@ -54,101 +43,47 @@ export const AdminOrderNotificationEmail = ({
         country: 'USA'
     }
 }: AdminOrderNotificationEmailProps) => {
-    const previewText = `New Order Received: ${orderId} - $${total.toFixed(2)}`;
-
     return (
-        <Html>
-            <Head />
-            <Preview>{previewText}</Preview>
-            <Tailwind>
-                <Body className="bg-slate-50 my-auto mx-auto font-sans px-2">
-                    <Container className="border border-solid border-slate-200 rounded-xl my-[40px] mx-auto p-[30px] w-[600px] bg-white">
-                        <Text className="text-emerald-600 text-[14px] font-bold tracking-widest uppercase m-0">
-                            New Order Received
-                        </Text>
+        <EmailLayout previewText={`New Order Received: ${orderId} - $${total.toFixed(2)}`}>
+            <Section className="mb-8 border-b-2 border-slate-100 border-solid pb-6">
+                <Text className="text-emerald-600 text-[12px] font-black uppercase tracking-widest m-0 mb-2">
+                    Action Required
+                </Text>
+                <Heading className="text-slate-900 text-[28px] font-black leading-[36px] m-0">
+                    Order {orderId}
+                </Heading>
+            </Section>
 
-                        <Heading className="text-slate-900 text-[24px] font-bold p-0 my-[16px] mx-0">
-                            Order {orderId}
-                        </Heading>
+            <Section className="mb-10 p-6 bg-slate-50 border border-slate-200 border-solid rounded-2xl">
+                <Row>
+                    <Column className="w-[50%]">
+                        <Text className="text-slate-500 text-[11px] font-black uppercase tracking-widest m-0 mb-1">Customer</Text>
+                        <Text className="text-slate-900 text-[15px] font-bold m-0">{customerName}</Text>
+                        <Text className="text-primary text-[14px] m-0">{customerEmail}</Text>
+                    </Column>
+                    <Column className="w-[50%]">
+                        <Text className="text-slate-500 text-[11px] font-black uppercase tracking-widest m-0 mb-1">Payment Method</Text>
+                        <Text className="text-slate-900 text-[15px] font-bold m-0">{paymentMethod}</Text>
+                    </Column>
+                </Row>
+            </Section>
 
-                        <Section className="bg-slate-50 border border-solid border-slate-200 rounded-lg p-6 my-6">
-                            <Row>
-                                <Column className="w-[50%]">
-                                    <Text className="text-slate-500 text-[12px] uppercase font-bold m-0 mb-1">Customer</Text>
-                                    <Text className="text-slate-900 text-[14px] m-0 font-medium">{customerName}</Text>
-                                    <Text className="text-[#137fec] text-[14px] m-0">{customerEmail}</Text>
-                                </Column>
-                                <Column className="w-[50%]">
-                                    <Text className="text-slate-500 text-[12px] uppercase font-bold m-0 mb-1">Payment Method</Text>
-                                    <Text className="text-slate-900 text-[14px] m-0 font-medium">{paymentMethod}</Text>
-                                </Column>
-                            </Row>
-                        </Section>
+            <OrderTable items={items} total={total} />
 
-                        <Section className="my-6">
-                            <Heading as="h3" className="text-slate-900 text-[16px] font-bold mt-0 mb-4 border-b border-solid border-slate-200 pb-2">
-                                Order Items
-                            </Heading>
+            <InfoBlock title="Shipping Address">
+                <strong>{customerName}</strong><br />
+                {shippingAddress.addressLine1}
+                {shippingAddress.addressLine2 && <><br />{shippingAddress.addressLine2}</>}
+                <br />
+                {shippingAddress.city}, {shippingAddress.state} {shippingAddress.zipCode}
+                <br />
+                {shippingAddress.country}
+            </InfoBlock>
 
-                            {items.map((item, index) => (
-                                <Row key={index} className="mb-4">
-                                    <Column className="w-[70%]">
-                                        <Text className="text-slate-900 text-[14px] font-medium m-0">
-                                            {item.name}
-                                        </Text>
-                                        {item.variationString && (
-                                            <Text className="text-slate-500 text-[12px] m-0">
-                                                {item.variationString}
-                                            </Text>
-                                        )}
-                                    </Column>
-                                    <Column className="w-[10%] text-center">
-                                        <Text className="text-slate-700 text-[14px] m-0">x{item.quantity}</Text>
-                                    </Column>
-                                    <Column className="w-[20%] text-right">
-                                        <Text className="text-slate-900 text-[14px] m-0 text-right">
-                                            ${(item.price * item.quantity).toFixed(2)}
-                                        </Text>
-                                    </Column>
-                                </Row>
-                            ))}
-
-                            <Hr className="border border-solid border-slate-200 my-4 mx-0 w-full" />
-
-                            <Row>
-                                <Column className="w-[80%]">
-                                    <Text className="text-slate-900 text-[16px] font-bold m-0">Total</Text>
-                                </Column>
-                                <Column className="w-[20%] text-right">
-                                    <Text className="text-slate-900 text-[16px] font-medium m-0 text-right">
-                                        ${total.toFixed(2)}
-                                    </Text>
-                                </Column>
-                            </Row>
-                        </Section>
-
-                        <Section className="bg-slate-50 border border-solid border-slate-200 rounded-lg p-6 my-6">
-                            <Heading as="h3" className="text-slate-900 text-[16px] font-bold mt-0 mb-2">
-                                Shipping Details
-                            </Heading>
-                            <Text className="text-slate-700 text-[14px] m-0">
-                                {customerName}<br />
-                                {shippingAddress.addressLine1}
-                                {shippingAddress.addressLine2 && <><br />{shippingAddress.addressLine2}</>}
-                                <br />
-                                {shippingAddress.city}, {shippingAddress.state} {shippingAddress.zipCode}
-                                <br />
-                                {shippingAddress.country}
-                            </Text>
-                        </Section>
-
-                        <Text className="text-slate-500 text-[12px] text-center mt-[40px]">
-                            This is an automated notification from BioLongevity Labs.
-                        </Text>
-                    </Container>
-                </Body>
-            </Tailwind>
-        </Html>
+            <Text className="text-slate-400 text-[12px] text-center mt-12">
+                This is an automated notification from BioLongevity Labs Store Backend.
+            </Text>
+        </EmailLayout>
     );
 };
 

@@ -1,68 +1,61 @@
 import React from 'react';
+import { Text, Section, Link } from '@react-email/components';
+import EmailLayout from './shared/EmailLayout';
+import { HeroHeader, InfoBlock } from './shared/EmailComponents';
 
-export default function PaymentReceivedEmail2() {
+export const PaymentReceivedEmail2 = () => {
+    // Mock data for reminder preview
+    const orderId = '#ORD-1234';
+    
     return (
-        <div className="bg-slate-50 font-sans text-slate-900 flex items-center justify-center min-h-screen p-4">
-            <div className="relative flex h-auto w-full flex-col bg-white shadow-xl rounded-xl overflow-hidden max-w-[600px] border border-slate-200">
-                <div className="flex h-full grow flex-col">
-                    <div className="flex flex-1 justify-center py-5">
-                        <div className="flex flex-col w-full flex-1">
-                            <header className="flex items-center justify-center whitespace-nowrap border-b border-solid border-slate-100 px-10 py-6">
-                                <div className="flex items-center gap-4 text-slate-900">
-                                    <h2 className="text-xl font-bold leading-tight tracking-[-0.015em]">Streamlined E-commerce</h2>
-                                </div>
-                            </header>
-
-                            <div className="flex flex-col px-8 py-10">
-                                <div className="flex flex-col items-center gap-8">
-                                    <div className="w-24 h-24 rounded-full bg-amber-50 flex items-center justify-center text-amber-500">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
-                                    </div>
-
-                                    <div className="flex w-full flex-col items-center gap-4 text-center">
-                                        <h1 className="text-2xl font-bold leading-tight text-slate-900">
-                                            Friendly Reminder: Payment Pending for Order #1234
-                                        </h1>
-                                        <p className="text-base font-normal leading-relaxed text-slate-600 max-w-[400px]">
-                                            Your order is currently reserved, but requires payment to proceed to shipping. Please follow the manual payment instructions below.
-                                        </p>
-
-                                        <div className="bg-amber-50 rounded-lg p-6 w-full mt-4 border border-amber-200 text-left">
-                                            <h2 className="text-sm font-semibold text-amber-900 mb-3 uppercase tracking-wider">Manual Payment Instructions</h2>
-                                            <div className="flex flex-col gap-3">
-                                                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center text-sm border-b border-amber-200/50 pb-2 gap-1 sm:gap-0">
-                                                    <span className="text-amber-700">Zelle:</span>
-                                                    <span className="font-medium text-amber-900">payments@streamlined.com</span>
-                                                </div>
-                                                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center text-sm gap-1 sm:gap-0">
-                                                    <span className="text-amber-700">Wire Transfer:</span>
-                                                    <span className="font-medium text-amber-900">Routing: 123456789 | Acct: 987654321</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="flex flex-col items-center w-full gap-4 mt-2">
-                                        <a href="#" className="flex w-full max-w-[300px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-sky-500 hover:bg-sky-600 text-white text-base font-medium leading-normal transition-colors">
-                                            Contact Support to Confirm
-                                        </a>
-                                        <a href="#" className="text-sm font-medium text-sky-500 hover:text-sky-600 hover:underline transition-colors">View Order Details</a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <footer className="flex flex-col gap-6 px-8 py-8 text-center bg-slate-50 border-t border-slate-100">
-                                <div className="flex flex-col gap-2">
-                                    <p className="text-slate-500 text-sm">
-                                        Have questions? Reply to this email or visit our <a href="#" className="text-sky-500 hover:underline">Help Center</a>.
-                                    </p>
-                                </div>
-                                <p className="text-slate-400 text-xs font-normal">© 2023 Streamlined E-commerce. All rights reserved.</p>
-                            </footer>
-                        </div>
-                    </div>
+        <EmailLayout previewText={`Reminder: Payment Pending for Order ${orderId}`}>
+            <Section className="text-center mb-8">
+                <div style={{ 
+                    width: '80px', 
+                    height: '80px', 
+                    backgroundColor: '#fffbeb', 
+                    borderRadius: '50%', 
+                    display: 'inline-flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'center',
+                    margin: '0 auto 20px auto'
+                }}>
+                    <div style={{ color: '#d97706', fontSize: '40px' }}>⏳</div>
                 </div>
-            </div>
-        </div>
+                <HeroHeader 
+                    title="Payment Still Pending" 
+                    subtitle={`We're holding your order ${orderId}, but we haven't received your payment yet.`}
+                />
+            </Section>
+
+            <Section className="bg-amber-50 border border-amber-200 border-solid rounded-2xl p-8 mb-8">
+                <Text className="text-amber-900 text-[14px] leading-[22px] m-0">
+                    Your order is currently reserved, but requires payment to proceed to shipping. If you have already sent the payment, please reply to this email with a screenshot of your receipt so we can expedite the verification.
+                </Text>
+            </Section>
+
+            <InfoBlock title="Payment Instructions" iconColor="#d97706">
+                <div style={{ padding: '16px', backgroundColor: '#ffffff', borderRadius: '12px', border: '1px solid #fcd34d' }}>
+                    <Text className="m-0 text-[13px]"><span className="text-slate-500">Zelle Email:</span> <strong>payments@biolongevitylabss.com</strong></Text>
+                    <Text className="m-0 mt-1 text-[13px]"><span className="text-slate-500">Account Name:</span> <strong>BioLongevity Labs</strong></Text>
+                    <Text className="m-0 mt-1 text-[13px]"><span className="text-slate-500">Required Memo:</span> <strong>Order ID {orderId}</strong></Text>
+                </div>
+            </InfoBlock>
+
+            <Section className="text-center mt-10">
+                <Text className="text-slate-500 text-[14px] mb-6">
+                    Need help with your payment? Our team is here to assist you.
+                </Text>
+                <Link 
+                    href="mailto:support@biolongevitylabss.com"
+                    className="bg-primary text-white font-bold py-3 px-8 rounded-xl"
+                    style={{ display: 'inline-block', textDecoration: 'none' }}
+                >
+                    Contact Support
+                </Link>
+            </Section>
+        </EmailLayout>
     );
-}
+};
+
+export default PaymentReceivedEmail2;
