@@ -36,7 +36,7 @@ function OrderConfirmationContent() {
                         </div>
                     </div>
 
-                    <h1 className="text-3xl md:text-4xl font-black text-slate-900 dark:text-white mb-3 tracking-tight">
+                    <h1 className="text-3xl md:text-4xl font-black text-slate-900 mb-3 tracking-tight">
                         Order Successfully Placed!
                     </h1>
 
@@ -55,7 +55,7 @@ function OrderConfirmationContent() {
                                 <Mail className="w-5 h-5" />
                             </div>
                             <div>
-                                <h2 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider mb-1">Check Your Inbox</h2>
+                                <h2 className="text-sm font-black text-slate-900 uppercase tracking-wider mb-1">Check Your Inbox</h2>
                                 <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">
                                     We sent a confirmation email with detailed instructions for your selected payment method.
                                 </p>
@@ -73,7 +73,7 @@ function OrderConfirmationContent() {
                         </Link>
                         <Link
                             href="/support"
-                            className="flex-1 h-16 flex items-center justify-center rounded-2xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-900 dark:text-white font-black transition-all active:scale-95 uppercase tracking-widest text-sm"
+                            className="flex-1 h-16 flex items-center justify-center rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-900 font-black transition-all active:scale-95 uppercase tracking-widest text-sm"
                         >
                             Contact Support
                         </Link>

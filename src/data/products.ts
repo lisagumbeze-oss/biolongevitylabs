@@ -11,6 +11,15 @@ export interface ProductVariable {
     options: string[];
 }
 
+export interface ProductCOA {
+    id: string;
+    labName: string;
+    purityPercentage?: number;
+    reportUrl: string;
+    testDate?: string;
+    batchNumber?: string;
+}
+
 export interface Product {
     id: string;
     name: string;
@@ -31,6 +40,7 @@ export interface Product {
     isVariable?: boolean;
     variables?: ProductVariable[];
     variations?: ProductVariation[];
+    coa?: ProductCOA;
 }
 
 import productsData from './products.json';

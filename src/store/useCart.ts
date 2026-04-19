@@ -78,8 +78,20 @@ export const useCart = create<CartStore>()(
 
             clearCart: () => set({ items: [] }),
 
-            getTotal: () =>
-                get().items.reduce((acc, item) => acc + item.price * item.quantity, 0),
+            getTotal: () => {
+                return get().items.reduce((acc, item) => {
+                    let price = item.price;
+                    // Wholesale Logic
+                    if (item.quantity >= 25) {
+                        price = item.price * 0.60; // 40% off
+                    } else if (item.quantity >= 10) {
+                        price = item.price * 0.75; // 25% off
+                    } else if (item.quantity >= 3) {
+                        price = item.price * 0.90; // 10% off
+                    }
+                    return acc + price * item.quantity;
+                }, 0);
+            },
         }),
         {
             name: 'biolongevity-cart-v2',

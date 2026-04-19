@@ -13,7 +13,7 @@ export default function ShippingAndPaymentsPage() {
 
                 {/* Header */}
                 <div className="flex flex-col gap-4 text-center">
-                    <h1 className="text-4xl md:text-5xl font-black leading-tight tracking-tight text-white">
+                    <h1 className="text-4xl md:text-5xl font-black leading-tight tracking-tight text-slate-900">
                         Shipping & <span className="text-primary">Payments</span>
                     </h1>
                     <p className="text-slate-600 dark:text-slate-400 text-lg font-medium leading-relaxed max-w-2xl mx-auto">
@@ -30,7 +30,7 @@ export default function ShippingAndPaymentsPage() {
                             <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
                                 <Truck className="w-6 h-6" />
                             </div>
-                            <h2 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Shipping & Delivery</h2>
+                            <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Shipping & Delivery</h2>
                         </div>
                         <div className="prose prose-slate dark:prose-invert max-w-none text-slate-600 dark:text-slate-400">
                             <p>
@@ -51,7 +51,7 @@ export default function ShippingAndPaymentsPage() {
                             <div className="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center text-emerald-500">
                                 <ShieldCheck className="w-6 h-6" />
                             </div>
-                            <h2 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Privacy & Security</h2>
+                            <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Privacy & Security</h2>
                         </div>
                         <div className="prose prose-slate dark:prose-invert max-w-none text-slate-600 dark:text-slate-400">
                             <p>
@@ -69,7 +69,7 @@ export default function ShippingAndPaymentsPage() {
                             <div className="w-12 h-12 bg-amber-500/10 rounded-xl flex items-center justify-center text-amber-500">
                                 <RefreshCcw className="w-6 h-6" />
                             </div>
-                            <h2 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Returns & Replacements</h2>
+                            <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Returns & Replacements</h2>
                         </div>
                         <div className="prose prose-slate dark:prose-invert max-w-none text-slate-600 dark:text-slate-400">
                             <p>
@@ -90,7 +90,7 @@ export default function ShippingAndPaymentsPage() {
                             <div className="w-12 h-12 bg-sky-500/10 rounded-xl flex items-center justify-center text-sky-500">
                                 <CreditCard className="w-6 h-6" />
                             </div>
-                            <h2 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Payment, Pricing & Promotions</h2>
+                            <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Payment, Pricing & Promotions</h2>
                         </div>
                         <div className="prose prose-slate dark:prose-invert max-w-none text-slate-600 dark:text-slate-400">
                             <p>
@@ -108,7 +108,7 @@ export default function ShippingAndPaymentsPage() {
                             <div className="w-12 h-12 bg-indigo-500/10 rounded-xl flex items-center justify-center text-indigo-500">
                                 <UserCheck className="w-6 h-6" />
                             </div>
-                            <h2 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Viewing Orders</h2>
+                            <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Viewing Orders</h2>
                         </div>
                         <div className="prose prose-slate dark:prose-invert max-w-none text-slate-600 dark:text-slate-400">
                             <p>
@@ -126,7 +126,7 @@ export default function ShippingAndPaymentsPage() {
                             <div className="w-12 h-12 bg-primary text-white rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(19,127,236,0.3)]">
                                 <HeartHandshake className="w-6 h-6" />
                             </div>
-                            <h2 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Satisfaction Guaranteed</h2>
+                            <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Satisfaction Guaranteed</h2>
                         </div>
                         <div className="prose prose-slate dark:prose-invert max-w-none text-slate-600 dark:text-slate-400">
                             <p className="font-medium text-slate-700 dark:text-slate-300">

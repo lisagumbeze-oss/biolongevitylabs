@@ -8,6 +8,8 @@ import Footer from "@/components/Footer";
 import LoadingProgress from "@/components/LoadingProgress";
 import ConsentModal from "@/components/ConsentModal";
 import Providers from "@/components/Providers";
+import SmartsuppWidget from "@/components/SmartsuppWidget";
+import SalesNotification from "@/components/SalesNotification";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -58,7 +60,7 @@ export const metadata: Metadata = {
 
 import BottomNav from "@/components/BottomNav";
 import CartDrawer from "@/components/CartDrawer";
-import { KeepAlive } from "@/components/KeepAlive";
+// KeepAlive removed as it's no longer needed for Vercel
 
 export default function RootLayout({
   children,
@@ -68,10 +70,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <body
-        className={`${inter.variable} font-sans antialiased min-h-screen flex flex-col bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300`}
+        className={`${inter.variable} font-sans antialiased min-h-screen flex flex-col bg-white text-slate-900 transition-colors duration-300`}
       >
         <Providers>
-          <KeepAlive />
           <React.Suspense fallback={null}>
             <LoadingProgress />
           </React.Suspense>
@@ -82,32 +83,12 @@ export default function RootLayout({
           </main>
           <BottomNav />
           <CartDrawer />
+          <SalesNotification />
           <Footer />
         </Providers>
 
-        {process.env.NEXT_PUBLIC_SMARTSUPP_KEY && (
-          <Script
-            id="smartsupp-script"
-            strategy="afterInteractive"
-            dangerouslySetInnerHTML={{
-              __html: `
-                window._smartsupp = window._smartsupp || {};
-                window._smartsupp.key = '${process.env.NEXT_PUBLIC_SMARTSUPP_KEY}';
-                // Move widget up on mobile to avoid BottomNav
-                if (window.innerWidth < 768) {
-                  window._smartsupp.offsetY = 100;
-                  window._smartsupp.offsetX = 20;
-                }
-                window.smartsupp||(function(d) {
-                  var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
-                  s=d.getElementsByTagName('script')[0];c=d.createElement('script');
-                  c.type='text/javascript';c.charset='utf-8';c.async=true;
-                  c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
-                })(document);
-              `
-            }}
-          />
-        )}
+        <SmartsuppWidget />
+
 
         {/* Global JSON-LD Schema */}
         <Script

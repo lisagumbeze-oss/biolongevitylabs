@@ -7,7 +7,6 @@ import { ShoppingCart, ShoppingBag, Menu, X, ChevronDown } from "lucide-react";
 import { useCart } from "@/store/useCart";
 import CartDrawer from "./CartDrawer";
 import LiveSearch from "./LiveSearch";
-import DarkModeToggle from "./DarkModeToggle";
 import { motion, AnimatePresence } from "framer-motion";
 
 const resourceLinks = [
@@ -24,7 +23,7 @@ const Navbar = () => {
     const cartCount = items.reduce((acc, item) => acc + item.quantity, 0);
 
     return (
-        <header className="bg-white dark:bg-slate-900 shadow-sm sticky top-0 z-50 transition-colors border-b border-slate-100 dark:border-slate-800">
+        <header className="bg-white shadow-sm sticky top-0 z-50 transition-colors border-b border-slate-100">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-20 gap-6">
                     <div className="shrink-0 flex items-center">
@@ -38,7 +37,7 @@ const Navbar = () => {
                                     className="object-contain"
                                 />
                             </div>
-                            <span className="text-xl font-black tracking-tight text-slate-900 dark:text-white uppercase">
+                            <span className="text-xl font-black tracking-tight text-slate-900 uppercase">
                                 BioLongevity <span className="text-primary italic">Labs</span>
                             </span>
                         </Link>
@@ -52,11 +51,11 @@ const Navbar = () => {
                     {/* Actions */}
                     <div className="flex items-center gap-4">
                         <nav className="hidden md:flex items-center space-x-6">
-                            <Link href="/about" className="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary font-bold transition-colors text-sm uppercase tracking-widest">About</Link>
-                            <Link href="/shop" className="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary font-bold transition-colors text-sm uppercase tracking-widest">Shop</Link>
-                            <Link href="/research" className="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary font-bold transition-colors text-sm uppercase tracking-widest">Research</Link>
+                            <Link href="/about" className="text-slate-600 hover:text-primary font-bold transition-colors text-sm uppercase tracking-widest">About</Link>
+                            <Link href="/shop" className="text-slate-600 hover:text-primary font-bold transition-colors text-sm uppercase tracking-widest">Shop</Link>
+                            <Link href="/research" className="text-slate-600 hover:text-primary font-bold transition-colors text-sm uppercase tracking-widest">Research</Link>
                             <div ref={resourcesRef} className="relative" onMouseEnter={() => setIsResourcesOpen(true)} onMouseLeave={() => setIsResourcesOpen(false)}>
-                                <button className="flex items-center gap-1 text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary font-bold transition-colors text-sm uppercase tracking-widest">
+                                <button className="flex items-center gap-1 text-slate-600 hover:text-primary font-bold transition-colors text-sm uppercase tracking-widest">
                                     Resources <ChevronDown className={`w-4 h-4 transition-transform ${isResourcesOpen ? 'rotate-180' : ''}`} />
                                 </button>
                                 <AnimatePresence>
@@ -66,10 +65,10 @@ const Navbar = () => {
                                             animate={{ opacity: 1, y: 0 }}
                                             exit={{ opacity: 0, y: 8 }}
                                             transition={{ duration: 0.15 }}
-                                            className="absolute top-full left-0 mt-2 w-56 bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-100 dark:border-slate-700 p-2 z-[60]"
+                                            className="absolute top-full left-0 mt-2 w-56 bg-white rounded-2xl shadow-2xl border border-slate-100 p-2 z-[60]"
                                         >
                                             {resourceLinks.map(link => (
-                                                <Link key={link.href} href={link.href} className="flex items-center gap-3 px-4 py-3 text-sm font-bold text-slate-700 dark:text-slate-200 hover:bg-primary/5 hover:text-primary rounded-xl transition-all">
+                                                <Link key={link.href} href={link.href} className="flex items-center gap-3 px-4 py-3 text-sm font-bold text-slate-700 hover:bg-primary/5 hover:text-primary rounded-xl transition-all">
                                                     {link.label}
                                                 </Link>
                                             ))}
@@ -77,17 +76,16 @@ const Navbar = () => {
                                     )}
                                 </AnimatePresence>
                             </div>
-                            <Link href="/support" className="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary font-bold transition-colors text-sm uppercase tracking-widest">Support</Link>
+                            <Link href="/support" className="text-slate-600 hover:text-primary font-bold transition-colors text-sm uppercase tracking-widest">Support</Link>
                         </nav>
 
                         <div className="flex items-center gap-1">
-                            <DarkModeToggle />
 
                             <motion.button
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.9 }}
                                 onClick={() => setIsCartOpen(true)}
-                                className="relative p-2.5 text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary transition-all rounded-xl hover:bg-primary/5"
+                                className="relative p-2.5 text-slate-600 hover:text-primary transition-all rounded-xl hover:bg-primary/5"
                                 aria-label="Shopping Cart"
                             >
                                 <ShoppingCart className="w-6 h-6" />
@@ -99,7 +97,7 @@ const Navbar = () => {
                                             animate={{ scale: 1 }}
                                             exit={{ scale: 0 }}
                                             transition={{ type: "spring", stiffness: 500, damping: 25 }}
-                                            className="absolute -top-1 -right-1 inline-flex items-center justify-center px-2 py-1 text-[10px] font-black leading-none text-white transform bg-primary rounded-full min-w-5 h-5 shadow-lg shadow-primary/40 ring-2 ring-white dark:ring-slate-900"
+                                            className="absolute -top-1 -right-1 inline-flex items-center justify-center px-2 py-1 text-[10px] font-black leading-none text-white transform bg-primary rounded-full min-w-5 h-5 shadow-lg shadow-primary/40 ring-2 ring-white"
                                         >
                                             {cartCount}
                                         </motion.span>
@@ -108,7 +106,7 @@ const Navbar = () => {
                             </motion.button>
 
                             <button
-                                className="md:hidden p-2 text-slate-600 dark:text-slate-300 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                                className="md:hidden p-2 text-slate-600 rounded-xl hover:bg-slate-100 transition-colors"
                                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                                 aria-label="Toggle Menu"
                             >
@@ -127,7 +125,7 @@ const Navbar = () => {
                         animate={{ opacity: 1, height: "auto" }}
                         exit={{ opacity: 0, height: 0 }}
                         transition={{ duration: 0.2 }}
-                        className="md:hidden bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden"
+                        className="md:hidden bg-white border-t border-slate-200 shadow-2xl overflow-hidden"
                     >
                         <div className="px-4 pt-4 pb-8 space-y-4">
                             <LiveSearch />

@@ -22,7 +22,7 @@ export const supabase = (supabaseUrl && supabaseKey)
 
 if (!supabase) {
     if (process.env.NODE_ENV === 'production') {
-        console.warn('[Supabase] Client NOT initialized. Check NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY (or NEXT_PUBLIC_SUPABASE_ANON_KEY) in Render env vars.');
+        console.warn('[Supabase] Client NOT initialized. Check NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY (or NEXT_PUBLIC_SUPABASE_ANON_KEY) in deployment environment variables.');
     } else {
         console.info('[Supabase] Client not initialized (Dev mode). Using local JSON fallback.');
     }

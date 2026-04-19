@@ -45,20 +45,20 @@ const CartDrawer: React.FC = () => {
                         animate={{ x: 0 }}
                         exit={{ x: "100%" }}
                         transition={{ type: "spring", stiffness: 350, damping: 35 }}
-                        className="fixed right-0 top-0 h-full w-full max-w-[400px] bg-white dark:bg-slate-800 z-[70] shadow-2xl flex flex-col"
+                        className="fixed right-0 top-0 h-full w-full max-w-[400px] bg-white z-[70] shadow-2xl flex flex-col"
                     >
                         {/* Header */}
-                        <div className="flex items-center justify-between px-6 py-5 border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 sticky top-0 z-10">
+                        <div className="flex items-center justify-between px-6 py-5 border-b border-slate-200 bg-white sticky top-0 z-10">
                             <div>
-                                <h2 className="text-xl font-black text-slate-900 dark:text-slate-100 tracking-tight">Your Cart</h2>
-                                <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">{items.length} item{items.length !== 1 ? "s" : ""}</p>
+                                <h2 className="text-xl font-black text-slate-900 tracking-tight">Your Cart</h2>
+                                <p className="text-xs text-slate-400 mt-0.5">{items.length} item{items.length !== 1 ? "s" : ""}</p>
                             </div>
                             <motion.button
                                 whileHover={{ scale: 1.1, rotate: 90 }}
                                 whileTap={{ scale: 0.9 }}
                                 transition={{ type: "spring", stiffness: 400, damping: 20 }}
                                 onClick={onClose}
-                                className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 transition-colors"
+                                className="p-2 rounded-full hover:bg-slate-100 text-slate-500 transition-colors"
                             >
                                 <X className="w-6 h-6" />
                             </motion.button>
@@ -76,19 +76,19 @@ const CartDrawer: React.FC = () => {
                                             exit={{ opacity: 0, x: -20, height: 0, marginBottom: 0 }}
                                             transition={{ delay: index * 0.05, duration: 0.25 }}
                                             layout
-                                            className="flex gap-4 pb-5 border-b border-slate-100 dark:border-slate-700 last:border-0"
-                                        >
-                                            <div className="relative w-20 h-20 bg-slate-100 dark:bg-slate-700 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-600 shrink-0">
+                                            className="flex gap-4 pb-5 border-b border-slate-100 last:border-0"
+>
+                                            <div className="relative w-20 h-20 bg-slate-100 rounded-xl overflow-hidden border border-slate-200 shrink-0">
                                                 <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                                             </div>
                                             <div className="flex flex-1 flex-col justify-between py-0.5">
                                                 <div className="flex justify-between items-start gap-2">
                                                     <div>
-                                                        <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 line-clamp-2 leading-tight">
+                                                        <h3 className="text-sm font-bold text-slate-900 line-clamp-2 leading-tight">
                                                             {item.name}
                                                         </h3>
                                                         {item.selectedOptions && Object.keys(item.selectedOptions).length > 0 && (
-                                                            <div className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                                                            <div className="mt-1 text-xs text-slate-500">
                                                                 {Object.entries(item.selectedOptions).map(([key, value]) => (
                                                                     <span key={key} className="block">{key}: {value}</span>
                                                                 ))}
@@ -99,31 +99,31 @@ const CartDrawer: React.FC = () => {
                                                         whileHover={{ scale: 1.2 }}
                                                         whileTap={{ scale: 0.9 }}
                                                         onClick={() => removeItem(item.id)}
-                                                        className="text-slate-400 hover:text-red-500 dark:text-slate-500 dark:hover:text-red-400 transition-colors shrink-0"
+                                                        className="text-slate-400 hover:text-red-500 transition-colors shrink-0"
                                                     >
                                                         <Trash2 className="w-4 h-4" />
                                                     </motion.button>
                                                 </div>
 
                                                 <div className="flex justify-between items-end mt-2">
-                                                    <div className="flex items-center gap-1 border border-slate-200 dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-700 p-1">
+                                                    <div className="flex items-center gap-1 border border-slate-200 rounded-lg bg-slate-50 p-1">
                                                         <button
                                                             onClick={() => updateQuantity(item.id, Math.max(1, item.quantity - 1))}
-                                                            className="w-6 h-6 flex items-center justify-center rounded hover:bg-white dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300 transition-colors"
+                                                            className="w-6 h-6 flex items-center justify-center rounded hover:bg-white text-slate-600 transition-colors"
                                                         >
                                                             <Minus className="w-3 h-3" />
                                                         </button>
-                                                        <span className="w-6 text-center text-xs font-bold text-slate-900 dark:text-slate-100">
+                                                        <span className="w-6 text-center text-xs font-bold text-slate-900">
                                                             {item.quantity}
                                                         </span>
                                                         <button
                                                             onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                                                            className="w-6 h-6 flex items-center justify-center rounded hover:bg-white dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300 transition-colors"
+                                                            className="w-6 h-6 flex items-center justify-center rounded hover:bg-white text-slate-600 transition-colors"
                                                         >
                                                             <Plus className="w-3 h-3" />
                                                         </button>
                                                     </div>
-                                                    <p className="text-slate-900 dark:text-slate-100 font-bold text-sm">
+                                                    <p className="text-slate-900 font-bold text-sm">
                                                         ${(item.price * item.quantity).toFixed(2)}
                                                     </p>
                                                 </div>
@@ -137,11 +137,11 @@ const CartDrawer: React.FC = () => {
                                         initial={{ scale: 0.8, opacity: 0 }}
                                         animate={{ scale: 1, opacity: 1 }}
                                         transition={{ type: "spring", stiffness: 300 }}
-                                        className="w-20 h-20 bg-slate-100 dark:bg-slate-700 rounded-full flex items-center justify-center text-slate-300"
+                                        className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center text-slate-300"
                                     >
                                         <ShoppingBag className="w-10 h-10" />
                                     </motion.div>
-                                    <p className="text-slate-500 dark:text-slate-400 font-medium">Your cart is currently empty.</p>
+                                    <p className="text-slate-500 font-medium">Your cart is currently empty.</p>
                                     <button onClick={onClose} className="text-primary hover:underline font-bold">
                                         Continue Shopping
                                     </button>
@@ -155,19 +155,19 @@ const CartDrawer: React.FC = () => {
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.15 }}
-                                className="border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 p-6 space-y-4"
+                                className="border-t border-slate-200 bg-slate-50 p-6 space-y-4"
                             >
                                 <div className="space-y-2">
-                                    <div className="flex justify-between items-center text-slate-600 dark:text-slate-400">
+                                    <div className="flex justify-between items-center text-slate-600">
                                         <p className="text-sm font-medium">Subtotal</p>
-                                        <p className="text-slate-900 dark:text-slate-100 font-bold">${subtotal.toFixed(2)}</p>
+                                        <p className="text-slate-900 font-bold">${subtotal.toFixed(2)}</p>
                                     </div>
-                                    <div className="flex justify-between items-center text-slate-500 dark:text-slate-500">
+                                    <div className="flex justify-between items-center text-slate-500">
                                         <p className="text-xs">Shipping</p>
                                         <p className="text-xs italic">Calculated at checkout</p>
                                     </div>
-                                    <div className="pt-3 border-t border-slate-200 dark:border-slate-700 flex justify-between items-center">
-                                        <p className="text-lg font-bold text-slate-900 dark:text-slate-100">Total</p>
+                                    <div className="pt-3 border-t border-slate-200 flex justify-between items-center">
+                                        <p className="text-lg font-bold text-slate-900">Total</p>
                                         <p className="text-2xl font-black text-primary">${subtotal.toFixed(2)}</p>
                                     </div>
                                 </div>
@@ -185,7 +185,7 @@ const CartDrawer: React.FC = () => {
                                     </motion.div>
                                 </div>
 
-                                <p className="text-center text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-widest font-bold flex items-center justify-center gap-2">
+                                <p className="text-center text-[10px] text-slate-500 uppercase tracking-widest font-bold flex items-center justify-center gap-2">
                                     <Bolt className="w-3 h-3 text-amber-500 fill-amber-500" />
                                     No Account Required
                                 </p>

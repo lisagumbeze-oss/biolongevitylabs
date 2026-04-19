@@ -22,7 +22,7 @@ const staggerContainer = {
 
 export default function AboutPage() {
     return (
-        <div className="bg-white dark:bg-slate-900 min-h-screen pt-24 pb-20">
+        <div className="bg-white min-h-screen pt-24 pb-20">
             {/* Breadcrumb Schema */}
             <script
                 type="application/ld+json"
@@ -90,15 +90,15 @@ export default function AboutPage() {
                     className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-32"
                 >
                     <div className="flex flex-col">
-                        <motion.h2 variants={fadeInUp} className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white leading-tight tracking-tight mb-6">
+                        <motion.h2 variants={fadeInUp} className="text-3xl sm:text-4xl font-black text-slate-900 leading-tight tracking-tight mb-6">
                             Premium Research Peptides & Bioregulators
                         </motion.h2>
 
                         <motion.div variants={fadeInUp} className="prose prose-lg dark:prose-invert prose-slate mb-10">
-                            <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
+                            <p className="text-lg text-slate-600 leading-relaxed font-medium">
                                 At <strong>BioLongevity Labs</strong>, we specialize in providing premium research peptides and bioregulators.
                             </p>
-                            <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
+                            <p className="text-lg text-slate-600 leading-relaxed">
                                 All of our products are meticulously formulated and produced in the United States, with purity levels exceeding 99%. Our expert team is here to meet your needs with precision and reliability.
                             </p>
                         </motion.div>
@@ -137,10 +137,10 @@ export default function AboutPage() {
                     whileInView="visible"
                     viewport={{ once: true, margin: "-100px" }}
                     variants={staggerContainer}
-                    className="bg-slate-50 dark:bg-slate-800/30 rounded-3xl p-8 md:p-16 border border-slate-100 dark:border-slate-800"
+                    className="bg-slate-50 rounded-3xl p-8 md:p-16 border border-slate-100"
                 >
                     <motion.div variants={fadeInUp} className="text-center max-w-3xl mx-auto mb-16">
-                        <h2 className="text-3xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tight mb-6">
+                        <h2 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight mb-6">
                             Manufactured in our state of the art US-based facilities
                         </h2>
                         <div className="w-24 h-1.5 bg-primary mx-auto rounded-full" />

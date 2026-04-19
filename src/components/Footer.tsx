@@ -18,18 +18,18 @@ const Footer = () => {
     ];
 
     return (
-        <footer className="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 mt-auto transition-colors">
+        <footer className="bg-white border-t border-slate-200 mt-auto transition-colors">
             {/* Trust Bar */}
-            <div className="border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
+            <div className="border-b border-slate-100 bg-slate-50/50">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
                         {trustItems.map((item, i) => (
                             <div key={i} className="flex flex-col items-center text-center md:flex-row md:text-left md:items-center gap-4 group">
-                                <div className="p-3 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 text-primary transition-transform group-hover:scale-110">
+                                <div className="p-3 bg-white rounded-2xl shadow-sm border border-slate-100 text-primary transition-transform group-hover:scale-110">
                                     <item.icon className="w-5 h-5" />
                                 </div>
                                 <div>
-                                    <p className="text-[10px] font-black tracking-[0.2em] text-slate-900 dark:text-white uppercase">{item.label}</p>
+                                    <p className="text-[10px] font-black tracking-[0.2em] text-slate-900 uppercase">{item.label}</p>
                                     <p className="text-[10px] font-bold text-slate-400 mt-0.5">{item.sub}</p>
                                 </div>
                             </div>
@@ -51,7 +51,7 @@ const Footer = () => {
                                     className="object-contain opacity-80"
                                 />
                             </div>
-                            <span className="text-lg font-black tracking-tight text-slate-900 dark:text-white uppercase">
+                            <span className="text-lg font-black tracking-tight text-slate-900 uppercase">
                                 BioLongevity <span className="text-primary italic">Labs</span>
                             </span>
                         </Link>
@@ -124,17 +124,17 @@ const Footer = () => {
                             target="_blank"
                             rel="noopener noreferrer"
                             aria-label="Visit Research Academy Institute Website"
-                            className="group flex flex-col sm:flex-row items-center gap-4 bg-slate-50 hover:bg-white dark:bg-slate-800/50 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-primary/50 dark:hover:border-primary/50 transition-all rounded-2xl p-4 md:px-8 shadow-sm hover:shadow-md w-full max-w-md"
+                            className="group flex flex-col sm:flex-row items-center gap-4 bg-slate-50 hover:bg-white border border-slate-200 hover:border-primary/50 transition-all rounded-2xl p-4 md:px-8 shadow-sm hover:shadow-md w-full max-w-md"
                         >
-                            <div className="shrink-0 bg-white p-2 rounded-xl shadow-sm border border-slate-100 dark:border-slate-600">
+                            <div className="shrink-0 bg-white p-2 rounded-xl shadow-sm border border-slate-100">
                                 <div className="font-serif font-black text-slate-800 text-lg leading-none flex flex-col text-center">
                                     <span>RESEARCH</span>
                                     <span className="text-xs text-slate-500 tracking-widest">ACADEMY</span>
                                 </div>
                             </div>
                             <div className="flex flex-col text-center sm:text-left">
-                                <span className="text-xs font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-1">Proud Member</span>
-                                <span className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2 justify-center sm:justify-start">
+                                <span className="text-xs font-black uppercase tracking-widest text-slate-400 mb-1">Proud Member</span>
+                                <span className="text-lg font-bold text-slate-900 flex items-center gap-2 justify-center sm:justify-start">
                                     <ShieldCheck className="w-5 h-5 text-emerald-500" />
                                     Verified Supplier
                                 </span>

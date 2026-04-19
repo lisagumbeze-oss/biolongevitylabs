@@ -68,7 +68,7 @@ export default function ShopPage() {
 
     if (isLoading) {
         return (
-            <div className="bg-white dark:bg-slate-950 min-h-screen transition-colors flex items-center justify-center">
+            <div className="bg-white min-h-screen transition-colors flex items-center justify-center">
                 <div className="flex flex-col items-center gap-4">
                     <Loader2 className="w-10 h-10 text-primary animate-spin" />
                     <p className="text-slate-500 font-bold uppercase tracking-widest text-xs">Loading Live Inventory...</p>
@@ -78,7 +78,7 @@ export default function ShopPage() {
     }
 
     return (
-        <div className="bg-white dark:bg-slate-950 min-h-screen transition-colors">
+        <div className="bg-white min-h-screen transition-colors">
             {/* Breadcrumb Schema */}
             <script
                 type="application/ld+json"
@@ -107,10 +107,10 @@ export default function ShopPage() {
 
                 {/* Page Header */}
                 <div className="mb-8">
-                    <h1 className="text-4xl font-bold text-slate-900 dark:text-white tracking-tight mb-2">
+                    <h1 className="text-4xl font-bold text-slate-900 tracking-tight mb-2">
                         Our Premium Compounds
                     </h1>
-                    <p className="text-slate-500 dark:text-slate-400 text-base flex items-center gap-2">
+                    <p className="text-slate-500 text-base flex items-center gap-2">
                         <Package className="w-4 h-4 text-primary" />
                         {filteredProducts.length} research-grade products available
                     </p>
@@ -124,8 +124,8 @@ export default function ShopPage() {
                                 key={cat}
                                 onClick={() => setActiveCategory(cat)}
                                 className={`px-5 py-2.5 rounded-full text-sm font-semibold whitespace-nowrap transition-all duration-200 ${activeCategory === cat
-                                    ? "bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-md"
-                                    : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700"
+                                    ? "bg-slate-900 text-white shadow-md"
+                                    : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                                     }`}
                             >
                                 {cat}
@@ -143,16 +143,16 @@ export default function ShopPage() {
                             placeholder="Search products..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full pl-11 pr-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all text-sm"
+                            className="w-full pl-11 pr-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all text-sm"
                         />
                     </div>
                     <div className="flex items-center gap-2">
-                        <div className="flex items-center gap-2 px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
+                        <div className="flex items-center gap-2 px-4 py-3 rounded-xl bg-slate-50 border border-slate-200">
                             <ArrowUpDown className="w-4 h-4 text-slate-400" />
                             <select
                                 value={sortBy}
                                 onChange={(e) => setSortBy(e.target.value)}
-                                className="bg-transparent text-sm font-medium text-slate-700 dark:text-slate-300 border-none focus:ring-0 cursor-pointer outline-none"
+                                className="bg-transparent text-sm font-medium text-slate-700 border-none focus:ring-0 cursor-pointer outline-none"
                             >
                                 <option value="featured">Featured</option>
                                 <option value="price-low">Price: Low to High</option>
@@ -165,7 +165,7 @@ export default function ShopPage() {
                 {/* Active Filter Indicator */}
                 {(activeCategory !== "All" || searchQuery) && (
                     <div className="flex items-center gap-3 mb-6">
-                        <span className="text-sm text-slate-500 dark:text-slate-400">Active filters:</span>
+                        <span className="text-sm text-slate-500">Active filters:</span>
                         {activeCategory !== "All" && (
                             <span className="inline-flex items-center gap-1.5 bg-primary/10 text-primary text-sm font-medium px-3 py-1 rounded-full">
                                 {activeCategory}
@@ -200,11 +200,11 @@ export default function ShopPage() {
                     </div>
                 ) : (
                     <div className="flex flex-col items-center justify-center py-24 text-center">
-                        <div className="w-20 h-20 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mb-6">
-                            <Search className="w-10 h-10 text-slate-300 dark:text-slate-600" />
+                        <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mb-6">
+                            <Search className="w-10 h-10 text-slate-300" />
                         </div>
-                        <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-2">No products found</h2>
-                        <p className="text-slate-500 dark:text-slate-400 max-w-xs mx-auto mb-6">
+                        <h2 className="text-xl font-bold text-slate-900 mb-2">No products found</h2>
+                        <p className="text-slate-500 max-w-xs mx-auto mb-6">
                             Try adjusting your filters or search terms to find what you&apos;re looking for.
                         </p>
                         <button

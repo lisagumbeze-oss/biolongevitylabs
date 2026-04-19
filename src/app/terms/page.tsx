@@ -46,7 +46,7 @@ export default function TermsPage() {
 
             <article className="flex-1 bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 p-8 md:p-12">
                 <header className="mb-12 pb-8 border-b border-slate-100 dark:border-slate-800">
-                    <h1 className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white tracking-tight mb-4">Legal Policies & Terms</h1>
+                    <h1 className="text-4xl sm:text-5xl font-black text-slate-900 tracking-tight mb-4">Legal Policies & Terms</h1>
                     <p className="text-slate-500 dark:text-slate-400 font-medium">Last updated: <span className="text-primary">October 2026</span></p>
                 </header>
 
@@ -56,7 +56,7 @@ export default function TermsPage() {
                     </p>
 
                     <section id="use-of-site" className="mb-16 scroll-mt-32">
-                        <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-4">
+                        <h2 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-4">
                             <span className="bg-primary/10 text-primary w-10 h-10 rounded-xl inline-flex items-center justify-center font-bold">1</span>
                             Use of Site
                         </h2>
@@ -78,7 +78,7 @@ export default function TermsPage() {
                     </section>
 
                     <section id="data-collection" className="mb-16 scroll-mt-32">
-                        <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-4">
+                        <h2 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-4">
                             <span className="bg-primary/10 text-primary w-10 h-10 rounded-xl inline-flex items-center justify-center font-bold">2</span>
                             Data Collection
                         </h2>
@@ -98,7 +98,7 @@ export default function TermsPage() {
                     </section>
 
                     <section id="cookies" className="mb-16 scroll-mt-32">
-                        <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-4">
+                        <h2 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-4">
                             <span className="bg-primary/10 text-primary w-10 h-10 rounded-xl inline-flex items-center justify-center font-bold">3</span>
                             Cookies
                         </h2>
@@ -113,7 +113,7 @@ export default function TermsPage() {
                     </section>
 
                     <section id="liability" className="mb-8 scroll-mt-32">
-                        <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-4">
+                        <h2 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-4">
                             <span className="bg-primary/10 text-primary w-10 h-10 rounded-xl inline-flex items-center justify-center font-bold">4</span>
                             Limitation of Liability
                         </h2>

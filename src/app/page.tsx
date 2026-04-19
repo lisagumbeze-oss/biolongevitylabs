@@ -4,7 +4,8 @@ import React, { useState, useEffect, useCallback } from "react";
 import Hero from "@/components/Hero";
 import ProductCard from "@/components/ProductCard";
 import AboutSection from "@/components/AboutSection";
-import { Truck, ShieldCheck, Award, Droplets, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import Link from "next/link";
+import { Truck, ShieldCheck, Award, Droplets, ChevronLeft, ChevronRight, Loader2, Beaker } from "lucide-react";
 import { Product } from "@/data/products";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -90,7 +91,7 @@ export default function Home() {
           <div className="flex items-center justify-between mb-10">
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white border-l-4 border-primary pl-4"
+              className="text-3xl font-bold tracking-tight text-slate-900 border-l-4 border-primary pl-4"
             >
               Featured Research Products
             </motion.h2>
@@ -157,6 +158,64 @@ export default function Home() {
             />
           ))}
         </div>
+        </motion.div>
+      </section>
+
+      <section className="relative py-24 overflow-hidden">
+        <div className="absolute inset-0 bg-slate-900">
+           <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_50%_50%,rgba(99,102,241,0.4),transparent_70%)]"></div>
+        </div>
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={staggerContainer}
+          className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+        >
+          <div className="bg-white/5 backdrop-blur-2xl rounded-[3rem] border border-white/10 p-8 sm:p-16 flex flex-col lg:flex-row items-center gap-12 sm:gap-20">
+            <div className="flex-1 text-center lg:text-left">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-primary/10 text-primary rounded-full mb-6 ring-1 ring-primary/20">
+                <span className="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                <span className="text-[10px] font-black uppercase tracking-widest">Interactive Lab Assistant</span>
+              </div>
+              <h2 className="text-4xl sm:text-6xl font-black text-white tracking-tighter mb-8 leading-tight">
+                Not sure where to <br /><span className="text-primary italic">start your research?</span>
+              </h2>
+              <p className="text-lg text-slate-400 font-medium leading-relaxed mb-10 max-w-xl">
+                Our AI-driven protocol finder helps you navigate our catalog by matching our 99%+ purity compounds to your specific study objectives.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                <Link 
+                  href="/protocol-finder"
+                  className="px-10 py-5 bg-primary text-white text-xs font-black uppercase tracking-[0.2em] rounded-2xl hover:scale-105 transition-all shadow-xl shadow-primary/25 text-center"
+                >
+                  Start Assessment
+                </Link>
+                <Link 
+                  href="/research"
+                  className="px-10 py-5 bg-white/5 text-white text-xs font-black uppercase tracking-[0.2em] rounded-2xl hover:bg-white/10 transition-all border border-white/10 text-center"
+                >
+                  View Science
+                </Link>
+              </div>
+            </div>
+            
+            <div className="flex-1 w-full max-w-md lg:max-w-none">
+              <div className="relative aspect-square lg:aspect-video rounded-[2.5rem] overflow-hidden border border-white/10 group">
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-violet-600/30 group-hover:opacity-60 transition-opacity"></div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-full bg-white/10 backdrop-blur-3xl border border-white/20 flex items-center justify-center animate-pulse">
+                     <Beaker className="w-10 h-10 sm:w-14 sm:h-14 text-white opacity-40" />
+                  </div>
+                </div>
+                <img 
+                  src="https://mlavgymrtxzc.i.optimole.com/cb:572_.56b/w:auto/h:auto/q:mauto/f:best/https://biolongevitylabs.com/wp-content/uploads/2026/01/Thymulin.jpg" 
+                  alt="Protocol Finder" 
+                  className="w-full h-full object-cover mix-blend-overlay group-hover:scale-110 transition-transform duration-1000"
+                />
+              </div>
+            </div>
+          </div>
         </motion.div>
       </section>
 

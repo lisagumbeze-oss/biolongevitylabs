@@ -112,7 +112,7 @@ export default function ContactPage() {
             <div className="max-w-[1200px] w-full flex flex-col gap-12">
 
                 <div className="flex flex-col gap-4 text-center md:text-left">
-                    <h1 className="text-4xl md:text-5xl font-black leading-tight tracking-tight text-white mb-2">
+                    <h1 className="text-4xl md:text-5xl font-black leading-tight tracking-tight text-slate-900 mb-2">
                         Contact <span className="text-primary">Support</span>
                     </h1>
                     <p className="text-slate-600 dark:text-slate-400 text-lg font-medium leading-relaxed max-w-2xl">
@@ -247,7 +247,7 @@ export default function ContactPage() {
                             <motion.h2 
                                 initial={{ opacity: 0, x: -20 }}
                                 whileInView={{ opacity: 1, x: 0 }}
-                                className="text-3xl font-bold leading-tight tracking-tight text-white relative inline-block mb-4"
+                                className="text-3xl font-bold leading-tight tracking-tight text-slate-900 relative inline-block mb-4"
                             >
                                 Contact Information
                                 <span className="absolute -bottom-2 left-0 w-12 h-1 bg-primary rounded-full"></span>
@@ -297,7 +297,7 @@ export default function ContactPage() {
                             <HelpCircle className="w-7 h-7" />
                         </div>
                         <div>
-                            <h2 className="text-3xl font-black leading-tight tracking-tight text-white uppercase">Frequently Asked Questions</h2>
+                            <h2 className="text-3xl font-black leading-tight tracking-tight text-slate-900 uppercase">Frequently Asked Questions</h2>
                         </div>
                     </div>
 

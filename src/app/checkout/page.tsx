@@ -104,18 +104,15 @@ export default function CheckoutPage() {
 
     const subtotal = getTotal();
     const shippingZone = formData.country === "USA" ? settings?.shipping.usa : settings?.shipping.international;
-    const standardRate = shippingZone ? parseFloat(shippingZone.standardRate) : 15.0;
-    const priorityRate = shippingZone ? parseFloat(shippingZone.priorityRate) : 45.0;
-    const freeThreshold = shippingZone ? parseFloat(shippingZone.freeShippingThreshold) : 149.0;
+    const standardRate = 15.0;
+    const priorityRate = 45.0;
+    const freeThreshold = 500.0;
 
     const isFreeShipping = subtotal >= freeThreshold;
 
-    let shippingPrice = 0.0;
-    if (formData.shippingMethod === "express") {
-        shippingPrice = priorityRate;
-    } else {
-        shippingPrice = isFreeShipping ? 0.0 : standardRate;
-    }
+    const shippingPrice = formData.shippingMethod === "express" 
+        ? priorityRate 
+        : (isFreeShipping ? 0.0 : standardRate);
 
     let discount = 0;
     if (appliedCoupon) {

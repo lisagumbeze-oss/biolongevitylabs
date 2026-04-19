@@ -7,18 +7,11 @@
   --background-dark: #0d1520;
 }
 
-/* next-themes uses .dark class on <html> */
-.dark {
-  --background: #0d1520;
-  --foreground: #f8fafc;
-}
-
-/* Also respect system preference when no explicit class is set */
-@media (prefers-color-scheme: dark) {
-  :root:not(.light) {
-    --background: #0d1520;
-    --foreground: #f8fafc;
-  }
+/* Force light mode variables */
+:root {
+  --background: #ffffff;
+  --foreground: #0f172a;
+  --primary: #137fec;
 }
 
 @theme {

@@ -12,8 +12,10 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import ProductCard from "@/components/ProductCard";
+import ReviewList from "@/components/ReviewList";
+import ReviewForm from "@/components/ReviewForm";
+import toast, { Toaster } from 'react-hot-toast';
 import { motion, AnimatePresence } from "framer-motion";
-import toast from "react-hot-toast";
 
 interface Props {
     id: string;
@@ -28,6 +30,30 @@ export default function ProductDetailsView({ id }: Props) {
     const addItem = useCart((state) => state.addItem);
     const setIsCartOpen = useCart((state) => state.setIsCartOpen);
     const [quantity, setQuantity] = useState(1);
+    const [reviews, setReviews] = useState<any[]>([]);
+    const [loadingReviews, setLoadingReviews] = useState(true);
+
+    const fetchReviews = async () => {
+        if (!product) return;
+        setLoadingReviews(true);
+        try {
+            const res = await fetch(`/api/reviews?productId=${product.id}`);
+            if (res.ok) {
+                const data = await res.json();
+                setReviews(data);
+            }
+        } catch (error) {
+            console.error("Failed to fetch reviews:", error);
+        } finally {
+            setLoadingReviews(false);
+        }
+    };
+
+    useEffect(() => {
+        if (product) {
+            fetchReviews();
+        }
+    }, [product]);
     const [selectedImage, setSelectedImage] = useState("");
 
     const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
@@ -150,8 +176,8 @@ export default function ProductDetailsView({ id }: Props) {
     if (!product) {
         return (
             <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
-                <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-4">Product Not Found</h2>
-                <p className="text-slate-600 dark:text-slate-400 mb-8">The product you are looking for does not exist or has been removed.</p>
+                <h2 className="text-2xl font-bold text-slate-900 mb-4">Product Not Found</h2>
+                <p className="text-slate-600 mb-8">The product you are looking for does not exist or has been removed.</p>
                 <Link href="/shop" className="bg-primary text-white px-8 py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors">
                     Back to Shop
                 </Link>
@@ -160,8 +186,8 @@ export default function ProductDetailsView({ id }: Props) {
     }
 
     return (
-        <div className="bg-white dark:bg-slate-950 min-h-screen transition-colors pb-20 overflow-x-hidden">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+        <div className="bg-white min-h-screen transition-colors pb-20 overflow-x-hidden">
+            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
 
                 {/* Breadcrumbs */}
                 <nav className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-400 mb-8 overflow-x-auto whitespace-nowrap scrollbar-hide">
@@ -169,13 +195,13 @@ export default function ProductDetailsView({ id }: Props) {
                     <ChevronRight className="w-3 h-3 shrink-0" />
                     <Link href="/shop" className="hover:text-primary transition-colors">Shop</Link>
                     <ChevronRight className="w-3 h-3 shrink-0" />
-                    <span className="text-slate-900 dark:text-white truncate max-w-[150px]">{product.name}</span>
+                    <span className="text-slate-900 truncate max-w-[150px]">{product.name}</span>
                 </nav>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
                     {/* Sticky Image Section */}
                     <div className="lg:sticky lg:top-24 h-fit space-y-6">
-                        <div className="relative aspect-square rounded-4xl overflow-hidden bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-inner group">
+                        <div className="relative aspect-square rounded-4xl overflow-hidden bg-slate-50 border border-slate-100 shadow-inner group">
                             <motion.img
                                 key={selectedImage}
                                 initial={{ opacity: 0 }}
@@ -223,9 +249,15 @@ export default function ProductDetailsView({ id }: Props) {
                                     <CheckCircle2 className="w-3.5 h-3.5" />
                                     <span className="text-[10px] font-black uppercase tracking-widest">Verified Quality</span>
                                 </div>
+                                {product.coa?.purityPercentage && (
+                                    <div className="flex items-center gap-1.5 px-3 py-1.5 border border-emerald-500/10 bg-emerald-500/5 text-emerald-600 dark:text-emerald-400 rounded-full">
+                                        <ShieldCheck className="w-3.5 h-3.5" />
+                                        <span className="text-[10px] font-black uppercase tracking-widest">{product.coa.purityPercentage}% Purity Tested</span>
+                                    </div>
+                                )}
                             </div>
 
-                            <h1 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white mb-6 tracking-tight leading-[1.1]">
+                            <h1 className="text-3xl sm:text-4xl font-black text-slate-900 mb-6 tracking-tight leading-[1.1]">
                                 {product.name}
                             </h1>
 
@@ -236,7 +268,7 @@ export default function ProductDetailsView({ id }: Props) {
                                             <Star key={i} className="w-4 h-4 fill-current last:opacity-30" />
                                         ))}
                                     </div>
-                                    <span className="text-xs text-slate-900 dark:text-white font-black uppercase tracking-widest">4.88 (34 Reviews)</span>
+                                    <span className="text-xs text-slate-900 font-black uppercase tracking-widest">4.88 (34 Reviews)</span>
                                 </div>
                                 <div className="h-4 w-px bg-slate-200 dark:bg-slate-800 hidden sm:block"></div>
                                 <div className="flex items-center gap-2">
@@ -260,6 +292,30 @@ export default function ProductDetailsView({ id }: Props) {
                                 <Info className="w-4 h-4 text-primary shrink-0" />
                                 <span className="text-xs uppercase tracking-widest font-black">Laboratory Research Chemical • Scroll down for full specifications</span>
                             </p>
+
+                            {product.coa && (
+                                <div className="mb-8 flex items-center gap-4 p-5 bg-emerald-500/5 dark:bg-emerald-500/10 border border-emerald-500/10 dark:border-emerald-500/20 rounded-3xl animate-in fade-in slide-in-from-left-4 duration-500">
+                                    <div className="w-12 h-12 rounded-2xl bg-white dark:bg-slate-900 border border-emerald-500/10 flex items-center justify-center text-emerald-600">
+                                        <Beaker className="w-6 h-6" />
+                                    </div>
+                                    <div className="flex-1">
+                                        <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-900 mb-1">HPLC Laboratory Report Available</h4>
+                                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-tighter">
+                                            Verified by {product.coa.labName} 
+                                            {product.coa.batchNumber ? ` • Batch #${product.coa.batchNumber}` : ''}
+                                            {product.coa.testDate ? ` • Tested ${new Date(product.coa.testDate).toLocaleDateString()}` : ''}
+                                        </p>
+                                    </div>
+                                    <a 
+                                        href={product.coa.reportUrl} 
+                                        target="_blank" 
+                                        rel="noopener noreferrer"
+                                        className="h-10 px-5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-[10px] font-black uppercase tracking-widest rounded-xl flex items-center justify-center hover:scale-105 transition-transform shadow-lg"
+                                    >
+                                        View PDF
+                                    </a>
+                                </div>
+                            )}
                         </div>
 
                         {/* Selection Controls */}
@@ -268,7 +324,7 @@ export default function ProductDetailsView({ id }: Props) {
                                 <div className="flex flex-col gap-6">
                                     {product.variables.map((variable) => (
                                         <div key={variable.name} className="flex flex-col gap-3">
-                                            <label className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-widest flex items-center gap-2 px-1">
+                                            <label className="text-[10px] font-black text-slate-900 uppercase tracking-widest flex items-center gap-2 px-1">
                                                 <Layers className="w-3.5 h-3.5 text-primary" />
                                                 {variable.name}
                                             </label>
@@ -290,24 +346,72 @@ export default function ProductDetailsView({ id }: Props) {
                                 </div>
                             )}
 
-                            <div className="flex flex-col gap-4">
-                                <label className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-widest px-1">Quantity</label>
-                            <div className="flex items-center border border-slate-200 dark:border-slate-800 rounded-3xl h-14 bg-white dark:bg-slate-950 w-full sm:w-fit">
-                                    <button
-                                        onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                                        className="w-14 h-full flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-colors border-r border-slate-200 dark:border-slate-800"
-                                    >
-                                        <Minus className="w-4 h-4" />
-                                    </button>
-                                    <span className="px-10 font-black text-lg min-w-16 text-center text-slate-900 dark:text-white">{quantity}</span>
-                                    <button
-                                        onClick={() => setQuantity(quantity + 1)}
-                                        className="w-14 h-full flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-colors border-l border-slate-200 dark:border-slate-800"
-                                    >
-                                        <Plus className="w-4 h-4" />
-                                    </button>
+                                <div className="flex flex-col gap-4">
+                                    <label className="text-[10px] font-black text-slate-900 uppercase tracking-widest px-1">Quantity</label>
+                                    <div className="flex flex-col sm:flex-row gap-6 items-start sm:items-center">
+                                        <div className="flex items-center border border-slate-200 rounded-3xl h-14 bg-white w-full sm:w-fit">
+                                            <button
+                                                onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                                                className="w-14 h-full flex items-center justify-center text-slate-500 hover:text-primary transition-colors border-r border-slate-200"
+                                            >
+                                                <Minus className="w-4 h-4" />
+                                            </button>
+                                            <span className="px-10 font-black text-lg min-w-16 text-center text-slate-900">{quantity}</span>
+                                            <button
+                                                onClick={() => setQuantity(quantity + 1)}
+                                                className="w-14 h-full flex items-center justify-center text-slate-500 hover:text-primary transition-colors border-l border-slate-200"
+                                            >
+                                                <Plus className="w-4 h-4" />
+                                            </button>
+                                        </div>
+
+                                        {/* Wholesale Info Badge */}
+                                        <AnimatePresence>
+                                            {quantity >= 3 && (
+                                                <motion.div 
+                                                    initial={{ opacity: 0, scale: 0.8, x: -20 }}
+                                                    animate={{ opacity: 1, scale: 1, x: 0 }}
+                                                    exit={{ opacity: 0, scale: 0.8 }}
+                                                    className="flex items-center gap-2 px-4 py-2 bg-primary/10 text-primary rounded-2xl border border-primary/20"
+                                                >
+                                                    <Zap className="w-4 h-4 fill-primary" />
+                                                    <span className="text-[10px] font-black uppercase tracking-widest">
+                                                        {quantity >= 25 ? "Wholesale: 40% Off Applied" : 
+                                                         quantity >= 10 ? "Bulk: 25% Off Applied" : 
+                                                         "Bundle: 10% Off Applied"}
+                                                    </span>
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
+                                    </div>
                                 </div>
-                            </div>
+
+                                {/* Wholesale Price Table */}
+                                <div className="bg-white rounded-3xl border border-slate-100 p-6">
+                                    <div className="flex items-center gap-2 mb-4">
+                                        <Layers className="w-4 h-4 text-primary" />
+                                        <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-900">Research Wholesale Pricing</h4>
+                                    </div>
+                                    <div className="grid grid-cols-3 gap-4">
+                                        {[
+                                            { qty: '3+', discount: '10%', label: 'Bundle' },
+                                            { qty: '10+', discount: '25%', label: 'Professional' },
+                                            { qty: '25+', discount: '40%', label: 'Wholesale' }
+                                        ].map((tier, i) => (
+                                            <div key={i} className={`p-4 rounded-2xl border transition-all ${
+                                                (tier.qty === '3+' && quantity >= 3 && quantity < 10) ||
+                                                (tier.qty === '10+' && quantity >= 10 && quantity < 25) ||
+                                                (tier.qty === '25+' && quantity >= 25)
+                                                ? 'border-primary bg-primary/[0.02] ring-1 ring-primary/20' 
+                                                : 'border-slate-50 bg-slate-50/50'
+                                            }`}>
+                                                <p className="text-[9px] font-black text-slate-400 uppercase tracking-tighter mb-1">{tier.label}</p>
+                                                <p className="text-sm font-black text-slate-900 leading-none mb-1">{tier.qty} Units</p>
+                                                <p className="text-[10px] font-black text-primary uppercase">{tier.discount} SAVINGS</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <button
@@ -398,12 +502,12 @@ export default function ProductDetailsView({ id }: Props) {
                                         <p className="text-[9px] font-bold uppercase text-slate-500">HPLC 99%+ Purity</p>
                                     </div>
                                 </div>
-                                <div className="flex items-center gap-3 p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-100 dark:border-slate-800">
+                                <div className="flex items-center gap-3 p-4 bg-slate-50 rounded-2xl border border-slate-100">
                                     <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
                                         <ShieldCheck className="w-5 h-5" />
                                     </div>
                                     <div>
-                                        <p className="text-[10px] font-black uppercase text-slate-900 dark:text-white">Verified Origin</p>
+                                        <p className="text-[10px] font-black uppercase text-slate-900">Verified Origin</p>
                                         <p className="text-[9px] font-bold uppercase text-slate-500">GMP Manufactured</p>
                                     </div>
                                 </div>
@@ -412,14 +516,14 @@ export default function ProductDetailsView({ id }: Props) {
 
                         <div className="lg:col-span-2">
                             <div
-                                className="prose prose-slate dark:prose-invert max-w-none 
-                                prose-h2:text-xl prose-h2:font-black prose-h2:uppercase prose-h2:tracking-widest prose-h2:mb-6 prose-h2:text-slate-900 dark:prose-h2:text-white
-                                prose-h3:text-sm prose-h3:font-bold prose-h3:uppercase prose-h3:tracking-widest prose-h3:mt-10 prose-h3:mb-4 prose-h3:text-primary dark:prose-h3:text-blue-400
-                                prose-p:text-slate-600 dark:prose-p:text-slate-300 prose-p:leading-relaxed prose-p:mb-6 prose-p:text-base
-                                prose-strong:text-slate-900 dark:prose-strong:text-white prose-strong:font-black
+                                className="prose prose-slate max-w-none 
+                                prose-h2:text-xl prose-h2:font-black prose-h2:uppercase prose-h2:tracking-widest prose-h2:mb-6 prose-h2:text-slate-900
+                                prose-h3:text-sm prose-h3:font-bold prose-h3:uppercase prose-h3:tracking-widest prose-h3:mt-10 prose-h3:mb-4 prose-h3:text-primary
+                                prose-p:text-slate-800 prose-p:leading-relaxed prose-p:mb-6 prose-p:text-base
+                                prose-strong:text-slate-900 prose-strong:font-black
                                 prose-table:border-collapse prose-table:my-10 prose-table:shadow-sm prose-table:rounded-2xl prose-table:overflow-hidden 
-                                prose-th:bg-slate-50 dark:prose-th:bg-slate-900 prose-th:p-4 prose-th:text-xs prose-th:font-black prose-th:uppercase prose-th:tracking-widest prose-th:text-slate-900 dark:prose-th:text-white
-                                prose-td:p-4 prose-td:border prose-td:border-slate-100 dark:prose-td:border-slate-800 prose-td:text-sm prose-td:text-slate-600 dark:prose-td:text-slate-400 font-medium"
+                                prose-th:bg-slate-50 prose-th:p-4 prose-th:text-xs prose-th:font-black prose-th:uppercase prose-th:tracking-widest prose-th:text-slate-900
+                                prose-td:p-4 prose-td:border prose-td:border-slate-100 prose-td:text-sm prose-td:text-slate-700 font-medium"
                                 dangerouslySetInnerHTML={{ __html: product.description }}
                             />
 
@@ -444,7 +548,7 @@ export default function ProductDetailsView({ id }: Props) {
                     <div className="mt-40 pt-20 border-t border-slate-100 dark:border-slate-800 text-left">
                         <div className="flex flex-col md:flex-row justify-between items-end gap-6 mb-12">
                             <div className="text-left">
-                                <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter mb-4">Complete Your Research</h2>
+                                <h2 className="text-3xl font-black text-slate-900 tracking-tighter mb-4">Complete Your Research</h2>
                                 <p className="text-slate-500 font-bold uppercase tracking-widest text-xs flex items-center gap-2">
                                     <Layers className="w-4 h-4 text-primary" />
                                     Synergistic compounds from the <span className="text-primary font-black">{product.category}</span> lineup
@@ -463,32 +567,32 @@ export default function ProductDetailsView({ id }: Props) {
                     </div>
                 )}
 
-                {/* Tabs / Info Sections */}
-                <div className="mt-32 border-t border-slate-100 dark:border-slate-800 pt-20 text-left">
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-20">
-                        <div className="lg:col-span-1 text-left">
-                            <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter mb-4 leading-none">Research Specification</h2>
-                            <p className="text-sm font-bold text-slate-400 uppercase tracking-widest leading-loose">Comprehensive documentation for laboratory application and compound verification.</p>
-                        </div>
-                        <div className="lg:col-span-2 space-y-10">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                {[
-                                    { title: "HPLC Verification", content: "Purity levels exceeding 99.2% guaranteed via third-party high-performance liquid chromatography testing.", icon: ShieldCheck },
-                                    { title: "Storage Compliance", content: "Stored at -20°C in oxygen-free environment. Shipped with cold-chain monitoring protocols.", icon: Package },
-                                    { title: "CAS Registry", content: "Uniquely identified compound with full structural validation and mass spectrometry reports.", icon: Info },
-                                    { title: "Usage Policy", content: "Strictly for lab research. Not for human or therapeutic use. Waiver required for bulk orders.", icon: Lock }
-                                ].map((spec, i) => (
-                                    <div key={i} className="p-8 bg-slate-50 dark:bg-slate-900/50 rounded-4xl border border-slate-100 dark:border-slate-800 group hover:border-primary/30 transition-colors text-left">
-                                        <spec.icon className="w-8 h-8 text-primary/40 group-hover:text-primary transition-colors mb-6" />
-                                        <h3 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-widest mb-3">{spec.title}</h3>
-                                        <p className="text-sm text-slate-500 dark:text-slate-400 font-medium leading-relaxed">{spec.content}</p>
-                                    </div>
-                                ))}
+                {/* Reviews Section */}
+                <div className="mt-32 max-w-4xl">
+                    <div className="flex flex-col gap-6 mb-12">
+                        <div className="flex items-center gap-3">
+                            <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
+                                <Star className="w-6 h-6 fill-primary" />
                             </div>
+                            <h2 className="text-3xl font-black text-slate-900 tracking-tight">Verified Research Feedback</h2>
+                        </div>
+                        <p className="text-slate-500 font-medium max-w-2xl">
+                            Clinical observations and feedback from certified researchers across our global network.
+                        </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 gap-16">
+                        <div className="order-2 lg:order-1">
+                            <ReviewList reviews={reviews} isLoading={loadingReviews} />
+                        </div>
+                        
+                        <div className="order-1 lg:order-2">
+                            <ReviewForm productId={product.id} onSuccess={fetchReviews} />
                         </div>
                     </div>
                 </div>
-            </div>
+            </main>
+            <Toaster position="bottom-right" />
         </div>
     );
 }

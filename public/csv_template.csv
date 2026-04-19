@@ -1,0 +1,3 @@
+name,category,form,price,description,image,stockStatus,variations
+"BPC-157 (5mg)","Peptide Vials","Vial","49.99","Research-grade BPC-157 peptide for laboratory use","https://example.com/bpc-157.jpg","In Stock","[]"
+"TB-500 (2mg)","Peptide Vials","Vial","39.99","Thymosin Beta-4 Fragment for in vitro research","https://example.com/tb-500.jpg","In Stock","[{""option"":""2mg"",""price"":39.99},{""option"":""5mg"",""price"":79.99}]"

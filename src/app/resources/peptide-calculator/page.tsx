@@ -80,7 +80,7 @@ export default function PeptideCalculatorPage() {
                                 <Calculator className="w-6 h-6" />
                             </div>
                             <div>
-                                <h2 className="text-xl font-black text-slate-900 dark:text-white">Measurement Inputs</h2>
+                                <h2 className="text-xl font-black text-slate-900">Measurement Inputs</h2>
                                 <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">Enter your experiment variables</p>
                             </div>
                         </div>
@@ -88,7 +88,7 @@ export default function PeptideCalculatorPage() {
                         <div className="space-y-6">
                             {/* Peptide Mass */}
                             <div>
-                                <label className="block text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-2">
+                                <label className="block text-sm font-bold text-slate-900 uppercase tracking-wider mb-2">
                                     Peptide Mass (Vial Size)
                                 </label>
                                 <select
@@ -119,7 +119,7 @@ export default function PeptideCalculatorPage() {
 
                             {/* Diluent Volume */}
                             <div>
-                                <label className="block text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-2">
+                                <label className="block text-sm font-bold text-slate-900 uppercase tracking-wider mb-2">
                                     Diluent Volume (Bac Water)
                                 </label>
                                 <select
@@ -149,7 +149,7 @@ export default function PeptideCalculatorPage() {
 
                             {/* Target Dose */}
                             <div>
-                                <label className="block text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-2">
+                                <label className="block text-sm font-bold text-slate-900 uppercase tracking-wider mb-2">
                                     Target Dose (Per Administration)
                                 </label>
                                 <select
@@ -190,7 +190,7 @@ export default function PeptideCalculatorPage() {
 
                             {/* Syringe Size */}
                             <div>
-                                <label className="block text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-2">
+                                <label className="block text-sm font-bold text-slate-900 uppercase tracking-wider mb-2">
                                     Syringe Size
                                 </label>
                                 <select
@@ -288,7 +288,7 @@ export default function PeptideCalculatorPage() {
                 {/* Embedded Guide Section */}
                 <div className="mt-20 pt-16 border-t border-slate-200 dark:border-slate-800">
                     <div className="text-center mb-12">
-                        <h2 className="text-3xl md:text-4xl font-black text-slate-900 dark:text-white mb-4">Need reconstitution instructions?</h2>
+                        <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-4">Need reconstitution instructions?</h2>
                         <p className="text-slate-500 dark:text-slate-400 font-medium text-lg max-w-2xl mx-auto mb-8">
                             Read our comprehensive guide on handling, diluting, and storing research peptides properly for maximum stability.
                         </p>

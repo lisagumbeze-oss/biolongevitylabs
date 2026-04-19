@@ -16,6 +16,15 @@ function writeProductsLocal(products: unknown[]) {
     fs.writeFileSync(PRODUCTS_JSON, JSON.stringify(products, null, 4));
 }
 
+interface COARow {
+    id: string;
+    lab_name: string;
+    purity_percentage: number | null;
+    report_url: string;
+    test_date: string | null;
+    batch_number: string | null;
+}
+
 interface ProductRow {
     id: string;
     name: string;
@@ -33,6 +42,7 @@ interface ProductRow {
     is_new: boolean;
     product_variables?: VariableRow[];
     product_variations?: VariationRow[];
+    product_coas?: COARow | COARow[]; // Can be either depending on PostgREST version/config, but testing showed object
 }
 
 interface VariableRow {
@@ -52,7 +62,7 @@ export async function GET() {
         if (supabase) {
             const { data, error } = await supabase
                 .from('products')
-                .select('*, product_variables(*), product_variations(*)');
+                .select('*, product_variables(*), product_variations(*), product_coas(*)');
 
             if (error) throw error;
 
@@ -90,7 +100,22 @@ export async function GET() {
                         attributes: v.attributes,
                         price: v.price,
                         stockStatus: v.stock_status
-                    })) || []
+                    })) || [],
+                    coa: p.product_coas ? (Array.isArray(p.product_coas) ? (p.product_coas.length > 0 ? {
+                        id: p.product_coas[0].id,
+                        labName: p.product_coas[0].lab_name,
+                        purityPercentage: p.product_coas[0].purity_percentage || undefined,
+                        reportUrl: p.product_coas[0].report_url,
+                        testDate: p.product_coas[0].test_date || undefined,
+                        batchNumber: p.product_coas[0].batch_number || undefined
+                    } : undefined) : {
+                        id: (p.product_coas as COARow).id,
+                        labName: (p.product_coas as COARow).lab_name,
+                        purityPercentage: (p.product_coas as COARow).purity_percentage || undefined,
+                        reportUrl: (p.product_coas as COARow).report_url,
+                        testDate: (p.product_coas as COARow).test_date || undefined,
+                        batchNumber: (p.product_coas as COARow).batch_number || undefined
+                    }) : undefined
                 };
             });
 
