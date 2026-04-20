@@ -3,10 +3,12 @@ import { spawn } from 'child_process';
 import path from 'path';
 import fs from 'fs';
 
-const LOG_FILE = path.join(process.cwd(), '.tmp/scraper.log');
+const LOG_FILE = process.env.VERCEL 
+    ? path.join('/tmp', 'scraper.log') 
+    : path.join(process.cwd(), '.tmp/scraper.log');
 
-// Ensure .tmp directory exists
-if (!fs.existsSync(path.join(process.cwd(), '.tmp'))) {
+// Ensure .tmp directory exists locally
+if (!process.env.VERCEL && !fs.existsSync(path.join(process.cwd(), '.tmp'))) {
     fs.mkdirSync(path.join(process.cwd(), '.tmp'));
 }
 
@@ -23,16 +25,20 @@ export async function GET() {
 export async function POST(request: Request) {
     try {
         const { script } = await request.json();
-        const scriptPath = path.join(process.cwd(), `execution/${script}.mjs`);
+        
+        // Use unconventional path construction to prevent Turbopack analysis
+        const base = "execution";
+        const scriptPath = path.join(process.cwd(), base, `${script}.mjs`);
 
         if (!fs.existsSync(scriptPath)) {
-            return NextResponse.json({ error: 'Script not found' }, { status: 404 });
+            return NextResponse.json({ error: 'Script not found at ' + scriptPath }, { status: 404 });
         }
 
         // Clear log file
         fs.writeFileSync(LOG_FILE, `[${new Date().toISOString()}] Starting ${script}...\n`);
 
-        const child = spawn('node', [scriptPath], {
+        const nodePath = process.env.NODE_PATH || 'node';
+        const child = spawn(nodePath, [scriptPath], {
             env: { ...process.env, FORCE_COLOR: '0' },
             detached: true,
             stdio: 'pipe'

@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "src/app/api/admin/scraper/route.ts": {
+      "includeFiles": "execution/**/*.mjs"
+    }
+  }
+}
