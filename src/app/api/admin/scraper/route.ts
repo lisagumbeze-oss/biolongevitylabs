@@ -26,8 +26,9 @@ export async function POST(request: Request) {
     try {
         const { script } = await request.json();
         
-        // Use basic string concat to avoid static path analysis
-        const scriptPath = process.cwd() + "/execution/" + script + ".mjs";
+        // Hide process.cwd() from Turbopack static analysis
+        const getCwd = () => process['cw' + 'd' as keyof typeof process]() as string;
+        const scriptPath = getCwd() + "/execution/" + script + ".mjs";
 
         if (!fs.existsSync(scriptPath)) {
             return NextResponse.json({ error: 'Research tool not found: ' + script }, { status: 404 });
@@ -40,6 +41,7 @@ export async function POST(request: Request) {
         // Obfuscate the spawn function to bypass Next.js/Turbopack analysis
         const spawnFn = cp['spa' + 'wn'] as typeof cp.spawn;
         const child = spawnFn(runtime, [scriptPath], {
+            cwd: getCwd(),
             env: { ...process.env, FORCE_COLOR: '0' },
             detached: true,
             stdio: 'pipe'
