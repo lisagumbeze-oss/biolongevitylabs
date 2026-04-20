@@ -26,19 +26,20 @@ export async function POST(request: Request) {
     try {
         const { script } = await request.json();
         
-        // Use unconventional path construction to prevent Turbopack analysis
-        const base = "execution";
-        const scriptPath = path.join(process.cwd(), base, `${script}.mjs`);
+        // Obfuscate path to avoid Turbopack static analysis attempting to 'bundle' it as a module
+        const dir = ["execut", "ion"].join("");
+        const ext = [".m", "js"].join("");
+        const scriptPath = path.join(process.cwd(), dir, script + ext);
 
         if (!fs.existsSync(scriptPath)) {
-            return NextResponse.json({ error: 'Script not found at ' + scriptPath }, { status: 404 });
+            return NextResponse.json({ error: 'Research tool not found: ' + script }, { status: 404 });
         }
 
         // Clear log file
-        fs.writeFileSync(LOG_FILE, `[${new Date().toISOString()}] Starting ${script}...\n`);
+        fs.writeFileSync(LOG_FILE, `[${new Date().toISOString()}] Starting operational task: ${script}...\n`);
 
-        const nodePath = process.env.NODE_PATH || 'node';
-        const child = spawn(nodePath, [scriptPath], {
+        const runtime = process.env.NODE_PATH || 'node';
+        const child = spawn(runtime, [scriptPath], {
             env: { ...process.env, FORCE_COLOR: '0' },
             detached: true,
             stdio: 'pipe'
@@ -53,12 +54,12 @@ export async function POST(request: Request) {
         });
 
         child.on('close', (code) => {
-            fs.appendFileSync(LOG_FILE, `\n[${new Date().toISOString()}] Finished with code ${code}\n`);
+            fs.appendFileSync(LOG_FILE, `\n[${new Date().toISOString()}] Operational task completed with code ${code}\n`);
         });
 
-        return NextResponse.json({ message: 'Scraper started' });
+        return NextResponse.json({ message: 'Operational command initiated' });
     } catch (error) {
-        console.error('Scraper API Error:', error);
-        return NextResponse.json({ error: 'Failed to start scraper' }, { status: 500 });
+        console.error('Operational API Error:', error);
+        return NextResponse.json({ error: 'Failed to initiate operational command' }, { status: 500 });
     }
 }
