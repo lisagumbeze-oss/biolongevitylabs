@@ -102,3 +102,18 @@ CREATE TABLE store_settings (
 ALTER TABLE store_settings ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Allow public read access to store_settings" ON store_settings FOR SELECT USING (true);
 CREATE POLICY "Allow admin update access to store_settings" ON store_settings FOR UPDATE USING (true); -- In search of simplicity, bypassing complex auth checks for now as RLS is enabled.
+
+-- 9. Coupons Table
+CREATE TABLE coupons (
+    id TEXT PRIMARY KEY,
+    code TEXT UNIQUE NOT NULL,
+    discount_type TEXT NOT NULL,
+    discount_value DECIMAL(12,2) NOT NULL,
+    min_amount DECIMAL(12,2),
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+ALTER TABLE coupons ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Allow public read access to coupons" ON coupons FOR SELECT USING (true);
+CREATE POLICY "Allow admin full access to coupons" ON coupons FOR ALL USING (true);

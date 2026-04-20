@@ -1,10 +1,11 @@
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
+import { supabase } from '@/lib/supabase';
 
 const COUPONS_JSON = path.join(process.cwd(), 'src/data/coupons.json');
 
-function readCoupons() {
+function readCouponsLocal() {
     if (!fs.existsSync(COUPONS_JSON)) {
         return [];
     }
@@ -12,15 +13,26 @@ function readCoupons() {
     return JSON.parse(content);
 }
 
-function writeCoupons(coupons: any) {
+function writeCouponsLocal(coupons: any) {
     fs.writeFileSync(COUPONS_JSON, JSON.stringify(coupons, null, 4));
 }
 
 export async function GET() {
     try {
-        const coupons = readCoupons();
+        if (supabase) {
+            const { data, error } = await supabase
+                .from('coupons')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) throw error;
+            return NextResponse.json(data);
+        }
+
+        const coupons = readCouponsLocal();
         return NextResponse.json(coupons);
     } catch (error) {
+        console.error('Coupons GET Error:', error);
         return NextResponse.json({ error: 'Failed to fetch coupons' }, { status: 500 });
     }
 }
@@ -28,21 +40,42 @@ export async function GET() {
 export async function POST(request: Request) {
     try {
         const coupon = await request.json();
-        const coupons = readCoupons();
 
-        // Add new coupon or update existing
-        const index = coupons.findIndex((c: any) => c.id === coupon.id);
-        if (index > -1) {
-            coupons[index] = { ...coupons[index], ...coupon };
+        if (supabase) {
+            // Map frontend fields (camelCase often) to Supabase fields (snake_case) if necessary
+            // But looking at the schema I created, I used snake_case. 
+            // In the UI they might be using camelCase. Let's be safe and map them.
+            const dbData = {
+                id: coupon.id || `cpn_${Date.now()}`,
+                code: coupon.code,
+                discount_type: coupon.discountType || coupon.discount_type,
+                discount_value: coupon.discountValue || coupon.discount_value,
+                min_amount: coupon.minAmount || coupon.min_amount || null,
+                is_active: coupon.isActive !== undefined ? coupon.isActive : (coupon.is_active !== undefined ? coupon.is_active : true)
+            };
+
+            const { data, error } = await supabase
+                .from('coupons')
+                .upsert(dbData)
+                .select()
+                .single();
+
+            if (error) throw error;
+            return NextResponse.json({ success: true, coupon: data });
         } else {
-            // Assign a unique ID if not present
-            if (!coupon.id) coupon.id = 'cpn_' + Date.now();
-            coupons.push(coupon);
+            const coupons = readCouponsLocal();
+            const index = coupons.findIndex((c: any) => c.id === coupon.id);
+            if (index > -1) {
+                coupons[index] = { ...coupons[index], ...coupon };
+            } else {
+                if (!coupon.id) coupon.id = 'cpn_' + Date.now();
+                coupons.push(coupon);
+            }
+            writeCouponsLocal(coupons);
+            return NextResponse.json({ success: true, coupon });
         }
-
-        writeCoupons(coupons);
-        return NextResponse.json({ success: true, coupon });
     } catch (error) {
+        console.error('Coupons POST Error:', error);
         return NextResponse.json({ error: 'Failed to save coupon' }, { status: 500 });
     }
 }
@@ -56,12 +89,18 @@ export async function DELETE(request: Request) {
             return NextResponse.json({ error: 'Coupon ID required' }, { status: 400 });
         }
 
-        let coupons = readCoupons();
-        coupons = coupons.filter((c: any) => c.id !== id);
-        writeCoupons(coupons);
-
-        return NextResponse.json({ success: true });
+        if (supabase) {
+            const { error } = await supabase.from('coupons').delete().eq('id', id);
+            if (error) throw error;
+            return NextResponse.json({ success: true });
+        } else {
+            let coupons = readCouponsLocal();
+            coupons = coupons.filter((c: any) => c.id !== id);
+            writeCouponsLocal(coupons);
+            return NextResponse.json({ success: true });
+        }
     } catch (error) {
+        console.error('Coupons DELETE Error:', error);
         return NextResponse.json({ error: 'Failed to delete coupon' }, { status: 500 });
     }
 }
