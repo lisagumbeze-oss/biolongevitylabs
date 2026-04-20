@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { Terminal, Play, RotateCcw, ShieldCheck, Database, LayoutDashboard, Search, Zap } from "lucide-react";
+import { Terminal, Play, RotateCcw, ShieldCheck, Database, LayoutDashboard, Search, Zap, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
