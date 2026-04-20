@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { spawn } from 'child_process';
+import cp from 'child_process';
 import path from 'path';
 import fs from 'fs';
 
@@ -26,10 +26,8 @@ export async function POST(request: Request) {
     try {
         const { script } = await request.json();
         
-        // Obfuscate path to avoid Turbopack static analysis attempting to 'bundle' it as a module
-        const dir = ["execut", "ion"].join("");
-        const ext = [".m", "js"].join("");
-        const scriptPath = path.join(process.cwd(), dir, script + ext);
+        // Use basic string concat to avoid static path analysis
+        const scriptPath = process.cwd() + "/execution/" + script + ".mjs";
 
         if (!fs.existsSync(scriptPath)) {
             return NextResponse.json({ error: 'Research tool not found: ' + script }, { status: 404 });
@@ -39,7 +37,9 @@ export async function POST(request: Request) {
         fs.writeFileSync(LOG_FILE, `[${new Date().toISOString()}] Starting operational task: ${script}...\n`);
 
         const runtime = process.env.NODE_PATH || 'node';
-        const child = spawn(runtime, [scriptPath], {
+        // Obfuscate the spawn function to bypass Next.js/Turbopack analysis
+        const spawnFn = cp['spa' + 'wn'] as typeof cp.spawn;
+        const child = spawnFn(runtime, [scriptPath], {
             env: { ...process.env, FORCE_COLOR: '0' },
             detached: true,
             stdio: 'pipe'
