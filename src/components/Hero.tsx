@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { ArrowRight, FlaskConical, ShieldCheck, Zap } from "lucide-react";
+import MolecularViewer from "./MolecularViewer";
 
 const Hero = () => {
     return (
@@ -122,25 +123,14 @@ const Hero = () => {
                         </motion.div>
                     </div>
 
-                    {/* Right column – product image */}
+                    {/* Right column – Molecular Viewer */}
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
                         className="relative hidden lg:block"
                     >
-                        {/* Glowing ring */}
-                        <div className="absolute inset-0 rounded-3xl bg-linear-to-br from-primary/30 to-violet-500/20 blur-xl scale-105" />
-                        <div className="relative h-full w-full rounded-2xl overflow-hidden border border-white/10 shadow-2xl min-h-[500px]">
-                            <Image
-                                src="/hero-peptides.jpg"
-                                alt="Bio-Longevity Research"
-                                fill
-                                priority
-                                className="object-cover transform motion-safe:hover:scale-110 transition-transform duration-1000"
-                            />
-                            <div className="absolute inset-0 bg-linear-to-t from-slate-900/60 via-transparent to-transparent" />
-                        </div>
+                        <MolecularViewer />
                     </motion.div>
                 </div>
             </div>

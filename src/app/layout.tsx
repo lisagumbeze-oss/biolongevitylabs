@@ -9,7 +9,7 @@ import LoadingProgress from "@/components/LoadingProgress";
 import ConsentModal from "@/components/ConsentModal";
 import Providers from "@/components/Providers";
 import SmartsuppWidget from "@/components/SmartsuppWidget";
-import SalesNotification from "@/components/SalesNotification";
+import LivePulse from "@/components/LivePulse";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -19,11 +19,11 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL("https://biolongevitylabss.com"),
   title: {
-    default: "BioLongevity Labs | Premium Research Compounds",
+    default: "BioLongevity Labs | Research Grade Peptides & Scientific Bioregulators",
     template: "%s | BioLongevity Labs"
   },
-  description: "Highest purity BPC-157, TB-500, and research peptides. USA-made, lab-tested, and research-compliant biotechnology.",
-  keywords: ["BPC-157", "TB-500", "Research Peptides", "BioLongevity Labs", "Biotech research"],
+  description: "USA-made, lab-tested research grade peptides. Buy BPC-157, TB-500, and advanced bioregulators for scientific investigation. 99%+ purity guaranteed with third-party testing.",
+  keywords: ["Research Grade Peptides", "Buy BPC-157", "TB-500 Research", "Peptide Synthesis USA", "Bioregulator Peptides", "Scientific Research Compounds"],
   authors: [{ name: "BioLongevity Labs" }],
   openGraph: {
     type: "website",
@@ -83,7 +83,7 @@ export default function RootLayout({
           </main>
           <BottomNav />
           <CartDrawer />
-          <SalesNotification />
+          <LivePulse />
           <Footer />
         </Providers>
 

@@ -30,9 +30,13 @@ const config: Config = {
                     "50%": { width: "70%", opacity: "1" },
                     "100%": { width: "100%", opacity: "0" },
                 },
+                shimmer: {
+                    "100%": { transform: "translateX(100%)" },
+                },
             },
             animation: {
                 "progress-bar": "progress-bar 0.8s ease-in-out infinite",
+                shimmer: "shimmer 1.5s infinite",
             },
         },
     },

@@ -4,13 +4,25 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Calendar, User, Search, Tag } from "lucide-react";
-import { researchPosts } from "@/data/researchPosts";
 import { motion } from "framer-motion";
 
 export default function ResearchPage() {
+    const [posts, setPosts] = React.useState<any[]>([]);
+    const [loading, setLoading] = React.useState(true);
+
+    React.useEffect(() => {
+        fetch('/api/admin/blog')
+            .then(res => res.json())
+            .then(data => {
+                if (Array.isArray(data)) setPosts(data);
+            })
+            .catch(err => console.error(err))
+            .finally(() => setLoading(false));
+    }, []);
+
     // Get the latest post for the featured spot
-    const featuredPost = researchPosts[0];
-    const regularPosts = researchPosts.slice(1);
+    const featuredPost = posts[0];
+    const regularPosts = posts.slice(1);
 
     return (
         <div className="bg-background min-h-screen">
@@ -60,7 +72,14 @@ export default function ResearchPage() {
             <section className="py-16 md:py-24">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
-                    {/* Featured Post */}
+                    {loading ? (
+                        <div className="flex flex-col items-center justify-center py-20">
+                            <div className="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin mb-4" />
+                            <p className="text-slate-400 font-bold uppercase tracking-widest text-xs">Scanning archives...</p>
+                        </div>
+                    ) : (
+                        <>
+                            {/* Featured Post */}
                     {featuredPost && (
                         <div className="mb-20">
                             <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-8 border-b border-slate-200 dark:border-slate-800 pb-4">Latest Research</h2>

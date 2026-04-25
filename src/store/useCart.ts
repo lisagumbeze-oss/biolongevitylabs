@@ -8,6 +8,7 @@ export interface CartItem {
     quantity: number;
     image: string;
     selectedOptions?: { [key: string]: string };
+    frequency?: 'one-time' | '30-days' | '60-days';
 }
 
 interface CartStore {
@@ -17,8 +18,8 @@ interface CartStore {
     setHasHydrated: (state: boolean) => void;
     setIsCartOpen: (open: boolean) => void;
     addItem: (product: Omit<CartItem, 'quantity'>, quantity?: number) => void;
-    removeItem: (id: string, selectedOptions?: { [key: string]: string }) => void;
-    updateQuantity: (id: string, quantity: number, selectedOptions?: { [key: string]: string }) => void;
+    removeItem: (id: string, selectedOptions?: { [key: string]: string }, frequency?: string) => void;
+    updateQuantity: (id: string, quantity: number, selectedOptions?: { [key: string]: string }, frequency?: string) => void;
     clearCart: () => void;
     getTotal: () => number;
 }
@@ -34,9 +35,11 @@ export const useCart = create<CartStore>()(
 
             addItem: (product, quantity = 1) => {
                 const items = get().items;
+                const freq = product.frequency || 'one-time';
                 const existingIndex = items.findIndex((item) =>
                     item.id === product.id &&
-                    JSON.stringify(item.selectedOptions ?? {}) === JSON.stringify(product.selectedOptions ?? {})
+                    JSON.stringify(item.selectedOptions ?? {}) === JSON.stringify(product.selectedOptions ?? {}) &&
+                    (item.frequency || 'one-time') === freq
                 );
 
                 if (existingIndex >= 0) {
@@ -51,25 +54,36 @@ export const useCart = create<CartStore>()(
                 }
             },
 
-            removeItem: (id, selectedOptions) => {
+            removeItem: (id, selectedOptions, frequency) => {
                 set({
                     items: get().items.filter((item) => {
                         if (item.id !== id) return true;
-                        if (selectedOptions !== undefined) {
-                            return JSON.stringify(item.selectedOptions ?? {}) !== JSON.stringify(selectedOptions ?? {});
+                        
+                        const itemFreq = item.frequency || 'one-time';
+                        const targetFreq = frequency || 'one-time';
+
+                        if (selectedOptions !== undefined || frequency !== undefined) {
+                            const optionsMatch = JSON.stringify(item.selectedOptions ?? {}) === JSON.stringify(selectedOptions ?? {});
+                            const freqMatch = itemFreq === targetFreq;
+                            return !(optionsMatch && freqMatch);
                         }
                         return false;
                     }),
                 });
             },
 
-            updateQuantity: (id, quantity, selectedOptions) => {
+            updateQuantity: (id, quantity, selectedOptions, frequency) => {
                 set({
                     items: get().items.map((item) => {
                         if (item.id !== id) return item;
-                        if (selectedOptions !== undefined &&
-                            JSON.stringify(item.selectedOptions ?? {}) !== JSON.stringify(selectedOptions ?? {})) {
-                            return item;
+
+                        const itemFreq = item.frequency || 'one-time';
+                        const targetFreq = frequency || 'one-time';
+
+                        if (selectedOptions !== undefined || frequency !== undefined) {
+                            const optionsMatch = JSON.stringify(item.selectedOptions ?? {}) === JSON.stringify(selectedOptions ?? {});
+                            const freqMatch = itemFreq === targetFreq;
+                            if (!optionsMatch || !freqMatch) return item;
                         }
                         return { ...item, quantity: Math.max(1, quantity) };
                     }),

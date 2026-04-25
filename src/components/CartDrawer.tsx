@@ -98,7 +98,7 @@ const CartDrawer: React.FC = () => {
                                                     <motion.button
                                                         whileHover={{ scale: 1.2 }}
                                                         whileTap={{ scale: 0.9 }}
-                                                        onClick={() => removeItem(item.id)}
+                                                        onClick={() => removeItem(item.id, item.selectedOptions, item.frequency)}
                                                         className="text-slate-400 hover:text-red-500 transition-colors shrink-0"
                                                     >
                                                         <Trash2 className="w-4 h-4" />
@@ -108,7 +108,7 @@ const CartDrawer: React.FC = () => {
                                                 <div className="flex justify-between items-end mt-2">
                                                     <div className="flex items-center gap-1 border border-slate-200 rounded-lg bg-slate-50 p-1">
                                                         <button
-                                                            onClick={() => updateQuantity(item.id, Math.max(1, item.quantity - 1))}
+                                                            onClick={() => updateQuantity(item.id, Math.max(1, item.quantity - 1), item.selectedOptions, item.frequency)}
                                                             className="w-6 h-6 flex items-center justify-center rounded hover:bg-white text-slate-600 transition-colors"
                                                         >
                                                             <Minus className="w-3 h-3" />
@@ -117,15 +117,22 @@ const CartDrawer: React.FC = () => {
                                                             {item.quantity}
                                                         </span>
                                                         <button
-                                                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                                                            onClick={() => updateQuantity(item.id, item.quantity + 1, item.selectedOptions, item.frequency)}
                                                             className="w-6 h-6 flex items-center justify-center rounded hover:bg-white text-slate-600 transition-colors"
                                                         >
                                                             <Plus className="w-3 h-3" />
                                                         </button>
                                                     </div>
-                                                    <p className="text-slate-900 font-bold text-sm">
-                                                        ${(item.price * item.quantity).toFixed(2)}
-                                                    </p>
+                                                    <div className="text-right">
+                                                        {item.frequency && item.frequency !== 'one-time' && (
+                                                            <span className="text-[8px] font-black uppercase text-emerald-600 tracking-tighter block mb-0.5 animate-pulse">
+                                                                Recurring ({item.frequency.replace('-', ' ')})
+                                                            </span>
+                                                        )}
+                                                        <p className="text-slate-900 font-black text-sm">
+                                                            ${(item.price * item.quantity).toFixed(2)}
+                                                        </p>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </motion.div>
@@ -157,18 +164,32 @@ const CartDrawer: React.FC = () => {
                                 transition={{ delay: 0.15 }}
                                 className="border-t border-slate-200 bg-slate-50 p-6 space-y-4"
                             >
+                                {/* Bio-Rewards Loyalty Points */}
+                                <div className="bg-primary/10 border border-primary/20 rounded-2xl p-4 flex items-center justify-between mb-2">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-8 h-8 rounded-xl bg-primary flex items-center justify-center text-white">
+                                            <Zap className="w-4 h-4 fill-white" />
+                                        </div>
+                                        <div>
+                                            <p className="text-[9px] font-black uppercase tracking-widest text-primary leading-none">Earned Bio-Points</p>
+                                            <p className="text-xs font-black text-slate-900 mt-1">+{Math.floor(subtotal * 10)} Credits</p>
+                                        </div>
+                                    </div>
+                                    <Link href="/loyalty" className="text-[8px] font-black uppercase text-primary underline">Join Program</Link>
+                                </div>
+
                                 <div className="space-y-2">
                                     <div className="flex justify-between items-center text-slate-600">
                                         <p className="text-sm font-medium">Subtotal</p>
-                                        <p className="text-slate-900 font-bold">${subtotal.toFixed(2)}</p>
+                                        <p className="text-slate-900 font-black">${subtotal.toFixed(2)}</p>
                                     </div>
                                     <div className="flex justify-between items-center text-slate-500">
                                         <p className="text-xs">Shipping</p>
-                                        <p className="text-xs italic">Calculated at checkout</p>
+                                        <p className="text-xs italic uppercase font-black tracking-tighter">Complimentary</p>
                                     </div>
                                     <div className="pt-3 border-t border-slate-200 flex justify-between items-center">
-                                        <p className="text-lg font-bold text-slate-900">Total</p>
-                                        <p className="text-2xl font-black text-primary">${subtotal.toFixed(2)}</p>
+                                        <p className="text-lg font-bold text-slate-900 uppercase tracking-tighter">Total</p>
+                                        <p className="text-2xl font-black text-primary tracking-tighter">${subtotal.toFixed(2)}</p>
                                     </div>
                                 </div>
 

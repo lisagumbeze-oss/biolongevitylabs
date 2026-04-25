@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Calendar, User, Tag, Share2, Bookmark } from "lucide-react";
-import { researchPosts } from "@/data/researchPosts";
 import { products } from "@/data/products";
 import { motion } from "framer-motion";
 
@@ -31,14 +30,38 @@ const parseMarkdown = (text: string) => {
 
 export default function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
     const resolvedParams = React.use(params);
-    const post = researchPosts.find(p => p.slug === resolvedParams.slug);
+    const [post, setPost] = React.useState<any>(null);
+    const [loading, setLoading] = React.useState(true);
+    const [otherPosts, setOtherPosts] = React.useState<any[]>([]);
+
+    React.useEffect(() => {
+        fetch('/api/admin/blog')
+            .then(res => res.json())
+            .then(data => {
+                if (Array.isArray(data)) {
+                    const found = data.find(p => p.slug === resolvedParams.slug);
+                    setPost(found);
+                    setOtherPosts(data.filter(p => p.slug !== resolvedParams.slug).slice(0, 3));
+                }
+            })
+            .catch(err => console.error(err))
+            .finally(() => setLoading(false));
+    }, [resolvedParams.slug]);
+
+    if (loading) {
+        return (
+            <div className="min-h-screen flex flex-col items-center justify-center bg-slate-900">
+                <div className="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin mb-4" />
+                <p className="text-slate-400 font-bold uppercase tracking-widest text-xs">Decrypting Scientific Data...</p>
+            </div>
+        );
+    }
 
     if (!post) {
         notFound();
     }
 
-    const otherPosts = researchPosts.filter(p => p.id !== post.id).slice(0, 3);
-    const relatedProducts = products.filter(p => p.category.toLowerCase().includes(post.category.toLowerCase().split(' ')[0])).slice(0, 2);
+    const relatedProducts = products.filter(p => p.category.toLowerCase().includes(post.category?.toLowerCase().split(' ')[0] || 'peptide')).slice(0, 2);
 
     return (
         <div className="bg-background min-h-screen">

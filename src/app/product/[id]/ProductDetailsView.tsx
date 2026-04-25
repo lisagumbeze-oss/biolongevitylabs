@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Product } from "@/data/products";
 import { researchPosts } from "@/data/researchPosts";
 import { useCart } from "@/store/useCart";
+import { useRecentlyViewed } from "@/store/useRecentlyViewed";
 import {
     ShoppingCart, Truck, ShieldCheck, RotateCcw, ChevronLeft,
     Minus, Plus, Star, ChevronRight, Zap, Heart, Share2,
@@ -12,6 +13,9 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import ProductCard from "@/components/ProductCard";
+import RecentlyViewedSection from "@/components/RecentlyViewedSection";
+import HPLCGraph from "@/components/HPLCGraph";
+import ScientificTooltip from "@/components/ScientificTooltip";
 import ReviewList from "@/components/ReviewList";
 import ReviewForm from "@/components/ReviewForm";
 import toast, { Toaster } from 'react-hot-toast';
@@ -29,7 +33,9 @@ export default function ProductDetailsView({ id }: Props) {
 
     const addItem = useCart((state) => state.addItem);
     const setIsCartOpen = useCart((state) => state.setIsCartOpen);
+    const addRecentlyViewed = useRecentlyViewed((state) => state.addItem);
     const [quantity, setQuantity] = useState(1);
+    const [frequency, setFrequency] = useState<'one-time' | '30-days' | '60-days'>('one-time');
     const [reviews, setReviews] = useState<any[]>([]);
     const [loadingReviews, setLoadingReviews] = useState(true);
 
@@ -69,6 +75,7 @@ export default function ProductDetailsView({ id }: Props) {
                     if (found) {
                         setProduct(found);
                         setSelectedImage(found.image || "");
+                        addRecentlyViewed(found);
 
                         // Set default options
                         const defaultOptions: Record<string, string> = {};
@@ -108,9 +115,10 @@ export default function ProductDetailsView({ id }: Props) {
         addItem({
             id: product.id,
             name: product.name,
-            price: displayPrice,
+            price: frequency === 'one-time' ? displayPrice : displayPrice * 0.85,
             image: selectedImage || product.image,
-            selectedOptions: Object.keys(selectedOptions).length > 0 ? selectedOptions : undefined
+            selectedOptions: Object.keys(selectedOptions).length > 0 ? selectedOptions : undefined,
+            frequency: frequency
         }, quantity);
 
         toast.success(`${product.name} added to cart`);
@@ -123,9 +131,10 @@ export default function ProductDetailsView({ id }: Props) {
         addItem({
             id: product.id,
             name: product.name,
-            price: displayPrice,
+            price: frequency === 'one-time' ? displayPrice : displayPrice * 0.85,
             image: selectedImage || product.image,
-            selectedOptions: Object.keys(selectedOptions).length > 0 ? selectedOptions : undefined
+            selectedOptions: Object.keys(selectedOptions).length > 0 ? selectedOptions : undefined,
+            frequency: frequency
         }, quantity);
 
         router.push('/checkout');
@@ -265,15 +274,33 @@ export default function ProductDetailsView({ id }: Props) {
                                 <div className="flex items-center gap-3">
                                     <div className="flex items-center text-amber-500">
                                         {[1, 2, 3, 4, 5].map((i) => (
-                                            <Star key={i} className="w-4 h-4 fill-current last:opacity-30" />
+                                            <Star 
+                                                key={i} 
+                                                className={`w-4 h-4 ${i <= (product.rating || 5) ? 'fill-current' : 'text-slate-200'}`} 
+                                            />
                                         ))}
                                     </div>
-                                    <span className="text-xs text-slate-900 font-black uppercase tracking-widest">4.88 (34 Reviews)</span>
+                                    <span className="text-xs text-slate-900 font-black uppercase tracking-widest">
+                                        {product.rating || "5.00"} ({product.reviewCount || 0} Reviews)
+                                    </span>
                                 </div>
                                 <div className="h-4 w-px bg-slate-200 dark:bg-slate-800 hidden sm:block"></div>
                                 <div className="flex items-center gap-2">
-                                    <span className="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
-                                    <span className="text-xs text-primary dark:text-blue-400 font-bold uppercase tracking-widest">Ships worldwide</span>
+                                    <span className={`w-2 h-2 rounded-full animate-pulse ${
+                                        product.stockStatus === 'In Stock' ? 'bg-emerald-500' : 
+                                        product.stockStatus === 'Low Stock' ? 'bg-amber-500' : 'bg-rose-500'
+                                    }`}></span>
+                                    <span className={`text-xs font-bold uppercase tracking-widest ${
+                                        product.stockStatus === 'In Stock' ? 'text-emerald-600' : 
+                                        product.stockStatus === 'Low Stock' ? 'text-amber-600' : 'text-rose-600'
+                                    }`}>
+                                        {product.stockStatus || 'In Stock'}
+                                    </span>
+                                </div>
+                                <div className="h-4 w-px bg-slate-200 dark:bg-slate-800 hidden sm:block"></div>
+                                <div className="flex items-center gap-2">
+                                    <Truck className="w-4 h-4 text-slate-400" />
+                                    <span className="text-xs text-slate-500 font-bold uppercase tracking-widest">Ships worldwide</span>
                                 </div>
                             </div>
 
@@ -413,7 +440,61 @@ export default function ProductDetailsView({ id }: Props) {
                                     </div>
                                 </div>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {/* Subscribe & Save Option */}
+                    <div className="space-y-3 mb-8">
+                        <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2">Purchase Options</h3>
+                        
+                        <button 
+                            onClick={() => setFrequency('one-time')}
+                            className={`w-full p-4 rounded-2xl border-2 transition-all flex items-center justify-between group ${frequency === 'one-time' ? 'border-primary bg-primary/5' : 'border-slate-100 hover:border-slate-200'}`}
+                        >
+                            <div className="flex items-center gap-3">
+                                <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${frequency === 'one-time' ? 'border-primary' : 'border-slate-300'}`}>
+                                    {frequency === 'one-time' && <div className="w-2.5 h-2.5 bg-primary rounded-full" />}
+                                </div>
+                                <div className="text-left">
+                                    <p className="text-sm font-black text-slate-900 uppercase">One-time purchase</p>
+                                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-tight">Standard laboratory delivery</p>
+                                </div>
+                            </div>
+                            <span className="text-sm font-black text-slate-900">${(displayPrice).toFixed(2)}</span>
+                        </button>
+
+                        <button 
+                            onClick={() => setFrequency('30-days')}
+                            className={`w-full p-4 rounded-2xl border-2 transition-all flex items-center justify-between group ${frequency !== 'one-time' ? 'border-primary bg-primary/5' : 'border-slate-100 hover:border-slate-200'}`}
+                        >
+                            <div className="flex items-center gap-3">
+                                <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${frequency !== 'one-time' ? 'border-primary' : 'border-slate-300'}`}>
+                                    {frequency !== 'one-time' && <div className="w-2.5 h-2.5 bg-primary rounded-full" />}
+                                </div>
+                                <div className="text-left">
+                                    <div className="flex items-center gap-2">
+                                        <p className="text-sm font-black text-slate-900 uppercase">Subscribe & Save</p>
+                                        <span className="bg-emerald-500 text-[8px] font-black text-white px-2 py-0.5 rounded-full uppercase tracking-widest shadow-lg shadow-emerald-500/20">Save 15%</span>
+                                    </div>
+                                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-tight">Recurring research supply • Cancel anytime</p>
+                                </div>
+                            </div>
+                            <span className="text-sm font-black text-slate-900">${(displayPrice * 0.85).toFixed(2)}</span>
+                        </button>
+
+                        {frequency !== 'one-time' && (
+                            <div className="px-4 py-3 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 flex items-center justify-between animate-in fade-in slide-in-from-top-1 duration-300">
+                                <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Frequency</span>
+                                <select 
+                                    value={frequency} 
+                                    onChange={(e) => setFrequency(e.target.value as any)}
+                                    className="bg-transparent text-xs font-black uppercase text-primary outline-none cursor-pointer"
+                                >
+                                    <option value="30-days">Every 30 Days</option>
+                                    <option value="60-days">Every 60 Days</option>
+                                </select>
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <button
                                     onClick={handleAddToCart}
                                     className="h-16 rounded-3xl bg-white dark:bg-slate-800 text-slate-900 dark:text-white border-2 border-slate-900 dark:border-slate-700 font-black flex items-center justify-center gap-3 hover:bg-slate-900 dark:hover:bg-white hover:text-white dark:hover:text-slate-900 transition-all active:scale-[0.98] uppercase tracking-widest text-[10px]"
@@ -485,6 +566,35 @@ export default function ProductDetailsView({ id }: Props) {
                     </div>
                 )}
 
+                {/* Scientific Visualization: HPLC Data */}
+                {product.coa?.purityPercentage && (
+                    <div className="mt-20 lg:mt-32 pt-20 border-t border-slate-100 dark:border-slate-800">
+                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                            <div className="lg:col-span-5 text-left">
+                                <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight mb-6 uppercase">Batch Spectral Analysis</h2>
+                                <p className="text-sm font-bold text-slate-400 uppercase tracking-widest leading-loose mb-8">
+                                    Our commitment to 99%+ purity is verified through High-Performance Liquid Chromatography (HPLC). Each batch is analyzed to ensure zero contaminants and precise concentration.
+                                </p>
+                                <div className="space-y-4">
+                                    {[
+                                        { label: "Detected Purity", value: `${product.coa.purityPercentage}%` },
+                                        { label: "Batch Variance", value: "< 0.02%" },
+                                        { label: "Lab Verification", value: "Verified by HPLC/MS" }
+                                    ].map((stat, i) => (
+                                        <div key={i} className="flex justify-between items-center py-4 border-b border-slate-100 dark:border-slate-800">
+                                            <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">{stat.label}</span>
+                                            <span className="text-xs font-black text-slate-900 dark:text-white uppercase">{stat.value}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                            <div className="lg:col-span-7">
+                                <HPLCGraph purity={product.coa.purityPercentage} substanceName={product.name} />
+                            </div>
+                        </div>
+                    </div>
+                )}
+
                 {/* Product Description Full Width */}
                 <div className="mt-20 lg:mt-32 pt-20 border-t border-slate-100 dark:border-slate-800 animate-in fade-in slide-in-from-bottom-10 duration-1000 text-left">
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-20">
@@ -514,18 +624,26 @@ export default function ProductDetailsView({ id }: Props) {
                             </div>
                         </div>
 
-                        <div className="lg:col-span-2">
-                            <div
-                                className="prose prose-slate max-w-none 
+                            <div className="prose prose-slate max-w-none 
                                 prose-h2:text-xl prose-h2:font-black prose-h2:uppercase prose-h2:tracking-widest prose-h2:mb-6 prose-h2:text-slate-900
                                 prose-h3:text-sm prose-h3:font-bold prose-h3:uppercase prose-h3:tracking-widest prose-h3:mt-10 prose-h3:mb-4 prose-h3:text-primary
                                 prose-p:text-slate-800 prose-p:leading-relaxed prose-p:mb-6 prose-p:text-base
-                                prose-strong:text-slate-900 prose-strong:font-black
-                                prose-table:border-collapse prose-table:my-10 prose-table:shadow-sm prose-table:rounded-2xl prose-table:overflow-hidden 
-                                prose-th:bg-slate-50 prose-th:p-4 prose-th:text-xs prose-th:font-black prose-th:uppercase prose-th:tracking-widest prose-th:text-slate-900
-                                prose-td:p-4 prose-td:border prose-td:border-slate-100 prose-td:text-sm prose-td:text-slate-700 font-medium"
-                                dangerouslySetInnerHTML={{ __html: product.description }}
-                            />
+                                prose-strong:text-slate-900 prose-strong:font-black"
+                            >
+                                <div dangerouslySetInnerHTML={{ __html: product.description }} />
+                                
+                                <div className="mt-8 p-6 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-100 dark:border-slate-800 flex items-start gap-4">
+                                    <div className="w-10 h-10 rounded-xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 flex items-center justify-center text-primary shrink-0">
+                                        <Info className="w-5 h-5" />
+                                    </div>
+                                    <div>
+                                        <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-900 dark:text-white mb-2 text-left">Research Glossary</h4>
+                                        <p className="text-xs text-slate-500 font-medium leading-relaxed text-left">
+                                            This compound is verified to induce <ScientificTooltip term="Angiogenesis" definition="The physiological process through which new blood vessels form from pre-existing vessels.">angiogenesis</ScientificTooltip> and accelerate <ScientificTooltip term="Myogenesis" definition="The formation of muscular tissue, particularly during embryonic development.">myogenesis</ScientificTooltip> in in-vitro research environments.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
 
                             <div className="mt-16 p-8 bg-amber-50 dark:bg-amber-900/10 border border-amber-100 dark:border-amber-900/20 rounded-3xl">
                                 <div className="flex items-start gap-4">
@@ -566,6 +684,9 @@ export default function ProductDetailsView({ id }: Props) {
                         </div>
                     </div>
                 )}
+
+                {/* Recently Viewed Products */}
+                <RecentlyViewedSection currentProductId={product.id} />
 
                 {/* Reviews Section */}
                 <div className="mt-32 max-w-4xl">

@@ -11,18 +11,48 @@ import {
     Package,
     Archive,
     Activity,
-    Tag
+    Tag,
+    FileText,
+    Users,
+    Image as ImageIcon,
+    MessageSquare
 } from 'lucide-react';
 
 const AdminSidebar = () => {
     const pathname = usePathname();
 
     const navigation = [
-        { name: 'Overview', href: '/admin', icon: LayoutDashboard },
-        { name: 'Products', href: '/admin/products', icon: Package },
-        { name: 'Coupons', href: '/admin/coupons', icon: Tag },
-        { name: 'Orders', href: '/admin/orders', icon: ShoppingCart },
-        { name: 'Settings', href: '/admin/settings', icon: Settings },
+        {
+            group: 'Intelligence',
+            items: [
+                { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
+                { name: 'Analytics', href: '/admin/analytics', icon: Activity },
+            ]
+        },
+        {
+            group: 'Store Management',
+            items: [
+                { name: 'Products', href: '/admin/products', icon: Package },
+                { name: 'Inventory', href: '/admin/inventory', icon: Archive },
+                { name: 'Customers', href: '/admin/customers', icon: Users },
+                { name: 'Reviews', href: '/admin/reviews', icon: MessageSquare },
+                { name: 'Coupons', href: '/admin/coupons', icon: Tag },
+                { name: 'Orders', href: '/admin/orders', icon: ShoppingCart },
+            ]
+        },
+        {
+            group: 'Content Management',
+            items: [
+                { name: 'Blog', href: '/admin/blog', icon: FileText },
+                { name: 'Media Library', href: '/admin/media', icon: ImageIcon },
+            ]
+        },
+        {
+            group: 'System',
+            items: [
+                { name: 'Settings', href: '/admin/settings', icon: Settings },
+            ]
+        }
     ];
 
     const isActive = (path: string) => {
@@ -48,23 +78,32 @@ const AdminSidebar = () => {
             </div>
 
             {/* Navigation Links */}
-            <nav className="flex-1 px-4 py-6 space-y-1">
-                {navigation.map((item) => {
-                    const active = isActive(item.href);
-                    return (
-                        <Link
-                            key={item.name}
-                            href={item.href}
-                            className={`flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 ${active
-                                ? 'bg-primary text-white shadow-md shadow-primary/20'
-                                : 'hover:bg-slate-800 hover:text-white'
-                                }`}
-                        >
-                            <item.icon className={`w-5 h-5 ${active ? 'text-white' : 'text-slate-400'}`} />
-                            {item.name}
-                        </Link>
-                    );
-                })}
+            <nav className="flex-1 px-4 py-6 space-y-8 overflow-y-auto">
+                {navigation.map((group) => (
+                    <div key={group.group} className="space-y-2">
+                        <h3 className="px-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">
+                            {group.group}
+                        </h3>
+                        <div className="space-y-1">
+                            {group.items.map((item) => {
+                                const active = isActive(item.href);
+                                return (
+                                    <Link
+                                        key={item.name}
+                                        href={item.href}
+                                        className={`flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-xl transition-all duration-200 ${active
+                                            ? 'bg-primary text-white shadow-md shadow-primary/20'
+                                            : 'hover:bg-slate-800 hover:text-white'
+                                            }`}
+                                    >
+                                        <item.icon className={`w-4 h-4 ${active ? 'text-white' : 'text-slate-400'}`} />
+                                        {item.name}
+                                    </Link>
+                                );
+                            })}
+                        </div>
+                    </div>
+                ))}
             </nav>
 
             {/* Bottom Actions */}

@@ -41,6 +41,8 @@ export interface Product {
     variables?: ProductVariable[];
     variations?: ProductVariation[];
     coa?: ProductCOA;
+    rating?: number;
+    reviewCount?: number;
 }
 
 import productsData from './products.json';

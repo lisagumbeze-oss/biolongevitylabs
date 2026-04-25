@@ -3,8 +3,9 @@
 import React, { useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ShoppingCart, ShoppingBag, Menu, X, ChevronDown } from "lucide-react";
+import { ShoppingCart, ShoppingBag, Menu, X, ChevronDown, Heart, User, Sparkles } from "lucide-react";
 import { useCart } from "@/store/useCart";
+import { useWishlist } from "@/store/useWishlist";
 import CartDrawer from "./CartDrawer";
 import LiveSearch from "./LiveSearch";
 import { motion, AnimatePresence } from "framer-motion";
@@ -21,6 +22,9 @@ const Navbar = () => {
     const { isCartOpen, setIsCartOpen } = useCart();
     const items = useCart((state) => state.items);
     const cartCount = items.reduce((acc, item) => acc + item.quantity, 0);
+
+    const wishlistItems = useWishlist((state) => state.items);
+    const wishlistCount = wishlistItems.length;
 
     return (
         <header className="bg-white shadow-sm sticky top-0 z-50 transition-colors border-b border-slate-100">
@@ -53,7 +57,12 @@ const Navbar = () => {
                         <nav className="hidden md:flex items-center space-x-6">
                             <Link href="/about" className="text-slate-600 hover:text-primary font-bold transition-colors text-sm uppercase tracking-widest">About</Link>
                             <Link href="/shop" className="text-slate-600 hover:text-primary font-bold transition-colors text-sm uppercase tracking-widest">Shop</Link>
-                            <Link href="/research" className="text-slate-600 hover:text-primary font-bold transition-colors text-sm uppercase tracking-widest">Research</Link>
+                            <Link href="/protocol-finder" className="text-primary hover:text-sky-400 font-black transition-colors text-sm uppercase tracking-widest flex items-center gap-1.5">
+                                <Sparkles className="w-3.5 h-3.5" />
+                                Protocol Finder
+                            </Link>
+                             <Link href="/research" className="text-slate-600 hover:text-primary font-bold transition-colors text-sm uppercase tracking-widest">Research</Link>
+                            <Link href="/wholesale" className="text-slate-600 hover:text-primary font-bold transition-colors text-sm uppercase tracking-widest">Wholesale</Link>
                             <div ref={resourcesRef} className="relative" onMouseEnter={() => setIsResourcesOpen(true)} onMouseLeave={() => setIsResourcesOpen(false)}>
                                 <button className="flex items-center gap-1 text-slate-600 hover:text-primary font-bold transition-colors text-sm uppercase tracking-widest">
                                     Resources <ChevronDown className={`w-4 h-4 transition-transform ${isResourcesOpen ? 'rotate-180' : ''}`} />
@@ -80,6 +89,35 @@ const Navbar = () => {
                         </nav>
 
                         <div className="flex items-center gap-1">
+                            <Link href="/wishlist">
+                                <motion.div
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.9 }}
+                                    className="relative p-2.5 text-slate-600 hover:text-primary transition-all rounded-xl hover:bg-primary/5"
+                                    aria-label="Wishlist"
+                                >
+                                    <Heart className="w-6 h-6" />
+                                    <AnimatePresence>
+                                        {wishlistCount > 0 && (
+                                            <motion.span
+                                                key="wishlist-badge"
+                                                initial={{ scale: 0 }}
+                                                animate={{ scale: 1 }}
+                                                exit={{ scale: 0 }}
+                                                transition={{ type: "spring", stiffness: 500, damping: 25 }}
+                                                className="absolute -top-1 -right-1 inline-flex items-center justify-center px-2 py-1 text-[10px] font-black leading-none text-white transform bg-rose-500 rounded-full min-w-5 h-5 shadow-lg shadow-rose-500/40 ring-2 ring-white"
+                                            >
+                                                {wishlistCount}
+                                            </motion.span>
+                                        )}
+                                    </AnimatePresence>
+                                </motion.div>
+                            </Link>
+
+                            <Link href="/dashboard" aria-label="Researcher Dashboard" className="p-2.5 text-slate-600 hover:text-primary transition-all rounded-xl hover:bg-primary/5 hidden sm:flex items-center gap-2">
+                                <User className="w-6 h-6" />
+                                <span className="text-[10px] font-black uppercase tracking-widest hidden lg:block">Dashboard</span>
+                            </Link>
 
                             <motion.button
                                 whileHover={{ scale: 1.05 }}

@@ -23,22 +23,22 @@ interface AdminProduct {
 
 export default function AdminDashboardPage() {
     const [orders, setOrders] = React.useState<AdminOrder[]>([]);
-    const [products, setProducts] = React.useState<AdminProduct[]>([]);
+    const [analytics, setAnalytics] = React.useState<any>(null);
     const [loading, setLoading] = React.useState(true);
 
     React.useEffect(() => {
         const fetchData = async () => {
             try {
-                const [ordersRes, productsRes] = await Promise.all([
+                const [ordersRes, analyticsRes] = await Promise.all([
                     fetch('/api/orders'),
-                    fetch('/api/products')
+                    fetch('/api/admin/analytics?period=30')
                 ]);
-                const [ordersData, productsData] = await Promise.all([
+                const [ordersData, analyticsData] = await Promise.all([
                     ordersRes.json(),
-                    productsRes.json()
+                    analyticsRes.json()
                 ]);
                 setOrders(Array.isArray(ordersData) ? ordersData : []);
-                setProducts(Array.isArray(productsData) ? productsData : []);
+                setAnalytics(analyticsData);
             } catch (error) {
                 console.error('Failed to fetch dashboard data:', error);
             } finally {
@@ -48,18 +48,31 @@ export default function AdminDashboardPage() {
         fetchData();
     }, []);
 
-    // Calculate real metrics
-    const totalRevenue = orders
-        .filter(o => o.status === 'Completed' || o.status === 'Shipped')
-        .reduce((acc, o) => acc + parseFloat(o.total.replace('$', '')), 0);
-
-    const activeOrders = orders.filter(o => o.status === 'Pending' || o.status === 'Processing').length;
-    const totalProducts = products.length;
-
     const metrics = [
-        { title: 'Total Revenue', value: `$${totalRevenue.toLocaleString(undefined, { minimumFractionDigits: 2 })}`, icon: DollarSign, trend: '+12.5%', trendUp: true, color: 'from-blue-500 to-cyan-400' },
-        { title: 'Active Orders', value: activeOrders.toString(), icon: PackageOpen, trend: '+5.2%', trendUp: true, color: 'from-primary to-purple-500' },
-        { title: 'Total Products', value: totalProducts.toString(), icon: PackageOpen, trend: '+3.1%', trendUp: true, color: 'from-primary to-blue-500' },
+        { 
+            title: 'Total Revenue', 
+            value: `$${(analytics?.kpis?.revenue?.value || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}`, 
+            icon: DollarSign, 
+            trend: `${(analytics?.kpis?.revenue?.growth || 0).toFixed(1)}%`, 
+            trendUp: (analytics?.kpis?.revenue?.growth || 0) >= 0, 
+            color: 'from-blue-500 to-cyan-400' 
+        },
+        { 
+            title: 'Total Orders', 
+            value: (analytics?.kpis?.orders?.value || 0).toString(), 
+            icon: PackageOpen, 
+            trend: `${(analytics?.kpis?.orders?.growth || 0).toFixed(1)}%`, 
+            trendUp: (analytics?.kpis?.orders?.growth || 0) >= 0, 
+            color: 'from-primary to-purple-500' 
+        },
+        { 
+            title: 'Avg. Order Value', 
+            value: `$${(analytics?.kpis?.aov?.value || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}`, 
+            icon: Activity, 
+            trend: `${(analytics?.kpis?.aov?.growth || 0).toFixed(1)}%`, 
+            trendUp: (analytics?.kpis?.aov?.growth || 0) >= 0, 
+            color: 'from-emerald-500 to-teal-400' 
+        },
     ];
 
     const recentOrders = orders.slice(0, 5);
