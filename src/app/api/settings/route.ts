@@ -3,11 +3,19 @@ import fs from 'fs';
 import path from 'path';
 import { supabase } from '@/lib/supabase';
 
+export const dynamic = 'force-dynamic';
+
 const SETTINGS_JSON = path.join(process.cwd(), 'src/data/settings.json');
 
 function readSettingsLocal() {
     if (!fs.existsSync(SETTINGS_JSON)) {
         return {
+            general: {
+                storeName: 'BioLongevity Labs',
+                supportEmail: 'support@biolongevitylabss.com',
+                maintenanceMode: false,
+                currency: 'USD'
+            },
             taxConfig: "auto",
             shipping: {
                 usa: { standardRate: "15.00", priorityRate: "45.00", freeShippingThreshold: "149.00" },
@@ -20,25 +28,17 @@ function readSettingsLocal() {
     return JSON.parse(content);
 }
 
-function writeSettingsLocal(settings: any) {
-    fs.writeFileSync(SETTINGS_JSON, JSON.stringify(settings, null, 4));
-}
-
 export async function GET() {
     try {
         if (supabase) {
             const { data, error } = await supabase
-                .from('store_settings')
-                .select('data')
+                .from('site_settings')
+                .select('config')
                 .eq('id', 1)
                 .single();
 
-            if (error && error.code !== 'PGRST116') { // PGRST116 is "no rows found"
-                throw error;
-            }
-
-            if (data) {
-                return NextResponse.json(data.data);
+            if (!error && data?.config) {
+                return NextResponse.json(data.config);
             }
         }
 
@@ -48,27 +48,5 @@ export async function GET() {
     } catch (error) {
         console.error('Settings GET Error:', error);
         return NextResponse.json({ error: 'Failed to fetch settings' }, { status: 500 });
-    }
-}
-
-export async function POST(request: Request) {
-    try {
-        const newSettings = await request.json();
-
-        if (supabase) {
-            const { error } = await supabase
-                .from('store_settings')
-                .upsert({ id: 1, data: newSettings, updated_at: new Date().toISOString() });
-
-            if (error) throw error;
-            return NextResponse.json({ success: true, settings: newSettings });
-        } else {
-            // Local fallback (will fail on Vercel but work locally)
-            writeSettingsLocal(newSettings);
-            return NextResponse.json({ success: true, settings: newSettings });
-        }
-    } catch (error) {
-        console.error('Settings POST Error:', error);
-        return NextResponse.json({ error: 'Failed to save settings' }, { status: 500 });
     }
 }

@@ -83,7 +83,7 @@ const AboutSection = () => {
                             Using a high-quality relevant Unsplash image representing a modern lab environment.
                         */}
                         <Image
-                            src="https://images.unsplash.com/photo-1579154235821-f0967969324d?auto=format&fit=crop&w=1200&q=80"
+                            src="/about-lab.png"
                             alt="Laboratory Research"
                             fill
                             className="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-all duration-1000 ease-out"

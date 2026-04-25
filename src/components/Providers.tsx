@@ -1,9 +1,17 @@
 "use client";
 
+import React, { useEffect } from 'react';
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "react-hot-toast";
+import { useSettings } from "@/store/useSettings";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
+    const fetchSettings = useSettings(state => state.fetchSettings);
+
+    useEffect(() => {
+        fetchSettings();
+    }, [fetchSettings]);
+
     return (
         <ThemeProvider attribute="class" defaultTheme="light" forcedTheme="light" enableSystem={false}>
             {children}
@@ -32,4 +40,3 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         </ThemeProvider>
     );
 }
-

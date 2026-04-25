@@ -9,6 +9,7 @@ import OrderReceiptEmail from '@/components/emails/OrderReceiptEmail';
 import AdminOrderNotificationEmail from '@/components/emails/AdminOrderNotificationEmail';
 import PaymentReceivedEmail1 from '@/components/emails/PaymentReceivedEmail1';
 import OrderCancellationEmail from '@/components/emails/OrderCancellationEmail';
+import OrderShippedEmail from '@/components/emails/OrderShippedEmail';
 
 const ORDERS_JSON = path.join(process.cwd(), 'src/data/orders.json');
 
@@ -99,7 +100,7 @@ async function sendOrderEmails(orderData: any) {
     }
 
     try {
-        const totalNum = parseFloat(orderData.total.replace('$', ''));
+        const totalNum = parseFloat(orderData.total.replace(/[^0-9.]/g, ''));
         const items = (orderData.full_items || orderData.items || []).map((item: any) => {
             let variationString = item.variationString || item.variation_name || '';
             
@@ -314,13 +315,12 @@ async function sendStatusUpdateEmail(orderData: any) {
             await sendEmail({
                 to: orderData.email,
                 subject: `Order Shipped - ${orderData.id}`,
-                html: `
-                    <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-                        <h2 style="color: #1a1a1a;">Your BioLongevity Labs Order Has Shipped!</h2>
-                        <p>Good news! Your order <strong>${orderData.id}</strong> is on its way.</p>
-                        <p>Thank you for choosing BioLongevity Labs.</p>
-                    </div>
-                `
+                react: React.createElement(OrderShippedEmail, {
+                    orderId: orderData.id,
+                    customerName: orderData.customer_name || 'Valued Researcher',
+                    trackingNumber: orderData.tracking_number,
+                    trackingUrl: orderData.tracking_url
+                })
             });
             console.log(`Order shipped email sent for ${orderData.id}`);
         }

@@ -37,7 +37,7 @@ export default function LivePulse() {
     }, []);
 
     return (
-        <div className="fixed bottom-6 left-6 z-[100] pointer-events-none">
+        <div className="fixed bottom-36 left-4 right-4 md:bottom-6 md:left-6 md:right-auto z-[100] pointer-events-none">
             <AnimatePresence>
                 {isVisible && (
                     <motion.div

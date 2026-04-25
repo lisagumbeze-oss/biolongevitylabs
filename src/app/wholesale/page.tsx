@@ -21,12 +21,33 @@ export default function WholesalePage() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setSubmitting(true);
-        // Simulate API call
-        setTimeout(() => {
-            setSubmitting(false);
+
+        const formData = new FormData(e.target as HTMLFormElement);
+        const data = {
+            name: formData.get('name'),
+            company: formData.get('company'),
+            email: formData.get('email'),
+            volume: formData.get('volume'),
+            message: formData.get('message'),
+        };
+
+        try {
+            const res = await fetch('/api/wholesale', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+            });
+
+            if (!res.ok) throw new Error('Failed to submit application');
+
             toast.success('Application submitted. Our wholesale team will contact you within 24 hours.');
             (e.target as HTMLFormElement).reset();
-        }, 1500);
+        } catch (error) {
+            console.error('Wholesale Error:', error);
+            toast.error('Submission failed. Please try again or contact support.');
+        } finally {
+            setSubmitting(false);
+        }
     };
 
     return (
@@ -138,20 +159,20 @@ export default function WholesalePage() {
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="space-y-1.5">
                                         <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Full Name</label>
-                                        <input required className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-bold focus:ring-primary/20 transition-all" type="text" placeholder="John Doe" />
+                                        <input name="name" required className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-bold focus:ring-primary/20 transition-all" type="text" placeholder="John Doe" />
                                     </div>
                                     <div className="space-y-1.5">
                                         <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Company / Lab</label>
-                                        <input required className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-bold focus:ring-primary/20 transition-all" type="text" placeholder="Research Institute" />
+                                        <input name="company" required className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-bold focus:ring-primary/20 transition-all" type="text" placeholder="Research Institute" />
                                     </div>
                                 </div>
                                 <div className="space-y-1.5">
                                     <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Email Address</label>
-                                    <input required className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-bold focus:ring-primary/20 transition-all" type="email" placeholder="john@research.edu" />
+                                    <input name="email" required className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-bold focus:ring-primary/20 transition-all" type="email" placeholder="john@research.edu" />
                                 </div>
                                 <div className="space-y-1.5">
                                     <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Approx. Monthly Volume</label>
-                                    <select className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-bold focus:ring-primary/20 transition-all appearance-none">
+                                    <select name="volume" className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-bold focus:ring-primary/20 transition-all appearance-none">
                                         <option>10 - 50 Vials</option>
                                         <option>50 - 200 Vials</option>
                                         <option>200+ Vials</option>
@@ -159,7 +180,7 @@ export default function WholesalePage() {
                                 </div>
                                 <div className="space-y-1.5">
                                     <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Additional Context</label>
-                                    <textarea className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-medium focus:ring-primary/20 transition-all resize-none" rows={3} placeholder="Tell us about your research focus..."></textarea>
+                                    <textarea name="message" className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm font-medium focus:ring-primary/20 transition-all resize-none" rows={3} placeholder="Tell us about your research focus..."></textarea>
                                 </div>
                                 <button 
                                     disabled={submitting}

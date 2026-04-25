@@ -16,55 +16,66 @@ export const ContactFormEmail = ({
     message = 'Testing message content here.'
 }: ContactFormEmailProps) => {
     return (
-        <EmailLayout previewText={`New Contact Message from ${name}`}>
-            <Section className="mb-8 border-b-2 border-slate-100 border-solid pb-6">
-                <Text className="text-primary text-[12px] font-black uppercase tracking-widest m-0 mb-2">
-                    Inquiry Received
+        <EmailLayout previewText={`Inquiry Received: ${name}`}>
+            {/* Header Section */}
+            <Section className="mb-10 text-center">
+                <Text className="text-primary text-[10px] font-black uppercase tracking-[0.3em] m-0 mb-3">
+                    Protocol: 004-Inquiry
                 </Text>
-                <Heading className="text-slate-900 text-[28px] font-black leading-[36px] m-0">
+                <Heading className="text-slate-900 text-[32px] font-black leading-[1.1] m-0 tracking-tight">
                     New Contact Message
                 </Heading>
-            </Section>
-
-            <Section className="mb-10 p-6 bg-slate-50 border border-slate-200 border-solid rounded-2xl">
-                <Row className="mb-4">
-                    <Column className="w-[30%]">
-                        <Text className="text-slate-500 text-[11px] font-black uppercase tracking-widest m-0">Name</Text>
-                    </Column>
-                    <Column className="w-[70%]">
-                        <Text className="text-slate-900 text-[15px] font-bold m-0">{name}</Text>
-                    </Column>
-                </Row>
-                <Row className="mb-4">
-                    <Column className="w-[30%]">
-                        <Text className="text-slate-500 text-[11px] font-black uppercase tracking-widest m-0">Email</Text>
-                    </Column>
-                    <Column className="w-[70%]">
-                        <Text className="text-primary text-[15px] font-bold m-0">{email}</Text>
-                    </Column>
-                </Row>
-                <Row>
-                    <Column className="w-[30%]">
-                        <Text className="text-slate-500 text-[11px] font-black uppercase tracking-widest m-0">Phone</Text>
-                    </Column>
-                    <Column className="w-[70%]">
-                        <Text className="text-slate-900 text-[15px] font-medium m-0">{phone || 'Not provided'}</Text>
-                    </Column>
-                </Row>
-            </Section>
-
-            <Section className="bg-[#f0f7ff] border border-primary/20 border-solid rounded-2xl p-8 mb-8">
-                <Heading as="h4" className="text-slate-900 text-[14px] font-black uppercase tracking-wider mt-0 mb-4">
-                    Message
-                </Heading>
-                <Text className="text-slate-700 text-[16px] leading-[26px] m-0 whitespace-pre-wrap">
-                    {message}
+                <Text className="text-slate-500 text-[14px] mt-2 font-medium">
+                    A new communication has been logged via the laboratory portal.
                 </Text>
             </Section>
 
-            <Text className="text-slate-400 text-[12px] text-center mt-12">
-                This is an automated notification from BioLongevity Labs Support Portal.
-            </Text>
+            {/* Subject Info Grid */}
+            <Section className="mb-8 p-1 bg-slate-50 border border-slate-200 border-solid rounded-2xl overflow-hidden">
+                <table className="w-full border-collapse">
+                    <tbody>
+                        <tr>
+                            <td className="p-6 border-b border-slate-200 border-solid" style={{ width: '50%' }}>
+                                <Text className="text-slate-400 text-[10px] font-black uppercase tracking-widest m-0 mb-1">Subject Name</Text>
+                                <Text className="text-slate-900 text-[16px] font-bold m-0">{name}</Text>
+                            </td>
+                            <td className="p-6 border-b border-slate-200 border-solid border-l" style={{ width: '50%' }}>
+                                <Text className="text-slate-400 text-[10px] font-black uppercase tracking-widest m-0 mb-1">Communication Channel</Text>
+                                <Text className="text-primary text-[16px] font-bold m-0">{email}</Text>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td className="p-6" style={{ width: '50%' }}>
+                                <Text className="text-slate-400 text-[10px] font-black uppercase tracking-widest m-0 mb-1">Telephone ID</Text>
+                                <Text className="text-slate-900 text-[16px] font-medium m-0">{phone || 'Not provided'}</Text>
+                            </td>
+                            <td className="p-6 border-l border-slate-200 border-solid" style={{ width: '50%' }}>
+                                <Text className="text-slate-400 text-[10px] font-black uppercase tracking-widest m-0 mb-1">Timestamp</Text>
+                                <Text className="text-slate-900 text-[16px] font-medium m-0">{new Date().toLocaleString()}</Text>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </Section>
+
+            {/* Message Content */}
+            <Section className="bg-white border border-slate-200 border-solid rounded-2xl overflow-hidden shadow-sm">
+                <div className="bg-slate-900 px-6 py-3">
+                    <Text className="text-white text-[10px] font-black uppercase tracking-widest m-0">Transmission Content</Text>
+                </div>
+                <div className="p-8">
+                    <Text className="text-slate-700 text-[16px] leading-[28px] m-0 whitespace-pre-wrap font-medium">
+                        {message}
+                    </Text>
+                </div>
+            </Section>
+
+            <Section className="mt-10 p-6 border border-dashed border-slate-200 rounded-2xl text-center">
+                <Text className="text-slate-400 text-[12px] m-0 font-medium italic">
+                    This transmission was generated by the BioLongevity Labs automated response system. 
+                    Please respond via the laboratory dashboard or direct email reply.
+                </Text>
+            </Section>
         </EmailLayout>
     );
 };

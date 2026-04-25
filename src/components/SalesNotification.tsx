@@ -149,7 +149,7 @@ export default function SalesNotification() {
                     exit={{ opacity: 0, y: 40, scale: 0.95 }}
                     transition={{ type: "spring", damping: 25, stiffness: 300 }}
                     className="fixed z-[60] 
-                        bottom-28 left-4 right-4 md:bottom-6 md:left-6 md:right-auto
+                        bottom-36 left-4 right-4 md:bottom-6 md:left-6 md:right-auto
                         max-w-sm w-full md:w-auto"
                 >
                     <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 

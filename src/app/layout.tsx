@@ -60,6 +60,7 @@ export const metadata: Metadata = {
 
 import BottomNav from "@/components/BottomNav";
 import CartDrawer from "@/components/CartDrawer";
+import MaintenanceGuard from "@/components/MaintenanceGuard";
 // KeepAlive removed as it's no longer needed for Vercel
 
 export default function RootLayout({
@@ -73,18 +74,20 @@ export default function RootLayout({
         className={`${inter.variable} font-sans antialiased min-h-screen flex flex-col bg-white text-slate-900 transition-colors duration-300`}
       >
         <Providers>
-          <React.Suspense fallback={null}>
-            <LoadingProgress />
-          </React.Suspense>
-          <ConsentModal />
-          <Navbar />
-          <main className="grow pb-24 md:pb-0">
-            {children}
-          </main>
-          <BottomNav />
-          <CartDrawer />
-          <LivePulse />
-          <Footer />
+          <MaintenanceGuard>
+            <React.Suspense fallback={null}>
+              <LoadingProgress />
+            </React.Suspense>
+            <ConsentModal />
+            <Navbar />
+            <main className="grow pb-24 md:pb-0">
+              {children}
+            </main>
+            <BottomNav />
+            <CartDrawer />
+            <LivePulse />
+            <Footer />
+          </MaintenanceGuard>
         </Providers>
 
         <SmartsuppWidget />

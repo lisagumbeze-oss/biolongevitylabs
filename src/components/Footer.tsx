@@ -7,8 +7,15 @@ import { Beaker, ShieldCheck, Truck, Award, Lock, Twitter, Instagram, Linkedin, 
 import PolicyModal from "./PolicyModal";
 import { privacyPolicy, ruoPolicy } from "@/data/policies";
 
+import { useSettings } from "@/store/useSettings";
+
 const Footer = () => {
     const [activeModal, setActiveModal] = useState<"privacy" | "ruo" | null>(null);
+    const settings = useSettings(state => state.settings);
+    const storeName = settings?.general?.storeName || "BioLongevity Labs";
+    const nameParts = storeName.split(" ");
+    const lastPart = nameParts.pop();
+    const firstPart = nameParts.join(" ");
 
     const trustItems = [
         { icon: Lock, label: "SECURE PAYMENTS", sub: "AES-256 Encryption" },
@@ -41,7 +48,7 @@ const Footer = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                 <div className="md:flex md:items-center md:justify-between">
                     <div className="flex justify-center md:justify-start mb-6 md:mb-0">
-                        <Link href="/" aria-label="BioLongevity Labs Home" className="flex items-center gap-3 group">
+                        <Link href="/" aria-label={`${storeName} Home`} className="flex items-center gap-3 group">
                             <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center border border-primary/20 group-hover:bg-primary/20 transition-all">
                                 <Image
                                     src="/favicon.png"
@@ -52,7 +59,7 @@ const Footer = () => {
                                 />
                             </div>
                             <span className="text-lg font-black tracking-tight text-slate-900 uppercase">
-                                BioLongevity <span className="text-primary italic">Labs</span>
+                                {firstPart} <span className="text-primary italic">{lastPart}</span>
                             </span>
                         </Link>
                     </div>
@@ -144,7 +151,7 @@ const Footer = () => {
                 </div>
                 <div className="mt-8 border-t border-slate-200 dark:border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center">
                     <p className="text-sm text-slate-400 text-center md:text-left font-medium">
-                        © {new Date().getFullYear()} BioLongevity Labs. All rights reserved.
+                        © {new Date().getFullYear()} {storeName}. All rights reserved.
                     </p>
                     <div className="mt-4 md:mt-0 flex space-x-6 text-xs text-slate-400 font-medium whitespace-nowrap">
                         <span>Research Use Only</span>

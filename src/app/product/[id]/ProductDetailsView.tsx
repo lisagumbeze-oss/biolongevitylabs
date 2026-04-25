@@ -102,9 +102,44 @@ export default function ProductDetailsView({ id }: Props) {
     const selectedVariation = React.useMemo(() => {
         if (!product || !product.variations || !product.isVariable) return null;
 
+        // Improved normalization for robust matching
+        const normalize = (val: string) => {
+            if (!val) return '';
+            return String(val)
+                .toLowerCase()
+                // Strip marketing suffixes after hyphen (e.g., " - Save 5%")
+                .split(/\s+-\s+/)[0]
+                // Remove everything in parentheses (e.g., "3 Pairs (6 Vials)" -> "3 pairs")
+                .replace(/\s*\(.*?\)\s*/g, ' ')
+                // Replace spaces and special chars with hyphens
+                .replace(/[^a-z0-9]+/g, '-')
+                // Remove leading/trailing hyphens
+                .replace(/^-+|-+$/g, '')
+                .trim();
+        };
+
+        // Only match on user-facing selected options (ignore internal attrs like Dutify)
+        const relevantOptions = Object.entries(selectedOptions).filter(
+            ([name]) => !name.toLowerCase().includes('dutify')
+        );
+
+        if (relevantOptions.length === 0) return product.variations[0] || null;
+
         return product.variations.find(v => {
-            return Object.entries(selectedOptions).every(([name, value]) => {
-                return v.attributes[name] === value;
+            return relevantOptions.every(([name, value]) => {
+                const attrValue = String(v.attributes[name] || '');
+                const selectedValue = String(value || '');
+                
+                if (!attrValue) return false;
+                
+                // Try strict match first
+                if (attrValue === selectedValue) return true;
+                
+                const vSlug = normalize(attrValue);
+                const sSlug = normalize(selectedValue);
+                
+                // Check for equality or inclusion (to handle "3 Pairs" matching "3 Pairs (6 Vials)")
+                return vSlug === sSlug || (vSlug.length > 2 && sSlug.includes(vSlug)) || (sSlug.length > 2 && vSlug.includes(sSlug));
             });
         });
     }, [product, selectedOptions]);
@@ -349,7 +384,9 @@ export default function ProductDetailsView({ id }: Props) {
                         <div className="space-y-8 mb-12 p-8 bg-slate-50/50 dark:bg-slate-900/50 rounded-[2.5rem] border border-slate-100 dark:border-slate-800">
                             {product.variables && product.variables.length > 0 && (
                                 <div className="flex flex-col gap-6">
-                                    {product.variables.map((variable) => (
+                                    {product.variables
+                                        .filter((variable) => variable.options.length > 1 && !variable.name.toLowerCase().includes('dutify'))
+                                        .map((variable) => (
                                         <div key={variable.name} className="flex flex-col gap-3">
                                             <label className="text-[10px] font-black text-slate-900 uppercase tracking-widest flex items-center gap-2 px-1">
                                                 <Layers className="w-3.5 h-3.5 text-primary" />

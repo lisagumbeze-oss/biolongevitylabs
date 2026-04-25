@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text } from '@react-email/components';
+import { Text, Section, Heading } from '@react-email/components';
 import EmailLayout from './shared/EmailLayout';
 import { OrderTable, InfoBlock, HeroHeader } from './shared/EmailComponents';
 
@@ -29,22 +29,58 @@ export const OrderReceiptEmail = ({
     paymentMethod = 'Zelle'
 }: OrderReceiptEmailProps) => {
     return (
-        <EmailLayout previewText={`Your BioLongevity Labs Order ${orderId}`}>
+        <EmailLayout previewText={`Receipt: Order ${orderId} - BioLongevity Labs`}>
             <HeroHeader 
-                title="Thank you for your order!" 
-                subtitle={`Hi ${customerName}, we've received your order and it's now pending payment confirmation.`}
+                title="Order Received" 
+                subtitle={`Verification of acquisition for ${customerName}. Your research materials are being prepared pending final payment verification.`}
             />
 
             <OrderTable items={items} total={total} />
 
-            <InfoBlock title="Payment Instructions">
-                You selected <strong>{paymentMethod}</strong> as your payment method.
-                Please follow the manual payment instructions provided on the checkout confirmation page.
-                Once we receive and verify your payment, we will process your order for shipping.
+            <InfoBlock title="Payment Protocol" iconColor="#137fec">
+                <Text className="m-0 font-bold text-slate-900">Method: {paymentMethod}</Text>
+                <Text className="mt-2 m-0 text-slate-600">
+                    Your order is currently in <strong>PENDING</strong> status. Please ensure the manual transfer is completed as per the instructions provided at checkout. Use your Order ID <strong>{orderId}</strong> as the reference.
+                </Text>
             </InfoBlock>
 
-            <Text className="text-slate-500 text-[14px] leading-[24px] text-center italic">
-                Order ID: {orderId} • Customer: {customerEmail}
+            <Section className="bg-slate-50 p-6 rounded-2xl border border-slate-200 border-solid">
+                <Heading as="h4" className="text-[11px] font-black uppercase tracking-[0.2em] m-0 mb-3 text-slate-400">
+                    Next Phases
+                </Heading>
+                <table className="w-full">
+                    <tr>
+                        <td className="pr-4 py-2" style={{ width: '20%' }}>
+                            <div className="bg-primary text-white text-[10px] font-black w-6 h-6 rounded-full flex items-center justify-center">1</div>
+                        </td>
+                        <td className="py-2">
+                            <Text className="text-[13px] font-bold text-slate-900 m-0">Payment Verification</Text>
+                            <Text className="text-[12px] text-slate-500 m-0">Our financial team verifies your transfer (typically 12-24 hours).</Text>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td className="pr-4 py-2">
+                            <div className="bg-slate-200 text-slate-500 text-[10px] font-black w-6 h-6 rounded-full flex items-center justify-center">2</div>
+                        </td>
+                        <td className="py-2">
+                            <Text className="text-[13px] font-bold text-slate-400 m-0">Laboratory Selection</Text>
+                            <Text className="text-[12px] text-slate-400 m-0">Items are pulled from temperature-controlled storage and inspected.</Text>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td className="pr-4 py-2">
+                            <div className="bg-slate-200 text-slate-500 text-[10px] font-black w-6 h-6 rounded-full flex items-center justify-center">3</div>
+                        </td>
+                        <td className="py-2">
+                            <Text className="text-[13px] font-bold text-slate-400 m-0">Global Logistics</Text>
+                            <Text className="text-[12px] text-slate-400 m-0">Dispatched via secure courier with real-time tracking IDs.</Text>
+                        </td>
+                    </tr>
+                </table>
+            </Section>
+
+            <Text className="text-slate-400 text-[11px] text-center mt-10 font-mono">
+                REFERENCE: {orderId} // {customerEmail.toUpperCase()}
             </Text>
         </EmailLayout>
     );

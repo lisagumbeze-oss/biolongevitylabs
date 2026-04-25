@@ -25,7 +25,7 @@ export default function SmartsuppWidget() {
           
           // Move widget up on mobile to avoid BottomNav
           if (window.innerWidth < 768) {
-            window._smartsupp.offsetY = 100;
+            window._smartsupp.offsetY = 150;
             window._smartsupp.offsetX = 20;
           }
           

@@ -11,55 +11,67 @@ export const OrderCancellationEmail = ({ orderId = "1234" }: OrderCancellationPr
     const displayOrderId = orderId.startsWith('#') ? orderId : `#${orderId}`;
 
     return (
-        <EmailLayout previewText={`Order Canceled - BioLongevity Labs ${displayOrderId}`}>
-            <Section className="text-center mb-8">
+        <EmailLayout previewText={`DEACTIVATED: Order ${displayOrderId} Canceled`}>
+            <Section className="text-center mb-10">
                 <div style={{ 
-                    width: '80px', 
-                    height: '80px', 
-                    backgroundColor: '#fee2e2', 
-                    borderRadius: '50%', 
+                    width: '64px', 
+                    height: '64px', 
+                    backgroundColor: '#ef4444', 
+                    borderRadius: '20px', 
                     display: 'inline-flex', 
                     alignItems: 'center', 
                     justifyContent: 'center',
-                    margin: '0 auto 20px auto'
+                    margin: '0 auto 24px auto',
+                    boxShadow: '0 10px 15px -3px rgba(239, 68, 68, 0.3)'
                 }}>
-                    <div style={{ color: '#dc2626', fontSize: '40px' }}>✕</div>
+                    <Text className="text-white text-[32px] font-bold m-0">✕</Text>
                 </div>
                 <HeroHeader 
-                    title="Order Canceled" 
-                    subtitle={`Your order ${displayOrderId} has been canceled.`}
+                    title="Protocol Deactivated" 
+                    subtitle={`Laboratory requisition ${displayOrderId} has been formally canceled.`}
                 />
             </Section>
 
-            <InfoBlock title="Reason for Cancellation" iconColor="#dc2626">
-                Payment was not received within the required 24-hour timeframe. As a guest checkout, unpaid orders are automatically released. 
-                If you believe this is an error or would like to reactivate your order, please contact our support team.
+            <InfoBlock title="Cancellation Report" iconColor="#ef4444">
+                <div className="bg-white p-6 rounded-xl border border-red-100 border-solid shadow-sm">
+                    <Text className="text-slate-600 text-[14px] leading-[24px] m-0">
+                        Financial clearance was not received within the 24-hour verification window. In accordance with laboratory procurement protocols, unpaid orders are automatically purged to release research inventory.
+                        <br /><br />
+                        If this deactivation was unexpected, please initiate a new requisition or contact the support division.
+                    </Text>
+                </div>
             </InfoBlock>
 
             <Section className="text-center mt-10">
-                <Text className="text-slate-500 text-[14px] mb-6">
-                    Would you like to try again or need assistance?
+                <Text className="text-slate-500 text-[13px] mb-8 font-medium">
+                    Select a resolution pathway below:
                 </Text>
-                <div className="flex justify-center gap-4">
-                    <Link 
-                        href="https://biolongevitylabss.com/shop"
-                        className="bg-primary text-white font-bold py-3 px-8 rounded-xl mx-2"
-                        style={{ display: 'inline-block', textDecoration: 'none' }}
-                    >
-                        Shop Again
-                    </Link>
-                    <Link 
-                        href="mailto:support@biolongevitylabss.com"
-                        className="bg-slate-200 text-slate-900 font-bold py-3 px-8 rounded-xl mx-2"
-                        style={{ display: 'inline-block', textDecoration: 'none' }}
-                    >
-                        Contact Support
-                    </Link>
-                </div>
+                <table className="mx-auto">
+                    <tr>
+                        <td>
+                            <Link 
+                                href="https://biolongevitylabss.com/shop"
+                                className="bg-slate-900 text-white font-black py-4 px-10 rounded-xl text-[12px] uppercase tracking-widest no-underline shadow-lg shadow-slate-900/20 hover:scale-105 transition-all mx-2"
+                                style={{ display: 'inline-block' }}
+                            >
+                                Shop Again
+                            </Link>
+                        </td>
+                        <td>
+                            <Link 
+                                href="mailto:support@biolongevitylabss.com"
+                                className="bg-slate-100 text-slate-900 font-black py-4 px-10 rounded-xl text-[12px] uppercase tracking-widest no-underline border border-slate-200 border-solid mx-2"
+                                style={{ display: 'inline-block' }}
+                            >
+                                Contact Support
+                            </Link>
+                        </td>
+                    </tr>
+                </table>
             </Section>
 
-            <Text className="text-slate-400 text-[13px] text-center italic mt-12">
-                Order ID: {displayOrderId} • BioLongevity Labs
+            <Text className="text-slate-400 text-[11px] text-center mt-12 font-mono">
+                STATUS: DEACTIVATED // LOG_REF: {displayOrderId.replace('#', '')}
             </Text>
         </EmailLayout>
     );

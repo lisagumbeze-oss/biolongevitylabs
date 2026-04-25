@@ -3,39 +3,55 @@
     "shipping": {
         "usa": {
             "standardRate": "15.00",
-            "priorityRate": "45.00",
-            "freeShippingThreshold": "149.00"
+            "priorityRate": "25",
+            "freeShippingThreshold": "500"
         },
         "international": {
-            "standardRate": "55.00",
-            "priorityRate": "85.00",
-            "freeShippingThreshold": "299.00"
+            "standardRate": "35",
+            "priorityRate": "55",
+            "freeShippingThreshold": "1000"
         }
     },
     "paymentMethods": [
         {
             "id": "zelle",
-            "name": "Zelle",
-            "instructions": "Please send your payment to support@biolongevitylabss.com via Zelle. Include your order number in the memo field.",
-            "enabled": true
+            "name": "Apple CAsh",
+            "instructions": "",
+            "enabled": true,
+            "type": "direct_transfer"
         },
         {
             "id": "venmo",
-            "name": "Venmo",
-            "instructions": "Send payment to Venmo username: @BioLongevityLabs. Please include your order ID.",
+            "name": "Chime",
+            "instructions": "",
             "enabled": true
         },
         {
             "id": "cashapp",
-            "name": "Cash App",
-            "instructions": "Send payment to Cashtag: $BioLongevityLabs. Include your order number.",
+            "name": "CashApp",
+            "instructions": "",
             "enabled": true
         },
         {
             "id": "check",
-            "name": "Check / Money Order",
-            "instructions": "Make checks payable to BioLongevity Labs LLC. Mail to: F2 Nutrition Inc. 405 Rothrock Rd #106 Akron, OH 44321.",
-            "enabled": true
+            "name": "Zelle",
+            "instructions": "",
+            "enabled": true,
+            "type": "direct_transfer"
+        },
+        {
+            "id": "pm_1777158646231",
+            "name": "Giftcard",
+            "instructions": "",
+            "enabled": true,
+            "type": "other",
+            "walletAddress": ""
         }
-    ]
+    ],
+    "general": {
+        "storeName": "BioLongevity Labs",
+        "supportEmail": "support@biolongevitylabss.com",
+        "maintenanceMode": false,
+        "currency": "USD"
+    }
 }

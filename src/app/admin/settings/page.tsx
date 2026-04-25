@@ -266,37 +266,121 @@ export default function SettingsAdminPage() {
                 {/* Payment Methods */}
                 {activeTab === 'payments' && (
                     <div className="space-y-6">
+                        {/* Add New Payment Method */}
+                        <button 
+                            type="button"
+                            onClick={() => {
+                                const newId = `pm_${Date.now()}`;
+                                setSettings({
+                                    ...settings,
+                                    paymentMethods: [
+                                        ...(settings.paymentMethods || []),
+                                        { id: newId, name: '', instructions: '', enabled: true, type: 'direct_transfer', walletAddress: '' }
+                                    ]
+                                });
+                            }}
+                            className="flex items-center gap-2 px-6 py-3 bg-primary/10 text-primary font-black text-xs uppercase tracking-widest rounded-2xl border-2 border-dashed border-primary/30 hover:bg-primary/20 hover:border-primary/50 transition-all w-full justify-center"
+                        >
+                            <Plus className="w-4 h-4" />
+                            Add Payment Method
+                        </button>
+
                         <div className="grid grid-cols-1 gap-6">
-                            {settings.paymentMethods?.map((pm: any) => (
-                                <div key={pm.id} className="bg-white dark:bg-slate-900 p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col md:flex-row gap-8 items-start">
-                                    <div className="w-full md:w-1/3 space-y-4">
-                                        <div className="flex items-center justify-between">
-                                            <h3 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-widest">{pm.name}</h3>
+                            {settings.paymentMethods?.map((pm: any, idx: number) => (
+                                <div key={pm.id} className="bg-white dark:bg-slate-900 p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+                                    {/* Header Row: Name + Toggle + Delete */}
+                                    <div className="flex items-center justify-between gap-4">
+                                        <div className="flex items-center gap-4 flex-1">
+                                            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary font-black text-sm">
+                                                {idx + 1}
+                                            </div>
+                                            <input 
+                                                type="text"
+                                                value={pm.name}
+                                                onChange={(e) => updatePayment(pm.id, 'name', e.target.value)}
+                                                placeholder="Payment method name (e.g., Zelle, Venmo)"
+                                                className="flex-1 bg-transparent border-b-2 border-slate-200 dark:border-slate-700 focus:border-primary px-2 py-2 text-lg font-black text-slate-900 dark:text-white uppercase tracking-wide outline-none transition-all placeholder:text-slate-300 placeholder:normal-case placeholder:text-sm placeholder:font-medium placeholder:tracking-normal"
+                                            />
+                                        </div>
+                                        <div className="flex items-center gap-3">
                                             <button 
                                                 type="button"
                                                 onClick={() => updatePayment(pm.id, 'enabled', !pm.enabled)}
-                                                className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${pm.enabled ? 'bg-emerald-500 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-400'}`}
+                                                className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${pm.enabled ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : 'bg-slate-200 dark:bg-slate-800 text-slate-400'}`}
                                             >
                                                 {pm.enabled ? 'Enabled' : 'Disabled'}
                                             </button>
-                                        </div>
-                                        <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800">
-                                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Method Type</p>
-                                            <p className="text-xs font-bold text-slate-700 dark:text-slate-300">Un-monitored Direct Transfer</p>
+                                            <button 
+                                                type="button"
+                                                onClick={() => {
+                                                    if (confirm(`Delete "${pm.name || 'Untitled'}" payment method?`)) {
+                                                        setSettings({
+                                                            ...settings,
+                                                            paymentMethods: settings.paymentMethods.filter((p: any) => p.id !== pm.id)
+                                                        });
+                                                    }
+                                                }}
+                                                className="p-2 rounded-xl text-rose-400 hover:text-white hover:bg-rose-500 transition-all"
+                                            >
+                                                <Trash2 className="w-4 h-4" />
+                                            </button>
                                         </div>
                                     </div>
-                                    <div className="w-full md:w-2/3 space-y-4">
+
+                                    {/* Fields Grid */}
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        {/* Method Type */}
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] font-black uppercase tracking-widest text-slate-500">Method Type</label>
+                                            <select
+                                                value={pm.type || 'direct_transfer'}
+                                                onChange={(e) => updatePayment(pm.id, 'type', e.target.value)}
+                                                className="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 text-sm font-bold focus:ring-primary/20 transition-all outline-none cursor-pointer"
+                                            >
+                                                <option value="direct_transfer">Direct Transfer</option>
+                                                <option value="crypto">Cryptocurrency</option>
+                                                <option value="bank_transfer">Bank Transfer</option>
+                                                <option value="other">Other</option>
+                                            </select>
+                                        </div>
+
+                                        {/* Wallet / Account ID */}
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] font-black uppercase tracking-widest text-slate-500">
+                                                {pm.type === 'crypto' ? 'Wallet Address' : pm.type === 'bank_transfer' ? 'Account Details' : 'Payment Handle / ID'}
+                                            </label>
+                                            <input 
+                                                type="text"
+                                                value={pm.walletAddress || ''}
+                                                onChange={(e) => updatePayment(pm.id, 'walletAddress', e.target.value)}
+                                                placeholder={pm.type === 'crypto' ? '0x...' : '@username or account ID'}
+                                                className="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 text-sm font-bold focus:ring-primary/20 transition-all outline-none"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Checkout Instructions */}
+                                    <div className="space-y-2">
                                         <label className="text-[10px] font-black uppercase tracking-widest text-slate-500">Checkout Instructions</label>
                                         <textarea 
                                             value={pm.instructions}
                                             onChange={(e) => updatePayment(pm.id, 'instructions', e.target.value)}
                                             rows={3}
-                                            className="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 rounded-xl p-4 text-sm font-medium focus:ring-primary/20 transition-all resize-none"
+                                            placeholder="Instructions shown to customer at checkout (e.g., 'Send payment to @YourHandle and include your order number in the note')"
+                                            className="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 rounded-xl p-4 text-sm font-medium focus:ring-primary/20 transition-all resize-none outline-none placeholder:text-slate-300"
                                         />
                                     </div>
                                 </div>
                             ))}
                         </div>
+
+                        {(!settings.paymentMethods || settings.paymentMethods.length === 0) && (
+                            <div className="text-center py-20 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800">
+                                <CreditCard className="w-12 h-12 text-slate-200 dark:text-slate-700 mx-auto mb-4" />
+                                <p className="text-sm font-bold text-slate-400">No payment methods configured.</p>
+                                <p className="text-xs text-slate-300 mt-1">Click "Add Payment Method" above to get started.</p>
+                            </div>
+                        )}
                     </div>
                 )}
             </form>

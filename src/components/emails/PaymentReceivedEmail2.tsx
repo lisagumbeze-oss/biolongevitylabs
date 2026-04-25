@@ -8,52 +8,74 @@ export const PaymentReceivedEmail2 = () => {
     const orderId = '#ORD-1234';
     
     return (
-        <EmailLayout previewText={`Reminder: Payment Pending for Order ${orderId}`}>
-            <Section className="text-center mb-8">
+        <EmailLayout previewText={`ACTION REQUIRED: Payment Pending for Order ${orderId}`}>
+            <Section className="text-center mb-10">
                 <div style={{ 
-                    width: '80px', 
-                    height: '80px', 
-                    backgroundColor: '#fffbeb', 
-                    borderRadius: '50%', 
+                    width: '64px', 
+                    height: '64px', 
+                    backgroundColor: '#fbbf24', 
+                    borderRadius: '20px', 
                     display: 'inline-flex', 
                     alignItems: 'center', 
                     justifyContent: 'center',
-                    margin: '0 auto 20px auto'
+                    margin: '0 auto 24px auto',
+                    boxShadow: '0 10px 15px -3px rgba(251, 191, 36, 0.3)'
                 }}>
-                    <div style={{ color: '#d97706', fontSize: '40px' }}>⏳</div>
+                    <Text className="text-white text-[32px] font-bold m-0">!</Text>
                 </div>
                 <HeroHeader 
-                    title="Payment Still Pending" 
-                    subtitle={`We're holding your order ${orderId}, but we haven't received your payment yet.`}
+                    title="Transaction Incomplete" 
+                    subtitle={`Laboratory requisition ${orderId} is currently held pending financial clearance.`}
                 />
             </Section>
 
-            <Section className="bg-amber-50 border border-amber-200 border-solid rounded-2xl p-8 mb-8">
-                <Text className="text-amber-900 text-[14px] leading-[22px] m-0">
-                    Your order is currently reserved, but requires payment to proceed to shipping. If you have already sent the payment, please reply to this email with a screenshot of your receipt so we can expedite the verification.
+            <Section className="bg-amber-50 border border-amber-200 border-solid rounded-2xl p-8 mb-10 shadow-sm">
+                <Text className="text-amber-900 text-[14px] leading-[24px] font-medium m-0">
+                    Your research compounds have been reserved, but requires payment verification to proceed to the logistics phase. If you have already initiated the transfer, please provide a transmission receipt to expedite verification.
                 </Text>
             </Section>
 
-            <InfoBlock title="Payment Instructions" iconColor="#d97706">
-                <div style={{ padding: '16px', backgroundColor: '#ffffff', borderRadius: '12px', border: '1px solid #fcd34d' }}>
-                    <Text className="m-0 text-[13px]"><span className="text-slate-500">Zelle Email:</span> <strong>payments@biolongevitylabss.com</strong></Text>
-                    <Text className="m-0 mt-1 text-[13px]"><span className="text-slate-500">Account Name:</span> <strong>BioLongevity Labs</strong></Text>
-                    <Text className="m-0 mt-1 text-[13px]"><span className="text-slate-500">Required Memo:</span> <strong>Order ID {orderId}</strong></Text>
+            <InfoBlock title="Financial Instructions" iconColor="#d97706">
+                <div className="bg-white p-6 rounded-xl border border-amber-200 border-solid shadow-sm">
+                    <table className="w-full">
+                        <tr>
+                            <td className="py-2 border-b border-slate-100 border-solid">
+                                <Text className="text-slate-400 text-[10px] font-black uppercase tracking-widest m-0 mb-1">Transfer Gateway</Text>
+                                <Text className="text-slate-900 text-[15px] font-bold m-0">Zelle / Bank Transfer</Text>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td className="py-2 border-b border-slate-100 border-solid">
+                                <Text className="text-slate-400 text-[10px] font-black uppercase tracking-widest m-0 mb-1">Protocol Address</Text>
+                                <Text className="text-primary text-[15px] font-black m-0">payments@biolongevitylabss.com</Text>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td className="py-2">
+                                <Text className="text-slate-400 text-[10px] font-black uppercase tracking-widest m-0 mb-1">Required Reference</Text>
+                                <Text className="text-slate-900 text-[15px] font-black m-0">ORDER {orderId.replace('#', '')}</Text>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
             </InfoBlock>
 
             <Section className="text-center mt-10">
-                <Text className="text-slate-500 text-[14px] mb-6">
-                    Need help with your payment? Our team is here to assist you.
+                <Text className="text-slate-500 text-[13px] mb-6 font-medium">
+                    Encountering issues with the gateway? Our technical support team is standing by.
                 </Text>
                 <Link 
                     href="mailto:support@biolongevitylabss.com"
-                    className="bg-primary text-white font-bold py-3 px-8 rounded-xl"
-                    style={{ display: 'inline-block', textDecoration: 'none' }}
+                    className="bg-primary text-white font-black py-4 px-10 rounded-xl text-[12px] uppercase tracking-widest no-underline shadow-lg shadow-primary/20 hover:scale-105 transition-all"
+                    style={{ display: 'inline-block' }}
                 >
                     Contact Support
                 </Link>
             </Section>
+
+            <Text className="text-slate-400 text-[11px] text-center mt-12 font-mono">
+                STATUS: WAITING_FOR_PAYMENT // TTL: 48H
+            </Text>
         </EmailLayout>
     );
 };

@@ -10,6 +10,8 @@ import CartDrawer from "./CartDrawer";
 import LiveSearch from "./LiveSearch";
 import { motion, AnimatePresence } from "framer-motion";
 
+import { useSettings } from "@/store/useSettings";
+
 const resourceLinks = [
     { href: "/resources/peptide-calculator", label: "Peptide Calculator" },
     { href: "/peptide-guide", label: "Peptide Guide" },
@@ -22,16 +24,22 @@ const Navbar = () => {
     const { isCartOpen, setIsCartOpen } = useCart();
     const items = useCart((state) => state.items);
     const cartCount = items.reduce((acc, item) => acc + item.quantity, 0);
+    const settings = useSettings(state => state.settings);
 
     const wishlistItems = useWishlist((state) => state.items);
     const wishlistCount = wishlistItems.length;
+
+    const storeName = settings?.general?.storeName || "BioLongevity Labs";
+    const nameParts = storeName.split(" ");
+    const lastPart = nameParts.pop();
+    const firstPart = nameParts.join(" ");
 
     return (
         <header className="bg-white shadow-sm sticky top-0 z-50 transition-colors border-b border-slate-100">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-20 gap-6">
                     <div className="shrink-0 flex items-center">
-                        <Link href="/" aria-label="BioLongevity Labs Home" className="flex items-center gap-3 group">
+                        <Link href="/" aria-label={`${storeName} Home`} className="flex items-center gap-3 group">
                             <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center border border-primary/20 group-hover:bg-primary/20 transition-all">
                                 <Image
                                     src="/favicon.png"
@@ -42,7 +50,7 @@ const Navbar = () => {
                                 />
                             </div>
                             <span className="text-xl font-black tracking-tight text-slate-900 uppercase">
-                                BioLongevity <span className="text-primary italic">Labs</span>
+                                {firstPart} <span className="text-primary italic">{lastPart}</span>
                             </span>
                         </Link>
                     </div>
@@ -57,11 +65,7 @@ const Navbar = () => {
                         <nav className="hidden md:flex items-center space-x-6">
                             <Link href="/about" className="text-slate-600 hover:text-primary font-bold transition-colors text-sm uppercase tracking-widest">About</Link>
                             <Link href="/shop" className="text-slate-600 hover:text-primary font-bold transition-colors text-sm uppercase tracking-widest">Shop</Link>
-                            <Link href="/protocol-finder" className="text-primary hover:text-sky-400 font-black transition-colors text-sm uppercase tracking-widest flex items-center gap-1.5">
-                                <Sparkles className="w-3.5 h-3.5" />
-                                Protocol Finder
-                            </Link>
-                             <Link href="/research" className="text-slate-600 hover:text-primary font-bold transition-colors text-sm uppercase tracking-widest">Research</Link>
+
                             <Link href="/wholesale" className="text-slate-600 hover:text-primary font-bold transition-colors text-sm uppercase tracking-widest">Wholesale</Link>
                             <div ref={resourcesRef} className="relative" onMouseEnter={() => setIsResourcesOpen(true)} onMouseLeave={() => setIsResourcesOpen(false)}>
                                 <button className="flex items-center gap-1 text-slate-600 hover:text-primary font-bold transition-colors text-sm uppercase tracking-widest">
@@ -170,7 +174,7 @@ const Navbar = () => {
                             <div className="grid grid-cols-1 gap-2 pt-2">
                                 <Link href="/about" onClick={() => setIsMenuOpen(false)} className="block px-4 py-4 rounded-xl text-lg font-bold text-slate-700 dark:text-slate-200 hover:bg-primary/5 hover:text-primary transition-all">About Us</Link>
                                 <Link href="/shop" onClick={() => setIsMenuOpen(false)} className="block px-4 py-4 rounded-xl text-lg font-bold text-slate-700 dark:text-slate-200 hover:bg-primary/5 hover:text-primary transition-all">Shop All</Link>
-                                <Link href="/research" onClick={() => setIsMenuOpen(false)} className="block px-4 py-4 rounded-xl text-lg font-bold text-slate-700 dark:text-slate-200 hover:bg-primary/5 hover:text-primary transition-all">Research</Link>
+
                                 <Link href="/resources/peptide-calculator" onClick={() => setIsMenuOpen(false)} className="block px-4 py-4 rounded-xl text-lg font-bold text-slate-700 dark:text-slate-200 hover:bg-primary/5 hover:text-primary transition-all">Peptide Calculator</Link>
                                 <Link href="/peptide-guide" onClick={() => setIsMenuOpen(false)} className="block px-4 py-4 rounded-xl text-lg font-bold text-slate-700 dark:text-slate-200 hover:bg-primary/5 hover:text-primary transition-all">Peptide Guide</Link>
                                 <Link href="/support" onClick={() => setIsMenuOpen(false)} className="block px-4 py-4 rounded-xl text-lg font-bold text-slate-700 dark:text-slate-200 hover:bg-primary/5 hover:text-primary transition-all">Support</Link>

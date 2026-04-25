@@ -39,6 +39,9 @@ const CONFIG = {
         'bioregulators': { name: 'Bioregulator Capsules', form: 'Capsule' },
         'bioregulators-creams': { name: 'Bioregulator Creams', form: 'Cream' },
         'non-oral-bioregulators': { name: 'Bioregulator Vials', form: 'Vial' },
+        'flagship-products': { name: 'Flagship Products', form: 'Vial' },
+        'uncategorized': { name: 'Other Products', form: 'Other' },
+        'bundle': { name: 'Bundles', form: 'Bundle' },
     }
 };
 
@@ -151,7 +154,7 @@ async function getSupabaseClient() {
 
     const envContent = fs.readFileSync(envPath, 'utf-8');
     const env = {};
-    envContent.split('\n').forEach(line => {
+    envContent.split(/\r?\n/).forEach(line => {
         const match = line.match(/^([^#=]+)=(.*)$/);
         if (match) env[match[1].trim()] = match[2].trim().replace(/^['"]|['"]$/g, '');
     });
@@ -201,11 +204,23 @@ async function fetchAllProducts() {
 }
 
 // ─── Step 2: Fetch Variation Details ────────────────────────────────────────────
-async function fetchVariationPrices(productId) {
-    const url = `${CONFIG.storeApiBase}/${productId}/variations`;
-    const variations = await fetchJson(url);
-    if (!Array.isArray(variations)) return [];
-    return variations;
+async function fetchVariationPrices(rawProduct) {
+    if (!rawProduct.variations || rawProduct.variations.length === 0) return [];
+    
+    const detailedVariations = [];
+    for (const v of rawProduct.variations) {
+        const url = `${CONFIG.storeApiBase}/${v.id}`;
+        const detail = await fetchJson(url);
+        if (detail) {
+            // Merge the attributes from the parent object if needed, though detail might have them
+            detailedVariations.push({
+                ...detail,
+                attributes: v.attributes || []
+            });
+        }
+        await sleep(CONFIG.requestDelay);
+    }
+    return detailedVariations;
 }
 
 // ─── Step 3: Fetch Full Description from WP REST API ───────────────────────────
@@ -301,7 +316,7 @@ async function mapProduct(rawProduct, index, total) {
     const isVariable = rawProduct.has_options || rawProduct.type === 'variable';
 
     if (isVariable) {
-        const rawVariations = await fetchVariationPrices(rawProduct.id);
+        const rawVariations = await fetchVariationPrices(rawProduct);
         if (rawVariations.length > 0) {
             variations = rawVariations.map(v => {
                 const varPrice = v.prices?.price ? parseFloat(v.prices.price) / (10 ** (v.prices?.currency_minor_unit || 2)) : price;

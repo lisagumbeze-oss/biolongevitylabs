@@ -104,9 +104,9 @@ export default function CheckoutPage() {
 
     const subtotal = getTotal();
     const shippingZone = formData.country === "USA" ? settings?.shipping.usa : settings?.shipping.international;
-    const standardRate = 15.0;
-    const priorityRate = 45.0;
-    const freeThreshold = 500.0;
+    const standardRate = parseFloat(shippingZone?.standardRate || "15.00");
+    const priorityRate = parseFloat(shippingZone?.priorityRate || "45.00");
+    const freeThreshold = parseFloat(shippingZone?.freeShippingThreshold || "149.00");
 
     const isFreeShipping = subtotal >= freeThreshold;
 
