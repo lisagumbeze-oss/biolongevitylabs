@@ -659,7 +659,6 @@ export default function ProductDetailsView({ id }: Props) {
                             </div>
                         </div>
                     </div>
-                </div>
 
                 {/* Related Products */}
                 {relatedProducts.length > 0 && (

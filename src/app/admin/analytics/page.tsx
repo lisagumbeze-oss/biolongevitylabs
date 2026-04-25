@@ -211,7 +211,7 @@ export default function AnalyticsPage() {
                                         contentStyle={{ backgroundColor: '#0f172a', border: 'none', borderRadius: '12px', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)' }}
                                         itemStyle={{ color: '#fff', fontSize: '12px', fontWeight: 'bold' }}
                                         labelStyle={{ color: '#64748b', fontSize: '10px', marginBottom: '4px', textTransform: 'uppercase', fontWeight: 'black' }}
-                                        formatter={(val: number) => [formatCurrency(val), 'Revenue']}
+                                        formatter={(val: any) => [formatCurrency(val as number), 'Revenue']}
                                     />
                                     <Area 
                                         type="monotone" 

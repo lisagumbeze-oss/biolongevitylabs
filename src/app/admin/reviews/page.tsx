@@ -163,7 +163,7 @@ export default function ReviewsAdminPage() {
                                             <h3 className="text-sm font-black text-slate-900 dark:text-white flex items-center gap-2">
                                                 {review.author_name}
                                                 {review.is_verified && (
-                                                    <ShieldCheck className="w-4 h-4 text-emerald-500" title="Verified Purchase" />
+                                                    <span title="Verified Purchase" className="inline-flex"><ShieldCheck className="w-4 h-4 text-emerald-500" /></span>
                                                 )}
                                             </h3>
                                             <p className="text-xs text-slate-500">{review.author_email}</p>

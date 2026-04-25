@@ -186,6 +186,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
                             dangerouslySetInnerHTML={{ __html: description }}
                         />
                     )}
+                </div>
+            </Link>
 
             <div className="px-6 pb-6 relative h-16 overflow-hidden">
                 <div className="flex flex-col mt-auto transition-all duration-300 group-hover:-translate-y-16">

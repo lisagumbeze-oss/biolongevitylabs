@@ -12,7 +12,8 @@ import {
     Code,
     Loader2,
     ArrowLeft,
-    Check
+    Check,
+    FileText
 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 
