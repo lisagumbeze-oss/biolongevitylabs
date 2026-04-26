@@ -52,9 +52,9 @@ const accentText = {
 export const EmailLayout = ({ previewText, children }: EmailLayoutProps) => {
     return (
         <Html>
-            <Head />
-            <Preview>{previewText}</Preview>
             <Tailwind>
+                <Head />
+                <Preview>{previewText}</Preview>
                 <Body style={main} className="bg-slate-100 my-auto mx-auto font-sans px-2">
                     <Container style={container} className="bg-white border border-slate-200 border-solid rounded-[24px] mx-auto my-10 overflow-hidden shadow-2xl">
                         {/* High-End Header */}
