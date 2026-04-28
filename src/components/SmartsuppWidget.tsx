@@ -34,7 +34,7 @@ export default function SmartsuppWidget() {
       }
       
       (function(d) {
-        var s,c,o=window.smartsupp=function(){ o._.push(arguments)};o._=[];
+        var s,c,o: any=window.smartsupp=function(){ o._.push(arguments)};o._=[];
         s=d.getElementsByTagName('script')[0];
         c=d.createElement('script');
         c.type='text/javascript';
