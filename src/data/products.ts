@@ -29,8 +29,8 @@ export interface Product {
     originalPrice?: number;
     image: string;
     gallery?: string[];
-    category: "Peptide Vials" | "Peptide Capsules" | "Bioregulator Capsules" | "Bioregulator Creams" | "Bioregulator Vials";
-    form: 'Vial' | 'Capsule' | 'Cream' | 'Solution';
+    category: "Peptide Vials" | "Peptide Capsules" | "Bioregulator Capsules" | "Bioregulator Creams" | "Bioregulator Vials" | "SARMS" | "Flagship Products";
+    form: 'Vial' | 'Capsule' | 'Cream' | 'Solution' | 'Tablet';
     description: string;
     attributes?: { label: string; value: string }[];
     isSale?: boolean;
@@ -53,12 +53,15 @@ export const categories = [
     "Peptide Capsules",
     "Bioregulator Capsules",
     "Bioregulator Creams",
-    "Bioregulator Vials"
+    "Bioregulator Vials",
+    "SARMS",
+    "Flagship Products"
 ];
 
 export const forms = [
     "Vial",
     "Capsule",
     "Cream",
-    "Solution"
+    "Solution",
+    "Tablet"
 ];

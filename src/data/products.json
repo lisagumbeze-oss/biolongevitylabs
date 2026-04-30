@@ -1,5 +1,22 @@
 [
     {
+        "id": "prod_mk677_10mg_50tab",
+        "name": "MK-677 (10MG) (50 TABLETS)",
+        "price": 100.0,
+        "minPrice": 100.0,
+        "maxPrice": 100.0,
+        "image": "/uploads/mk-677-10mg-50tablets.jpg",
+        "gallery": [],
+        "category": "SARMS",
+        "form": "Tablet",
+        "description": "<p>MK-677 (Ibutamoren) is a potent, non-peptide, orally active growth hormone secretagogue. Research-grade tablets for investigational use.</p>",
+        "isSale": false,
+        "stockStatus": "In Stock",
+        "isVariable": false,
+        "variables": [],
+        "variations": []
+    },
+    {
         "id": "prod_239119",
         "name": "Follistatin (FLGR242) (10mg) Subscription",
         "price": 449.1,
