@@ -17,6 +17,18 @@ function writeCouponsLocal(coupons: any) {
     fs.writeFileSync(COUPONS_JSON, JSON.stringify(coupons, null, 4));
 }
 
+function toUiCoupon(row: any) {
+    return {
+        id: row.id,
+        code: row.code,
+        type: row.discount_type,
+        value: Number(row.discount_value ?? 0),
+        minCartAmount: Number(row.min_amount ?? 0),
+        usageCount: Number(row.usage_count ?? 0),
+        active: row.is_active ?? true
+    };
+}
+
 export async function GET() {
     try {
         if (supabase) {
@@ -26,7 +38,7 @@ export async function GET() {
                 .order('created_at', { ascending: false });
 
             if (error) throw error;
-            return NextResponse.json(data);
+            return NextResponse.json((data || []).map(toUiCoupon));
         }
 
         const coupons = readCouponsLocal();
@@ -45,14 +57,23 @@ export async function POST(request: Request) {
             // Map frontend fields (camelCase often) to Supabase fields (snake_case) if necessary
             // But looking at the schema I created, I used snake_case. 
             // In the UI they might be using camelCase. Let's be safe and map them.
+            const discountType = coupon.type || coupon.discountType || coupon.discount_type;
+            const discountValue = coupon.value ?? coupon.discountValue ?? coupon.discount_value;
+            const minAmount = coupon.minCartAmount ?? coupon.minAmount ?? coupon.min_amount ?? null;
+            const isActive = coupon.active ?? coupon.isActive ?? coupon.is_active ?? true;
+
             const dbData = {
                 id: coupon.id || `cpn_${Date.now()}`,
-                code: coupon.code,
-                discount_type: coupon.discountType || coupon.discount_type,
-                discount_value: coupon.discountValue || coupon.discount_value,
-                min_amount: coupon.minAmount || coupon.min_amount || null,
-                is_active: coupon.isActive !== undefined ? coupon.isActive : (coupon.is_active !== undefined ? coupon.is_active : true)
+                code: String(coupon.code || '').trim().toUpperCase(),
+                discount_type: discountType,
+                discount_value: discountValue !== null && discountValue !== undefined ? Number(discountValue) : null,
+                min_amount: minAmount !== null && minAmount !== undefined ? Number(minAmount) : null,
+                is_active: Boolean(isActive)
             };
+
+            if (!dbData.code || !dbData.discount_type || dbData.discount_value === null || Number.isNaN(dbData.discount_value)) {
+                return NextResponse.json({ error: 'Invalid coupon payload' }, { status: 400 });
+            }
 
             const { data, error } = await supabase
                 .from('coupons')
@@ -61,7 +82,7 @@ export async function POST(request: Request) {
                 .single();
 
             if (error) throw error;
-            return NextResponse.json({ success: true, coupon: data });
+            return NextResponse.json({ success: true, coupon: toUiCoupon(data) });
         } else {
             const coupons = readCouponsLocal();
             const index = coupons.findIndex((c: any) => c.id === coupon.id);

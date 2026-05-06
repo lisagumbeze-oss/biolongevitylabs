@@ -88,7 +88,8 @@ export default function AdminCouponsPage() {
                 fetchCoupons();
                 handleCloseModal();
             } else {
-                alert('Failed to save coupon.');
+                const errorData = await res.json().catch(() => null);
+                alert(errorData?.error || 'Failed to save coupon.');
             }
         } catch (error) {
             console.error('Save error:', error);
