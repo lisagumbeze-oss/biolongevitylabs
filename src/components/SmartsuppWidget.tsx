@@ -22,6 +22,32 @@ export default function SmartsuppWidget() {
   useEffect(() => {
     if (!smartsuppKey) return;
 
+    const forceHideWidget = () => {
+      if (typeof document === "undefined") return;
+      const chatNodes = document.querySelectorAll<HTMLElement>(
+        'iframe[src*="smartsuppchat"], [id*="smartsupp"], [class*="smartsupp"]'
+      );
+      chatNodes.forEach((node) => {
+        node.style.setProperty("display", "none", "important");
+        node.style.setProperty("visibility", "hidden", "important");
+        node.style.setProperty("opacity", "0", "important");
+        node.style.setProperty("pointer-events", "none", "important");
+      });
+    };
+
+    // Never initialize widget on admin/dashboard-like routes.
+    if (isAdminPage) {
+      if (typeof window !== "undefined" && typeof window.smartsupp === "function") {
+        try {
+          window.smartsupp("chat:hide");
+        } catch (_e) {
+          // No-op: widget might not be fully initialized yet.
+        }
+      }
+      forceHideWidget();
+      return;
+    }
+
     // Load the script if it hasn't been loaded yet
     if (!window.smartsupp) {
       window._smartsupp = window._smartsupp || {};
@@ -55,6 +81,7 @@ export default function SmartsuppWidget() {
         try {
           if (isAdminPage) {
             window.smartsupp('chat:hide');
+            forceHideWidget();
           } else {
             window.smartsupp('chat:show');
           }
