@@ -72,7 +72,7 @@ export default function SalesNotification() {
     const [productNames, setProductNames] = useState<string[]>([]);
 
     // Don't render on admin pages
-    const isAdminPage = pathname?.startsWith("/admin");
+    const isAdminPage = pathname?.startsWith("/admin") || pathname?.startsWith("/dashboard");
 
     // Fetch product names for realistic notifications
     useEffect(() => {

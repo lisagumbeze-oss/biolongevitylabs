@@ -11,6 +11,9 @@ const BottomNav = () => {
     const pathname = usePathname();
     const { items, setIsCartOpen } = useCart();
     const cartCount = items.reduce((acc, item) => acc + item.quantity, 0);
+    const isAdminPage = pathname?.startsWith("/admin") || pathname?.startsWith("/dashboard");
+
+    if (isAdminPage) return null;
 
     const navItems = [
         { label: "Home", href: "/", icon: Home },

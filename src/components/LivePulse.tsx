@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Zap, Globe, Beaker, ShieldCheck } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { Zap, Globe } from "lucide-react";
 
 const activities = [
     { city: "London", country: "UK", product: "BPC-157 5mg", action: "verified order" },
@@ -15,10 +16,14 @@ const activities = [
 ];
 
 export default function LivePulse() {
+    const pathname = usePathname();
     const [currentActivity, setCurrentActivity] = useState(0);
     const [isVisible, setIsVisible] = useState(false);
+    const isAdminPage = pathname?.startsWith("/admin") || pathname?.startsWith("/dashboard");
 
     useEffect(() => {
+        if (isAdminPage) return;
+
         // Show after 3 seconds
         const initialTimeout = setTimeout(() => setIsVisible(true), 3000);
 
@@ -34,7 +39,9 @@ export default function LivePulse() {
             clearTimeout(initialTimeout);
             clearInterval(interval);
         };
-    }, []);
+    }, [isAdminPage]);
+
+    if (isAdminPage) return null;
 
     return (
         <div className="fixed bottom-36 left-4 right-4 md:bottom-6 md:left-6 md:right-auto z-[100] pointer-events-none">
