@@ -259,23 +259,23 @@ export default function ProductsManagement() {
     }
 
     return (
-        <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-5 md:gap-8">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight text-white">Products</h1>
+                    <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-white">Products</h1>
                     <p className="text-sm text-slate-400 mt-1">Manage your {products.length} products, pricing, and variations.</p>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 w-full sm:w-auto">
                     <button
                         onClick={() => { setIsImportModalOpen(true); setImportFile(null); setImportResult(null); }}
-                        className="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white text-sm font-medium rounded-xl transition-colors border border-slate-700"
+                        className="flex-1 sm:flex-none justify-center flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white text-sm font-medium rounded-xl transition-colors border border-slate-700"
                     >
                         <Upload className="w-4 h-4" />
                         Import CSV
                     </button>
                     <button
                         onClick={handleOpenAddModal}
-                        className="flex items-center gap-2 px-4 py-2 bg-primary hover:bg-sky-500 text-white text-sm font-medium rounded-xl transition-colors shadow-lg shadow-primary/20"
+                        className="flex-1 sm:flex-none justify-center flex items-center gap-2 px-4 py-2 bg-primary hover:bg-sky-500 text-white text-sm font-medium rounded-xl transition-colors shadow-lg shadow-primary/20"
                     >
                         <Plus className="w-4 h-4" />
                         Add Product
@@ -286,7 +286,7 @@ export default function ProductsManagement() {
             <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
                 {/* Search Bar */}
                 <div className="p-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50">
-                    <div className="relative max-w-md">
+                    <div className="relative max-w-full md:max-w-md">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                         <input
                             type="text"
@@ -300,28 +300,28 @@ export default function ProductsManagement() {
 
                 {/* Products Table */}
                 <div className="overflow-x-auto">
-                    <table className="w-full text-sm text-left">
+                    <table className="w-full text-xs md:text-sm text-left">
                         <thead className="text-xs text-slate-500 dark:text-slate-400 uppercase bg-slate-50 dark:bg-slate-900/50 font-bold border-b border-slate-200 dark:border-slate-800">
                             <tr>
-                                <th className="px-6 py-4 cursor-pointer hover:text-slate-700 dark:hover:text-slate-200 transition-colors" onClick={() => handleSort('name')}>
+                                <th className="px-4 md:px-6 py-4 cursor-pointer hover:text-slate-700 dark:hover:text-slate-200 transition-colors" onClick={() => handleSort('name')}>
                                     <div className="flex items-center gap-1">Product {sortConfig?.key === 'name' ? (sortConfig.direction === 'asc' ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />) : <ArrowUpDown className="w-3 h-3 opacity-30" />}</div>
                                 </th>
-                                <th className="px-6 py-4 cursor-pointer hover:text-slate-700 dark:hover:text-slate-200 transition-colors" onClick={() => handleSort('category')}>
+                                <th className="hidden sm:table-cell px-4 md:px-6 py-4 cursor-pointer hover:text-slate-700 dark:hover:text-slate-200 transition-colors" onClick={() => handleSort('category')}>
                                     <div className="flex items-center gap-1">Category / Form {sortConfig?.key === 'category' ? (sortConfig.direction === 'asc' ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />) : <ArrowUpDown className="w-3 h-3 opacity-30" />}</div>
                                 </th>
-                                <th className="px-6 py-4 cursor-pointer hover:text-slate-700 dark:hover:text-slate-200 transition-colors" onClick={() => handleSort('price')}>
+                                <th className="px-4 md:px-6 py-4 cursor-pointer hover:text-slate-700 dark:hover:text-slate-200 transition-colors" onClick={() => handleSort('price')}>
                                     <div className="flex items-center gap-1">Base Price {sortConfig?.key === 'price' ? (sortConfig.direction === 'asc' ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />) : <ArrowUpDown className="w-3 h-3 opacity-30" />}</div>
                                 </th>
-                                <th className="px-6 py-4 cursor-pointer hover:text-slate-700 dark:hover:text-slate-200 transition-colors" onClick={() => handleSort('stockStatus')}>
+                                <th className="hidden md:table-cell px-4 md:px-6 py-4 cursor-pointer hover:text-slate-700 dark:hover:text-slate-200 transition-colors" onClick={() => handleSort('stockStatus')}>
                                     <div className="flex items-center gap-1">Status {sortConfig?.key === 'stockStatus' ? (sortConfig.direction === 'asc' ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />) : <ArrowUpDown className="w-3 h-3 opacity-30" />}</div>
                                 </th>
-                                <th className="px-6 py-4 text-right">Actions</th>
+                                <th className="px-4 md:px-6 py-4 text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {sortedProducts.map((product) => (
                                 <tr key={product.id} className="border-b border-slate-100 dark:border-slate-800/50 hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
-                                    <td className="px-6 py-4">
+                                    <td className="px-4 md:px-6 py-4">
                                         <div className="flex items-center gap-4">
                                             <div className="w-12 h-12 rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-800 shrink-0">
                                                 <img src={product.image || 'https://via.placeholder.com/150'} alt={product.name} className="w-full h-full object-cover" />
@@ -334,15 +334,15 @@ export default function ProductsManagement() {
                                             </div>
                                         </div>
                                     </td>
-                                    <td className="px-6 py-4">
+                                    <td className="hidden sm:table-cell px-4 md:px-6 py-4">
                                         <div className="text-slate-900 dark:text-slate-200 font-medium">{product.category}</div>
                                         <div className="text-slate-500 dark:text-slate-400 text-xs mt-0.5">{product.form}</div>
                                     </td>
-                                    <td className="px-6 py-4 font-bold text-slate-900 dark:text-white">
+                                    <td className="px-4 md:px-6 py-4 font-bold text-slate-900 dark:text-white">
                                         ${product.price ? product.price.toFixed(2) : '0.00'}
                                         {product.isVariable && <span className="ml-1 text-[10px] text-primary">(Variable)</span>}
                                     </td>
-                                    <td className="px-6 py-4">
+                                    <td className="hidden md:table-cell px-4 md:px-6 py-4">
                                         <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${product.stockStatus === 'In Stock' ? 'bg-primary/10 text-primary dark:bg-primary/20 dark:text-blue-400' :
                                             product.stockStatus === 'Low Stock' ? 'bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400' :
                                                 'bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-400'
@@ -350,7 +350,7 @@ export default function ProductsManagement() {
                                             {product.stockStatus || 'In Stock'}
                                         </span>
                                     </td>
-                                    <td className="px-6 py-4">
+                                    <td className="px-4 md:px-6 py-4">
                                         <div className="flex items-center justify-end gap-2">
                                             <button
                                                 onClick={() => handleOpenEditModal(product)}
@@ -397,7 +397,7 @@ export default function ProductsManagement() {
                                     <label className="text-sm font-bold text-slate-300">Product Name</label>
                                     <input name="name" required defaultValue={editingProduct?.name || ''} className="flex w-full rounded-xl border border-slate-700 bg-slate-800 text-white h-11 px-4 focus:ring-2 focus:ring-primary focus:border-primary" type="text" placeholder="e.g. BPC-157" />
                                 </div>
-                                <div className="grid grid-cols-2 gap-4 w-full">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
                                     <div className="flex flex-col gap-2 w-full">
                                         <label className="text-sm font-bold text-slate-300">Base Price ($)</label>
                                         <input name="price" required defaultValue={editingProduct?.price || ''} className="flex w-full rounded-xl border border-slate-700 bg-slate-800 text-white h-11 px-4 focus:ring-2 focus:ring-primary focus:border-primary" type="number" step="0.01" />
@@ -412,7 +412,7 @@ export default function ProductsManagement() {
                                         </select>
                                     </div>
                                 </div>
-                                <div className="grid grid-cols-2 gap-4 w-full">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
                                     <div className="flex flex-col gap-2 w-full">
                                         <label className="text-sm font-bold text-slate-300">Category</label>
                                         <select name="category" defaultValue={editingProduct?.category || 'Peptide Capsules'} className="flex w-full rounded-xl border border-slate-700 bg-slate-800 text-white h-11 px-4 focus:ring-2 focus:ring-primary focus:border-primary">
@@ -545,9 +545,9 @@ export default function ProductsManagement() {
                                 </div>
                             </form>
                         </div>
-                        <div className="p-6 border-t border-slate-800 bg-slate-900/95 sticky bottom-0 z-20 flex justify-end gap-3">
-                            <button onClick={() => { setIsAddModalOpen(false); setEditingProduct(null); }} className="px-5 py-2.5 rounded-xl font-bold text-slate-300 bg-slate-800 hover:bg-slate-700 transition-colors">Cancel</button>
-                            <button type="submit" form="productForm" className="px-5 py-2.5 rounded-xl font-bold text-white bg-primary hover:bg-sky-500 transition-colors">Save Product</button>
+                        <div className="p-4 md:p-6 border-t border-slate-800 bg-slate-900/95 sticky bottom-0 z-20 flex flex-col-reverse sm:flex-row justify-end gap-3">
+                            <button onClick={() => { setIsAddModalOpen(false); setEditingProduct(null); }} className="w-full sm:w-auto px-5 py-2.5 rounded-xl font-bold text-slate-300 bg-slate-800 hover:bg-slate-700 transition-colors">Cancel</button>
+                            <button type="submit" form="productForm" className="w-full sm:w-auto px-5 py-2.5 rounded-xl font-bold text-white bg-primary hover:bg-sky-500 transition-colors">Save Product</button>
                         </div>
                     </div>
                 </div>

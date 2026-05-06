@@ -61,18 +61,18 @@ export default function AdminOrdersPage() {
     }
 
     return (
-        <div className="space-y-6 animate-in fade-in duration-500">
+        <div className="space-y-5 md:space-y-6 animate-in fade-in duration-500">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <h1 className="text-3xl font-black tracking-tight text-slate-900 dark:text-white">Order Management</h1>
+                    <h1 className="text-2xl md:text-3xl font-black tracking-tight text-slate-900 dark:text-white">Order Management</h1>
                     <p className="text-slate-500 dark:text-slate-400 mt-1 font-medium text-sm">Monitor and process customer orders in real-time.</p>
                 </div>
-                <div className="flex items-center gap-3">
-                    <button className="flex items-center gap-2 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 px-4 py-2.5 rounded-xl font-bold hover:bg-slate-50 dark:hover:bg-slate-700 transition-all shadow-sm text-sm">
+                <div className="flex items-center gap-3 w-full md:w-auto">
+                    <button className="flex-1 md:flex-none justify-center flex items-center gap-2 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 px-4 py-2.5 rounded-xl font-bold hover:bg-slate-50 dark:hover:bg-slate-700 transition-all shadow-sm text-sm">
                         <Download className="w-4 h-4" />
                         Export CSV
                     </button>
-                    <button className="flex items-center gap-2 bg-primary text-white px-5 py-2.5 rounded-xl font-black hover:bg-sky-500 transition-all shadow-lg shadow-primary/20 text-sm">
+                    <button className="flex-1 md:flex-none justify-center flex items-center gap-2 bg-primary text-white px-5 py-2.5 rounded-xl font-black hover:bg-sky-500 transition-all shadow-lg shadow-primary/20 text-sm">
                         <Calendar className="w-4 h-4" />
                         Schedule Report
                     </button>
@@ -81,7 +81,7 @@ export default function AdminOrdersPage() {
 
             <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
                 {/* Filters Bar */}
-                <div className="p-5 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 flex flex-col lg:flex-row justify-between items-center gap-4">
+                <div className="p-4 md:p-5 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 flex flex-col lg:flex-row justify-between items-center gap-4">
                     <div className="relative w-full lg:max-w-md">
                         <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                         <input
@@ -109,28 +109,28 @@ export default function AdminOrdersPage() {
 
                 {/* Orders Table */}
                 <div className="overflow-x-auto">
-                    <table className="w-full text-sm text-left">
+                    <table className="w-full text-xs md:text-sm text-left">
                         <thead className="text-[10px] text-slate-400 dark:text-slate-500 uppercase bg-white dark:bg-slate-900 font-black border-b border-slate-200 dark:border-slate-800">
                             <tr>
-                                <th className="px-6 py-5 tracking-widest">Order Details</th>
-                                <th className="px-6 py-5 tracking-widest">Customer</th>
-                                <th className="px-6 py-5 tracking-widest">Status</th>
-                                <th className="px-6 py-5 tracking-widest">Total</th>
-                                <th className="px-6 py-5 tracking-widest text-right">Actions</th>
+                                <th className="px-4 md:px-6 py-5 tracking-widest">Order Details</th>
+                                <th className="hidden sm:table-cell px-4 md:px-6 py-5 tracking-widest">Customer</th>
+                                <th className="hidden md:table-cell px-4 md:px-6 py-5 tracking-widest">Status</th>
+                                <th className="px-4 md:px-6 py-5 tracking-widest">Total</th>
+                                <th className="px-4 md:px-6 py-5 tracking-widest text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100 dark:divide-slate-800/50">
                             {filteredOrders.map((order) => (
                                 <tr key={order.id} className="group hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-all">
-                                    <td className="px-6 py-6">
+                                    <td className="px-4 md:px-6 py-5 md:py-6">
                                         <div className="font-black text-slate-900 dark:text-white text-sm tracking-tight">{order.id}</div>
                                         <div className="text-slate-500 dark:text-slate-500 text-xs mt-1 font-bold">{order.date} • {order.items} item(s)</div>
                                     </td>
-                                    <td className="px-6 py-6">
+                                    <td className="hidden sm:table-cell px-4 md:px-6 py-5 md:py-6">
                                         <div className="text-slate-900 dark:text-slate-200 font-black text-sm">{order.customer}</div>
                                         <div className="text-slate-500 dark:text-slate-400 text-xs mt-1 font-medium">{order.email}</div>
                                     </td>
-                                    <td className="px-6 py-6">
+                                    <td className="hidden md:table-cell px-4 md:px-6 py-5 md:py-6">
                                         <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider ${order.status === 'Completed' ? 'bg-primary/10 text-primary dark:text-blue-400' :
                                             order.status === 'Shipped' ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400' :
                                                 order.status === 'Processing' ? 'bg-purple-500/10 text-purple-600 dark:text-purple-400' :
@@ -144,18 +144,18 @@ export default function AdminOrdersPage() {
                                             {order.status}
                                         </span>
                                     </td>
-                                    <td className="px-6 py-6">
+                                    <td className="px-4 md:px-6 py-5 md:py-6">
                                         <div className="font-black text-slate-900 dark:text-white text-sm">{order.total}</div>
                                         <div className="text-[10px] text-slate-400 mt-1 font-bold uppercase tracking-tighter">Paid via {order.payment_method || 'Transfer'}</div>
                                     </td>
-                                    <td className="px-6 py-6">
+                                    <td className="px-4 md:px-6 py-5 md:py-6">
                                         <div className="flex items-center justify-end gap-2">
                                             <Link
                                                 href={`/admin/orders/${order.id.replace('#', '')}`}
-                                                className="flex items-center gap-2 px-4 py-2 text-xs font-black text-slate-700 dark:text-slate-300 hover:text-primary bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl transition-all shadow-sm group-hover:border-primary/50"
+                                                className="flex items-center gap-1.5 md:gap-2 px-3 md:px-4 py-2 text-xs font-black text-slate-700 dark:text-slate-300 hover:text-primary bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl transition-all shadow-sm group-hover:border-primary/50"
                                             >
                                                 <Eye className="w-3.5 h-3.5" />
-                                                Review
+                                                <span className="hidden sm:inline">Review</span>
                                             </Link>
                                             <button
                                                 onClick={() => handleDeleteOrder(order.id)}

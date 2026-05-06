@@ -78,27 +78,27 @@ export default function AdminDashboardPage() {
     const recentOrders = orders.slice(0, 5);
 
     return (
-        <div className="space-y-8 animate-in fade-in duration-500">
+        <div className="space-y-5 md:space-y-8 animate-in fade-in duration-500">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-3xl font-black tracking-tight text-slate-900 dark:text-white">Dashboard Overview</h1>
-                    <p className="text-slate-500 dark:text-slate-400 mt-2">Welcome back, Admin. Here&apos;s a snapshot of your store&apos;s performance.</p>
+                    <h1 className="text-2xl md:text-3xl font-black tracking-tight text-slate-900 dark:text-white">Dashboard Overview</h1>
+                    <p className="text-sm md:text-base text-slate-500 dark:text-slate-400 mt-2">Welcome back, Admin. Here&apos;s a snapshot of your store&apos;s performance.</p>
                 </div>
-                <div className="flex items-center gap-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-1.5 rounded-xl shadow-sm">
+                <div className="flex items-center gap-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-1.5 rounded-xl shadow-sm w-full md:w-auto justify-between md:justify-start">
                     <button className="px-3 py-1.5 text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white rounded-lg transition-all">Last 30 Days</button>
                     <button className="px-3 py-1.5 text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-primary transition-all">Last 90 Days</button>
                 </div>
             </div>
 
             {/* Metrics Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                 {metrics.map((metric) => (
-                    <div key={metric.title} className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden group hover:border-primary/30 transition-all duration-300">
+                    <div key={metric.title} className="bg-white dark:bg-slate-900 p-4 md:p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden group hover:border-primary/30 transition-all duration-300">
                         <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${metric.color} opacity-5 rounded-bl-full -mr-8 -mt-8 transition-transform duration-500 group-hover:scale-110`} />
                         <div className="flex justify-between items-start">
                             <div>
-                                <p className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{metric.title}</p>
-                                <p className="text-3xl font-black text-slate-900 dark:text-white mt-2 tracking-tight">{metric.value}</p>
+                                <p className="text-xs md:text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{metric.title}</p>
+                                <p className="text-2xl md:text-3xl font-black text-slate-900 dark:text-white mt-2 tracking-tight break-all sm:break-normal">{metric.value}</p>
                             </div>
                             <div className={`p-3 rounded-xl bg-gradient-to-br ${metric.color} text-white shadow-lg shadow-current/20`}>
                                 <metric.icon className="w-5 h-5" />
@@ -122,29 +122,29 @@ export default function AdminDashboardPage() {
                 ))}
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 md:gap-8">
                 {/* Recent Orders Preview */}
                 <div className="lg:col-span-2 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
-                    <div className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center bg-slate-50 dark:bg-slate-900/50">
-                        <h2 className="text-lg font-black text-slate-900 dark:text-white">Recent Orders</h2>
+                    <div className="px-4 md:px-6 py-4 md:py-5 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center bg-slate-50 dark:bg-slate-900/50">
+                        <h2 className="text-base md:text-lg font-black text-slate-900 dark:text-white">Recent Orders</h2>
                         <button className="text-sm font-black text-primary hover:underline transition-all">View All Orders</button>
                     </div>
                     <div className="overflow-x-auto">
-                        <table className="w-full text-sm text-left">
+                        <table className="w-full text-xs md:text-sm text-left">
                             <thead className="text-xs text-slate-500 dark:text-slate-400 uppercase bg-slate-50 dark:bg-slate-900/50 font-black border-b border-slate-200 dark:border-slate-800">
                                 <tr>
-                                    <th className="px-6 py-4">Order ID</th>
-                                    <th className="px-6 py-4">Customer</th>
-                                    <th className="px-6 py-4">Status</th>
-                                    <th className="px-6 py-4">Total</th>
+                                    <th className="px-4 md:px-6 py-4">Order ID</th>
+                                    <th className="hidden sm:table-cell px-4 md:px-6 py-4">Customer</th>
+                                    <th className="hidden md:table-cell px-4 md:px-6 py-4">Status</th>
+                                    <th className="px-4 md:px-6 py-4">Total</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {recentOrders.map((order) => (
                                     <tr key={order.id} className="border-b border-slate-100 dark:border-slate-800/50 hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
-                                        <td className="px-6 py-4 font-bold text-slate-900 dark:text-white">{order.id}</td>
-                                        <td className="px-6 py-4 text-slate-600 dark:text-slate-300 font-medium">{order.customer}</td>
-                                        <td className="px-6 py-4">
+                                        <td className="px-4 md:px-6 py-4 font-bold text-slate-900 dark:text-white whitespace-nowrap">{order.id}</td>
+                                        <td className="hidden sm:table-cell px-4 md:px-6 py-4 text-slate-600 dark:text-slate-300 font-medium">{order.customer}</td>
+                                        <td className="hidden md:table-cell px-4 md:px-6 py-4">
                                             <span className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${order.status === 'Completed' ? 'bg-primary/10 text-primary dark:bg-primary/20 dark:text-blue-400' :
                                                 order.status === 'Shipped' ? 'bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400' :
                                                     order.status === 'Processing' ? 'bg-purple-100 text-purple-700 dark:bg-purple-500/20 dark:text-purple-400' :
@@ -153,7 +153,7 @@ export default function AdminDashboardPage() {
                                                 {order.status}
                                             </span>
                                         </td>
-                                        <td className="px-6 py-4 font-black text-slate-900 dark:text-white">{order.total}</td>
+                                        <td className="px-4 md:px-6 py-4 font-black text-slate-900 dark:text-white whitespace-nowrap">{order.total}</td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -163,13 +163,13 @@ export default function AdminDashboardPage() {
 
                 {/* Top Selling Products */}
                 <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col">
-                    <div className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center bg-slate-50 dark:bg-slate-900/50">
-                        <h2 className="text-lg font-black text-slate-900 dark:text-white">Top Sellers</h2>
+                    <div className="px-4 md:px-6 py-4 md:py-5 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center bg-slate-50 dark:bg-slate-900/50">
+                        <h2 className="text-base md:text-lg font-black text-slate-900 dark:text-white">Top Sellers</h2>
                         <button className="p-2 text-slate-400 hover:text-primary transition-colors">
                             <MoreHorizontal className="w-5 h-5" />
                         </button>
                     </div>
-                    <div className="p-6 space-y-6 flex-1">
+                    <div className="p-4 md:p-6 space-y-5 md:space-y-6 flex-1">
                         {[
                             { name: 'BPC-157 (5mg)', sales: 124, price: '$49.99', image: 'https://via.placeholder.com/50' },
                             { name: 'TB-500 (2mg)', sales: 98, price: '$39.99', image: 'https://via.placeholder.com/50' },

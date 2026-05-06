@@ -134,7 +134,7 @@ export default function AdminCouponsPage() {
     }
 
     return (
-        <div className="flex flex-col gap-6 max-w-7xl">
+        <div className="flex flex-col gap-5 md:gap-6 max-w-7xl">
             {/* Header & Search */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div className="flex items-center gap-4 text-slate-900 dark:text-white">
@@ -142,7 +142,7 @@ export default function AdminCouponsPage() {
                         <Ticket className="w-6 h-6" />
                     </div>
                     <div>
-                        <h1 className="text-3xl font-bold tracking-tight">Coupons & Discounts</h1>
+                        <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Coupons & Discounts</h1>
                         <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Manage promotional codes and cart rules.</p>
                     </div>
                 </div>

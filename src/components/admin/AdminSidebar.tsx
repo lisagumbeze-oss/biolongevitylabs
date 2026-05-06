@@ -18,7 +18,12 @@ import {
     MessageSquare
 } from 'lucide-react';
 
-const AdminSidebar = () => {
+type AdminSidebarProps = {
+    mobileOpen?: boolean;
+    onCloseMobile?: () => void;
+};
+
+const AdminSidebar = ({ mobileOpen = false, onCloseMobile }: AdminSidebarProps) => {
     const pathname = usePathname();
 
     const navigation = [
@@ -68,7 +73,14 @@ const AdminSidebar = () => {
     };
 
     return (
-        <div className="flex flex-col w-64 bg-slate-900 border-r border-slate-800 text-slate-300 min-h-screen sticky top-0">
+        <>
+            <div
+                className={`fixed inset-0 z-40 bg-slate-950/60 transition-opacity md:hidden ${mobileOpen ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
+                onClick={onCloseMobile}
+            />
+            <aside
+                className={`fixed inset-y-0 left-0 z-50 flex w-64 flex-col bg-slate-900 border-r border-slate-800 text-slate-300 min-h-screen transform transition-transform duration-300 md:sticky md:top-0 md:z-auto md:translate-x-0 ${mobileOpen ? 'translate-x-0' : '-translate-x-full'}`}
+            >
             {/* Logo Area */}
             <div className="h-16 flex items-center px-6 border-b border-slate-800">
                 <Link href="/admin" className="flex items-center gap-2 text-white font-black tracking-tighter">
@@ -91,6 +103,7 @@ const AdminSidebar = () => {
                                     <Link
                                         key={item.name}
                                         href={item.href}
+                                        onClick={onCloseMobile}
                                         className={`flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-xl transition-all duration-200 ${active
                                             ? 'bg-primary text-white shadow-md shadow-primary/20'
                                             : 'hover:bg-slate-800 hover:text-white'
@@ -110,6 +123,7 @@ const AdminSidebar = () => {
             <div className="p-4 border-t border-slate-800 space-y-2">
                 <Link
                     href="/"
+                    onClick={onCloseMobile}
                     className="flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
                 >
                     <Package className="w-5 h-5" />
@@ -123,7 +137,8 @@ const AdminSidebar = () => {
                     Logout Account
                 </button>
             </div>
-        </div>
+            </aside>
+        </>
     );
 };
 

@@ -1,10 +1,14 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Bell, Search, CheckCircle, ShoppingCart } from 'lucide-react';
+import { Bell, Search, CheckCircle, ShoppingCart, Menu } from 'lucide-react';
 import Link from 'next/link';
 
-export default function AdminHeader() {
+type AdminHeaderProps = {
+    onMenuClick?: () => void;
+};
+
+export default function AdminHeader({ onMenuClick }: AdminHeaderProps) {
     const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
     const [orders, setOrders] = useState<any[]>([]);
     const [readOrders, setReadOrders] = useState<string[]>([]);
@@ -44,20 +48,28 @@ export default function AdminHeader() {
     const displayList = activeTab === 'Unread' ? unreadNotifications : allNotifications;
 
     return (
-        <header className="h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-8 shadow-sm sticky top-0 z-40">
+        <header className="h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-4 md:px-8 shadow-sm sticky top-0 z-40">
             {/* Search */}
-            <div className="flex-1 max-w-md">
+            <div className="flex items-center gap-2 flex-1 max-w-md">
+                <button
+                    type="button"
+                    onClick={onMenuClick}
+                    className="inline-flex md:hidden p-2 text-slate-600 dark:text-slate-400 hover:text-primary transition-colors hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl"
+                    aria-label="Open navigation menu"
+                >
+                    <Menu className="w-5 h-5" />
+                </button>
                 <div className="relative">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                     <input
                         type="text"
                         placeholder="Search orders, products..."
-                        className="w-full pl-10 pr-4 py-2 bg-slate-100 dark:bg-slate-800 border-transparent focus:border-primary focus:ring-1 focus:ring-primary focus:bg-white dark:focus:bg-slate-950 rounded-xl text-sm transition-all text-slate-900 dark:text-white"
+                        className="w-full pl-10 pr-4 py-2 bg-slate-100 dark:bg-slate-800 border-transparent focus:border-primary focus:ring-1 focus:ring-primary focus:bg-white dark:focus:bg-slate-950 rounded-xl text-sm transition-all text-slate-900 dark:text-white hidden sm:block"
                     />
                 </div>
             </div>
 
-            <div className="flex items-center gap-6">
+            <div className="flex items-center gap-2 md:gap-6">
                 {/* Notifications */}
                 <div className="relative">
                     <button
@@ -76,7 +88,7 @@ export default function AdminHeader() {
                     </button>
 
                     {isNotificationsOpen && (
-                        <div className="absolute right-0 mt-2 w-96 bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-800/50 overflow-hidden transform origin-top-right transition-all text-left">
+                        <div className="absolute right-0 mt-2 w-[92vw] max-w-96 bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-800/50 overflow-hidden transform origin-top-right transition-all text-left">
                             <div className="px-5 py-4 border-b border-slate-100 dark:border-slate-800/50 flex justify-between items-center bg-slate-50/50 dark:bg-slate-950/50">
                                 <h3 className="text-lg font-black tracking-tight text-slate-900 dark:text-white">Notifications</h3>
                                 {unreadNotifications.length > 0 && (
@@ -148,7 +160,7 @@ export default function AdminHeader() {
                 </div>
 
                 {/* Vertical Divider */}
-                <div className="h-6 w-px bg-slate-200 dark:bg-slate-700"></div>
+                <div className="h-6 w-px bg-slate-200 dark:bg-slate-700 hidden sm:block"></div>
 
                 {/* Profile */}
                 <div className="flex items-center gap-3 cursor-pointer group">
