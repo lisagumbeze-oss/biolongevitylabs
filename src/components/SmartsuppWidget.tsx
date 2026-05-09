@@ -52,6 +52,7 @@ export default function SmartsuppWidget() {
     if (!window.smartsupp) {
       window._smartsupp = window._smartsupp || {};
       window._smartsupp.key = smartsuppKey;
+      window._smartsupp.color = '#137fec';
       
       // Move widget up on mobile to avoid BottomNav
       if (window.innerWidth < 768) {
