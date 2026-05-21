@@ -1,0 +1,28 @@
+# BioLongevity Labs
+> USA-made, third-party tested research-grade peptides and bioregulators for laboratory and scientific investigation.
+
+BioLongevity Labs supplies high-purity research compounds including BPC-157, TB-500, epitalon, thymulin, and bioregulator capsules with certificates of analysis. Products are for research use only (RUO).
+
+## Key Pages
+- /: Homepage — research peptide catalog overview and trust signals
+- /shop: Full product catalog with filters by form and category
+- /product/{id}: Individual research compound product pages with COA and specifications
+- /research: Research articles, guides, and industry reports
+- /about: Company mission, USA manufacturing, and quality standards
+- /peptide-guide: Educational peptide reference
+- /protocol-finder: Research goal-based compound discovery tool
+- /resources/peptide-calculator: Reconstitution calculator for lab preparation
+- /support: Customer support and policies
+- /shipping-and-payments: Shipping methods and payment information
+
+## Primary Topics
+- Research grade peptides for sale (USA)
+- BPC-157 and TB-500 research compounds
+- Bioregulator peptides and capsules
+- Peptide reconstitution and dosage guides (research context)
+- Third-party COA verification and HPLC testing
+- Peptide industry quality standards
+
+## Contact
+- Website: https://biolongevitylabss.com
+- Support: https://biolongevitylabss.com/support

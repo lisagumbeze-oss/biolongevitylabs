@@ -1,8 +1,10 @@
 import { Metadata } from 'next';
+import { canonicalPath } from '@/lib/seo';
 
 export const metadata: Metadata = {
   title: 'About Us',
   description: 'Learn about BioLongevity Labs and our mission to provide the highest-purity, research-grade peptides and bioregulators manufactured in US facilities.',
+  alternates: canonicalPath('/about'),
   openGraph: {
     title: 'About Us | BioLongevity Labs',
     description: 'Learn about BioLongevity Labs and our mission to provide the highest-purity, research-grade peptides and bioregulators manufactured in US facilities.',

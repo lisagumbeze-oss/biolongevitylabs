@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
+import { trackAddToCart } from '@/lib/analytics';
 
 export interface CartItem {
     id: string;
@@ -44,13 +45,17 @@ export const useCart = create<CartStore>()(
 
                 if (existingIndex >= 0) {
                     const updated = [...items];
-                    updated[existingIndex] = {
+                    const merged = {
                         ...updated[existingIndex],
                         quantity: updated[existingIndex].quantity + quantity,
                     };
+                    updated[existingIndex] = merged;
                     set({ items: updated });
+                    trackAddToCart(merged, quantity);
                 } else {
-                    set({ items: [...items, { ...product, quantity }] });
+                    const newItem = { ...product, quantity };
+                    set({ items: [...items, newItem] });
+                    trackAddToCart(newItem, quantity);
                 }
             },
 

@@ -10,6 +10,7 @@ import ConsentModal from "@/components/ConsentModal";
 import Providers from "@/components/Providers";
 import SmartsuppWidget from "@/components/SmartsuppWidget";
 import LivePulse from "@/components/LivePulse";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -91,7 +92,7 @@ export default function RootLayout({
         </Providers>
 
         <SmartsuppWidget />
-
+        <GoogleAnalytics />
 
         {/* Global JSON-LD Schema */}
         <Script

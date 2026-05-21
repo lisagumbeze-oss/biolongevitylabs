@@ -5,6 +5,11 @@ import { useCart } from "@/store/useCart";
 import { Lock, Truck, CreditCard, ChevronRight, Info, CheckCircle2, ShieldCheck, MapPin, Mail, User, Phone, Tag } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import {
+    trackBeginCheckout,
+    trackPurchase,
+    persistPurchaseForConfirmation,
+} from "@/lib/analytics";
 
 interface PaymentMethod {
     id: string;
@@ -43,6 +48,7 @@ export default function CheckoutPage() {
     const router = useRouter();
     const [isMounted, setIsMounted] = useState(false);
     const hydrationTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const beginCheckoutTracked = useRef(false);
     const [hydrationGaveUp, setHydrationGaveUp] = useState(false);
 
     useEffect(() => {
@@ -126,6 +132,12 @@ export default function CheckoutPage() {
     const total = Math.max(0, subtotal - discount) + shippingPrice;
     const isReady = isMounted && (_hasHydrated || hydrationGaveUp);
 
+    useEffect(() => {
+        if (!isReady || items.length === 0 || beginCheckoutTracked.current) return;
+        beginCheckoutTracked.current = true;
+        trackBeginCheckout(items, total, appliedCoupon?.code);
+    }, [isReady, items, total, appliedCoupon?.code]);
+
     const handleApplyCoupon = () => {
         setCouponError("");
         const c = coupons.find(c => c.code.toUpperCase() === couponCode.toUpperCase());
@@ -203,6 +215,17 @@ export default function CheckoutPage() {
                     body: JSON.stringify({ ...appliedCoupon, usageCount: (appliedCoupon.usageCount || 0) + 1 })
                 }).catch(console.error);
             }
+
+            const purchasePayload = {
+                transactionId: orderId,
+                value: total,
+                shipping: shippingPrice,
+                tax: 0,
+                coupon: appliedCoupon?.code,
+                items: [...items],
+            };
+            persistPurchaseForConfirmation(purchasePayload);
+            trackPurchase(purchasePayload);
 
             clearCart();
             // Pass the generated order ID to the confirmation page

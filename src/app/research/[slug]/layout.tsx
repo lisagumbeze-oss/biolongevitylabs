@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { researchPosts } from '@/data/researchPosts';
+import { canonicalPath } from '@/lib/seo';
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const post = researchPosts.find(p => p.slug === params.slug);
@@ -13,6 +14,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   return {
     title: post.title,
     description: post.excerpt,
+    alternates: canonicalPath(`/research/${post.slug}`),
     openGraph: {
       title: post.title,
       description: post.excerpt,

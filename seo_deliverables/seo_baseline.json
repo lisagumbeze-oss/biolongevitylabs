@@ -1,0 +1,10 @@
+{
+  "production_domain": "https://biolongevitylabss.com",
+  "production_domain_confirmed": true,
+  "gsc_connected": "Verified — Domain property biolongevitylabss.com (DNS / domain name provider)",
+  "ga4_connected": "G-0SF8MTQP01 — implemented via GoogleAnalytics.tsx (verify in GA4 Realtime after deploy)",
+  "sitemap_status": "Present and dynamically generated (/sitemap.xml)",
+  "robots_txt_status": "Present and valid (/robots.txt)",
+  "estimated_domain_authority": "New/Low",
+  "indexed_pages_estimate": "Pending GSC connection"
+}

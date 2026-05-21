@@ -44,4 +44,5 @@ export default function EmailsPreview() {
 export const metadata: Metadata = {
   title: "Emails Preview" + " | BioLongevity Labs",
   description: "Preview email templates.",
+  robots: { index: false, follow: false },
 };

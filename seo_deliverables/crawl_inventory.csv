@@ -1,0 +1,12 @@
+URL,HTTP Status,Title Tag,Meta Description,H1,Word Count,Canonical Tag,Indexability Status,Page Type
+/,200,BioLongevity Labs | Research Grade Peptides & Scientific Bioregulators,USA-made lab-tested research grade peptides...,"Welcome to BioLongevity Labs",800,/,Indexable,Homepage
+/about,200,About | BioLongevity Labs,USA-made lab-tested research grade peptides...,"Welcome to BioLongevity Labs",500,/about,Indexable,About Page
+/shop,200,Shop | BioLongevity Labs,USA-made lab-tested research grade peptides...,"Our Premium Compounds",300,/shop,Indexable,Product Listing
+/research,200,Research | BioLongevity Labs,USA-made lab-tested research grade peptides...,"Research & Protocols",1500,/research,Indexable,Blog/Articles
+/protocol-finder,200,Protocol Finder | BioLongevity Labs,USA-made lab-tested research grade peptides...,"Protocol Finder",200,/protocol-finder,Indexable,Utility
+/cart,200,Cart | BioLongevity Labs,USA-made lab-tested research grade peptides...,"Your Cart",100,/cart,Non-Indexable,Cart
+/checkout,200,Checkout | BioLongevity Labs,USA-made lab-tested research grade peptides...,"Checkout",100,/checkout,Non-Indexable,Checkout
+/admin,403,Admin | BioLongevity Labs,-,-,0,-,Non-Indexable,Admin
+/shipping-and-payments,200,Shipping & Payments | BioLongevity Labs,USA-made lab-tested research grade peptides...,"Shipping & Payments",400,/shipping-and-payments,Indexable,Info Page
+/refunds,200,Refund Policy | BioLongevity Labs,USA-made lab-tested research grade peptides...,"Refund Policy",400,/refunds,Indexable,Info Page
+/terms,200,Terms of Service | BioLongevity Labs,USA-made lab-tested research grade peptides...,"Terms of Service",800,/terms,Indexable,Info Page

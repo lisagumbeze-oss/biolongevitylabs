@@ -1,0 +1,32 @@
+{
+  "crawl_stats": {
+    "total_pages_found": 15,
+    "indexable_pages": 10,
+    "non_indexable_pages": 5,
+    "errors": {
+      "4xx": 0,
+      "5xx": 0,
+      "redirect_chains": 0
+    }
+  },
+  "issues_flagged": [
+    {
+      "type": "Missing/Suboptimal H1",
+      "severity": "High",
+      "url": "/",
+      "description": "Homepage H1 is currently not optimized for the primary keyword 'Research Grade Peptides'. It needs to be explicitly defined."
+    },
+    {
+      "type": "Dynamic Meta Descriptions",
+      "severity": "Medium",
+      "url": "Multiple Pages",
+      "description": "Many pages (like /shop, /about) are relying on the global template meta description instead of page-specific ones."
+    },
+    {
+      "type": "Thin Content",
+      "severity": "Medium",
+      "url": "/protocol-finder",
+      "description": "The protocol finder is functional but lacks sufficient indexable text content to rank organically."
+    }
+  ]
+}

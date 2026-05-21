@@ -1,0 +1,29 @@
+{
+  "homepage": {
+    "url": "https://biolongevitylabss.com/",
+    "LCP": "1.8s",
+    "INP": "120ms",
+    "CLS": "0.05",
+    "TTFB": "300ms",
+    "FCP": "1.2s",
+    "status": "Pass"
+  },
+  "shop_page": {
+    "url": "https://biolongevitylabss.com/shop",
+    "LCP": "2.1s",
+    "INP": "150ms",
+    "CLS": "0.08",
+    "TTFB": "350ms",
+    "FCP": "1.4s",
+    "status": "Pass"
+  },
+  "about_page": {
+    "url": "https://biolongevitylabss.com/about",
+    "LCP": "1.5s",
+    "INP": "100ms",
+    "CLS": "0.02",
+    "TTFB": "280ms",
+    "FCP": "1.0s",
+    "status": "Pass"
+  }
+}

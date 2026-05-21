@@ -1,0 +1,22 @@
+From Page,To Page,Anchor Text,Priority
+/,/shop,research grade peptides catalog,High
+/,/research,peptide research guides,High
+/,/about,USA peptide synthesis and testing,High
+/,/product/bpc-157-5mg,buy BPC-157 for research,High
+/,/product/tb-500-5mg,TB-500 research peptide,High
+/shop,/research/peptide-reconstitution-guide,how to reconstitute peptides,High
+/shop,/research/bpc-157-dosage-guide,BPC-157 dosage guide,High
+/shop,/about,third-party tested USA peptides,Medium
+/research,/shop,browse research peptides,High
+/research/peptide-industry-report-2026,/shop,shop lab-tested peptides,Medium
+/research,/product/bpc-157-5mg,BPC-157 research compound,Medium
+/product/bpc-157-5mg,/research/bpc-157-dosage-guide,BPC-157 dosage for research,High
+/product/bpc-157-5mg,/research/bpc-157-vs-tb-500,BPC-157 vs TB-500 comparison,High
+/product/tb-500-5mg,/research/bpc-157-vs-tb-500,TB-500 vs BPC-157 research uses,High
+/about,/shop,view peptide catalog,Medium
+/about,/research,read research protocols,Medium
+/protocol-finder,/shop,shop recommended research compounds,Medium
+/protocol-finder,/research/peptide-reconstitution-guide,peptide reconstitution guide,High
+/support,/research,peptide education hub,Medium
+/peptide-guide,/shop,shop peptides by category,Medium
+/resources/peptide-calculator,/research/peptide-reconstitution-guide,reconstitution guide,Medium

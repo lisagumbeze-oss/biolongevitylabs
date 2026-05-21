@@ -5,6 +5,7 @@ import { CheckCircle2, ArrowRight, ShoppingBag, Mail, ExternalLink } from "lucid
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useCart } from "@/store/useCart";
+import { trackPurchaseFromSession } from "@/lib/analytics";
 
 function OrderConfirmationContent() {
     const { clearCart } = useCart();
@@ -12,16 +13,19 @@ function OrderConfirmationContent() {
     const [orderId, setOrderId] = useState("");
 
     useEffect(() => {
-        // Get order ID from URL params
+        clearCart();
+    }, [clearCart]);
+
+    useEffect(() => {
         const id = searchParams.get("id");
         if (id) {
             setOrderId(id);
+            trackPurchaseFromSession(id);
         } else {
-            // Fallback if no ID in URL
             const randomId = Math.floor(100000000 + Math.random() * 900000000);
             setOrderId(`#ORD-${randomId}`);
         }
-    }, [searchParams, clearCart]);
+    }, [searchParams]);
 
     return (
         <div className="min-h-[80vh] flex items-center justify-center p-4 bg-background transition-colors">

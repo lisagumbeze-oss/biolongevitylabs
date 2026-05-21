@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { products } from "@/data/products";
+import { canonicalPath } from "@/lib/seo";
 import ProductDetailsView from "./ProductDetailsView";
 
 interface Props {
@@ -19,6 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {
         title: product.name,
         description: product.description.substring(0, 160),
+        alternates: canonicalPath(`/product/${product.id}`),
         openGraph: {
             title: product.name,
             description: product.description.substring(0, 160),
