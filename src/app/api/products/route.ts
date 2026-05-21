@@ -87,7 +87,7 @@ export async function GET() {
                     form: p.form,
                     description: p.description,
                     stockStatus: p.stock_status,
-                    isVariable: p.is_variable,
+                    isVariable: p.is_variable || (p.product_variations?.length ?? 0) > 0,
                     isSale: p.is_sale,
                     isBestseller: p.is_bestseller,
                     isNew: p.is_new,

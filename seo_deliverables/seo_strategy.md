@@ -227,6 +227,11 @@ Prioritize editorial links from: lab supply blogs, longevity research newsletter
 2. OG image asset
 3. GSC/GA4 verification
 
+### Sprint C — Content (Week 2–6) ✅ First batch live
+1. Five gap articles published in `researchPostsSprintC.ts` (dosage, reconstitution, comparison, bioregulator, healing pillar)
+2. Blog API merges static + dynamic posts (`mergeResearchPosts`)
+3. Research articles include answer capsules, internal links, BlogPosting schema
+
 ### Sprint B — On-page (Days 4–10) ✅ Implemented
 1. Homepage answer capsule + metadata (`page.tsx`, `HomePage.tsx`)
 2. Shop category copy + H1 (`shop/page.tsx`, `shop/layout.tsx`)

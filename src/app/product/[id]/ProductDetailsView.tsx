@@ -21,6 +21,7 @@ import ReviewForm from "@/components/ReviewForm";
 import AnswerCapsule from "@/components/AnswerCapsule";
 import ProductFaq from "@/components/ProductFaq";
 import { getProductSeo } from "@/lib/product-seo";
+import { findMatchingVariation, variationPrice } from "@/lib/variation-matching";
 import toast, { Toaster } from 'react-hot-toast';
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -103,48 +104,8 @@ export default function ProductDetailsView({ id }: Props) {
     }, [id]);
 
     const selectedVariation = React.useMemo(() => {
-        if (!product || !product.variations || !product.isVariable) return null;
-
-        // Improved normalization for robust matching
-        const normalize = (val: string) => {
-            if (!val) return '';
-            return String(val)
-                .toLowerCase()
-                // Strip marketing suffixes after hyphen (e.g., " - Save 5%")
-                .split(/\s+-\s+/)[0]
-                // Remove everything in parentheses (e.g., "3 Pairs (6 Vials)" -> "3 pairs")
-                .replace(/\s*\(.*?\)\s*/g, ' ')
-                // Replace spaces and special chars with hyphens
-                .replace(/[^a-z0-9]+/g, '-')
-                // Remove leading/trailing hyphens
-                .replace(/^-+|-+$/g, '')
-                .trim();
-        };
-
-        // Only match on user-facing selected options (ignore internal attrs like Dutify)
-        const relevantOptions = Object.entries(selectedOptions).filter(
-            ([name]) => !name.toLowerCase().includes('dutify')
-        );
-
-        if (relevantOptions.length === 0) return product.variations[0] || null;
-
-        return product.variations.find(v => {
-            return relevantOptions.every(([name, value]) => {
-                const attrValue = String(v.attributes[name] || '');
-                const selectedValue = String(value || '');
-                
-                if (!attrValue) return false;
-                
-                // Try strict match first
-                if (attrValue === selectedValue) return true;
-                
-                const vSlug = normalize(attrValue);
-                const sSlug = normalize(selectedValue);
-                
-                // Check for equality or inclusion (to handle "3 Pairs" matching "3 Pairs (6 Vials)")
-                return vSlug === sSlug || (vSlug.length > 2 && sSlug.includes(vSlug)) || (sSlug.length > 2 && vSlug.includes(sSlug));
-            });
-        });
+        if (!product) return null;
+        return findMatchingVariation(product, selectedOptions);
     }, [product, selectedOptions]);
 
     const handleAddToCart = () => {
@@ -185,7 +146,11 @@ export default function ProductDetailsView({ id }: Props) {
 
     const displayPrice = React.useMemo(() => {
         if (!product) return 0;
-        return selectedVariation?.price ?? product.price ?? 0;
+        const fallback =
+            product.variations?.length && product.minPrice != null
+                ? Number(product.minPrice)
+                : Number(product.price) || 0;
+        return variationPrice(selectedVariation, fallback);
     }, [selectedVariation, product]);
 
     const originalPrice = React.useMemo(() => {
@@ -351,7 +316,7 @@ export default function ProductDetailsView({ id }: Props) {
                             <div className="flex flex-col gap-2 mb-10 text-left">
                                 <div className="flex items-baseline gap-4">
                                     <span className="text-4xl sm:text-4xl font-black text-primary tracking-tighter">${displayPrice.toFixed(2)}</span>
-                                    {(!product.isVariable || selectedVariation) && (selectedVariation?.originalPrice ?? product.originalPrice) && (
+                                    {(selectedVariation?.originalPrice ?? product.originalPrice) && (
                                         <span className="text-2xl sm:text-2xl text-slate-300 line-through font-bold">${(selectedVariation?.originalPrice ?? product.originalPrice)?.toFixed(2)}</span>
                                     )}
                                 </div>

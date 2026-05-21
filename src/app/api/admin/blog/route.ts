@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
 import { supabase } from '@/lib/supabase';
+import { mergeResearchPosts } from '@/lib/research-posts';
 
 export const dynamic = 'force-dynamic';
 
@@ -30,16 +31,24 @@ export async function GET(request: Request) {
             if (id) query.eq('id', id).single();
             const { data, error } = await query;
             if (error && error.code !== '42P01') throw error;
-            if (data) return NextResponse.json(data);
+            if (data) {
+                const merged = Array.isArray(data) ? mergeResearchPosts(data) : mergeResearchPosts([data]);
+                if (id) {
+                    const post = merged.find((p) => p.id === id);
+                    return post ? NextResponse.json(post) : NextResponse.json({ error: 'Post not found' }, { status: 404 });
+                }
+                return NextResponse.json(merged);
+            }
         }
 
         const posts = readPostsLocal();
+        const merged = mergeResearchPosts(posts);
         if (id) {
-            const post = posts.find((p: any) => p.id === id);
+            const post = merged.find((p) => p.id === id);
             return post ? NextResponse.json(post) : NextResponse.json({ error: 'Post not found' }, { status: 404 });
         }
-        
-        return NextResponse.json(posts.sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime()));
+
+        return NextResponse.json(merged);
     } catch (error: any) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }

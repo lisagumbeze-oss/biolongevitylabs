@@ -6,6 +6,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Calendar, User, Tag, Share2, Bookmark } from "lucide-react";
 import { products } from "@/data/products";
+import { researchPosts } from "@/data/researchPosts";
+import AnswerCapsule from "@/components/AnswerCapsule";
 import { motion } from "framer-motion";
 
 // Very simple markdown parser for the included data
@@ -15,7 +17,9 @@ const parseMarkdown = (text: string) => {
         .replace(/^## (.*$)/gim, '<h3 class="text-2xl font-bold text-slate-900 dark:text-white mt-10 mb-5">$1</h3>')
         .replace(/\*\*(.*)\*\*/gim, '<strong>$1</strong>')
         .replace(/\*(.*)\*/gim, '<em>$1</em>')
+        .replace(/\[([^\]]+)\]\(([^)]+)\)/gim, '<a href="$2" class="text-primary font-semibold hover:underline">$1</a>')
         .replace(/^\* (.*$)/gim, '<li class="ml-6 list-disc mb-2">$1</li>')
+        .replace(/^\d+\. (.*$)/gim, '<li class="ml-6 list-decimal mb-2">$1</li>')
         // Wrap contiguous text blocks in <p> tags if they aren't headers or lists
         .split('\n\n').filter(Boolean).map(block => {
             if (block.startsWith('<h') || block.startsWith('<li')) return block;
@@ -39,9 +43,17 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
             .then(res => res.json())
             .then(data => {
                 if (Array.isArray(data)) {
-                    const found = data.find(p => p.slug === resolvedParams.slug);
+                    const found =
+                        data.find((p) => p.slug === resolvedParams.slug) ||
+                        researchPosts.find((p) => p.slug === resolvedParams.slug);
                     setPost(found);
-                    setOtherPosts(data.filter(p => p.slug !== resolvedParams.slug).slice(0, 3));
+                    setOtherPosts(data.filter((p) => p.slug !== resolvedParams.slug).slice(0, 3));
+                } else {
+                    const found = researchPosts.find((p) => p.slug === resolvedParams.slug);
+                    if (found) {
+                        setPost(found);
+                        setOtherPosts(researchPosts.filter((p) => p.slug !== resolvedParams.slug).slice(0, 3));
+                    }
                 }
             })
             .catch(err => console.error(err))
@@ -103,12 +115,13 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
                 dangerouslySetInnerHTML={{
                     __html: JSON.stringify({
                         "@context": "https://schema.org",
-                        "@type": "Article",
+                        "@type": "BlogPosting",
                         "headline": post.title,
                         "image": [
                             post.imageUrl.startsWith("http") ? post.imageUrl : `https://biolongevitylabss.com${post.imageUrl}`
                         ],
                         "datePublished": post.date,
+                        "dateModified": post.dateModified || post.date,
                         "author": {
                             "@type": "Person",
                             "name": post.author
@@ -169,6 +182,9 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
                             animate={{ opacity: 1, y: 0 }}
                             className="bg-white dark:bg-slate-900 rounded-3xl p-8 md:p-12 shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-800"
                         >
+                            {post.answerCapsule && (
+                                <AnswerCapsule className="mb-10">{post.answerCapsule}</AnswerCapsule>
+                            )}
                             <div
                                 className="prose prose-lg dark:prose-invert max-w-none"
                                 dangerouslySetInnerHTML={parseMarkdown(post.content)}

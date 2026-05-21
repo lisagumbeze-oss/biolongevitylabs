@@ -184,8 +184,8 @@ export default function ShopPage() {
                         <p>
                             Each SKU is tied to a certificate of analysis showing identity and purity. For handling
                             lyophilized material, see our{" "}
-                            <Link href="/peptide-guide" className="text-primary font-semibold hover:underline">
-                                peptide guide
+                            <Link href="/research/peptide-reconstitution-guide" className="text-primary font-semibold hover:underline">
+                                reconstitution guide
                             </Link>{" "}
                             and{" "}
                             <Link href="/resources/peptide-calculator" className="text-primary font-semibold hover:underline">

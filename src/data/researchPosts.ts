@@ -1,16 +1,8 @@
-export interface BlogPost {
-    id: string;
-    title: string;
-    slug: string;
-    excerpt: string;
-    content: string;
-    author: string;
-    date: string;
-    category: string;
-    imageUrl: string;
-}
+import { sprintCArticles } from "./researchPostsSprintC";
+export type { BlogPost } from "./researchPostTypes";
+import type { BlogPost } from "./researchPostTypes";
 
-export const researchPosts: BlogPost[] = [
+const legacyResearchPosts: BlogPost[] = [
     {
         id: "1",
         title: "2026 Peptide Industry Report: Market Trends and Top Vendors Revealed",
@@ -140,4 +132,7 @@ While further research is needed, TB-500 presents a promising avenue for underst
         imageUrl: "https://biolongevitylabs.com/wp-content/uploads/2025/06/mobile-hero-peptide-guide.webp"
     }
 ];
+
+/** Newest SEO articles first, then legacy catalog */
+export const researchPosts: BlogPost[] = [...sprintCArticles, ...legacyResearchPosts];
 

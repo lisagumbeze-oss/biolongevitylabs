@@ -231,7 +231,7 @@ export default function HomePage() {
               </h2>
               <p className="text-lg text-slate-400 font-medium leading-relaxed mb-10 max-w-xl">
                 Our protocol finder matches 99%+ purity compounds to your study objectives. Explore{" "}
-                <Link href="/peptide-guide" className="text-primary hover:underline">
+                <Link href="/research/peptide-reconstitution-guide" className="text-primary hover:underline">
                   reconstitution guides
                 </Link>{" "}
                 and the full{" "}
