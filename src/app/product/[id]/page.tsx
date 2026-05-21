@@ -1,6 +1,11 @@
 import { Metadata } from "next";
 import { products } from "@/data/products";
 import { canonicalPath } from "@/lib/seo";
+import {
+    getProductSeo,
+    buildFaqPageSchema,
+    productPageUrl,
+} from "@/lib/product-seo";
 import ProductDetailsView from "./ProductDetailsView";
 
 interface Props {
@@ -17,13 +22,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         };
     }
 
+    const seo = getProductSeo(product.id);
+    const title = seo?.metaTitle ?? product.name;
+    const plainDescription = product.description.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+    const description = seo?.metaDescription ?? plainDescription.substring(0, 160);
+
     return {
-        title: product.name,
-        description: product.description.substring(0, 160),
+        title,
+        description,
         alternates: canonicalPath(`/product/${product.id}`),
         openGraph: {
-            title: product.name,
-            description: product.description.substring(0, 160),
+            title: `${title} | BioLongevity Labs`,
+            description,
             url: `https://biolongevitylabss.com/product/${product.id}`,
             siteName: 'BioLongevity Labs',
             type: 'website',
@@ -38,8 +48,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         },
         twitter: {
             card: 'summary_large_image',
-            title: product.name,
-            description: product.description.substring(0, 160),
+            title,
+            description,
             images: [product.image.startsWith("http") ? product.image : `https://biolongevitylabss.com${product.image}`],
         },
     };
@@ -50,6 +60,9 @@ export default async function ProductDetailsPage({ params }: Props) {
     const product = products.find((p) => p.id === id);
 
     if (!product) return <ProductDetailsView id={id} key={id} />;
+
+    const seo = getProductSeo(product.id);
+    const pageUrl = productPageUrl(product.id);
 
     return (
         <>
@@ -117,6 +130,14 @@ export default async function ProductDetailsPage({ params }: Props) {
                     })
                 }}
             />
+            {seo?.faqs.length ? (
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{
+                        __html: JSON.stringify(buildFaqPageSchema(seo.faqs, pageUrl)),
+                    }}
+                />
+            ) : null}
             <ProductDetailsView id={id} key={id} />
         </>
     );

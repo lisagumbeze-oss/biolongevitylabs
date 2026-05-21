@@ -18,6 +18,9 @@ import HPLCGraph from "@/components/HPLCGraph";
 import ScientificTooltip from "@/components/ScientificTooltip";
 import ReviewList from "@/components/ReviewList";
 import ReviewForm from "@/components/ReviewForm";
+import AnswerCapsule from "@/components/AnswerCapsule";
+import ProductFaq from "@/components/ProductFaq";
+import { getProductSeo } from "@/lib/product-seo";
 import toast, { Toaster } from 'react-hot-toast';
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -217,6 +220,8 @@ export default function ProductDetailsView({ id }: Props) {
         );
     }
 
+    const productSeo = product ? getProductSeo(product.id) : undefined;
+
     if (!product) {
         return (
             <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
@@ -301,9 +306,13 @@ export default function ProductDetailsView({ id }: Props) {
                                 )}
                             </div>
 
-                            <h1 className="text-3xl sm:text-4xl font-black text-slate-900 mb-6 tracking-tight leading-[1.1]">
+                            <h1 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white mb-6 tracking-tight leading-[1.1]">
                                 {product.name}
                             </h1>
+
+                            {productSeo?.answerCapsule && (
+                                <AnswerCapsule className="mb-8">{productSeo.answerCapsule}</AnswerCapsule>
+                            )}
 
                             <div className="flex flex-wrap items-center gap-6 mb-8 py-6 border-y border-slate-100 dark:border-slate-800">
                                 <div className="flex items-center gap-3">
@@ -694,6 +703,8 @@ export default function ProductDetailsView({ id }: Props) {
                                     </div>
                                 </div>
                             </div>
+
+                            {productSeo?.faqs && <ProductFaq faqs={productSeo.faqs} />}
                         </div>
                     </div>
 

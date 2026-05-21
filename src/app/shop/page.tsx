@@ -8,6 +8,8 @@ import { Search, ArrowUpDown, Package, SlidersHorizontal, X, Loader2 } from "luc
 import { motion, AnimatePresence } from "framer-motion";
 
 import { ShopSkeleton } from "@/components/Skeleton";
+import AnswerCapsule from "@/components/AnswerCapsule";
+import Link from "next/link";
 
 export default function ShopPage() {
     const [products, setProducts] = useState<Product[]>([]);
@@ -146,15 +148,68 @@ export default function ShopPage() {
             <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-20">
 
                 {/* Page Header */}
-                <div className="mb-8">
-                    <h1 className="text-4xl font-bold text-slate-900 tracking-tight mb-2">
-                        Our Premium Compounds
-                    </h1>
-                    <p className="text-slate-500 text-base flex items-center gap-2">
-                        <Package className="w-4 h-4 text-primary" />
-                        Showing {filteredProducts.length} of {products.length} research-grade products
-                    </p>
-                </div>
+                <header className="mb-10 space-y-6">
+                    <div>
+                        <h1 className="text-4xl font-bold text-slate-900 tracking-tight mb-2">
+                            Buy Research Peptides &amp; Bioregulators Online
+                        </h1>
+                        <p className="text-slate-500 text-base flex items-center gap-2">
+                            <Package className="w-4 h-4 text-primary" />
+                            Showing {filteredProducts.length} of {products.length} research-grade products
+                        </p>
+                    </div>
+
+                    <AnswerCapsule>
+                        You can buy research peptides online from BioLongevity Labs with batch-specific COA
+                        documentation, USA-based fulfillment, and HPLC-verified purity targets of 99%+. Catalog
+                        includes lyophilized vials, capsules, and Khavinson-class bioregulators for in vitro work only.
+                    </AnswerCapsule>
+
+                    <article className="prose prose-slate max-w-none text-slate-600 text-sm leading-relaxed">
+                        <h2 className="text-lg font-bold text-slate-900 not-prose">
+                            Research-grade peptide catalog
+                        </h2>
+                        <p>
+                            Our shop lists peptides and bioregulators synthesized under GMP-aligned USA processes and
+                            independently tested before release. Filter by product form—lyophilized{" "}
+                            <Link href="/shop" className="text-primary font-semibold hover:underline">
+                                research vials
+                            </Link>
+                            , capsules, or topical research creams—or browse bioregulator families used in longevity and
+                            organ-specific cell models.
+                        </p>
+                        <h2 className="text-lg font-bold text-slate-900 not-prose">
+                            How do laboratories verify quality before ordering?
+                        </h2>
+                        <p>
+                            Each SKU is tied to a certificate of analysis showing identity and purity. For handling
+                            lyophilized material, see our{" "}
+                            <Link href="/peptide-guide" className="text-primary font-semibold hover:underline">
+                                peptide guide
+                            </Link>{" "}
+                            and{" "}
+                            <Link href="/resources/peptide-calculator" className="text-primary font-semibold hover:underline">
+                                reconstitution calculator
+                            </Link>
+                            . Popular research lines include{" "}
+                            <Link href="/product/prod_105727" className="text-primary font-semibold hover:underline">
+                                BPC-157 &amp; TB-500 blends
+                            </Link>
+                            ,{" "}
+                            <Link href="/product/prod_201099" className="text-primary font-semibold hover:underline">
+                                thymulin
+                            </Link>
+                            , and vascular bioregulators such as{" "}
+                            <Link href="/product/prod_26974" className="text-primary font-semibold hover:underline">
+                                Vesugen
+                            </Link>
+                            .
+                        </p>
+                        <p className="text-xs font-bold uppercase tracking-widest text-amber-700 not-prose">
+                            Research use only (RUO). Not for human or veterinary consumption.
+                        </p>
+                    </article>
+                </header>
 
                 {/* Toolbar */}
                 <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-4 mb-8">

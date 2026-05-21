@@ -227,10 +227,10 @@ Prioritize editorial links from: lab supply blogs, longevity research newsletter
 2. OG image asset
 3. GSC/GA4 verification
 
-### Sprint B — On-page (Days 4–10)
-1. Homepage answer capsule + metadata
-2. Shop category copy
-3. Top 5 PDP meta + FAQ blocks
+### Sprint B — On-page (Days 4–10) ✅ Implemented
+1. Homepage answer capsule + metadata (`page.tsx`, `HomePage.tsx`)
+2. Shop category copy + H1 (`shop/page.tsx`, `shop/layout.tsx`)
+3. Top 5 PDP meta + FAQ blocks (`product-seo.ts`: prod_105727, prod_201099, prod_230039, prod_26974, prod_4103)
 
 ### Sprint C — Content (Days 10–21)
 1. First gap article: BPC-157 dosage guide
