@@ -40,24 +40,25 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
     const [otherPosts, setOtherPosts] = React.useState<any[]>([]);
 
     React.useEffect(() => {
-        fetch('/api/admin/blog')
-            .then(res => res.json())
-            .then(data => {
-                if (Array.isArray(data)) {
-                    const found =
-                        data.find((p) => p.slug === resolvedParams.slug) ||
-                        researchPosts.find((p) => p.slug === resolvedParams.slug);
-                    setPost(found);
-                    setOtherPosts(data.filter((p) => p.slug !== resolvedParams.slug).slice(0, 3));
-                } else {
-                    const found = researchPosts.find((p) => p.slug === resolvedParams.slug);
-                    if (found) {
-                        setPost(found);
-                        setOtherPosts(researchPosts.filter((p) => p.slug !== resolvedParams.slug).slice(0, 3));
-                    }
-                }
+        const applyFromList = (list: typeof researchPosts) => {
+            const found = list.find((p) => p.slug === resolvedParams.slug);
+            if (found) {
+                setPost(found);
+                setOtherPosts(list.filter((p) => p.slug !== resolvedParams.slug).slice(0, 3));
+            }
+        };
+
+        applyFromList(researchPosts);
+        if (researchPosts.some((p) => p.slug === resolvedParams.slug)) {
+            setLoading(false);
+        }
+
+        fetch("/api/research")
+            .then((res) => (res.ok ? res.json() : researchPosts))
+            .then((data) => {
+                if (Array.isArray(data)) applyFromList(data);
             })
-            .catch(err => console.error(err))
+            .catch((err) => console.error(err))
             .finally(() => setLoading(false));
     }, [resolvedParams.slug]);
 
@@ -227,9 +228,12 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
                             <p className="text-slate-600 dark:text-slate-400 font-medium mb-6">
                                 Senior scientific reviewer and content editor at BioLongevity Labs.
                             </p>
-                            <button className="w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-white border-2 border-slate-200 dark:border-slate-700 font-bold py-3 rounded-xl hover:border-primary transition-colors">
+                            <Link
+                                href="/research"
+                                className="block w-full bg-white dark:bg-slate-800 text-slate-900 dark:text-white border-2 border-slate-200 dark:border-slate-700 font-bold py-3 rounded-xl hover:border-primary hover:text-primary transition-colors text-center"
+                            >
                                 View Articles
-                            </button>
+                            </Link>
                         </div>
 
                         {/* Newsletter Mini */}

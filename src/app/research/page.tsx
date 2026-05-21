@@ -5,18 +5,23 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Calendar, User, Search, Tag } from "lucide-react";
 import { motion } from "framer-motion";
+import { researchPosts } from "@/data/researchPosts";
+import type { BlogPost } from "@/data/researchPostTypes";
 
 export default function ResearchPage() {
-    const [posts, setPosts] = React.useState<any[]>([]);
+    const [posts, setPosts] = React.useState<BlogPost[]>(researchPosts);
     const [loading, setLoading] = React.useState(true);
 
     React.useEffect(() => {
-        fetch('/api/admin/blog')
-            .then(res => res.json())
-            .then(data => {
-                if (Array.isArray(data)) setPosts(data);
+        fetch("/api/research")
+            .then((res) => (res.ok ? res.json() : researchPosts))
+            .then((data) => {
+                if (Array.isArray(data) && data.length > 0) setPosts(data);
             })
-            .catch(err => console.error(err))
+            .catch((err) => {
+                console.error(err);
+                setPosts(researchPosts);
+            })
             .finally(() => setLoading(false));
     }, []);
 
@@ -76,6 +81,10 @@ export default function ResearchPage() {
                         <div className="flex flex-col items-center justify-center py-20">
                             <div className="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin mb-4" />
                             <p className="text-slate-400 font-bold uppercase tracking-widest text-xs">Scanning archives...</p>
+                        </div>
+                    ) : posts.length === 0 ? (
+                        <div className="text-center py-20">
+                            <p className="text-slate-500 font-medium">No research articles are available yet. Check back soon.</p>
                         </div>
                     ) : (
                         <>
