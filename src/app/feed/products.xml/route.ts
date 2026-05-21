@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
+import { productPath } from '@/lib/product-slug';
+import type { Product } from '@/data/products';
 import fs from 'fs';
 import path from 'path';
 
@@ -31,7 +33,11 @@ export async function GET() {
             const id = p.id;
             const title = String(p.name || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
             const description = String(p.description || '').replace(/<[^>]*>?/gm, '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;').trim();
-            const link = `${BASE_URL}/product/${p.id}`;
+            const link = `${BASE_URL}${productPath({
+                id: p.id,
+                name: p.name || "",
+                slug: p.slug,
+            } as Pick<Product, "id" | "name" | "slug">)}`;
             const imageLink = (p.image_url || p.image || '').replace(/&/g, '&amp;');
             const price = `${p.price || 0} USD`;
             const availability = p.stock_status === 'In Stock' ? 'in_stock' : 'out_of_stock';

@@ -1,4 +1,6 @@
 import { SITE_URL } from "@/lib/seo";
+import { productPath } from "@/lib/product-slug";
+import type { Product } from "@/data/products";
 
 export type ProductFaq = {
   question: string;
@@ -164,6 +166,6 @@ export function buildFaqPageSchema(faqs: ProductFaq[], pageUrl: string) {
   };
 }
 
-export function productPageUrl(productId: string) {
-  return `${SITE_URL}/product/${productId}`;
+export function productPageUrl(product: Pick<Product, "id" | "slug">) {
+  return `${SITE_URL}${productPath(product)}`;
 }

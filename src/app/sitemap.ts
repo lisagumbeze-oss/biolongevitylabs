@@ -2,6 +2,7 @@ import { MetadataRoute } from 'next';
 import { products } from '@/data/products';
 import { researchPosts } from '@/data/researchPosts';
 import { SITE_URL } from '@/lib/seo';
+import { assignSlugsToProducts } from '@/lib/product-slug';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes: MetadataRoute.Sitemap = [
@@ -19,8 +20,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/refunds`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.3 },
   ];
 
-  const productRoutes: MetadataRoute.Sitemap = products.map((product) => ({
-    url: `${SITE_URL}/product/${product.id}`,
+  const productRoutes: MetadataRoute.Sitemap = assignSlugsToProducts(products).map((product) => ({
+    url: `${SITE_URL}/product/${product.slug}`,
     lastModified: new Date(), // Ideally this would be the product's last modified date
     changeFrequency: 'daily',
     priority: 0.8,

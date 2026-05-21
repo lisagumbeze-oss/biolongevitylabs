@@ -24,9 +24,9 @@ const staggerContainer = {
 };
 
 const TOP_PRODUCT_LINKS = [
-  { href: "/product/prod_105727", label: "BPC-157 & TB-500 blend" },
-  { href: "/product/prod_201099", label: "Thymulin peptide" },
-  { href: "/product/prod_230039", label: "Follistatin (FLGR242)" },
+  { href: "/product/regeno-blend-bpc-157-tb-500-cartalax-30mg", label: "BPC-157 & TB-500 blend" },
+  { href: "/product/thymulin-peptide-10mg", label: "Thymulin peptide" },
+  { href: "/product/follistatin-flgr242-10mg", label: "Follistatin (FLGR242)" },
 ];
 
 export default function HomePage() {

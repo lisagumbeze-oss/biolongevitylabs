@@ -1,4 +1,6 @@
 import { NextResponse } from 'next/server';
+import { productPath } from '@/lib/product-slug';
+import type { Product } from '@/data/products';
 import { supabase } from '@/lib/supabase';
 import fs from 'fs';
 import path from 'path';
@@ -43,7 +45,7 @@ export async function GET() {
                 p.id,
                 p.name,
                 description,
-                `${BASE_URL}/product/${p.id}`,
+                `${BASE_URL}${productPath({ id: p.id, name: p.name || "", slug: p.slug } as Pick<Product, "id" | "name" | "slug">)}`,
                 p.image_url || p.image || '',
                 p.stock_status === 'In Stock' ? 'in_stock' : 'out_of_stock',
                 `${p.price || 0} USD`,

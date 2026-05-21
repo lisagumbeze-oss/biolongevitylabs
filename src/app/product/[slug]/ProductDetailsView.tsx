@@ -7,7 +7,7 @@ import { researchPosts } from "@/data/researchPosts";
 import { useCart } from "@/store/useCart";
 import { useRecentlyViewed } from "@/store/useRecentlyViewed";
 import {
-    ShoppingCart, Truck, ShieldCheck, RotateCcw, ChevronLeft,
+    ShoppingCart, Truck, ShieldCheck, RotateCcw, ChevronLeft, ChevronDown,
     Minus, Plus, Star, ChevronRight, Zap, Heart, Share2,
     CheckCircle2, Info, Package, Beaker, Layers, Lock, ArrowRight, Loader2
 } from "lucide-react";
@@ -22,14 +22,16 @@ import AnswerCapsule from "@/components/AnswerCapsule";
 import ProductFaq from "@/components/ProductFaq";
 import { getProductSeo } from "@/lib/product-seo";
 import { findMatchingVariation, variationPrice } from "@/lib/variation-matching";
+import { getSellableOptions } from "@/lib/variation-matching";
+import { isProductId, productPath } from "@/lib/product-slug";
 import toast, { Toaster } from 'react-hot-toast';
 import { motion, AnimatePresence } from "framer-motion";
 
 interface Props {
-    id: string;
+    slug: string;
 }
 
-export default function ProductDetailsView({ id }: Props) {
+export default function ProductDetailsView({ slug }: Props) {
     const router = useRouter();
     const [product, setProduct] = useState<Product | null>(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -69,39 +71,61 @@ export default function ProductDetailsView({ id }: Props) {
     const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
 
     useEffect(() => {
+        const applyProduct = (found: Product) => {
+            setProduct(found);
+            setSelectedImage(found.image || "");
+            addRecentlyViewed(found);
+
+            if (found.slug && isProductId(slug)) {
+                router.replace(productPath(found));
+            }
+
+            const defaultOptions: Record<string, string> = {};
+            found.variables?.forEach((v) => {
+                const sellable = getSellableOptions(found, v.name);
+                if (sellable.length > 0) {
+                    defaultOptions[v.name] = sellable[0];
+                }
+            });
+            setSelectedOptions(defaultOptions);
+        };
+
         const fetchProduct = async () => {
             try {
-                const response = await fetch('/api/products');
+                const singleRes = await fetch(`/api/products/${encodeURIComponent(slug)}`);
+                if (singleRes.ok) {
+                    const found = await singleRes.json();
+                    if (found?.id) {
+                        applyProduct(found);
+                        const listRes = await fetch("/api/products");
+                        if (listRes.ok) {
+                            const data = await listRes.json();
+                            if (Array.isArray(data)) setAllProducts(data);
+                        }
+                        return;
+                    }
+                }
+
+                const response = await fetch("/api/products");
                 if (response.ok) {
                     const data = await response.json();
-                    setAllProducts(data);
-                    const found = data.find((p: Product) => p.id === id);
-                    if (found) {
-                        setProduct(found);
-                        setSelectedImage(found.image || "");
-                        addRecentlyViewed(found);
-
-                        // Set default options
-                        const defaultOptions: Record<string, string> = {};
-                        if (found.variables) {
-                            found.variables.forEach((v: any) => {
-                                if (v.options && v.options.length > 0) {
-                                    defaultOptions[v.name] = v.options[0];
-                                }
-                            });
-                        }
-                        setSelectedOptions(defaultOptions);
+                    if (Array.isArray(data)) {
+                        setAllProducts(data);
+                        const found = data.find(
+                            (p: Product) => p.id === slug || p.slug === slug
+                        );
+                        if (found) applyProduct(found);
                     }
                 }
             } catch (error) {
-                console.error('Error fetching product:', error);
+                console.error("Error fetching product:", error);
             } finally {
                 setIsLoading(false);
             }
         };
 
         fetchProduct();
-    }, [id]);
+    }, [slug, addRecentlyViewed, router]);
 
     const selectedVariation = React.useMemo(() => {
         if (!product) return null;
@@ -359,28 +383,51 @@ export default function ProductDetailsView({ id }: Props) {
                             {product.variables && product.variables.length > 0 && (
                                 <div className="flex flex-col gap-6">
                                     {product.variables
-                                        .filter((variable) => variable.options.length > 1 && !variable.name.toLowerCase().includes('dutify'))
-                                        .map((variable) => (
+                                        .filter((variable) => !variable.name.toLowerCase().includes('dutify'))
+                                        .map((variable) => {
+                                            const sellableOptions = getSellableOptions(product, variable.name);
+                                            if (sellableOptions.length <= 1) return null;
+                                            return (
                                         <div key={variable.name} className="flex flex-col gap-3">
-                                            <label className="text-[10px] font-black text-slate-900 uppercase tracking-widest flex items-center gap-2 px-1">
+                                            <label
+                                                htmlFor={`variation-${variable.name}`}
+                                                className="text-[10px] font-black text-slate-900 uppercase tracking-widest flex items-center gap-2 px-1"
+                                            >
                                                 <Layers className="w-3.5 h-3.5 text-primary" />
                                                 {variable.name}
                                             </label>
-                                            <div className="flex flex-wrap gap-3">
-                                                {variable.options.map(opt => (
-                                                    <button
-                                                        key={opt}
-                                                        onClick={() => setSelectedOptions(prev => ({ ...prev, [variable.name]: opt }))}
-                                                        className={`px-4 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${selectedOptions[variable.name] === opt
-                                                            ? 'bg-primary text-white shadow-lg shadow-primary/20 scale-[1.02]'
-                                                            : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700 hover:border-primary'}`}
-                                                    >
-                                                        {opt}
-                                                    </button>
-                                                ))}
+                                            <div className="relative w-full">
+                                                <select
+                                                    id={`variation-${variable.name}`}
+                                                    value={selectedOptions[variable.name] ?? sellableOptions[0] ?? ""}
+                                                    onChange={(e) =>
+                                                        setSelectedOptions((prev) => ({
+                                                            ...prev,
+                                                            [variable.name]: e.target.value,
+                                                        }))
+                                                    }
+                                                    className="w-full h-14 appearance-none rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 pl-4 pr-12 text-xs font-black uppercase tracking-widest text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary cursor-pointer transition-all"
+                                                >
+                                                    {sellableOptions.map((opt) => {
+                                                        const optVariation = findMatchingVariation(product, {
+                                                            [variable.name]: opt,
+                                                        });
+                                                        const optPrice = variationPrice(
+                                                            optVariation,
+                                                            product.price
+                                                        );
+                                                        return (
+                                                            <option key={opt} value={opt}>
+                                                                {opt} — ${optPrice.toFixed(2)}
+                                                            </option>
+                                                        );
+                                                    })}
+                                                </select>
+                                                <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
                                             </div>
                                         </div>
-                                    ))}
+                                    );
+                                        })}
                                 </div>
                             )}
 

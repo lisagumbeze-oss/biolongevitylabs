@@ -8,6 +8,7 @@ import { ArrowLeft, Calendar, User, Tag, Share2, Bookmark } from "lucide-react";
 import { products } from "@/data/products";
 import { researchPosts } from "@/data/researchPosts";
 import AnswerCapsule from "@/components/AnswerCapsule";
+import { productPath } from "@/lib/product-slug";
 import { motion } from "framer-motion";
 
 // Very simple markdown parser for the included data
@@ -256,7 +257,7 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
                                 </h3>
                                 <div className="space-y-6">
                                     {relatedProducts.map(p => (
-                                        <Link key={p.id} href={`/product/${p.id}`} className="flex items-center gap-4 group/prod">
+                                        <Link key={p.id} href={productPath(p)} className="flex items-center gap-4 group/prod">
                                             <div className="w-16 h-16 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 overflow-hidden p-2 shrink-0">
                                                 <img src={p.image} alt={p.name} className="w-full h-full object-contain group-hover/prod:scale-110 transition-transform" />
                                             </div>

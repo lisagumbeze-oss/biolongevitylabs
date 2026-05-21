@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { Search, Package, X } from "lucide-react";
 import { products } from "@/data/products";
 import Link from "next/link";
+import { productPath } from "@/lib/product-slug";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function LiveSearch() {
@@ -76,7 +77,7 @@ export default function LiveSearch() {
                                         transition={{ delay: i * 0.04 }}
                                     >
                                         <Link
-                                            href={`/product/${product.id}`}
+                                            href={productPath(product)}
                                             onClick={() => { setQuery(""); setIsFocused(false); }}
                                             className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors group"
                                         >

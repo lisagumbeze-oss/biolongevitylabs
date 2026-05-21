@@ -4,6 +4,7 @@ import React from "react";
 import { Trash2, Minus, Plus, ShoppingBag, ArrowRight, ArrowLeft, ShieldCheck, Truck, RotateCcw } from "lucide-react";
 import { useCart } from "@/store/useCart";
 import Link from "next/link";
+import { productPath } from "@/lib/product-slug";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function CartPage() {
@@ -53,7 +54,7 @@ export default function CartPage() {
                                         <div className="flex-1 flex flex-col justify-between py-1">
                                             <div className="flex justify-between items-start gap-4">
                                                 <div>
-                                                    <Link href={`/product/${item.id}`} className="text-lg font-black text-slate-900 hover:text-primary transition-colors line-clamp-1">
+                                                    <Link href={productPath({ id: item.id, name: item.name })} className="text-lg font-black text-slate-900 hover:text-primary transition-colors line-clamp-1">
                                                         {item.name}
                                                     </Link>
                                                     {item.selectedOptions && Object.keys(item.selectedOptions).length > 0 && (

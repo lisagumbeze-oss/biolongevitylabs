@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { productPath } from "@/lib/product-slug";
 import { 
     Activity, 
     Brain, 
@@ -145,7 +146,7 @@ export default function ProtocolFinder() {
                                                 <span className="text-xs text-slate-400 font-bold uppercase tracking-widest">IN STOCK</span>
                                             </div>
                                             <Link 
-                                                href={`/product/${product.id}`}
+                                                href={productPath(product)}
                                                 className="w-full flex items-center justify-center gap-2 py-4 bg-slate-900 dark:bg-white dark:text-slate-900 text-white font-black rounded-xl hover:scale-105 transition-all shadow-xl active:scale-95"
                                             >
                                                 View Compound

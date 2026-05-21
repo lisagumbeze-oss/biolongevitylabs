@@ -8,9 +8,11 @@ import { useCart } from "@/store/useCart";
 import { useWishlist } from "@/store/useWishlist";
 import toast from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
+import { productPath } from "@/lib/product-slug";
 
 interface ProductCardProps {
     id: string;
+    slug?: string;
     name: string;
     price: number;
     minPrice?: number | null;
@@ -30,6 +32,7 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = ({
     id,
+    slug,
     name,
     price,
     minPrice,
@@ -49,6 +52,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
     const addItem = useCart((state) => state.addItem);
     const { toggleItem, isInWishlist } = useWishlist();
     const activeInWishlist = isInWishlist(id);
+    const href = productPath({ id, slug });
 
     const handleAddToCart = (e: React.MouseEvent) => {
         e.preventDefault();
@@ -97,7 +101,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             whileHover={{ y: -4 }}
             className="group bg-white dark:bg-slate-900 rounded-4xl overflow-hidden border border-slate-100 dark:border-slate-800 flex flex-col h-full hover:shadow-[0_20px_50px_rgba(0,0,0,0.05)] dark:hover:shadow-[0_20px_50px_rgba(0,0,0,0.3)] transition-all duration-500"
         >
-            <Link href={`/product/${id}`} className="flex flex-col flex-1">
+            <Link href={href} className="flex flex-col flex-1">
                 <div className="relative aspect-square bg-slate-50 dark:bg-slate-950 overflow-hidden m-4 rounded-3xl">
                     {image ? (
                         <Image
@@ -212,7 +216,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
                 <div className="absolute inset-x-6 bottom-6 translate-y-16 group-hover:translate-y-0 transition-all duration-300">
                     {isVariable ? (
                         <Link
-                            href={`/product/${id}`}
+                            href={href}
                             aria-label={`Learn more about ${name}`}
                             className="w-full bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white hover:bg-primary hover:text-white py-4 rounded-2xl font-black transition-all duration-300 flex justify-center items-center gap-2 active:scale-[0.98] text-[10px] uppercase tracking-widest border border-slate-100 dark:border-slate-700 hover:border-transparent"
                         >

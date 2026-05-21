@@ -3,14 +3,9 @@ export const dynamic = 'force-dynamic';
 import fs from 'fs';
 import path from 'path';
 import { supabase } from '@/lib/supabase';
+import { getAllProducts, readProductsLocal } from '@/lib/catalog-product';
 
 const PRODUCTS_JSON = path.join(process.cwd(), 'src/data/products.json');
-
-function readProductsLocal() {
-    if (!fs.existsSync(PRODUCTS_JSON)) return [];
-    const content = fs.readFileSync(PRODUCTS_JSON, 'utf-8');
-    return JSON.parse(content);
-}
 
 function writeProductsLocal(products: unknown[]) {
     fs.writeFileSync(PRODUCTS_JSON, JSON.stringify(products, null, 4));
@@ -59,71 +54,8 @@ interface VariationRow {
 
 export async function GET() {
     try {
-        if (supabase) {
-            const { data, error } = await supabase
-                .from('products')
-                .select('*, product_variables(*), product_variations(*), product_coas(*)');
-
-            if (error) throw error;
-
-            // Map Supabase schema back to frontend expected format
-            const products = (data as unknown as ProductRow[]).map((p: ProductRow) => {
-                const variationPrices = (p.product_variations || [])
-                    .map((v: VariationRow) => Number(v.price))
-                    .filter((n: number) => !isNaN(n) && n > 0);
-
-                // Use stored min/max if set, otherwise derive from variations on-the-fly
-                const minPrice = p.min_price ?? (variationPrices.length > 0 ? Math.min(...variationPrices) : null);
-                const maxPrice = p.max_price ?? (variationPrices.length > 0 ? Math.max(...variationPrices) : null);
-
-                return {
-                    id: p.id,
-                    name: p.name,
-                    price: p.price,
-                    minPrice,
-                    maxPrice,
-                    image: p.image_url,
-                    category: p.category_name,
-                    form: p.form,
-                    description: p.description,
-                    stockStatus: p.stock_status,
-                    isVariable: p.is_variable || (p.product_variations?.length ?? 0) > 0,
-                    isSale: p.is_sale,
-                    isBestseller: p.is_bestseller,
-                    isNew: p.is_new,
-                    variables: p.product_variables?.map((v: VariableRow) => ({
-                        name: v.name,
-                        options: v.options
-                    })) || [],
-                    variations: p.product_variations?.map((v: VariationRow) => ({
-                        id: v.id,
-                        attributes: v.attributes,
-                        price: v.price,
-                        stockStatus: v.stock_status
-                    })) || [],
-                    coa: p.product_coas ? (Array.isArray(p.product_coas) ? (p.product_coas.length > 0 ? {
-                        id: p.product_coas[0].id,
-                        labName: p.product_coas[0].lab_name,
-                        purityPercentage: p.product_coas[0].purity_percentage || undefined,
-                        reportUrl: p.product_coas[0].report_url,
-                        testDate: p.product_coas[0].test_date || undefined,
-                        batchNumber: p.product_coas[0].batch_number || undefined
-                    } : undefined) : {
-                        id: (p.product_coas as COARow).id,
-                        labName: (p.product_coas as COARow).lab_name,
-                        purityPercentage: (p.product_coas as COARow).purity_percentage || undefined,
-                        reportUrl: (p.product_coas as COARow).report_url,
-                        testDate: (p.product_coas as COARow).test_date || undefined,
-                        batchNumber: (p.product_coas as COARow).batch_number || undefined
-                    }) : undefined
-                };
-            });
-
-            return NextResponse.json(products);
-        } else {
-            const products = readProductsLocal();
-            return NextResponse.json(products);
-        }
+        const products = await getAllProducts();
+        return NextResponse.json(products);
     } catch (error: unknown) {
         console.error('API Error (GET):', error instanceof Error ? error.message : String(error));
         return NextResponse.json({ error: 'Failed to fetch products' }, { status: 500 });

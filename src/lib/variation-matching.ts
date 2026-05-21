@@ -73,6 +73,20 @@ export function findMatchingVariation(
     return null;
 }
 
+/** Only show variable options that resolve to a catalog variation (avoids orphan labels). */
+export function getSellableOptions(product: Product, variableName: string): string[] {
+    const variable = product.variables?.find(
+        (v) => v.name.toLowerCase() === variableName.toLowerCase()
+    );
+    if (!variable) return [];
+
+    if (!product.variations?.length) return variable.options;
+
+    return variable.options.filter((opt) =>
+        Boolean(findMatchingVariation(product, { [variable.name]: opt }))
+    );
+}
+
 export function variationPrice(variation: ProductVariation | null, fallback: number): number {
     const raw = variation?.price ?? fallback;
     const n = typeof raw === "number" ? raw : Number(raw);

@@ -192,15 +192,15 @@ export default function ShopPage() {
                                 reconstitution calculator
                             </Link>
                             . Popular research lines include{" "}
-                            <Link href="/product/prod_105727" className="text-primary font-semibold hover:underline">
+                            <Link href="/product/regeno-blend-bpc-157-tb-500-cartalax-30mg" className="text-primary font-semibold hover:underline">
                                 BPC-157 &amp; TB-500 blends
                             </Link>
                             ,{" "}
-                            <Link href="/product/prod_201099" className="text-primary font-semibold hover:underline">
+                            <Link href="/product/thymulin-peptide-10mg" className="text-primary font-semibold hover:underline">
                                 thymulin
                             </Link>
                             , and vascular bioregulators such as{" "}
-                            <Link href="/product/prod_26974" className="text-primary font-semibold hover:underline">
+                            <Link href="/product/vesugen-peptide-20mg" className="text-primary font-semibold hover:underline">
                                 Vesugen
                             </Link>
                             .

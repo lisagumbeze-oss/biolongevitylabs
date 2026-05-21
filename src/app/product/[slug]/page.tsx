@@ -1,6 +1,8 @@
 import { Metadata } from "next";
-import { products } from "@/data/products";
+import { redirect } from "next/navigation";
 import { canonicalPath } from "@/lib/seo";
+import { getProductBySlugOrId } from "@/lib/catalog-product";
+import { isProductId, productPath } from "@/lib/product-slug";
 import {
     getProductSeo,
     buildFaqPageSchema,
@@ -8,13 +10,15 @@ import {
 } from "@/lib/product-seo";
 import ProductDetailsView from "./ProductDetailsView";
 
+export const dynamic = "force-dynamic";
+
 interface Props {
-    params: Promise<{ id: string }>;
+    params: Promise<{ slug: string }>;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-    const { id } = await params;
-    const product = products.find((p) => p.id === id);
+    const { slug } = await params;
+    const product = await getProductBySlugOrId(slug);
 
     if (!product) {
         return {
@@ -26,17 +30,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const title = seo?.metaTitle ?? product.name;
     const plainDescription = product.description.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
     const description = seo?.metaDescription ?? plainDescription.substring(0, 160);
+    const path = productPath(product);
 
     return {
         title,
         description,
-        alternates: canonicalPath(`/product/${product.id}`),
+        alternates: canonicalPath(path),
         openGraph: {
             title: `${title} | BioLongevity Labs`,
             description,
-            url: `https://biolongevitylabss.com/product/${product.id}`,
-            siteName: 'BioLongevity Labs',
-            type: 'website',
+            url: `https://biolongevitylabss.com${path}`,
+            siteName: "BioLongevity Labs",
+            type: "website",
             images: [
                 {
                     url: product.image.startsWith("http") ? product.image : `https://biolongevitylabss.com${product.image}`,
@@ -47,7 +52,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             ],
         },
         twitter: {
-            card: 'summary_large_image',
+            card: "summary_large_image",
             title,
             description,
             images: [product.image.startsWith("http") ? product.image : `https://biolongevitylabss.com${product.image}`],
@@ -56,78 +61,82 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function ProductDetailsPage({ params }: Props) {
-    const { id } = await params;
-    const product = products.find((p) => p.id === id);
+    const { slug } = await params;
+    const product = await getProductBySlugOrId(slug);
 
-    if (!product) return <ProductDetailsView id={id} key={id} />;
+    if (!product) return <ProductDetailsView slug={slug} key={slug} />;
+
+    const canonicalSlug = product.slug!;
+    if (slug !== canonicalSlug) {
+        redirect(`/product/${canonicalSlug}`);
+    }
 
     const seo = getProductSeo(product.id);
-    const pageUrl = productPageUrl(product.id);
+    const pageUrl = productPageUrl(product);
+    const path = productPath(product);
 
     return (
         <>
-            {/* Breadcrumb Schema */}
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{
                     __html: JSON.stringify({
                         "@context": "https://schema.org",
                         "@type": "BreadcrumbList",
-                        "itemListElement": [
+                        itemListElement: [
                             {
                                 "@type": "ListItem",
-                                "position": 1,
-                                "name": "Home",
-                                "item": "https://biolongevitylabss.com/"
+                                position: 1,
+                                name: "Home",
+                                item: "https://biolongevitylabss.com/",
                             },
                             {
                                 "@type": "ListItem",
-                                "position": 2,
-                                "name": "Shop",
-                                "item": "https://biolongevitylabss.com/shop"
+                                position: 2,
+                                name: "Shop",
+                                item: "https://biolongevitylabss.com/shop",
                             },
                             {
                                 "@type": "ListItem",
-                                "position": 3,
-                                "name": product.name,
-                                "item": `https://biolongevitylabss.com/product/${product.id}`
-                            }
-                        ]
-                    })
+                                position: 3,
+                                name: product.name,
+                                item: `https://biolongevitylabss.com${path}`,
+                            },
+                        ],
+                    }),
                 }}
             />
 
-            {/* Product Schema */}
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{
                     __html: JSON.stringify({
                         "@context": "https://schema.org",
                         "@type": "Product",
-                        "name": product.name,
-                        "image": product.image.startsWith("http") ? product.image : `https://biolongevitylabss.com${product.image}`,
-                        "description": product.description,
-                        "sku": product.id,
-                        "mpn": product.id,
-                        "brand": {
+                        name: product.name,
+                        image: product.image.startsWith("http") ? product.image : `https://biolongevitylabss.com${product.image}`,
+                        description: product.description,
+                        sku: product.id,
+                        mpn: product.id,
+                        brand: {
                             "@type": "Brand",
-                            "name": "BioLongevity Labs"
+                            name: "BioLongevity Labs",
                         },
-                        "category": product.category,
-                        "offers": {
+                        category: product.category,
+                        offers: {
                             "@type": "Offer",
-                            "url": `https://biolongevitylabss.com/product/${product.id}`,
-                            "priceCurrency": "USD",
-                            "price": product.isVariable && product.minPrice ? product.minPrice : product.price,
-                            "priceValidUntil": "2026-12-31",
-                            "availability": "https://schema.org/InStock",
-                            "itemCondition": "https://schema.org/NewCondition",
-                            "seller": {
+                            url: `https://biolongevitylabss.com${path}`,
+                            priceCurrency: "USD",
+                            price: product.isVariable && product.minPrice ? product.minPrice : product.price,
+                            priceValidUntil: "2026-12-31",
+                            availability: "https://schema.org/InStock",
+                            itemCondition: "https://schema.org/NewCondition",
+                            seller: {
                                 "@type": "Organization",
-                                "name": "BioLongevity Labs"
-                            }
-                        }
-                    })
+                                name: "BioLongevity Labs",
+                            },
+                        },
+                    }),
                 }}
             />
             {seo?.faqs.length ? (
@@ -138,7 +147,7 @@ export default async function ProductDetailsPage({ params }: Props) {
                     }}
                 />
             ) : null}
-            <ProductDetailsView id={id} key={id} />
+            <ProductDetailsView slug={canonicalSlug} key={canonicalSlug} />
         </>
     );
 }

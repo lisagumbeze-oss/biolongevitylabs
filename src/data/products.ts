@@ -22,6 +22,8 @@ export interface ProductCOA {
 
 export interface Product {
     id: string;
+    /** SEO URL segment, derived from product name (e.g. follistatin-flgr242-10mg-private) */
+    slug?: string;
     name: string;
     price: number;
     minPrice?: number | null;

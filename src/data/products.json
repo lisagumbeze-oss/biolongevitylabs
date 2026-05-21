@@ -2,9 +2,9 @@
     {
         "id": "prod_mk677_10mg_50tab",
         "name": "MK-677 (10MG) (50 TABLETS)",
-        "price": 100.0,
-        "minPrice": 100.0,
-        "maxPrice": 100.0,
+        "price": 100,
+        "minPrice": 100,
+        "maxPrice": 100,
         "image": "/uploads/mk-677-10mg-50tablets.jpg",
         "gallery": [],
         "category": "SARMS",
@@ -14,7 +14,8 @@
         "stockStatus": "In Stock",
         "isVariable": false,
         "variables": [],
-        "variations": []
+        "variations": [],
+        "slug": "mk-677-10mg-50-tablets"
     },
     {
         "id": "prod_239119",
@@ -74,7 +75,8 @@
                 "price": 1796.4,
                 "stockStatus": "Out of Stock"
             }
-        ]
+        ],
+        "slug": "follistatin-flgr242-10mg-subscription"
     },
     {
         "id": "prod_230039",
@@ -147,7 +149,87 @@
                 "price": 19161.6,
                 "stockStatus": "In Stock"
             }
-        ]
+        ],
+        "slug": "follistatin-flgr242-10mg"
+    },
+    {
+        "id": "prod_153676",
+        "name": "Follistatin (FLGR242) (10mg) (Private)",
+        "price": 2397,
+        "minPrice": 2397,
+        "maxPrice": 28764,
+        "image": "https://mlavgymrtxzc.i.optimole.com/cb:572_.56b/w:auto/h:auto/q:mauto/f:best/https://biolongevitylabs.com/wp-content/uploads/2025/11/Folli-Pair.jpg",
+        "gallery": [],
+        "category": "Flagship Products",
+        "form": "Vial",
+        "description": "<h2>Product Description</h2>\n<p class=\"whitespace-normal break-words\"><strong>Follistatin (FLGR242)</strong>, is a novel fragmented, modified version of Follistatin-344 (FST-344) that does not bind to the protein activin. Activin is responsible for the negative effects of myostatin inhibition such as unwanted cellular growth in laboratory models. It also contains a patented albumin binder.</p>\n<p>Follistatin protein (FST) fused with an albumin-binding construct that uses a hydrophilic glycine-serine linker to achieve high-affinity binding to serum albumin (&lt;20 nM Kd). This recombinant technology allows researchers to study follistatin-albumin interactions and protein trafficking in experimental systems.</p>\n<p>Research applications include muscle mass development studies, activin neutralization assays, and TGF-β superfamily pathway modulation with albumin binding dynamics. The construct maintains biological activity while enabling investigation of albumin as a carrier protein.</p>\n<p>US GMP-manufactured with third-party verification and comprehensive COAs for reproducible research outcomes.</p>\n<h3 class=\"whitespace-normal break-words\">Peptide Information</h3>\n<table class=\"bg-bg-100 min-w-full border-separate border-spacing-0 text-sm leading-[1.88888] whitespace-normal\">\n<thead class=\"border-b-border-100/50 border-b-[0.5px] text-left\">\n<tr class=\"[tbody&gt;&amp;]:odd:bg-bg-500/10\">\n<th class=\"text-text-000 [&amp;:not(:first-child)]:-x-[hsla(var(--border-100) / 0.5)] px-2 [&amp;:not(:first-child)]:border-l-[0.5px]\">Property</th>\n<th class=\"text-text-000 [&amp;:not(:first-child)]:-x-[hsla(var(--border-100) / 0.5)] px-2 [&amp;:not(:first-child)]:border-l-[0.5px]\">Value</th>\n</tr>\n</thead>\n<tbody>\n<tr class=\"[tbody&gt;&amp;]:odd:bg-bg-500/10\">\n<td class=\"border-t-border-100/50 [&amp;:not(:first-child)]:-x-[hsla(var(--border-100) / 0.5)] border-t-[0.5px] px-2 [&amp;:not(:first-child)]:border-l-[0.5px]\">Peptide Type</td>\n<td class=\"border-t-border-100/50 [&amp;:not(:first-child)]:-x-[hsla(var(--border-100) / 0.5)] border-t-[0.5px] px-2 [&amp;:not(:first-child)]:border-l-[0.5px]\">Follistatin-Albumin Binding Construct</td>\n</tr>\n<tr class=\"[tbody&gt;&amp;]:odd:bg-bg-500/10\">\n<td class=\"border-t-border-100/50 [&amp;:not(:first-child)]:-x-[hsla(var(--border-100) / 0.5)] border-t-[0.5px] px-2 [&amp;:not(:first-child)]:border-l-[0.5px]\">Technology</td>\n<td class=\"border-t-border-100/50 [&amp;:not(:first-child)]:-x-[hsla(var(--border-100) / 0.5)] border-t-[0.5px] px-2 [&amp;:not(:first-child)]:border-l-[0.5px]\">Albumin-binding peptide fusion (GGSGGSGGSGGRLIEDICLPRWGCLWEDD linker)</td>\n</tr>\n<tr class=\"[tbody&gt;&amp;]:odd:bg-bg-500/10\">\n<td class=\"border-t-border-100/50 [&amp;:not(:first-child)]:-x-[hsla(var(--border-100) / 0.5)] border-t-[0.5px] px-2 [&amp;:not(:first-child)]:border-l-[0.5px]\">Molecular Weight</td>\n<td class=\"border-t-border-100/50 [&amp;:not(:first-child)]:-x-[hsla(var(--border-100) / 0.5)] border-t-[0.5px] px-2 [&amp;:not(:first-child)]:border-l-[0.5px]\">~40 kDa</td>\n</tr>\n<tr class=\"[tbody&gt;&amp;]:odd:bg-bg-500/10\">\n<td class=\"border-t-border-100/50 [&amp;:not(:first-child)]:-x-[hsla(var(--border-100) / 0.5)] border-t-[0.5px] px-2 [&amp;:not(:first-child)]:border-l-[0.5px]\">Binding Affinity</td>\n<td class=\"border-t-border-100/50 [&amp;:not(:first-child)]:-x-[hsla(var(--border-100) / 0.5)] border-t-[0.5px] px-2 [&amp;:not(:first-child)]:border-l-[0.5px]\">&lt;20 nM</td>\n</tr>\n<tr class=\"[tbody&gt;&amp;]:odd:bg-bg-500/10\">\n<td class=\"border-t-border-100/50 [&amp;:not(:first-child)]:-x-[hsla(var(--border-100) / 0.5)] border-t-[0.5px] px-2 [&amp;:not(:first-child)]:border-l-[0.5px]\">Synonyms</td>\n<td class=\"border-t-border-100/50 [&amp;:not(:first-child)]:-x-[hsla(var(--border-100) / 0.5)] border-t-[0.5px] px-2 [&amp;:not(:first-child)]:border-l-[0.5px]\">FST-Albumin Construct, Extended Half-Life Follistatin</td>\n</tr>\n</tbody>\n</table>\n<h2>Lyophilized Peptides:</h2>\n<p>These peptides are freeze-dried, a process that not only extends shelf life but also preserves the purity and integrity of the peptides during storage. We do not use any fillers in this process.</p>\n<h2>Product Usage:</h2>\n<p>This PRODUCT IS INTENDED AS A RESEARCH CHEMICAL ONLY. This designation allows the use of research chemicals strictly for in vitro testing and laboratory experimentation only. All product information available on this website is for educational purposes only.  This product should only be handled by licensed, qualified professionals. This product is not a drug, food, or cosmetic and may not be misbranded, misused or mislabeled as a drug.</p>",
+        "isSale": false,
+        "stockStatus": "In Stock",
+        "isVariable": true,
+        "variables": [
+            {
+                "name": "Quantity",
+                "options": [
+                    "3 Pairs (6 Vials)",
+                    "6 Pairs (12 Vials) - Save 5%",
+                    "12 Pairs (24 Vials) - Save 10%",
+                    "18 Pairs (36 Vials) - Save 15%",
+                    "24 Pairs (48 Vials) - Save 20%",
+                    "48 Pairs (96 Vials) - Save 25%"
+                ]
+            }
+        ],
+        "variations": [
+            {
+                "id": 229126,
+                "attributes": {
+                    "Quantity": "3-pairs"
+                },
+                "price": 2397,
+                "stockStatus": "In Stock"
+            },
+            {
+                "id": 229128,
+                "attributes": {
+                    "Quantity": "6-pairs"
+                },
+                "price": 4794,
+                "stockStatus": "In Stock"
+            },
+            {
+                "id": 229123,
+                "attributes": {
+                    "Quantity": "12-pairs"
+                },
+                "price": 9588,
+                "stockStatus": "In Stock"
+            },
+            {
+                "id": 229124,
+                "attributes": {
+                    "Quantity": "18-pairs"
+                },
+                "price": 14382,
+                "stockStatus": "In Stock"
+            },
+            {
+                "id": 229125,
+                "attributes": {
+                    "Quantity": "24-pairs"
+                },
+                "price": 19176,
+                "stockStatus": "In Stock"
+            },
+            {
+                "id": 229127,
+                "attributes": {
+                    "Quantity": "48-pairs"
+                },
+                "price": 28764,
+                "stockStatus": "In Stock"
+            }
+        ],
+        "slug": "follistatin-flgr242-10mg-private"
     },
     {
         "id": "prod_229417",
@@ -209,7 +291,8 @@
                 "price": 10179.6,
                 "stockStatus": "In Stock"
             }
-        ]
+        ],
+        "slug": "klotho-alphaklotholr-20mcg"
     },
     {
         "id": "prod_219500",
@@ -229,7 +312,8 @@
         "stockStatus": "In Stock",
         "isVariable": false,
         "variables": [],
-        "variations": []
+        "variations": [],
+        "slug": "biobam-15"
     },
     {
         "id": "prod_219499",
@@ -249,7 +333,8 @@
         "stockStatus": "In Stock",
         "isVariable": false,
         "variables": [],
-        "variations": []
+        "variations": [],
+        "slug": "biorecharge"
     },
     {
         "id": "prod_219498",
@@ -266,7 +351,8 @@
         "stockStatus": "Out of Stock",
         "isVariable": false,
         "variables": [],
-        "variations": []
+        "variations": [],
+        "slug": "bioscavenger-skq1"
     },
     {
         "id": "prod_201099",
@@ -285,7 +371,8 @@
         "stockStatus": "In Stock",
         "isVariable": false,
         "variables": [],
-        "variations": []
+        "variations": [],
+        "slug": "thymulin-peptide-10mg"
     },
     {
         "id": "prod_155411",
@@ -311,7 +398,8 @@
                 ]
             }
         ],
-        "variations": []
+        "variations": [],
+        "slug": "lepto3gr-50mcg"
     },
     {
         "id": "prod_155404",
@@ -371,7 +459,8 @@
                 "price": 9588,
                 "stockStatus": "Out of Stock"
             }
-        ]
+        ],
+        "slug": "slimassist-flgr-2mg-250mcg-b-complex"
     },
     {
         "id": "prod_105727",
@@ -388,7 +477,8 @@
         "stockStatus": "In Stock",
         "isVariable": false,
         "variables": [],
-        "variations": []
+        "variations": [],
+        "slug": "regeno-blend-bpc-157-tb-500-cartalax-30mg"
     },
     {
         "id": "prod_105646",
@@ -405,7 +495,8 @@
         "stockStatus": "Out of Stock",
         "isVariable": false,
         "variables": [],
-        "variations": []
+        "variations": [],
+        "slug": "flgr242-single-vial"
     },
     {
         "id": "prod_105629",
@@ -422,7 +513,8 @@
         "stockStatus": "Out of Stock",
         "isVariable": false,
         "variables": [],
-        "variations": []
+        "variations": [],
+        "slug": "klotho-alphaklotholr-single-vial"
     },
     {
         "id": "prod_104157",
@@ -441,7 +533,8 @@
         "stockStatus": "In Stock",
         "isVariable": false,
         "variables": [],
-        "variations": []
+        "variations": [],
+        "slug": "bioregenix-recovery-cream-4-pack"
     },
     {
         "id": "prod_104156",
@@ -460,7 +553,8 @@
         "stockStatus": "In Stock",
         "isVariable": false,
         "variables": [],
-        "variations": []
+        "variations": [],
+        "slug": "bioregenix-recovery-cream-2-pack"
     },
     {
         "id": "prod_104136",
@@ -479,7 +573,8 @@
         "stockStatus": "In Stock",
         "isVariable": false,
         "variables": [],
-        "variations": []
+        "variations": [],
+        "slug": "bioregenix-recovery-cream-6-pack"
     },
     {
         "id": "prod_104135",
@@ -498,7 +593,8 @@
         "stockStatus": "In Stock",
         "isVariable": false,
         "variables": [],
-        "variations": []
+        "variations": [],
+        "slug": "bioregenix-recovery-cream-3-pack"
     },
     {
         "id": "prod_76864",
@@ -552,7 +648,8 @@
                 "price": 349.97,
                 "stockStatus": "In Stock"
             }
-        ]
+        ],
+        "slug": "shredmax-slu-pp-332"
     },
     {
         "id": "prod_65890",
@@ -572,7 +669,8 @@
         "stockStatus": "In Stock",
         "isVariable": false,
         "variables": [],
-        "variations": []
+        "variations": [],
+        "slug": "biozapetite"
     },
     {
         "id": "prod_65888",
@@ -592,7 +690,8 @@
         "stockStatus": "In Stock",
         "isVariable": false,
         "variables": [],
-        "variations": []
+        "variations": [],
+        "slug": "bioignite"
     },
     {
         "id": "prod_52493",
@@ -619,7 +718,8 @@
                 ]
             }
         ],
-        "variations": []
+        "variations": [],
+        "slug": "biomale-natural-geroprotector-complex-gpl-man"
     },
     {
         "id": "prod_52494",
@@ -646,7 +746,8 @@
                 ]
             }
         ],
-        "variations": []
+        "variations": [],
+        "slug": "biofemale-natural-peptide-geroprotector-gpl-femme"
     },
     {
         "id": "prod_52471",
@@ -694,7 +795,8 @@
                 "price": 228,
                 "stockStatus": "In Stock"
             }
-        ]
+        ],
+        "slug": "biothyroid-a-2-thyroid-peptide-bioregulator-thyreogen"
     },
     {
         "id": "prod_52481",
@@ -742,7 +844,8 @@
                 "price": 247.5,
                 "stockStatus": "In Stock"
             }
-        ]
+        ],
+        "slug": "biothymus-a-6-thymus-peptide-bioregulator-vladonix"
     },
     {
         "id": "prod_52468",
@@ -790,7 +893,8 @@
                 "price": 216,
                 "stockStatus": "In Stock"
             }
-        ]
+        ],
+        "slug": "biotestes-a-13-testes-peptide-bioregulator-testoluten"
     },
     {
         "id": "prod_52478",
@@ -838,7 +942,8 @@
                 "price": 232,
                 "stockStatus": "Out of Stock"
             }
-        ]
+        ],
+        "slug": "bioretina-a-11-retina-peptide-bioregulator-visoluten"
     },
     {
         "id": "prod_52456",
@@ -886,7 +991,8 @@
                 "price": 247.5,
                 "stockStatus": "In Stock"
             }
-        ]
+        ],
+        "slug": "biostomach-a-10-stomach-peptide-bioregulator-stamakort"
     },
     {
         "id": "prod_52447",
@@ -934,7 +1040,8 @@
                 "price": 220,
                 "stockStatus": "Out of Stock"
             }
-        ]
+        ],
+        "slug": "bioprostate-a-16-prostate-peptide-bioregulator-libidon"
     },
     {
         "id": "prod_52438",
@@ -982,7 +1089,8 @@
                 "price": 373.5,
                 "stockStatus": "In Stock"
             }
-        ]
+        ],
+        "slug": "biopineal-a-8-pineal-peptide-bioregulator-endoluten"
     },
     {
         "id": "prod_52490",
@@ -1030,7 +1138,8 @@
                 "price": 247.5,
                 "stockStatus": "In Stock"
             }
-        ]
+        ],
+        "slug": "bioparathyroid-a-21-peptide-bioregulator-bonothyrk"
     },
     {
         "id": "prod_52459",
@@ -1078,7 +1187,8 @@
                 "price": 220,
                 "stockStatus": "In Stock"
             }
-        ]
+        ],
+        "slug": "biopancreas-a-1-pancreas-peptide-bioregulator-suprefort"
     },
     {
         "id": "prod_52484",
@@ -1126,7 +1236,8 @@
                 "price": 220,
                 "stockStatus": "In Stock"
             }
-        ]
+        ],
+        "slug": "bioovary-a-15-ovary-peptide-bioregulator-zhenoluten"
     },
     {
         "id": "prod_52426",
@@ -1174,7 +1285,8 @@
                 "price": 226,
                 "stockStatus": "In Stock"
             }
-        ]
+        ],
+        "slug": "bionervoussystem-a-5-nervous-system-peptide-bioregulator-cerluten"
     },
     {
         "id": "prod_52441",
@@ -1222,7 +1334,8 @@
                 "price": 186,
                 "stockStatus": "In Stock"
             }
-        ]
+        ],
+        "slug": "biomuscle-a-18-muscle-peptide-bioregulator-gotratix"
     },
     {
         "id": "prod_52465",
@@ -1270,7 +1383,8 @@
                 "price": 220,
                 "stockStatus": "In Stock"
             }
-        ]
+        ],
+        "slug": "biolung-a-19-lung-peptide-bioregulator-taxorest"
     },
     {
         "id": "prod_52462",
@@ -1318,7 +1432,8 @@
                 "price": 216,
                 "stockStatus": "In Stock"
             }
-        ]
+        ],
+        "slug": "bioliver-a-7-liver-peptide-bioregulator-svetinorm"
     },
     {
         "id": "prod_52450",
@@ -1366,7 +1481,8 @@
                 "price": 216,
                 "stockStatus": "Out of Stock"
             }
-        ]
+        ],
+        "slug": "biokidney-a-9-kidney-peptide-bioregulator-pielotax"
     },
     {
         "id": "prod_52429",
@@ -1414,7 +1530,8 @@
                 "price": 104,
                 "stockStatus": "In Stock"
             }
-        ]
+        ],
+        "slug": "bioheart-a-14-heart-peptide-bioregulator-chelohart"
     },
     {
         "id": "prod_52453",
@@ -1462,7 +1579,8 @@
                 "price": 232,
                 "stockStatus": "In Stock"
             }
-        ]
+        ],
+        "slug": "biocartilage-a-4-cartilage-peptide-bioregulator-sigumir"
     },
     {
         "id": "prod_52487",
@@ -1510,7 +1628,8 @@
                 "price": 298.5,
                 "stockStatus": "In Stock"
             }
-        ]
+        ],
+        "slug": "biobonemarrow-a-20-peptide-bioregulator-bonomarlot"
     },
     {
         "id": "prod_52475",
@@ -1558,7 +1677,8 @@
                 "price": 236,
                 "stockStatus": "Out of Stock"
             }
-        ]
+        ],
+        "slug": "biobloodvessels-a-3-blood-vessels-peptide-bioregulator-ventfort"
     },
     {
         "id": "prod_52432",
@@ -1606,7 +1726,8 @@
                 "price": 208,
                 "stockStatus": "In Stock"
             }
-        ]
+        ],
+        "slug": "biobladder-a-12-bladder-peptide-bioregulator-chitomur"
     },
     {
         "id": "prod_52435",
@@ -1654,7 +1775,8 @@
                 "price": 220,
                 "stockStatus": "In Stock"
             }
-        ]
+        ],
+        "slug": "bioadrenal-a-17-adrenal-peptide-bioregulator-glandokort"
     },
     {
         "id": "prod_36719",
@@ -1675,7 +1797,8 @@
         "stockStatus": "In Stock",
         "isVariable": false,
         "variables": [],
-        "variations": []
+        "variations": [],
+        "slug": "bioampmax"
     },
     {
         "id": "prod_36718",
@@ -1696,7 +1819,8 @@
         "stockStatus": "In Stock",
         "isVariable": false,
         "variables": [],
-        "variations": []
+        "variations": [],
+        "slug": "bioamp"
     },
     {
         "id": "prod_31520",
@@ -1717,7 +1841,8 @@
         "stockStatus": "In Stock",
         "isVariable": false,
         "variables": [],
-        "variations": []
+        "variations": [],
+        "slug": "bioflow"
     },
     {
         "id": "prod_31519",
@@ -1738,7 +1863,8 @@
         "stockStatus": "In Stock",
         "isVariable": false,
         "variables": [],
-        "variations": []
+        "variations": [],
+        "slug": "bioabsorb"
     },
     {
         "id": "prod_26974",
@@ -1757,7 +1883,8 @@
         "stockStatus": "In Stock",
         "isVariable": false,
         "variables": [],
-        "variations": []
+        "variations": [],
+        "slug": "vesugen-peptide-20mg"
     },
     {
         "id": "prod_26973",
@@ -1776,7 +1903,8 @@
         "stockStatus": "In Stock",
         "isVariable": false,
         "variables": [],
-        "variations": []
+        "variations": [],
+        "slug": "vesilute-peptide-20mg"
     },
     {
         "id": "prod_26972",
@@ -1795,7 +1923,8 @@
         "stockStatus": "In Stock",
         "isVariable": false,
         "variables": [],
-        "variations": []
+        "variations": [],
+        "slug": "thymagen-thymogen-20mg"
     },
     {
         "id": "prod_26970",
@@ -1814,7 +1943,8 @@
         "stockStatus": "In Stock",
         "isVariable": false,
         "variables": [],
-        "variations": []
+        "variations": [],
+        "slug": "testagen-peptide-20mg"
     },
     {
         "id": "prod_26969",
@@ -1833,7 +1963,8 @@
         "stockStatus": "In Stock",
         "isVariable": false,
         "variables": [],
-        "variations": []
+        "variations": [],
+        "slug": "prostamax-peptide-20mg"
     },
     {
         "id": "prod_26966",
@@ -1852,7 +1983,8 @@
         "stockStatus": "In Stock",
         "isVariable": false,
         "variables": [],
-        "variations": []
+        "variations": [],
+        "slug": "pancragen-peptide-20mg"
     },
     {
         "id": "prod_26964",
@@ -1871,7 +2003,8 @@
         "stockStatus": "In Stock",
         "isVariable": false,
         "variables": [],
-        "variations": []
+        "variations": [],
+        "slug": "ovagen-peptide-20mg"
     },
     {
         "id": "prod_26963",
@@ -1890,7 +2023,8 @@
         "stockStatus": "In Stock",
         "isVariable": false,
         "variables": [],
-        "variations": []
+        "variations": [],
+        "slug": "livagen-peptide-20mg"
     },
     {
         "id": "prod_26962",
@@ -1909,7 +2043,8 @@
         "stockStatus": "In Stock",
         "isVariable": false,
         "variables": [],
-        "variations": []
+        "variations": [],
+        "slug": "vilon-peptide-20mg"
     },
     {
         "id": "prod_14074",
@@ -1929,7 +2064,8 @@
         "stockStatus": "In Stock",
         "isVariable": false,
         "variables": [],
-        "variations": []
+        "variations": [],
+        "slug": "biogutpro"
     },
     {
         "id": "prod_11933",
@@ -1949,7 +2085,8 @@
         "stockStatus": "In Stock",
         "isVariable": false,
         "variables": [],
-        "variations": []
+        "variations": [],
+        "slug": "biomind"
     },
     {
         "id": "prod_11929",
@@ -1969,7 +2106,8 @@
         "stockStatus": "In Stock",
         "isVariable": false,
         "variables": [],
-        "variations": []
+        "variations": [],
+        "slug": "biorestore"
     },
     {
         "id": "prod_4818",
@@ -1988,7 +2126,8 @@
         "stockStatus": "In Stock",
         "isVariable": false,
         "variables": [],
-        "variations": []
+        "variations": [],
+        "slug": "biosculpt-thermogenic-cream"
     },
     {
         "id": "prod_4817",
@@ -2007,7 +2146,8 @@
         "stockStatus": "In Stock",
         "isVariable": false,
         "variables": [],
-        "variations": []
+        "variations": [],
+        "slug": "bioregenix-recovery-cream"
     },
     {
         "id": "prod_3886",
@@ -2033,7 +2173,8 @@
                 ]
             }
         ],
-        "variations": []
+        "variations": [],
+        "slug": "pinealon-20mg"
     },
     {
         "id": "prod_4101",
@@ -2059,7 +2200,8 @@
                 ]
             }
         ],
-        "variations": []
+        "variations": [],
+        "slug": "bronchogen-20mg"
     },
     {
         "id": "prod_4102",
@@ -2085,7 +2227,8 @@
                 ]
             }
         ],
-        "variations": []
+        "variations": [],
+        "slug": "cardiogen-20mg"
     },
     {
         "id": "prod_4103",
@@ -2111,7 +2254,8 @@
                 ]
             }
         ],
-        "variations": []
+        "variations": [],
+        "slug": "cartalax-20mg"
     },
     {
         "id": "prod_4104",
@@ -2137,7 +2281,8 @@
                 ]
             }
         ],
-        "variations": []
+        "variations": [],
+        "slug": "chonluten-20mg"
     },
     {
         "id": "prod_4105",
@@ -2163,7 +2308,8 @@
                 ]
             }
         ],
-        "variations": []
+        "variations": [],
+        "slug": "cortagen-20mg"
     },
     {
         "id": "prod_455",
@@ -2190,7 +2336,8 @@
                 ]
             }
         ],
-        "variations": []
+        "variations": [],
+        "slug": "shredx"
     },
     {
         "id": "prod_441",
@@ -2245,7 +2392,8 @@
                 "price": 165,
                 "stockStatus": "Out of Stock"
             }
-        ]
+        ],
+        "slug": "bonothyrk-a-21-parathyroid-peptide-bioregulator-capsules"
     },
     {
         "id": "prod_440",
@@ -2300,7 +2448,8 @@
                 "price": 199,
                 "stockStatus": "In Stock"
             }
-        ]
+        ],
+        "slug": "bonomarlot-a-20-bone-marrow-peptide-bioregulator-capsules"
     },
     {
         "id": "prod_439",
@@ -2355,7 +2504,8 @@
                 "price": 165,
                 "stockStatus": "In Stock"
             }
-        ]
+        ],
+        "slug": "zhenoluten-a-15-ovary-peptide-bioregulator-capsules"
     },
     {
         "id": "prod_433",
@@ -2410,6 +2560,7 @@
                 "price": 165,
                 "stockStatus": "Out of Stock"
             }
-        ]
+        ],
+        "slug": "taxorest-a-19-lung-peptide-bioregulator-capsules"
     }
 ]
