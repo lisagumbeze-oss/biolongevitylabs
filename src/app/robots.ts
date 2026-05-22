@@ -1,21 +1,36 @@
-import { MetadataRoute } from 'next';
-import { SITE_URL } from '@/lib/seo';
+import { MetadataRoute } from "next";
+import { SITE_URL, SOCIAL_CRAWLER_AGENTS } from "@/lib/site";
 
 export default function robots(): MetadataRoute.Robots {
-  const sharedDisallow = ['/admin/', '/api/', '/cart', '/checkout', '/payment/', '/search', '/emails-preview', '/access-denied'];
+  const sharedDisallow = [
+    "/admin/",
+    "/api/",
+    "/cart",
+    "/checkout",
+    "/payment/",
+    "/search",
+    "/emails-preview",
+    "/access-denied",
+  ];
+
+  const defaultRule = {
+    allow: "/" as const,
+    disallow: sharedDisallow,
+  };
 
   return {
     rules: [
-      {
-        userAgent: '*',
-        allow: '/',
-        disallow: sharedDisallow,
-      },
-      { userAgent: 'GPTBot', allow: '/', disallow: sharedDisallow },
-      { userAgent: 'ClaudeBot', allow: '/', disallow: sharedDisallow },
-      { userAgent: 'PerplexityBot', allow: '/', disallow: sharedDisallow },
-      { userAgent: 'Google-Extended', allow: '/', disallow: sharedDisallow },
+      { userAgent: "*", ...defaultRule },
+      ...SOCIAL_CRAWLER_AGENTS.map((userAgent) => ({
+        userAgent,
+        ...defaultRule,
+      })),
+      { userAgent: "GPTBot", ...defaultRule },
+      { userAgent: "ClaudeBot", ...defaultRule },
+      { userAgent: "PerplexityBot", ...defaultRule },
+      { userAgent: "Google-Extended", ...defaultRule },
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,
+    host: SITE_URL,
   };
 }

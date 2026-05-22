@@ -1,0 +1,49 @@
+name: SEO Validation
+
+on:
+  pull_request:
+  push:
+    branches: [master, main]
+
+jobs:
+  lighthouse-and-seo:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Static SEO audit (metadata exports)
+        run: node scripts/seo-audit.mjs
+
+      - name: Build application
+        run: npm run build
+        env:
+          NEXT_PUBLIC_SITE_URL: https://www.biolongevitylabss.com
+
+      - name: Start production server
+        run: |
+          npm run start -- -p 3000 &
+          npx --yes wait-on@7.2.0 tcp:3000 -t 120000
+
+      - name: Validate JSON-LD on key routes
+        run: node scripts/validate-schema.mjs http://127.0.0.1:3000
+
+      - name: Run Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          urls: |
+            http://127.0.0.1:3000/
+            http://127.0.0.1:3000/shop
+            http://127.0.0.1:3000/about
+            http://127.0.0.1:3000/research
+          configPath: .lighthouserc.json
+          uploadArtifacts: true
+          temporaryPublicStorage: true

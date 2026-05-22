@@ -11,6 +11,7 @@ import Providers from "@/components/Providers";
 import SmartsuppWidget from "@/components/SmartsuppWidget";
 import LivePulse from "@/components/LivePulse";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
+import { SITE_URL, OG_IMAGE } from "@/lib/site";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -18,7 +19,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://biolongevitylabss.com"),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "BioLongevity Labs | Research Grade Peptides & Scientific Bioregulators",
     template: "%s | BioLongevity Labs"
@@ -29,18 +30,11 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://biolongevitylabss.com",
+    url: SITE_URL,
     siteName: "BioLongevity Labs",
     title: "BioLongevity Labs | Premium Research Peptides & Bioregulators",
     description: "Highest purity BPC-157, TB-500, and advanced research compounds. 99%+ purity, US-manufactured, and lab-tested for scientific excellence.",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "BioLongevity Labs - Premium Research Compounds",
-      },
-    ],
+    images: [OG_IMAGE],
   },
   twitter: {
     card: "summary_large_image",
@@ -48,7 +42,7 @@ export const metadata: Metadata = {
     creator: "@biolongevity",
     title: "BioLongevity Labs | Premium Research Peptides",
     description: "Empowering breakthrough research with highest purity peptides and bioregulators.",
-    images: ["/og-image.png"],
+    images: [OG_IMAGE.url],
   },
   robots: {
     index: true,
@@ -104,8 +98,8 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "Organization",
               "name": "BioLongevity Labs",
-              "url": "https://biolongevitylabss.com",
-              "logo": "https://biolongevitylabss.com/logo.png",
+              "url": SITE_URL,
+              "logo": `${SITE_URL}/logo.png`,
               "sameAs": [
                 "https://twitter.com/biolongevitylabs",
                 "https://facebook.com/biolongevitylabs"
@@ -123,10 +117,10 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "WebSite",
               "name": "BioLongevity Labs",
-              "url": "https://biolongevitylabss.com",
+              "url": SITE_URL,
               "potentialAction": {
                 "@type": "SearchAction",
-                "target": "https://biolongevitylabss.com/shop?search={search_term_string}",
+                "target": `${SITE_URL}/shop?search={search_term_string}`,
                 "query-input": "required name=search_term_string"
               }
             })

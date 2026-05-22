@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "seo:audit": "node scripts/seo-audit.mjs",
+    "seo:validate-schema": "node scripts/validate-schema.mjs",
+    "seo:check": "npm run seo:audit && npm run build"
   },
   "dependencies": {
     "@radix-ui/react-tooltip": "^1.2.8",

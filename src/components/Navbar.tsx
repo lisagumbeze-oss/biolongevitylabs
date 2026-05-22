@@ -46,10 +46,11 @@ const Navbar = () => {
                         <Link href="/" aria-label={`${storeName} Home`} className="flex items-center gap-3 group">
                             <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center border border-primary/20 group-hover:bg-primary/20 transition-all">
                                 <Image
-                                    src="/favicon.png"
-                                    alt="B"
+                                    src="/icon.png"
+                                    alt=""
                                     width={24}
                                     height={24}
+                                    priority
                                     className="object-contain"
                                 />
                             </div>

@@ -95,10 +95,10 @@ This plan follows the [SEO_GEO_Master_Prompt.md](../SEO_GEO_Master_Prompt.md) ex
 - [ ] Block faceted/filter query URLs in robots (`/shop?*` optional — evaluate index strategy)
 
 ### Week 2–3 — Infrastructure
-- [ ] Security headers via `next.config` (HSTS, X-Content-Type-Options, Referrer-Policy)
-- [ ] Preload LCP hero image on homepage
-- [ ] Defer Smartsupp chat (`lazyOnload`) if INP regresses
-- [ ] CI: Lighthouse + schema validation workflow (Section 11 of master prompt)
+- [x] Security headers via `next.config` (HSTS, X-Content-Type-Options, Referrer-Policy, Permissions-Policy)
+- [x] Preload LCP resources on homepage (`HomeLcpPreload`, `/icon.png`, hero H1 without fade-in delay)
+- [x] Defer Smartsupp chat (`next/script` `lazyOnload`)
+- [x] CI: `.github/workflows/seo-check.yml` — Lighthouse CI, `scripts/seo-audit.mjs`, `scripts/validate-schema.mjs`, `.lighthouserc.json`
 
 ---
 
@@ -273,7 +273,7 @@ Prioritize editorial links from: lab supply blogs, longevity research newsletter
 | `content_briefs/` | Pending (generate per sprint) |
 | `llms.txt` (live at `/llms.txt`) | Done |
 | `analytics_setup.md` | Done |
-| `schema_validation_report.json` | Pending post-deploy |
+| `schema_validation_report.json` | CI: `scripts/validate-schema.mjs` on PR/push |
 | `link_gap_opportunities.csv` | Pending Ahrefs access |
 
 ---
