@@ -1,4 +1,5 @@
 import { sprintCArticles } from "./researchPostsSprintC";
+import { sprintC2Articles } from "./researchPostsSprintC2";
 export type { BlogPost } from "./researchPostTypes";
 import type { BlogPost } from "./researchPostTypes";
 
@@ -8,9 +9,10 @@ const legacyResearchPosts: BlogPost[] = [
         title: "2026 Peptide Industry Report: Market Trends and Top Vendors Revealed",
         slug: "peptide-industry-report-2026",
         excerpt: "The research peptide market is expanding at a pace that’s reshaping how laboratories source compounds. This 2026 report reveals key market trends and top-rated vendors.",
+        answerCapsule:
+            "The 2026 research peptide market favors vendors publishing batch-specific COAs, USA manufacturing, and HPLC/MS verification—criteria BioLongevity Labs uses for every catalog SKU.",
+        dateModified: "2026-05-21",
         content: `
-# 2026 Peptide Industry Report: Market Trends and Top Vendors Revealed
-
 The research peptide market is expanding at a pace that’s reshaping how laboratories source compounds. As we move through 2026, the demand for high-purity, documented peptides has reached an all-time high.
 
 ## Global Peptide Market Size & Growth Outlook
@@ -34,6 +36,8 @@ Quality is no longer an optional "extra"—it is the baseline requirement for cr
 ## Choosing the Right Supplier for Your Lab
 
 When selecting a vendor, prioritize those with transparent documentation and US-based fulfillment. Avoid suppliers with missing batch numbers or inconsistent analytical reporting.
+
+Browse the [research peptide shop](/shop) or review [BPC-157 dosage guidance](/research/bpc-157-dosage-guide) before ordering.
         `,
         author: "Editorial Team",
         date: "2026-02-15",
@@ -45,9 +49,10 @@ When selecting a vendor, prioritize those with transparent documentation and US-
         title: "Polar vs Nonpolar Amino Acids: Classification, Structure, and Research Relevance",
         slug: "polar-vs-nonpolar-amino-acids",
         excerpt: "What separates polar from nonpolar amino acids? A concise breakdown of R-group chemistry, classification tables, and research applications.",
+        answerCapsule:
+            "Polar amino acids have hydrophilic side chains that interact with aqueous buffers; nonpolar amino acids are hydrophobic and influence peptide solubility and folding in lab preparations.",
+        dateModified: "2026-05-20",
         content: `
-# Polar vs Nonpolar Amino Acids
-
 Understanding the distinction between polar and nonpolar amino acids is fundamental to predicting how a specific peptide sequence will behave in aqueous research environments.
 
 ## Heart of the Matter: The R-Group
@@ -71,6 +76,8 @@ The "hydrophobic effect" is the primary driver of protein folding. Nonpolar resi
 In lab settings, the polarity of a peptide determines:
 * **Solubility:** High nonpolar content requires specialized reconstitution solutions (like dilute Acetic Acid).
 * **Binding Affinity:** Polarity shifts how a peptide interacts with cell receptors.
+
+See the [peptide reconstitution guide](/research/peptide-reconstitution-guide) for solvent selection tips.
         `,
         author: "Editorial Team",
         date: "2026-01-20",
@@ -82,9 +89,10 @@ In lab settings, the polarity of a peptide determines:
         title: "What is Thymulin? An Emerging Immunoregulatory Nonapeptide",
         slug: "thymulin-peptide",
         excerpt: "Thymulin is a zinc-dependent nonapeptide produced by thymic epithelial cells. Learn its structure, cellular mechanisms, and research applications.",
+        answerCapsule:
+            "Thymulin is a zinc-dependent nonapeptide studied in immune cell differentiation models; active form requires zinc coordination, unlike inactive apothymulin.",
+        dateModified: "2026-05-19",
         content: `
-# What is Thymulin? An Emerging Immunoregulatory Nonapeptide
-
 Thymulin is a zinc-dependent nonapeptide (nine amino acids) produced by the thymic epithelial cells. It plays a critical role in the maturation and function of T-lymphocytes.
 
 ## Molecular Structure and Zinc Dependency
@@ -102,6 +110,8 @@ Thymulin acts through several key mechanisms:
 
 ## Thymulin vs Thymalin
 It is important to distinguish Thymulin (a specific nine-amino acid sequence) from Thymalin (a multi-peptide complex extracted from bovine thymus glands). While both relate to the thymus, their research applications differ in specificity.
+
+Source [Thymulin for research](/product/prod_201099) with batch COA documentation.
         `,
         author: "Editorial Team",
         date: "2025-12-05",
@@ -113,9 +123,10 @@ It is important to distinguish Thymulin (a specific nine-amino acid sequence) fr
         title: "TB-500 and Hair Growth Research: Mechanisms, Pathways, and In Vitro Applications",
         slug: "tb-500-for-hair-growth-research",
         excerpt: "An exploration into how TB-500 influences hair follicle stem cells and promotes angiogenesis in research settings.",
+        answerCapsule:
+            "TB-500 research focuses on Thymosin β4–related actin dynamics, cell migration, and angiogenesis models—not on cosmetic hair claims in humans.",
+        dateModified: "2026-05-18",
         content: `
-# TB-500 and Hair Growth Research
-
 TB-500 (Thymosin Beta-4) is a synthetic version of a naturally occurring peptide. It plays a significant role in cell migration and blood vessel formation.
 
 ## Mechanisms of Action
@@ -125,6 +136,8 @@ TB-500 (Thymosin Beta-4) is a synthetic version of a naturally occurring peptide
 
 ## Conclusion
 While further research is needed, TB-500 presents a promising avenue for understanding hair regeneration and vascularization.
+
+Compare mechanisms in [BPC-157 vs TB-500](/research/bpc-157-vs-tb-500) or explore the [Regeno Blend SKU](/product/prod_105727).
         `,
         author: "Editorial Team",
         date: "2025-11-10",
@@ -134,5 +147,9 @@ While further research is needed, TB-500 presents a promising avenue for underst
 ];
 
 /** Newest SEO articles first, then legacy catalog */
-export const researchPosts: BlogPost[] = [...sprintCArticles, ...legacyResearchPosts];
+export const researchPosts: BlogPost[] = [
+    ...sprintC2Articles,
+    ...sprintCArticles,
+    ...legacyResearchPosts,
+];
 

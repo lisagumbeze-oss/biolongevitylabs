@@ -14,6 +14,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/protocol-finder`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.65 },
     { url: `${SITE_URL}/resources/peptide-calculator`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
     { url: `${SITE_URL}/support`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${SITE_URL}/support/faq`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.75 },
+    { url: `${SITE_URL}/shop/bioregulators`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.85 },
     { url: `${SITE_URL}/wholesale`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.6 },
     { url: `${SITE_URL}/terms`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.3 },
     { url: `${SITE_URL}/shipping-and-payments`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.3 },

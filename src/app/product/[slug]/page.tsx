@@ -27,7 +27,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }
 
     const seo = getProductSeo(product.id);
-    const title = seo?.metaTitle ?? product.name;
+    const title =
+        seo?.metaTitle ??
+        (product.name.includes("for Research") ? product.name : `${product.name} for Research`);
     const plainDescription = product.description.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
     const description = seo?.metaDescription ?? plainDescription.substring(0, 160);
     const path = productPath(product);

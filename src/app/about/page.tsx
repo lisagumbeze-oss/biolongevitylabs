@@ -2,7 +2,9 @@
 
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Microscope, Activity, Shield, CheckCircle2, FlaskConical, Award } from 'lucide-react';
+import AnswerCapsule from '@/components/AnswerCapsule';
 import { motion } from 'framer-motion';
 
 const fadeInUp = {
@@ -71,10 +73,10 @@ export default function AboutPage() {
                             Our Mission & Vision
                         </div>
                         <h1 className="text-5xl md:text-7xl font-black text-white tracking-tight mb-8 drop-shadow-lg">
-                            Welcome to <span className="text-transparent bg-clip-text bg-linear-to-r from-primary to-blue-400">BioLongevity Labs</span>
+                            USA <span className="text-transparent bg-clip-text bg-linear-to-r from-primary to-blue-400">Peptide Synthesis</span> for Research Labs
                         </h1>
                         <p className="text-xl md:text-2xl text-slate-300 max-w-3xl mx-auto font-medium leading-relaxed">
-                            Your Trusted Research Partner for premium peptides and bioregulators.
+                            Third-party tested research peptides and bioregulators manufactured in the United States.
                         </p>
                     </motion.div>
                 </div>
@@ -82,6 +84,21 @@ export default function AboutPage() {
 
             {/* Main Content Section */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div className="mb-12">
+                    <AnswerCapsule>
+                        BioLongevity Labs performs USA-based peptide synthesis and independent verification for
+                        research-grade catalog SKUs. Every batch ships with traceable COA data for institutional
+                        labs sourcing BPC-157, TB-500, thymulin, and bioregulators for in vitro work only.
+                    </AnswerCapsule>
+                    <p className="mt-4 text-sm text-slate-500 text-center">
+                        Explore our{" "}
+                        <Link href="/shop" className="text-primary font-semibold hover:underline">research catalog</Link>
+                        ,{" "}
+                        <Link href="/research" className="text-primary font-semibold hover:underline">science library</Link>
+                        , and{" "}
+                        <Link href="/research/how-to-read-peptide-coa" className="text-primary font-semibold hover:underline">COA guide</Link>.
+                    </p>
+                </div>
                 <motion.div
                     initial="hidden"
                     whileInView="visible"

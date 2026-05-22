@@ -232,14 +232,19 @@ Prioritize editorial links from: lab supply blogs, longevity research newsletter
 2. Blog API merges static + dynamic posts (`mergeResearchPosts`)
 3. Research articles include answer capsules, internal links, BlogPosting schema
 
-### Sprint B — On-page (Days 4–10) ✅ Implemented
+### Sprint B — On-page (Days 4–10) ✅ Complete
 1. Homepage answer capsule + metadata (`page.tsx`, `HomePage.tsx`)
 2. Shop category copy + H1 (`shop/page.tsx`, `shop/layout.tsx`)
 3. Top 5 PDP meta + FAQ blocks (`product-seo.ts`: prod_105727, prod_201099, prod_230039, prod_26974, prod_4103)
+4. `/protocol-finder` SEO copy + FAQ schema (`ProtocolFinderSeoContent.tsx`)
+5. `/about` H1, answer capsule, internal links
+6. Default PDP title suffix `for Research` when no custom SEO title
+7. Legacy research posts: answer capsules, `dateModified`, internal links
 
-### Sprint C — Content (Days 10–21)
-1. First gap article: BPC-157 dosage guide
-2. Internal linking pass per `internal_linking_plan.csv`
+### Sprint C — Content (Days 10–21) ✅ Complete
+1. All 10 calendar items published (5 in `researchPostsSprintC.ts`, 4 in `researchPostsSprintC2.ts`, FAQ hub at `/support/faq`, category landing at `/shop/bioregulators`)
+2. Legacy research posts updated with answer capsules, `dateModified`, and internal PDP links
+3. `content_calendar.csv` — all rows Published
 
 ---
 
