@@ -21,8 +21,12 @@ import ReviewForm from "@/components/ReviewForm";
 import AnswerCapsule from "@/components/AnswerCapsule";
 import ProductFaq from "@/components/ProductFaq";
 import { getProductSeo } from "@/lib/product-seo";
-import { findMatchingVariation, variationPrice } from "@/lib/variation-matching";
-import { getSellableOptions } from "@/lib/variation-matching";
+import {
+    findMatchingVariation,
+    variationPrice,
+    getSellableOptions,
+    variableProductPriceFallback,
+} from "@/lib/variation-matching";
 import { isProductId, productPath } from "@/lib/product-slug";
 import toast, { Toaster } from 'react-hot-toast';
 import { motion, AnimatePresence } from "framer-motion";
@@ -168,14 +172,15 @@ export default function ProductDetailsView({ slug }: Props) {
         return [product.image, ...(product.gallery || [])].filter((val, i, arr) => val && arr.indexOf(val) === i);
     }, [product]);
 
+    const priceFallback = React.useMemo(
+        () => (product ? variableProductPriceFallback(product) : 0),
+        [product]
+    );
+
     const displayPrice = React.useMemo(() => {
         if (!product) return 0;
-        const fallback =
-            product.variations?.length && product.minPrice != null
-                ? Number(product.minPrice)
-                : Number(product.price) || 0;
-        return variationPrice(selectedVariation, fallback);
-    }, [selectedVariation, product]);
+        return variationPrice(selectedVariation, priceFallback);
+    }, [selectedVariation, product, priceFallback]);
 
     const originalPrice = React.useMemo(() => {
         if (!product) return undefined;
@@ -414,7 +419,7 @@ export default function ProductDetailsView({ slug }: Props) {
                                                         });
                                                         const optPrice = variationPrice(
                                                             optVariation,
-                                                            product.price
+                                                            priceFallback
                                                         );
                                                         return (
                                                             <option key={opt} value={opt}>

@@ -3,15 +3,15 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Beaker, ShieldCheck, Truck, Award, Lock, Twitter, Instagram, Linkedin, Facebook } from "lucide-react";
+import { Beaker, ShieldCheck, Truck, Award, Lock, Twitter, Instagram, Facebook } from "lucide-react";
 import PolicyModal from "./PolicyModal";
 import { privacyPolicy, ruoPolicy } from "@/data/policies";
-
 import { useSettings } from "@/store/useSettings";
+import { footerSections, isFooterModalLink } from "@/config/navigation";
 
 const Footer = () => {
     const [activeModal, setActiveModal] = useState<"privacy" | "ruo" | null>(null);
-    const settings = useSettings(state => state.settings);
+    const settings = useSettings((state) => state.settings);
     const storeName = settings?.general?.storeName || "BioLongevity Labs";
     const nameParts = storeName.split(" ");
     const lastPart = nameParts.pop();
@@ -24,19 +24,26 @@ const Footer = () => {
         { icon: Award, label: "SATISFACTION", sub: "60-Day Guarantee" },
     ];
 
+    const footerLinkClass =
+        "text-sm font-medium text-slate-500 hover:text-primary transition-colors text-left";
+
     return (
         <footer className="bg-white border-t border-slate-200 mt-auto transition-colors">
-            {/* Trust Bar */}
             <div className="border-b border-slate-100 bg-slate-50/50">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
                         {trustItems.map((item, i) => (
-                            <div key={i} className="flex flex-col items-center text-center md:flex-row md:text-left md:items-center gap-4 group">
+                            <div
+                                key={i}
+                                className="flex flex-col items-center text-center md:flex-row md:text-left md:items-center gap-4 group"
+                            >
                                 <div className="p-3 bg-white rounded-2xl shadow-sm border border-slate-100 text-primary transition-transform group-hover:scale-110">
                                     <item.icon className="w-5 h-5" />
                                 </div>
                                 <div>
-                                    <p className="text-[10px] font-black tracking-[0.2em] text-slate-900 uppercase">{item.label}</p>
+                                    <p className="text-[10px] font-black tracking-[0.2em] text-slate-900 uppercase">
+                                        {item.label}
+                                    </p>
                                     <p className="text-[10px] font-bold text-slate-400 mt-0.5">{item.sub}</p>
                                 </div>
                             </div>
@@ -46,50 +53,53 @@ const Footer = () => {
             </div>
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                <div className="md:flex md:items-center md:justify-between">
-                    <div className="flex justify-center md:justify-start mb-6 md:mb-0">
-                        <Link href="/" aria-label={`${storeName} Home`} className="flex items-center gap-3 group">
-                            <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center border border-primary/20 group-hover:bg-primary/20 transition-all">
-                                <Image
-                                    src="/favicon.png"
-                                    alt="B"
-                                    width={20}
-                                    height={20}
-                                    className="object-contain opacity-80"
-                                />
+                <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-10">
+                    <Link href="/" aria-label={`${storeName} Home`} className="flex items-center gap-3 group shrink-0">
+                        <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center border border-primary/20 group-hover:bg-primary/20 transition-all">
+                            <Image
+                                src="/favicon.png"
+                                alt="B"
+                                width={20}
+                                height={20}
+                                className="object-contain opacity-80"
+                            />
+                        </div>
+                        <span className="text-lg font-black tracking-tight text-slate-900 uppercase">
+                            {firstPart} <span className="text-primary italic">{lastPart}</span>
+                        </span>
+                    </Link>
+
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 flex-1 lg:max-w-3xl">
+                        {footerSections.map((section) => (
+                            <div key={section.title}>
+                                <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-900 mb-4">
+                                    {section.title}
+                                </h3>
+                                <ul className="space-y-3">
+                                    {section.links.map((link) => (
+                                        <li key={isFooterModalLink(link) ? link.modal : link.href}>
+                                            {isFooterModalLink(link) ? (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setActiveModal(link.modal)}
+                                                    className={footerLinkClass}
+                                                >
+                                                    {link.label}
+                                                </button>
+                                            ) : (
+                                                <Link href={link.href} className={footerLinkClass}>
+                                                    {link.label}
+                                                </Link>
+                                            )}
+                                        </li>
+                                    ))}
+                                </ul>
                             </div>
-                            <span className="text-lg font-black tracking-tight text-slate-900 uppercase">
-                                {firstPart} <span className="text-primary italic">{lastPart}</span>
-                            </span>
-                        </Link>
-                    </div>
-                    <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-8">
-                        <Link href="/about" className="text-sm font-medium text-slate-500 hover:text-primary dark:text-slate-400 transition-colors">About Us</Link>
-                        <Link href="/shipping-and-payments" className="text-sm font-medium text-slate-500 hover:text-primary dark:text-slate-400 transition-colors">Shipping and Payments</Link>
-                        <Link href="/support" className="text-sm font-medium text-slate-500 hover:text-primary dark:text-slate-400 transition-colors">Customer Service</Link>
-                        <Link
-                            href="/terms"
-                            className="text-sm font-medium text-slate-500 hover:text-primary dark:text-slate-400 transition-colors"
-                        >
-                            Terms and Conditions
-                        </Link>
-                        <button
-                            onClick={() => setActiveModal("privacy")}
-                            className="text-sm font-medium text-slate-500 hover:text-primary dark:text-slate-400 transition-colors"
-                        >
-                            Privacy Policy
-                        </button>
-                        <button
-                            onClick={() => setActiveModal("ruo")}
-                            className="text-sm font-medium text-slate-500 hover:text-primary dark:text-slate-400 transition-colors"
-                        >
-                            RUO Policy
-                        </button>
+                        ))}
                     </div>
                 </div>
 
-                {/* Social Links & Verified Supplier Section */}
-                <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8 items-center border-t border-slate-100 dark:border-slate-800 pt-12">
+                <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8 items-center border-t border-slate-100 pt-12">
                     <div className="flex flex-col items-center md:items-start gap-6">
                         <div className="flex items-center gap-4">
                             <Link
@@ -97,7 +107,7 @@ const Footer = () => {
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 aria-label="Follow us on X (Twitter)"
-                                className="w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-white transition-all border border-slate-100 dark:border-slate-700 hover:border-primary"
+                                className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-white transition-all border border-slate-100 hover:border-primary"
                             >
                                 <Twitter className="w-5 h-5" />
                             </Link>
@@ -106,7 +116,7 @@ const Footer = () => {
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 aria-label="Follow us on Instagram"
-                                className="w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-white transition-all border border-slate-100 dark:border-slate-700 hover:border-primary"
+                                className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-white transition-all border border-slate-100 hover:border-primary"
                             >
                                 <Instagram className="w-5 h-5" />
                             </Link>
@@ -115,13 +125,14 @@ const Footer = () => {
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 aria-label="Follow us on Facebook"
-                                className="w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-white transition-all border border-slate-100 dark:border-slate-700 hover:border-primary"
+                                className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-white transition-all border border-slate-100 hover:border-primary"
                             >
                                 <Facebook className="w-5 h-5" />
                             </Link>
                         </div>
                         <p className="text-xs text-slate-400 font-medium max-w-sm text-center md:text-left">
-                            Join our community of precision researchers. Stay updated with the latest in biotechnology and peptide science.
+                            Join our community of precision researchers. Stay updated with the latest in
+                            biotechnology and peptide science.
                         </p>
                     </div>
 
@@ -140,7 +151,9 @@ const Footer = () => {
                                 </div>
                             </div>
                             <div className="flex flex-col text-center sm:text-left">
-                                <span className="text-xs font-black uppercase tracking-widest text-slate-400 mb-1">Proud Member</span>
+                                <span className="text-xs font-black uppercase tracking-widest text-slate-400 mb-1">
+                                    Proud Member
+                                </span>
                                 <span className="text-lg font-bold text-slate-900 flex items-center gap-2 justify-center sm:justify-start">
                                     <ShieldCheck className="w-5 h-5 text-emerald-500" />
                                     Verified Supplier
@@ -149,7 +162,8 @@ const Footer = () => {
                         </Link>
                     </div>
                 </div>
-                <div className="mt-8 border-t border-slate-200 dark:border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center">
+
+                <div className="mt-8 border-t border-slate-200 pt-8 flex flex-col md:flex-row justify-between items-center">
                     <p className="text-sm text-slate-400 text-center md:text-left font-medium">
                         © {new Date().getFullYear()} {storeName}. All rights reserved.
                     </p>
@@ -160,7 +174,6 @@ const Footer = () => {
                 </div>
             </div>
 
-            {/* Modals */}
             <PolicyModal
                 isOpen={activeModal === "privacy"}
                 onClose={() => setActiveModal(null)}

@@ -193,8 +193,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
                 </div>
             </Link>
 
-            <div className="px-6 pb-6 relative h-16 overflow-hidden">
-                <div className="flex flex-col mt-auto transition-all duration-300 group-hover:-translate-y-16">
+            <div className="px-6 pb-6 mt-auto flex flex-col gap-3">
+                <div className="flex flex-col">
                     {isVariable && minPrice ? (
                         <p className="text-xl font-black text-slate-900 dark:text-white tracking-tighter">
                             {maxPrice && maxPrice > minPrice
@@ -213,27 +213,25 @@ const ProductCard: React.FC<ProductCardProps> = ({
                     )}
                 </div>
 
-                <div className="absolute inset-x-6 bottom-6 translate-y-16 group-hover:translate-y-0 transition-all duration-300">
-                    {isVariable ? (
-                        <Link
-                            href={href}
-                            aria-label={`Learn more about ${name}`}
-                            className="w-full bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white hover:bg-primary hover:text-white py-4 rounded-2xl font-black transition-all duration-300 flex justify-center items-center gap-2 active:scale-[0.98] text-[10px] uppercase tracking-widest border border-slate-100 dark:border-slate-700 hover:border-transparent"
-                        >
-                            Learn More
-                            <ArrowRight className="w-3.5 h-3.5" />
-                        </Link>
-                    ) : (
-                        <button
-                            onClick={handleAddToCart}
-                            aria-label={`Add ${name} to cart`}
-                            className="w-full bg-slate-900 dark:bg-slate-700 text-white hover:bg-primary py-4 rounded-2xl font-black transition-all duration-300 flex justify-center items-center gap-2 active:scale-[0.98] text-[10px] uppercase tracking-widest shadow-lg shadow-slate-900/5 hover:shadow-primary/20"
-                        >
-                            <ShoppingCart className="w-3.5 h-3.5" />
-                            Quick Add
-                        </button>
-                    )}
-                </div>
+                {isVariable ? (
+                    <Link
+                        href={href}
+                        aria-label={`Select options for ${name}`}
+                        className="w-full bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white hover:bg-primary hover:text-white py-4 rounded-2xl font-black transition-all duration-300 flex justify-center items-center gap-2 active:scale-[0.98] text-[10px] uppercase tracking-widest border border-slate-100 dark:border-slate-700 hover:border-transparent"
+                    >
+                        Select Options
+                        <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
+                ) : (
+                    <button
+                        onClick={handleAddToCart}
+                        aria-label={`Add ${name} to cart`}
+                        className="w-full bg-slate-900 dark:bg-slate-700 text-white hover:bg-primary py-4 rounded-2xl font-black transition-all duration-300 flex justify-center items-center gap-2 active:scale-[0.98] text-[10px] uppercase tracking-widest shadow-lg shadow-slate-900/5 hover:shadow-primary/20"
+                    >
+                        <ShoppingCart className="w-3.5 h-3.5" />
+                        Add to Cart
+                    </button>
+                )}
             </div>
         </motion.div>
     );

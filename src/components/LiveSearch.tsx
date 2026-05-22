@@ -7,10 +7,23 @@ import Link from "next/link";
 import { productPath } from "@/lib/product-slug";
 import { motion, AnimatePresence } from "framer-motion";
 
-export default function LiveSearch() {
+interface LiveSearchProps {
+    autoFocus?: boolean;
+    className?: string;
+    onNavigate?: () => void;
+}
+
+export default function LiveSearch({ autoFocus, className, onNavigate }: LiveSearchProps = {}) {
     const [query, setQuery] = useState("");
     const [isFocused, setIsFocused] = useState(false);
     const ref = useRef<HTMLDivElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    const closeSearch = () => {
+        setQuery("");
+        setIsFocused(false);
+        onNavigate?.();
+    };
 
     const results = query.trim().length > 1
         ? products.filter(p =>
@@ -31,23 +44,31 @@ export default function LiveSearch() {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
+    useEffect(() => {
+        if (autoFocus) {
+            setIsFocused(true);
+            inputRef.current?.focus();
+        }
+    }, [autoFocus]);
+
     return (
-        <div ref={ref} className="relative flex-1 max-w-xl">
+        <div ref={ref} className={`relative flex-1 max-w-xl ${className ?? ""}`}>
             <div className="relative group">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                     <Search className="w-5 h-5 text-slate-400 group-focus-within:text-primary transition-colors" />
                 </div>
                 <input
+                    ref={inputRef}
                     className="block w-full pl-12 pr-10 py-3 border border-slate-200 dark:border-slate-700 rounded-2xl leading-5 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary sm:text-sm transition-all shadow-inner"
                     placeholder="Search research products..."
-                    type="text"
+                    type="search"
                     value={query}
                     onChange={e => setQuery(e.target.value)}
                     onFocus={() => setIsFocused(true)}
                 />
                 {query && (
                     <button
-                        onClick={() => { setQuery(""); setIsFocused(false); }}
+                        onClick={closeSearch}
                         className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-slate-600 transition-colors"
                     >
                         <X className="w-4 h-4" />
@@ -78,7 +99,7 @@ export default function LiveSearch() {
                                     >
                                         <Link
                                             href={productPath(product)}
-                                            onClick={() => { setQuery(""); setIsFocused(false); }}
+                                            onClick={closeSearch}
                                             className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors group"
                                         >
                                             <div className="w-10 h-10 rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-700 shrink-0">
@@ -95,7 +116,7 @@ export default function LiveSearch() {
                                 <div className="px-4 py-2 border-t border-slate-100 dark:border-slate-700">
                                     <Link
                                         href={`/shop?q=${encodeURIComponent(query)}`}
-                                        onClick={() => { setQuery(""); setIsFocused(false); }}
+                                        onClick={closeSearch}
                                         className="text-xs font-bold text-primary hover:underline"
                                     >
                                         View all results for &quot;{query}&quot; →
