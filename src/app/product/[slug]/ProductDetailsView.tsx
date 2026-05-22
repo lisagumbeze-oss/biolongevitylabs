@@ -21,6 +21,7 @@ import ReviewForm from "@/components/ReviewForm";
 import AnswerCapsule from "@/components/AnswerCapsule";
 import ProductFaq from "@/components/ProductFaq";
 import { getProductSeo } from "@/lib/product-seo";
+import { getExpandedProductBody } from "@/lib/product-body-copy";
 import {
     findMatchingVariation,
     variationPrice,
@@ -215,6 +216,7 @@ export default function ProductDetailsView({ slug }: Props) {
     }
 
     const productSeo = product ? getProductSeo(product.id) : undefined;
+    const expandedBodyHtml = product ? getExpandedProductBody(product) : "";
 
     if (!product) {
         return (
@@ -693,7 +695,7 @@ export default function ProductDetailsView({ slug }: Props) {
                                 prose-p:text-slate-800 prose-p:leading-relaxed prose-p:mb-6 prose-p:text-base
                                 prose-strong:text-slate-900 prose-strong:font-black"
                             >
-                                <div dangerouslySetInnerHTML={{ __html: product.description }} />
+                                <div dangerouslySetInnerHTML={{ __html: expandedBodyHtml }} />
                                 
                                 <div className="mt-8 p-6 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-100 dark:border-slate-800 flex items-start gap-4">
                                     <div className="w-10 h-10 rounded-xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 flex items-center justify-center text-primary shrink-0">

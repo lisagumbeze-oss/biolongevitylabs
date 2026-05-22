@@ -117,7 +117,7 @@ This plan follows the [SEO_GEO_Master_Prompt.md](../SEO_GEO_Master_Prompt.md) ex
 
 ### Product PDPs
 - Title pattern: `{Product Name} for Research | BioLongevity Labs`
-- Expand descriptions to 800+ words where thin
+- Expand descriptions to 800+ words where thin — done via `getExpandedProductBody()` on all PDPs
 - FAQ section per top SKU → `FAQPage` schema
 - `AggregateRating` only when real review data exists
 
