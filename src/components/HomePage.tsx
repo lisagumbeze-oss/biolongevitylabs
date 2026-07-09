@@ -6,7 +6,7 @@ import ProductCard from "@/components/ProductCard";
 import AboutSection from "@/components/AboutSection";
 import AnswerCapsule from "@/components/AnswerCapsule";
 import Link from "next/link";
-import { Truck, ShieldCheck, Award, Droplets, ChevronLeft, ChevronRight, Loader2, Beaker } from "lucide-react";
+import { Truck, ShieldCheck, Award, Droplets, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { Product } from "@/data/products";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -256,18 +256,13 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="flex-1 w-full max-w-md lg:max-w-none">
-              <div className="relative aspect-square lg:aspect-video rounded-[2.5rem] overflow-hidden border border-white/10 group">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-violet-600/30 group-hover:opacity-60 transition-opacity" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-full bg-white/10 backdrop-blur-3xl border border-white/20 flex items-center justify-center animate-pulse">
-                    <Beaker className="w-10 h-10 sm:w-14 sm:h-14 text-white opacity-40" />
-                  </div>
-                </div>
+            <div className="flex-1 w-full max-w-md lg:max-w-lg">
+              <div className="relative aspect-[3/4] sm:aspect-[4/5] lg:min-h-[480px] lg:aspect-auto rounded-[2.5rem] overflow-hidden border border-white/10 bg-slate-900/30 group">
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/15 to-violet-600/15 pointer-events-none" />
                 <img
                   src="https://mlavgymrtxzc.i.optimole.com/cb:572_.56b/w:auto/h:auto/q:mauto/f:best/https://biolongevitylabs.com/wp-content/uploads/2026/01/Thymulin.jpg"
-                  alt="Laboratory peptide research"
-                  className="w-full h-full object-cover mix-blend-overlay group-hover:scale-110 transition-transform duration-1000"
+                  alt="Thymulin peptide research vial — BioLongevity Labs"
+                  className="relative z-10 w-full h-full min-h-[280px] lg:min-h-[480px] object-contain object-center p-6 sm:p-8 group-hover:scale-[1.02] transition-transform duration-700"
                 />
               </div>
             </div>

@@ -9,6 +9,7 @@ import LoadingProgress from "@/components/LoadingProgress";
 import ConsentModal from "@/components/ConsentModal";
 import Providers from "@/components/Providers";
 import SmartsuppWidget from "@/components/SmartsuppWidget";
+import BackToTopButton from "@/components/BackToTopButton";
 import LivePulse from "@/components/LivePulse";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import { SITE_URL, OG_IMAGE } from "@/lib/site";
@@ -86,6 +87,7 @@ export default function RootLayout({
         </Providers>
 
         <SmartsuppWidget />
+        <BackToTopButton />
         <GoogleAnalytics />
 
         {/* Global JSON-LD Schema */}

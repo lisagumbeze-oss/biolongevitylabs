@@ -11,6 +11,12 @@ declare global {
   }
 }
 
+import {
+  BRAND_PRIMARY,
+  SMARTSUPP_MOBILE_OFFSET_Y,
+  SMARTSUPP_OFFSET_X,
+} from "@/lib/brand";
+
 /** Official Smartsupp site key — override with NEXT_PUBLIC_SMARTSUPP_KEY in .env.local */
 const SMARTSUPP_KEY =
   process.env.NEXT_PUBLIC_SMARTSUPP_KEY ??
@@ -19,6 +25,7 @@ const SMARTSUPP_KEY =
 const SMARTSUPP_BOOTSTRAP = `
 var _smartsupp = _smartsupp || {};
 _smartsupp.key = '${SMARTSUPP_KEY}';
+_smartsupp.color = '${BRAND_PRIMARY}';
 window.smartsupp||(function(d) {
   var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
   s=d.getElementsByTagName('script')[0];c=d.createElement('script');
@@ -40,10 +47,14 @@ export default function SmartsuppWidget() {
   useEffect(() => {
     if (!shouldLoad) return;
 
+    window._smartsupp = window._smartsupp || {};
+    window._smartsupp.color = BRAND_PRIMARY;
+    window._smartsupp.offsetX = SMARTSUPP_OFFSET_X;
+
     if (typeof window !== "undefined" && window.innerWidth < 768) {
-      window._smartsupp = window._smartsupp || {};
-      window._smartsupp.offsetY = 150;
-      window._smartsupp.offsetX = 20;
+      window._smartsupp.offsetY = SMARTSUPP_MOBILE_OFFSET_Y;
+    } else {
+      window._smartsupp.offsetY = 20;
     }
   }, [shouldLoad]);
 
