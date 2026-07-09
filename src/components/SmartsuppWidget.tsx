@@ -11,46 +11,55 @@ declare global {
   }
 }
 
-const LOADER_SRC = "https://www.smartsuppchat.com/loader.js?";
+/** Official Smartsupp site key — override with NEXT_PUBLIC_SMARTSUPP_KEY in .env.local */
+const SMARTSUPP_KEY =
+  process.env.NEXT_PUBLIC_SMARTSUPP_KEY ??
+  "066c33c30d5a0cddcfb7a8750f96fe6b77709e72";
+
+const SMARTSUPP_BOOTSTRAP = `
+var _smartsupp = _smartsupp || {};
+_smartsupp.key = '${SMARTSUPP_KEY}';
+window.smartsupp||(function(d) {
+  var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
+  s=d.getElementsByTagName('script')[0];c=d.createElement('script');
+  c.type='text/javascript';c.charset='utf-8';c.async=true;
+  c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
+})(document);
+`;
 
 export default function SmartsuppWidget() {
   const pathname = usePathname();
-  const smartsuppKey = process.env.NEXT_PUBLIC_SMARTSUPP_KEY;
 
   const isAdminPage =
     pathname?.startsWith("/admin") ||
     pathname?.startsWith("/dashboard") ||
     pathname?.startsWith("/emails-preview");
 
-  const shouldLoad = Boolean(smartsuppKey) && !isAdminPage;
+  const shouldLoad = !isAdminPage;
 
   useEffect(() => {
     if (!shouldLoad) return;
 
-    window._smartsupp = window._smartsupp || {};
-    window._smartsupp.key = smartsuppKey;
-    window._smartsupp.color = "#137fec";
-
     if (typeof window !== "undefined" && window.innerWidth < 768) {
+      window._smartsupp = window._smartsupp || {};
       window._smartsupp.offsetY = 150;
       window._smartsupp.offsetX = 20;
     }
-  }, [shouldLoad, smartsuppKey]);
+  }, [shouldLoad]);
 
   useEffect(() => {
-    if (!smartsuppKey) return;
-
     const forceHideWidget = () => {
       if (typeof document === "undefined") return;
-      const chatNodes = document.querySelectorAll<HTMLElement>(
-        'iframe[src*="smartsuppchat"], [id*="smartsupp"], [class*="smartsupp"]'
-      );
-      chatNodes.forEach((node) => {
-        node.style.setProperty("display", "none", "important");
-        node.style.setProperty("visibility", "hidden", "important");
-        node.style.setProperty("opacity", "0", "important");
-        node.style.setProperty("pointer-events", "none", "important");
-      });
+      document
+        .querySelectorAll<HTMLElement>(
+          'iframe[src*="smartsuppchat"], [id*="smartsupp"], [class*="smartsupp"]'
+        )
+        .forEach((node) => {
+          node.style.setProperty("display", "none", "important");
+          node.style.setProperty("visibility", "hidden", "important");
+          node.style.setProperty("opacity", "0", "important");
+          node.style.setProperty("pointer-events", "none", "important");
+        });
     };
 
     if (isAdminPage) {
@@ -82,24 +91,23 @@ export default function SmartsuppWidget() {
       clearInterval(interval);
       clearTimeout(timeout);
     };
-  }, [pathname, isAdminPage, smartsuppKey, shouldLoad]);
+  }, [pathname, isAdminPage, shouldLoad]);
 
   if (!shouldLoad) return null;
 
   return (
-    <Script
-      id="smartsupp-loader"
-      src={LOADER_SRC}
-      strategy="lazyOnload"
-      onLoad={() => {
-        if (typeof window.smartsupp === "function") {
-          try {
-            window.smartsupp("chat:show");
-          } catch {
-            /* ignore */
-          }
-        }
-      }}
-    />
+    <>
+      <Script
+        id="smartsupp-live-chat"
+        strategy="lazyOnload"
+        dangerouslySetInnerHTML={{ __html: SMARTSUPP_BOOTSTRAP }}
+      />
+      <noscript>
+        Powered by{" "}
+        <a href="https://www.smartsupp.com" target="_blank" rel="noopener noreferrer">
+          Smartsupp
+        </a>
+      </noscript>
+    </>
   );
 }
