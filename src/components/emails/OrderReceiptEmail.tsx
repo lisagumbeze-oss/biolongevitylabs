@@ -16,6 +16,8 @@ interface OrderReceiptEmailProps {
     }>;
     total: number;
     paymentMethod: string;
+    paymentWalletAddress?: string;
+    paymentType?: string;
 }
 
 export const OrderReceiptEmail = ({
@@ -26,7 +28,9 @@ export const OrderReceiptEmail = ({
         { id: '1', name: 'BPC-157', price: 59.99, quantity: 2, variationString: '5mg Vial' }
     ],
     total = 119.98,
-    paymentMethod = 'Zelle'
+    paymentMethod = 'Zelle',
+    paymentWalletAddress,
+    paymentType,
 }: OrderReceiptEmailProps) => {
     return (
         <EmailLayout previewText={`Receipt: Order ${orderId} - BioLongevity Labs`}>
@@ -39,6 +43,13 @@ export const OrderReceiptEmail = ({
 
             <InfoBlock title="Payment Protocol" iconColor="#137fec">
                 <Text className="m-0 font-bold text-slate-900">Method: {paymentMethod}</Text>
+                {paymentType === 'crypto' && paymentWalletAddress && (
+                    <div style={{ marginTop: '16px', padding: '20px', backgroundColor: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+                        <Text className="text-slate-400 text-[10px] font-black uppercase tracking-widest m-0 mb-2">BTC Wallet Address</Text>
+                        <Text className="text-slate-900 text-[14px] font-black m-0 mb-3" style={{ wordBreak: 'break-all' }}>{paymentWalletAddress}</Text>
+                        <Text className="text-slate-500 text-[12px] m-0">Send <strong>${total.toFixed(2)}</strong> worth of BTC to the address above. Include order ID <strong>{orderId}</strong> in the memo if your wallet supports it.</Text>
+                    </div>
+                )}
                 <Text className="mt-2 m-0 text-slate-600">
                     Your order is currently in <strong>PENDING</strong> status. Please ensure the manual transfer is completed as per the instructions provided at checkout. Use your Order ID <strong>{orderId}</strong> as the reference.
                 </Text>

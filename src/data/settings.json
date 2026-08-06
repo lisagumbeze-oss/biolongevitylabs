@@ -46,6 +46,14 @@
             "enabled": true,
             "type": "other",
             "walletAddress": ""
+        },
+        {
+            "id": "bitcoin",
+            "name": "Bitcoin (BTC)",
+            "instructions": "Send the exact order total in BTC to the wallet address below. Include your order number in the transaction memo if your wallet supports it.",
+            "enabled": true,
+            "type": "crypto",
+            "walletAddress": "1CED26bTSz4JVWzrQCe3vCoxYfAwj95bFN"
         }
     ],
     "general": {

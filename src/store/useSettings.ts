@@ -11,6 +11,8 @@ interface PaymentMethod {
     name: string;
     instructions: string;
     enabled: boolean;
+    type?: string;
+    walletAddress?: string;
 }
 
 interface StoreSettings {

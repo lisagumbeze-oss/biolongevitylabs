@@ -10,12 +10,15 @@ import {
     trackPurchase,
     persistPurchaseForConfirmation,
 } from "@/lib/analytics";
+import { getAvailablePaymentMethods, CRYPTO_ONLY_ORDER_MAX } from "@/config/payments";
 
 interface PaymentMethod {
     id: string;
     name: string;
     instructions: string;
     enabled: boolean;
+    type?: string;
+    walletAddress?: string;
 }
 
 interface Coupon {
@@ -96,8 +99,6 @@ export default function CheckoutPage() {
                 const res = await fetch('/api/settings');
                 const data = await res.json();
                 setSettings(data);
-                const firstEnabled = data.paymentMethods.find((pm: PaymentMethod) => pm.enabled);
-                if (firstEnabled) setSelectedPayment(firstEnabled.id);
 
                 const couponsRes = await fetch('/api/coupons');
                 setCoupons(await couponsRes.json());
@@ -132,6 +133,21 @@ export default function CheckoutPage() {
     const total = Math.max(0, subtotal - discount) + shippingPrice;
     const isReady = isMounted && (_hasHydrated || hydrationGaveUp);
 
+    const availablePayments = settings
+        ? getAvailablePaymentMethods(settings.paymentMethods, total)
+        : [];
+    const isCryptoOnlyCheckout = total < CRYPTO_ONLY_ORDER_MAX;
+
+    useEffect(() => {
+        if (!settings?.paymentMethods.length) return;
+        const payments = getAvailablePaymentMethods(settings.paymentMethods, total);
+        if (payments.length === 0) return;
+        setSelectedPayment((prev) => {
+            if (payments.some((pm) => pm.id === prev)) return prev;
+            return payments[0].id;
+        });
+    }, [settings, total]);
+
     useEffect(() => {
         if (!isReady || items.length === 0 || beginCheckoutTracked.current) return;
         beginCheckoutTracked.current = true;
@@ -164,6 +180,9 @@ export default function CheckoutPage() {
         setIsPending(true);
         const orderId = `#ORD-${Math.floor(100000000 + Math.random() * 900000000)}`;
 
+        const selectedPm = availablePayments.find(pm => pm.id === selectedPayment)
+            ?? settings?.paymentMethods.find(pm => pm.id === selectedPayment);
+
         const orderData = {
             id: orderId,
             customer: `${formData.firstName} ${formData.lastName}`,
@@ -186,7 +205,10 @@ export default function CheckoutPage() {
                 zip: formData.zipCode,
                 country: formData.country
             },
-            payment_method: settings?.paymentMethods.find(pm => pm.id === selectedPayment)?.name || 'Transfer'
+            payment_method: selectedPm?.name || 'Transfer',
+            payment_method_id: selectedPm?.id,
+            payment_type: selectedPm?.type,
+            payment_wallet_address: selectedPm?.walletAddress || undefined,
         };
 
         const controller = new AbortController();
@@ -227,6 +249,13 @@ export default function CheckoutPage() {
             persistPurchaseForConfirmation(purchasePayload);
             trackPurchase(purchasePayload);
 
+            sessionStorage.setItem(`order_payment_${orderId}`, JSON.stringify({
+                paymentMethod: selectedPm?.name || 'Transfer',
+                paymentType: selectedPm?.type,
+                walletAddress: selectedPm?.walletAddress,
+                total: total.toFixed(2),
+            }));
+
             clearCart();
             // Pass the generated order ID to the confirmation page
             router.push(`/order-confirmation?id=${encodeURIComponent(orderId)}`);
@@ -261,8 +290,6 @@ export default function CheckoutPage() {
             </div>
         );
     }
-
-    const availablePayments = settings?.paymentMethods.filter(pm => pm.enabled) || [];
 
     return (
         <div className="bg-background min-h-screen transition-colors">
@@ -480,7 +507,12 @@ export default function CheckoutPage() {
                                 </div>
                                 Manual Payment Selection
                             </h2>
-                            <p className="text-slate-500 dark:text-slate-400 text-sm mb-8 font-medium">Research-compliant payment steps follow order review.</p>
+                            <p className="text-slate-500 dark:text-slate-400 text-sm mb-4 font-medium">Research-compliant payment steps follow order review.</p>
+                            {isCryptoOnlyCheckout && (
+                                <p className="text-xs font-bold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/50 rounded-xl px-4 py-3 mb-6">
+                                    Orders under ${CRYPTO_ONLY_ORDER_MAX} are processed via Bitcoin only. All payment options become available at ${CRYPTO_ONLY_ORDER_MAX} and above.
+                                </p>
+                            )}
 
                             <div className="flex flex-col gap-4">
                                 {availablePayments.map((pm) => (
@@ -501,6 +533,14 @@ export default function CheckoutPage() {
                                                     <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed font-medium">
                                                         {pm.instructions}
                                                     </p>
+                                                    {pm.type === 'crypto' && pm.walletAddress && (
+                                                        <div className="mt-4 p-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-700">
+                                                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">BTC Wallet Address</p>
+                                                            <p className="text-sm font-mono font-bold text-slate-900 dark:text-white break-all select-all">
+                                                                {pm.walletAddress}
+                                                            </p>
+                                                        </div>
+                                                    )}
                                                     <div className="flex items-center gap-2 mt-4 text-[10px] font-black text-amber-500 uppercase tracking-widest border-t border-slate-100 dark:border-slate-700 pt-3">
                                                         <Info className="w-3 h-3" /> Note: Order processes only after manual confirmation.
                                                     </div>

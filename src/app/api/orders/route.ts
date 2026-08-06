@@ -129,7 +129,9 @@ async function sendOrderEmails(orderData: any) {
                 customerEmail: orderData.email,
                 items,
                 total: totalNum,
-                paymentMethod: orderData.payment_method || 'Manual Transfer'
+                paymentMethod: orderData.payment_method || 'Manual Transfer',
+                paymentWalletAddress: orderData.payment_wallet_address,
+                paymentType: orderData.payment_type,
             })
         });
 
@@ -144,6 +146,8 @@ async function sendOrderEmails(orderData: any) {
                 items,
                 total: totalNum,
                 paymentMethod: orderData.payment_method || 'Manual Transfer',
+                paymentWalletAddress: orderData.payment_wallet_address,
+                paymentType: orderData.payment_type,
                 shippingAddress: {
                     addressLine1: orderData.shipping_address?.address || orderData.shipping_address?.street || '',
                     city: orderData.shipping_address?.city || '',
