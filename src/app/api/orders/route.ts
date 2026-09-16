@@ -4,7 +4,7 @@ export const dynamic = 'force-dynamic';
 import fs from 'fs';
 import path from 'path';
 import { supabase } from '@/lib/supabase';
-import { sendEmail } from '@/lib/mail';
+import { sendEmail, isEmailConfigured, getNotificationEmail } from '@/lib/mail';
 import OrderReceiptEmail from '@/components/emails/OrderReceiptEmail';
 import AdminOrderNotificationEmail from '@/components/emails/AdminOrderNotificationEmail';
 import PaymentReceivedEmail1 from '@/components/emails/PaymentReceivedEmail1';
@@ -94,8 +94,8 @@ export async function GET() {
 }
 
 async function sendOrderEmails(orderData: any) {
-    if (!process.env.SMTP_HOST) {
-        console.warn('SMTP_HOST is not set. Skipping emails.');
+    if (!isEmailConfigured()) {
+        console.warn('RESEND_API_KEY is not set. Skipping emails.');
         return;
     }
 
@@ -137,7 +137,7 @@ async function sendOrderEmails(orderData: any) {
 
         // Send to Admin
         await sendEmail({
-            to: process.env.SMTP_FROM_EMAIL || 'support@biolongevitylabss.com',
+            to: getNotificationEmail(),
             subject: `New Order Received ${orderData.id}`,
             react: React.createElement(AdminOrderNotificationEmail, {
                 orderId: orderData.id,
@@ -295,8 +295,8 @@ export async function DELETE(request: Request) {
 }
 
 async function sendStatusUpdateEmail(orderData: any) {
-    if (!process.env.SMTP_HOST) {
-        console.warn('SMTP_HOST is not set. Skipping emails.');
+    if (!isEmailConfigured()) {
+        console.warn('RESEND_API_KEY is not set. Skipping emails.');
         return;
     }
 

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import React from 'react';
-import { sendEmail } from '@/lib/mail';
+import { sendEmail, isEmailConfigured, getNotificationEmail } from '@/lib/mail';
 import ContactFormEmail from '@/components/emails/ContactFormEmail';
 
 export async function POST(request: Request) {
@@ -14,10 +14,9 @@ export async function POST(request: Request) {
             );
         }
 
-        // Send via SMTP if configured
-        if (process.env.SMTP_HOST) {
+        if (isEmailConfigured()) {
             await sendEmail({
-                to: process.env.SMTP_FROM_EMAIL || 'support@biolongevitylabss.com',
+                to: getNotificationEmail(),
                 replyTo: email,
                 subject: `New Contact Form Message from ${name}`,
                 react: React.createElement(ContactFormEmail, {
@@ -28,7 +27,7 @@ export async function POST(request: Request) {
                 })
             });
         } else {
-            console.warn('SMTP_HOST not set. Contact form email not sent.');
+            console.warn('RESEND_API_KEY not set. Contact form email not sent.');
             // Still return success — we don't want to show an error to the user
             // The message data is logged for backup
             console.log('Contact form submission (dry run):', { name, email, phone, message });

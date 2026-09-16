@@ -1,24 +1,9 @@
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 import { render } from '@react-email/render';
 import React from 'react';
 
-// Configure the SMTP transporter
-const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: parseInt(process.env.SMTP_PORT || '465'),
-    secure: true, // Port 465 strictly requires SSL/TLS
-    auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-    },
-    connectionTimeout: 30000, // 30 seconds
-    greetingTimeout: 30000,
-    tls: {
-        rejectUnauthorized: false, // For shared hosting servers
-    },
-    debug: true,
-    logger: true,
-});
+const DEFAULT_FROM_EMAIL = 'support@biolongevitylabss.com';
+const DEFAULT_FROM_NAME = 'BioLongevity Labs';
 
 interface SendEmailOptions {
     to: string | string[];
@@ -28,35 +13,54 @@ interface SendEmailOptions {
     replyTo?: string;
 }
 
+export function isEmailConfigured() {
+    return Boolean(process.env.RESEND_API_KEY);
+}
+
+export function getNotificationEmail() {
+    return process.env.ORDER_NOTIFICATION_EMAIL
+        || process.env.RESEND_FROM_EMAIL
+        || DEFAULT_FROM_EMAIL;
+}
+
+function getFromAddress() {
+    const email = process.env.RESEND_FROM_EMAIL || DEFAULT_FROM_EMAIL;
+    const name = process.env.RESEND_FROM_NAME || DEFAULT_FROM_NAME;
+    return `${name} <${email}>`;
+}
+
 /**
- * Sends an email using the configured SMTP server.
+ * Sends an email through Resend.
  * Supports both raw HTML and React Email components.
  */
 export async function sendEmail({ to, subject, html, react, replyTo }: SendEmailOptions) {
-    try {
-        let emailHtml = html;
-
-        // If a React component is provided, render it to HTML string
-        if (react) {
-            emailHtml = await render(react);
-        }
-
-        if (!emailHtml) {
-            throw new Error('No email content provided (html or react).');
-        }
-
-        const info = await transporter.sendMail({
-            from: `"${process.env.SMTP_FROM_NAME || 'BioLongevity Labs'}" <${process.env.SMTP_FROM_EMAIL || process.env.SMTP_USER}>`,
-            to: Array.isArray(to) ? to.join(', ') : to,
-            subject,
-            html: emailHtml,
-            replyTo,
-        });
-
-        console.log('[Mail] Email sent successfully:', info.messageId);
-        return { success: true, messageId: info.messageId };
-    } catch (error) {
-        console.error('[Mail] Error sending email:', error);
-        throw error;
+    if (!process.env.RESEND_API_KEY) {
+        throw new Error('RESEND_API_KEY is not set.');
     }
+
+    let emailHtml = html;
+    if (react) {
+        emailHtml = await render(react);
+    }
+
+    if (!emailHtml) {
+        throw new Error('No email content provided (html or react).');
+    }
+
+    const resend = new Resend(process.env.RESEND_API_KEY);
+    const { data, error } = await resend.emails.send({
+        from: getFromAddress(),
+        to,
+        subject,
+        html: emailHtml,
+        replyTo,
+    });
+
+    if (error) {
+        console.error('[Mail] Resend rejected the email:', error);
+        throw new Error(error.message || 'Resend failed to send email.');
+    }
+
+    console.log('[Mail] Email sent successfully:', data?.id);
+    return { success: true, messageId: data?.id };
 }

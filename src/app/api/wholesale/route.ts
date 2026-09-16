@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import React from 'react';
-import { sendEmail } from '@/lib/mail';
+import { sendEmail, isEmailConfigured, getNotificationEmail } from '@/lib/mail';
 import WholesaleApplicationEmail from '@/components/emails/WholesaleApplicationEmail';
 
 export async function POST(request: Request) {
@@ -14,10 +14,9 @@ export async function POST(request: Request) {
             );
         }
 
-        // Send via SMTP
-        if (process.env.SMTP_HOST) {
+        if (isEmailConfigured()) {
             await sendEmail({
-                to: 'support@biolongevitylabss.com',
+                to: getNotificationEmail(),
                 replyTo: email,
                 subject: `New Wholesale Application from ${company}`,
                 react: React.createElement(WholesaleApplicationEmail, {
@@ -30,7 +29,7 @@ export async function POST(request: Request) {
             });
             console.log(`Wholesale application sent for ${company}`);
         } else {
-            console.warn('SMTP_HOST not set. Wholesale email not sent.');
+            console.warn('RESEND_API_KEY not set. Wholesale email not sent.');
             console.log('Wholesale submission (dry run):', { name, email, company, volume, message });
         }
 
