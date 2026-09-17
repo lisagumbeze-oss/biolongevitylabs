@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import React from 'react';
-import { sendEmail, isEmailConfigured, getNotificationEmail } from '@/lib/mail';
+import { sendEmailToBoth, isEmailConfigured } from '@/lib/mail';
 import WholesaleApplicationEmail from '@/components/emails/WholesaleApplicationEmail';
+import SubmissionReceivedEmail from '@/components/emails/SubmissionReceivedEmail';
 
 export async function POST(request: Request) {
     try {
@@ -15,19 +16,33 @@ export async function POST(request: Request) {
         }
 
         if (isEmailConfigured()) {
-            await sendEmail({
-                to: getNotificationEmail(),
-                replyTo: email,
-                subject: `New Wholesale Application from ${company}`,
-                react: React.createElement(WholesaleApplicationEmail, {
+            await sendEmailToBoth({
+                customerEmail: email,
+                customerSubject: 'Wholesale application received - BioLongevity Labs',
+                customerReact: React.createElement(SubmissionReceivedEmail, {
+                    previewText: 'We received your wholesale application.',
+                    title: 'Application Received',
+                    subtitle: `Thanks ${name}. Your wholesale request is under review.`,
+                    intro: 'Our institutional team will contact you at this email address, typically within 24 hours.',
+                    details: [
+                        { label: 'Name', value: name },
+                        { label: 'Company', value: company },
+                        { label: 'Email', value: email },
+                        { label: 'Projected volume', value: volume || 'Not provided' },
+                        { label: 'Message', value: message || 'No additional details provided.' },
+                    ],
+                }),
+                adminSubject: `New Wholesale Application from ${company}`,
+                adminReact: React.createElement(WholesaleApplicationEmail, {
                     name,
                     email,
                     company,
                     volume,
-                    message
-                })
+                    message,
+                }),
+                replyToCustomer: email,
             });
-            console.log(`Wholesale application sent for ${company}`);
+            console.log(`Wholesale application emails sent for ${company}`);
         } else {
             console.warn('RESEND_API_KEY not set. Wholesale email not sent.');
             console.log('Wholesale submission (dry run):', { name, email, company, volume, message });

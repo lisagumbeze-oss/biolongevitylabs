@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import React from 'react';
-import { sendEmail, isEmailConfigured, getNotificationEmail } from '@/lib/mail';
+import { sendEmailToBoth, isEmailConfigured } from '@/lib/mail';
 import ContactFormEmail from '@/components/emails/ContactFormEmail';
+import SubmissionReceivedEmail from '@/components/emails/SubmissionReceivedEmail';
 
 export async function POST(request: Request) {
     try {
@@ -15,16 +16,29 @@ export async function POST(request: Request) {
         }
 
         if (isEmailConfigured()) {
-            await sendEmail({
-                to: getNotificationEmail(),
-                replyTo: email,
-                subject: `New Contact Form Message from ${name}`,
-                react: React.createElement(ContactFormEmail, {
+            await sendEmailToBoth({
+                customerEmail: email,
+                customerSubject: 'We received your message - BioLongevity Labs',
+                customerReact: React.createElement(SubmissionReceivedEmail, {
+                    previewText: 'We received your message.',
+                    title: 'Message Received',
+                    subtitle: `Thanks ${name}. Your inquiry is in the support queue.`,
+                    intro: 'Our team will reply to this email address. A copy of what you sent is below.',
+                    details: [
+                        { label: 'Name', value: name },
+                        { label: 'Email', value: email },
+                        { label: 'Phone', value: phone || 'Not provided' },
+                        { label: 'Message', value: message },
+                    ],
+                }),
+                adminSubject: `New Contact Form Message from ${name}`,
+                adminReact: React.createElement(ContactFormEmail, {
                     name,
                     email,
                     phone,
-                    message
-                })
+                    message,
+                }),
+                replyToCustomer: email,
             });
         } else {
             console.warn('RESEND_API_KEY not set. Contact form email not sent.');

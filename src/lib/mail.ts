@@ -64,3 +64,50 @@ export async function sendEmail({ to, subject, html, react, replyTo }: SendEmail
     console.log('[Mail] Email sent successfully:', data?.id);
     return { success: true, messageId: data?.id };
 }
+
+interface BothRecipientsEmail {
+    customerEmail: string;
+    customerSubject: string;
+    customerReact: React.ReactElement;
+    adminSubject: string;
+    adminReact: React.ReactElement;
+    replyToCustomer?: string;
+}
+
+/** Sends the customer copy and the admin copy independently so one failure does not skip the other. */
+export async function sendEmailToBoth(options: BothRecipientsEmail) {
+    if (!isEmailConfigured()) {
+        console.warn('RESEND_API_KEY is not set. Skipping emails.');
+        return { customerSent: false, adminSent: false };
+    }
+
+    const [customerResult, adminResult] = await Promise.allSettled([
+        sendEmail({
+            to: options.customerEmail,
+            subject: options.customerSubject,
+            react: options.customerReact,
+            replyTo: getNotificationEmail(),
+        }),
+        sendEmail({
+            to: getNotificationEmail(),
+            subject: options.adminSubject,
+            react: options.adminReact,
+            replyTo: options.replyToCustomer,
+        }),
+    ]);
+
+    if (customerResult.status === 'rejected') {
+        console.error('[Mail] Customer email failed:', customerResult.reason);
+    }
+    if (adminResult.status === 'rejected') {
+        console.error('[Mail] Admin email failed:', adminResult.reason);
+    }
+    if (customerResult.status === 'rejected' && adminResult.status === 'rejected') {
+        throw customerResult.reason;
+    }
+
+    return {
+        customerSent: customerResult.status === 'fulfilled',
+        adminSent: adminResult.status === 'fulfilled',
+    };
+}

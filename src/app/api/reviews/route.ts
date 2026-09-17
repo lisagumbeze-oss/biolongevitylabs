@@ -1,7 +1,10 @@
 import { NextResponse } from 'next/server';
+import React from 'react';
 import { supabase } from '@/lib/supabase';
 import fs from 'fs';
 import path from 'path';
+import { sendEmailToBoth, isEmailConfigured } from '@/lib/mail';
+import SubmissionReceivedEmail from '@/components/emails/SubmissionReceivedEmail';
 
 const REVIEWS_JSON = path.join(process.cwd(), 'src/data/reviews.json');
 const ORDERS_JSON = path.join(process.cwd(), 'src/data/orders.json');
@@ -18,6 +21,51 @@ function readLocal(filePath: string) {
 
 function writeLocal(filePath: string, data: any) {
     fs.writeFileSync(filePath, JSON.stringify(data, null, 4));
+}
+
+async function sendReviewEmails(review: {
+    productId: string;
+    rating: number;
+    comment: string;
+    authorName: string;
+    authorEmail: string;
+}) {
+    if (!isEmailConfigured()) return;
+
+    try {
+        await sendEmailToBoth({
+            customerEmail: review.authorEmail,
+            customerSubject: 'We received your review - BioLongevity Labs',
+            customerReact: React.createElement(SubmissionReceivedEmail, {
+                previewText: 'We received your product review.',
+                title: 'Review Received',
+                subtitle: `Thanks ${review.authorName}. Your review has been logged.`,
+                intro: 'This is a copy of the review you submitted. Our team can see it in the admin panel.',
+                details: [
+                    { label: 'Product', value: review.productId },
+                    { label: 'Rating', value: `${review.rating} / 5` },
+                    { label: 'Review', value: review.comment },
+                ],
+            }),
+            adminSubject: `New review from ${review.authorName}`,
+            adminReact: React.createElement(SubmissionReceivedEmail, {
+                previewText: `New review from ${review.authorName}`,
+                title: 'New Product Review',
+                subtitle: `${review.authorName} submitted a ${review.rating}/5 review.`,
+                intro: 'A customer review was posted on the storefront.',
+                details: [
+                    { label: 'Name', value: review.authorName },
+                    { label: 'Email', value: review.authorEmail },
+                    { label: 'Product', value: review.productId },
+                    { label: 'Rating', value: `${review.rating} / 5` },
+                    { label: 'Review', value: review.comment },
+                ],
+            }),
+            replyToCustomer: review.authorEmail,
+        });
+    } catch (error) {
+        console.error('[Reviews API] Failed to send review emails:', error);
+    }
 }
 
 export async function GET(request: Request) {
@@ -90,6 +138,7 @@ export async function POST(request: Request) {
                 .single();
 
             if (reviewError) throw reviewError;
+            await sendReviewEmails({ productId, rating, comment, authorName, authorEmail });
             return NextResponse.json(review, { status: 201 });
         } else {
             const orders = readLocal(ORDERS_JSON);
@@ -112,6 +161,7 @@ export async function POST(request: Request) {
             };
             reviews.push(newReview);
             writeLocal(REVIEWS_JSON, reviews);
+            await sendReviewEmails({ productId, rating, comment, authorName, authorEmail });
             return NextResponse.json(newReview, { status: 201 });
         }
     } catch (error) {

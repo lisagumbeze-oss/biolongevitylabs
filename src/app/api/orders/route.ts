@@ -4,12 +4,13 @@ export const dynamic = 'force-dynamic';
 import fs from 'fs';
 import path from 'path';
 import { supabase } from '@/lib/supabase';
-import { sendEmail, isEmailConfigured, getNotificationEmail } from '@/lib/mail';
+import { sendEmail, sendEmailToBoth, isEmailConfigured } from '@/lib/mail';
 import OrderReceiptEmail from '@/components/emails/OrderReceiptEmail';
 import AdminOrderNotificationEmail from '@/components/emails/AdminOrderNotificationEmail';
 import PaymentReceivedEmail1 from '@/components/emails/PaymentReceivedEmail1';
 import OrderCancellationEmail from '@/components/emails/OrderCancellationEmail';
 import OrderShippedEmail from '@/components/emails/OrderShippedEmail';
+import SubmissionReceivedEmail from '@/components/emails/SubmissionReceivedEmail';
 
 const ORDERS_JSON = path.join(process.cwd(), 'src/data/orders.json');
 
@@ -119,11 +120,10 @@ async function sendOrderEmails(orderData: any) {
             };
         });
 
-        // Send to Customer
-        await sendEmail({
-            to: orderData.email,
-            subject: `Order Confirmation ${orderData.id}`,
-            react: React.createElement(OrderReceiptEmail, {
+        const delivery = await sendEmailToBoth({
+            customerEmail: orderData.email,
+            customerSubject: `Order Confirmation ${orderData.id}`,
+            customerReact: React.createElement(OrderReceiptEmail, {
                 orderId: orderData.id,
                 customerName: orderData.customer,
                 customerEmail: orderData.email,
@@ -132,14 +132,9 @@ async function sendOrderEmails(orderData: any) {
                 paymentMethod: orderData.payment_method || 'Manual Transfer',
                 paymentWalletAddress: orderData.payment_wallet_address,
                 paymentType: orderData.payment_type,
-            })
-        });
-
-        // Send to Admin
-        await sendEmail({
-            to: getNotificationEmail(),
-            subject: `New Order Received ${orderData.id}`,
-            react: React.createElement(AdminOrderNotificationEmail, {
+            }),
+            adminSubject: `New Order Received ${orderData.id}`,
+            adminReact: React.createElement(AdminOrderNotificationEmail, {
                 orderId: orderData.id,
                 customerName: orderData.customer,
                 customerEmail: orderData.email,
@@ -155,9 +150,10 @@ async function sendOrderEmails(orderData: any) {
                     zipCode: orderData.shipping_address?.zipCode || orderData.shipping_address?.zip || '',
                     country: orderData.shipping_address?.country || 'USA'
                 }
-            })
+            }),
+            replyToCustomer: orderData.email,
         });
-        console.log(`Order emails sent successfully for ${orderData.id}`);
+        console.log(`Order emails for ${orderData.id}: customer=${delivery.customerSent} admin=${delivery.adminSent}`);
     } catch (emailError) {
         console.error('Failed to send order emails:', emailError);
     }
@@ -301,7 +297,37 @@ async function sendStatusUpdateEmail(orderData: any) {
     }
 
     try {
-        if (orderData.status === 'Processing' || orderData.payment_status === 'PAID') {
+        if (orderData.status === 'Pending Payments') {
+            await sendEmailToBoth({
+                customerEmail: orderData.email,
+                customerSubject: `Payment notification received - ${orderData.id}`,
+                customerReact: React.createElement(SubmissionReceivedEmail, {
+                    previewText: `We received your payment notice for ${orderData.id}.`,
+                    title: 'Payment Notice Received',
+                    subtitle: `Order ${orderData.id} is waiting for manual verification.`,
+                    intro: 'Thanks for confirming payment. We will match the transfer and update you when the order moves forward.',
+                    details: [
+                        { label: 'Order', value: orderData.id },
+                        { label: 'Payment method', value: orderData.payment_method || 'Manual transfer' },
+                    ],
+                }),
+                adminSubject: `Customer marked order paid - ${orderData.id}`,
+                adminReact: React.createElement(SubmissionReceivedEmail, {
+                    previewText: `Payment claimed for ${orderData.id}`,
+                    title: 'Payment Claimed',
+                    subtitle: `${orderData.customer || 'A customer'} says order ${orderData.id} has been paid.`,
+                    intro: 'Check the transfer, then update the order status once it is verified.',
+                    details: [
+                        { label: 'Order', value: orderData.id },
+                        { label: 'Customer', value: orderData.customer || 'Unknown' },
+                        { label: 'Email', value: orderData.email },
+                        { label: 'Payment method', value: orderData.payment_method || 'Manual transfer' },
+                    ],
+                }),
+                replyToCustomer: orderData.email,
+            });
+            console.log(`Payment claim emails sent for ${orderData.id}`);
+        } else if (orderData.status === 'Processing' || orderData.payment_status === 'PAID') {
             await sendEmail({
                 to: orderData.email,
                 subject: `Payment Received - Order ${orderData.id}`,
@@ -375,6 +401,8 @@ export async function PUT(request: Request) {
                 const emailData = {
                     id: (updatedOrder as any).order_number || (updatedOrder as any).id || id,
                     email: (updatedOrder as any).customer_email || (updatedOrder as any).email,
+                    customer: (updatedOrder as any).customer_name || (updatedOrder as any).customer,
+                    payment_method: (updatedOrder as any).payment_method,
                     status: (updatedOrder as any).status || status,
                     payment_status: (updatedOrder as any).payment_status || payment_status,
                 };
