@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Microscope, Activity, Shield, CheckCircle2, FlaskConical, Award } from 'lucide-react';
 import AnswerCapsule from '@/components/AnswerCapsule';
+import { SITE_URL } from '@/lib/site';
 import { motion } from 'framer-motion';
 
 const fadeInUp = {
@@ -37,13 +38,13 @@ export default function AboutPage() {
                                 "@type": "ListItem",
                                 "position": 1,
                                 "name": "Home",
-                                "item": "https://biolongevitylabss.com/"
+                                "item": `${SITE_URL}/`
                             },
                             {
                                 "@type": "ListItem",
                                 "position": 2,
                                 "name": "About",
-                                "item": "https://biolongevitylabss.com/about"
+                                "item": `${SITE_URL}/about`
                             }
                         ]
                     })
@@ -86,9 +87,9 @@ export default function AboutPage() {
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <div className="mb-12">
                     <AnswerCapsule>
-                        BioLongevity Labs performs USA-based peptide synthesis and independent verification for
-                        research-grade catalog SKUs. Every batch ships with traceable COA data for institutional
-                        labs sourcing BPC-157, TB-500, thymulin, and bioregulators for in vitro work only.
+                        BioLongevity Labs, also searched as Bio Longevity Labs, performs USA-based peptide synthesis
+                        and independent verification for research-grade catalog SKUs. The legal name in our terms is
+                        F2 Nutrition, LLC dba BioLongevity Labs. Compounds are for in vitro work only.
                     </AnswerCapsule>
                     <p className="mt-4 text-sm text-slate-500 text-center">
                         Explore our{" "}
@@ -96,7 +97,11 @@ export default function AboutPage() {
                         ,{" "}
                         <Link href="/research" className="text-primary font-semibold hover:underline">science library</Link>
                         , and{" "}
-                        <Link href="/research/how-to-read-peptide-coa" className="text-primary font-semibold hover:underline">COA guide</Link>.
+                        <Link href="/research/how-to-read-peptide-coa" className="text-primary font-semibold hover:underline">COA guide</Link>
+                        ,{" "}
+                        <Link href="/research/is-biolongevity-labs-legit" className="text-primary font-semibold hover:underline">supplier checks</Link>
+                        , and{" "}
+                        <Link href="/research/biolongevity-labs-reviews" className="text-primary font-semibold hover:underline">review notes</Link>.
                     </p>
                 </div>
                 <motion.div

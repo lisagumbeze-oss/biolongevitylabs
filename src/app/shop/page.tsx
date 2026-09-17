@@ -10,6 +10,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ShopSkeleton } from "@/components/Skeleton";
 import AnswerCapsule from "@/components/AnswerCapsule";
 import Link from "next/link";
+import { SITE_URL } from "@/lib/site";
 
 export default function ShopPage() {
     const [products, setProducts] = useState<Product[]>([]);
@@ -96,11 +97,30 @@ export default function ShopPage() {
     if (isLoading) {
         return (
             <div className="bg-white min-h-screen pt-8 pb-20">
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{
+                        __html: JSON.stringify({
+                            "@context": "https://schema.org",
+                            "@type": "BreadcrumbList",
+                            itemListElement: [
+                                { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` },
+                                { "@type": "ListItem", position: 2, name: "Shop", item: `${SITE_URL}/shop` },
+                            ],
+                        }),
+                    }}
+                />
                 <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="mb-12">
-                        <div className="h-10 w-64 bg-slate-100 rounded-full animate-pulse mb-4" />
-                        <div className="h-4 w-48 bg-slate-100 rounded-full animate-pulse" />
-                    </div>
+                    <header className="mb-12 space-y-6">
+                        <h1 className="text-4xl font-bold text-slate-900 tracking-tight">
+                            Buy Research Peptides &amp; Bioregulators Online
+                        </h1>
+                        <AnswerCapsule>
+                            You can buy Biolongevity peptides online from BioLongevity Labs with batch-specific COA
+                            documentation, USA-based fulfillment, and HPLC-verified purity targets of 99%+. Catalog
+                            includes lyophilized vials, capsules, and Khavinson-class bioregulators for in vitro work only.
+                        </AnswerCapsule>
+                    </header>
                     <div className="flex flex-col lg:flex-row gap-8">
                         <div className="hidden lg:block w-64 shrink-0 space-y-8">
                             <div className="h-8 w-full bg-slate-100 rounded-full animate-pulse" />
@@ -133,13 +153,13 @@ export default function ShopPage() {
                                 "@type": "ListItem",
                                 "position": 1,
                                 "name": "Home",
-                                "item": "https://biolongevitylabss.com/"
+                                "item": `${SITE_URL}/`
                             },
                             {
                                 "@type": "ListItem",
                                 "position": 2,
                                 "name": "Shop",
-                                "item": "https://biolongevitylabss.com/shop"
+                                "item": `${SITE_URL}/shop`
                             }
                         ]
                     })
@@ -160,12 +180,35 @@ export default function ShopPage() {
                     </div>
 
                     <AnswerCapsule>
-                        You can buy research peptides online from BioLongevity Labs with batch-specific COA
+                        You can buy Biolongevity peptides online from BioLongevity Labs with batch-specific COA
                         documentation, USA-based fulfillment, and HPLC-verified purity targets of 99%+. Catalog
                         includes lyophilized vials, capsules, and Khavinson-class bioregulators for in vitro work only.
                     </AnswerCapsule>
 
                     <article className="prose prose-slate max-w-none text-slate-600 text-sm leading-relaxed">
+                        <h2 className="text-lg font-bold text-slate-900 not-prose">
+                            Biolongevity peptides and bioregulators
+                        </h2>
+                        <p>
+                            Searches for Biolongevity peptides, Biolongevity Labs peptides, and longevity labs
+                            peptides belong on this catalog, not a wishlist. Read the{" "}
+                            <Link href="/research/biolongevity-labs-peptides" className="text-primary font-semibold hover:underline">
+                                Biolongevity peptides overview
+                            </Link>{" "}
+                            or open the{" "}
+                            <Link href="/research/a-15-ovary-peptide-bioregulator" className="text-primary font-semibold hover:underline">
+                                A-15 ovary peptide bioregulator
+                            </Link>{" "}
+                            note, the{" "}
+                            <Link href="/research/where-to-buy-bpc-157" className="text-primary font-semibold hover:underline">
+                                BPC-157 listing note
+                            </Link>
+                            , or the{" "}
+                            <Link href="/research/bioregulator-peptides-catalog" className="text-primary font-semibold hover:underline">
+                                bioregulator name index
+                            </Link>
+                            .
+                        </p>
                         <h2 className="text-lg font-bold text-slate-900 not-prose">
                             Research-grade peptide catalog
                         </h2>
@@ -220,7 +263,7 @@ export default function ShopPage() {
                             placeholder="Search products..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full pl-11 pr-4 py-3.5 rounded-2xl border border-slate-200 bg-slate-50 text-slate-900 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all text-sm"
+                            className="w-full rounded-2xl border border-slate-200 bg-white py-3.5 pl-11 pr-4 text-sm text-slate-900 outline-none transition-all placeholder:text-slate-500 focus:border-primary focus:ring-2 focus:ring-primary/20"
                         />
                     </div>
                     

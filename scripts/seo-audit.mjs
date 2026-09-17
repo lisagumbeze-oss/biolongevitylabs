@@ -17,6 +17,7 @@ const REQUIRED_ROUTES = [
   ["support/faq/layout.tsx", "FAQ hub"],
   ["shop/bioregulators/layout.tsx", "Bioregulators"],
   ["protocol-finder/page.tsx", "Protocol finder"],
+  ["wholesale/layout.tsx", "Wholesale"],
 ];
 
 const FORBIDDEN_GLOBAL_CANONICAL =
@@ -77,6 +78,29 @@ if (!fs.existsSync(llms)) {
 } else {
   console.log("  ✓ public/llms.txt");
 }
+
+const apexPageUrl = /https:\/\/(?!www\.)biolongevitylabss\.com(?!\/wp-content\/)/;
+function walk(dir, acc = []) {
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) walk(full, acc);
+    else if (/\.(tsx|ts|txt)$/.test(entry.name)) acc.push(full);
+  }
+  return acc;
+}
+const scanRoots = [appDir, path.join(__dirname, "..", "public", "llms.txt")];
+for (const root of scanRoots) {
+  const files = fs.existsSync(root) && fs.statSync(root).isDirectory() ? walk(root) : [root];
+  for (const file of files) {
+    if (!fs.existsSync(file)) continue;
+    const text = fs.readFileSync(file, "utf8");
+    if (apexPageUrl.test(text)) {
+      console.error(`✗ apex page URL in ${path.relative(path.join(__dirname, ".."), file)}`);
+      failed = true;
+    }
+  }
+}
+if (!failed) console.log("  ✓ no apex page URLs in app metadata or llms.txt");
 
 if (failed) {
   console.error("\nSEO static audit failed.");

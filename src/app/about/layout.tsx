@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { canonicalPath } from '@/lib/seo';
+import { SITE_URL } from '@/lib/site';
 
 export const metadata: Metadata = {
   title: 'Peptide Synthesis USA — About BioLongevity Labs',
@@ -9,7 +10,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'About Us | BioLongevity Labs',
     description: 'Learn about BioLongevity Labs and our mission to provide the highest-purity, research-grade peptides and bioregulators manufactured in US facilities.',
-    url: 'https://biolongevitylabss.com/about',
+    url: `${SITE_URL}/about`,
     siteName: 'BioLongevity Labs',
     images: [
       {

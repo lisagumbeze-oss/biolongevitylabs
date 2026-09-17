@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { canonicalPath } from '@/lib/seo';
+import { SITE_URL } from '@/lib/site';
 
 export const metadata: Metadata = {
   title: 'Research & Knowledge Base',
@@ -8,7 +9,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Research & Knowledge Base | BioLongevity Labs',
     description: 'Explore research-backed articles on peptide mechanisms, bioregulator applications, and laboratory protocols for scientists conducting in vitro studies.',
-    url: 'https://biolongevitylabss.com/research',
+    url: `${SITE_URL}/research`,
     siteName: 'BioLongevity Labs',
     type: 'website',
   },

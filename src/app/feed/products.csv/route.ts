@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { productPath } from '@/lib/product-slug';
+import { SITE_URL } from '@/lib/site';
 import type { Product } from '@/data/products';
 import { supabase } from '@/lib/supabase';
 import fs from 'fs';
@@ -8,7 +9,7 @@ import path from 'path';
 export const dynamic = 'force-dynamic';
 
 const PRODUCTS_JSON = path.join(process.cwd(), 'src/data/products.json');
-const BASE_URL = 'https://biolongevitylabss.com';
+const BASE_URL = SITE_URL;
 
 function readProductsLocal() {
     if (!fs.existsSync(PRODUCTS_JSON)) return [];

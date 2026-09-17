@@ -59,7 +59,7 @@ export default function LiveSearch({ autoFocus, className, onNavigate }: LiveSea
                 </div>
                 <input
                     ref={inputRef}
-                    className="block w-full pl-12 pr-10 py-3 border border-slate-200 dark:border-slate-700 rounded-2xl leading-5 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary sm:text-sm transition-all shadow-inner"
+                    className="block w-full rounded-2xl border border-slate-200 bg-white py-3 pl-12 pr-10 text-sm leading-5 text-slate-900 placeholder:text-slate-500 shadow-none transition-all focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                     placeholder="Search research products..."
                     type="search"
                     value={query}
@@ -83,7 +83,7 @@ export default function LiveSearch({ autoFocus, className, onNavigate }: LiveSea
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -8, scale: 0.98 }}
                         transition={{ duration: 0.15, ease: "easeOut" }}
-                        className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl shadow-slate-900/20 z-50 overflow-hidden"
+                        className="absolute top-full left-0 right-0 z-50 mt-2 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl"
                     >
                         {results.length > 0 ? (
                             <>
@@ -100,13 +100,13 @@ export default function LiveSearch({ autoFocus, className, onNavigate }: LiveSea
                                         <Link
                                             href={productPath(product)}
                                             onClick={closeSearch}
-                                            className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors group"
+                                            className="group flex items-center gap-3 px-4 py-3 transition-colors hover:bg-slate-50"
                                         >
-                                            <div className="w-10 h-10 rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-700 shrink-0">
-                                                <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+                                            <div className="h-10 w-10 shrink-0 overflow-hidden rounded-lg border border-slate-100 bg-white">
+                                                <img src={product.image} alt={product.name} className="h-full w-full object-cover" />
                                             </div>
-                                            <div className="flex-1 min-w-0">
-                                                <p className="text-sm font-bold text-slate-900 dark:text-white line-clamp-1 group-hover:text-primary transition-colors">{product.name}</p>
+                                            <div className="min-w-0 flex-1">
+                                                <p className="line-clamp-1 text-sm font-semibold text-slate-900 transition-colors group-hover:text-primary">{product.name}</p>
                                                 <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-1">{product.category}</p>
                                             </div>
                                             <p className="text-sm font-black text-primary shrink-0">${product.price.toFixed(2)}</p>

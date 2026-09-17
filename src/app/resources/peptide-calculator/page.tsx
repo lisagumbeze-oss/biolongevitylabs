@@ -59,10 +59,10 @@ export default function PeptideCalculatorPage() {
                         Research Tool
                     </span>
                     <h1 className="text-4xl md:text-6xl font-black text-white mb-6 tracking-tight">
-                        Peptide Reconstitution <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">Calculator</span>
+                        Peptide <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">Calculator</span>
                     </h1>
                     <p className="text-xl text-slate-300 font-medium max-w-2xl mx-auto">
-                        Accurately calculate your peptide concentrations and required injection volumes for laboratory research.
+                        Calculate laboratory reconstitution concentration from peptide mass and diluent volume. Research preparation only, not a human dosing tool.
                     </p>
                 </div>
             </div>

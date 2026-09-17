@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { canonicalPath } from '@/lib/seo';
+import { SITE_URL } from '@/lib/site';
 
 export const metadata: Metadata = {
   title: 'Buy Research Peptides Online — Shop Catalog',
@@ -9,7 +10,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Shop Premium Peptides & Bioregulators | BioLongevity Labs',
     description: 'Browse our extensive catalog of 99%+ purity research-grade peptides, bioregulators, creams, and capsules crafted under GMP standards in the USA.',
-    url: 'https://biolongevitylabss.com/shop',
+    url: `${SITE_URL}/shop`,
     siteName: 'BioLongevity Labs',
     type: 'website',
   },

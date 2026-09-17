@@ -41,6 +41,31 @@ const FAQ_ITEMS = [
     a: "Start with our bioregulator definition article, then browse vials, capsules, and creams in the bioregulator shop category.",
     href: "/research/what-is-a-bioregulator",
   },
+  {
+    q: "Is BioLongevity Labs legit?",
+    a: "Check the published legal name, Bath, Ohio mailing address, batch COAs, and research-use-only checkout terms. We do not post open jobs on this site.",
+    href: "/research/is-biolongevity-labs-legit",
+  },
+  {
+    q: "Does BioLongevity Labs publish reviews or a Reddit score?",
+    a: "No. We do not invent review scores or copy Reddit threads. Use COAs and written policies, and read the reviews note for what is and is not verified here.",
+    href: "/research/biolongevity-labs-reviews",
+  },
+  {
+    q: "Where can I buy BPC-157 from this catalog?",
+    a: "Only inside the Regeno Blend research vial. A standalone BPC-157 10mg product is not listed.",
+    href: "/research/where-to-buy-bpc-157",
+  },
+  {
+    q: "Where is the peptide calculator?",
+    a: "The laboratory reconstitution calculator is a separate tool from the peptide guide. It calculates concentration, not a human dose.",
+    href: "/resources/peptide-calculator",
+  },
+  {
+    q: "Is there a Biolongevity Labs coupon or promo code?",
+    a: "No public promo code is listed. Enter a code at checkout only if it was issued and is still valid. Third-party coupon lists are not confirmed here.",
+    href: "/research/biolongevity-labs-coupon-codes",
+  },
 ];
 
 const faqSchema = {

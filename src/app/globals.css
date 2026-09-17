@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Keep dark styles off unless the site explicitly opts in. OS dark mode was painting light pages gray. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #f6f7f8;
   --foreground: #0f172a;
@@ -27,6 +30,10 @@
   --radius-xl: 0.75rem;
 }
 
+html {
+  color-scheme: light;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
@@ -36,4 +43,61 @@ body {
 .dark body {
   background-color: var(--background-dark);
   color: #f8fafc;
+}
+
+.product-copy {
+  color: #334155;
+  font-size: 1.0625rem;
+  line-height: 1.75;
+}
+
+.product-copy h2 {
+  margin: 2.25rem 0 0.75rem;
+  color: #0f172a;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+
+.product-copy h2:first-child {
+  margin-top: 0;
+}
+
+.product-copy h3 {
+  margin: 1.75rem 0 0.5rem;
+  color: #0f172a;
+  font-size: 1.05rem;
+  font-weight: 650;
+  line-height: 1.4;
+}
+
+.product-copy p {
+  margin: 0 0 1rem;
+}
+
+.product-copy strong {
+  color: #0f172a;
+  font-weight: 650;
+}
+
+.product-copy a {
+  color: #137fec;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.product-copy ul,
+.product-copy ol {
+  margin: 0 0 1.25rem;
+  padding-left: 1.25rem;
+}
+
+.product-copy li {
+  margin: 0.35rem 0;
+}
+
+.product-copy li::marker {
+  color: #137fec;
 }

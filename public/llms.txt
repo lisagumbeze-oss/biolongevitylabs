@@ -1,28 +1,37 @@
 # BioLongevity Labs
 > USA-made, third-party tested research-grade peptides and bioregulators for laboratory and scientific investigation.
 
-BioLongevity Labs supplies high-purity research compounds including BPC-157, TB-500, epitalon, thymulin, and bioregulator capsules with certificates of analysis. Products are for research use only (RUO).
+BioLongevity Labs supplies high-purity research compounds including BPC-157, TB-500, epitalon, thymulin, and bioregulator capsules with certificates of analysis. Products are for research use only (RUO), not for human or veterinary administration.
 
 ## Key Pages
 - /: Homepage — research peptide catalog overview and trust signals
 - /shop: Full product catalog with filters by form and category
-- /product/{id}: Individual research compound product pages with COA and specifications
+- /shop/bioregulators: Bioregulator vials, capsules, and creams
+- /product/{slug}: Individual research compound pages with COA and specifications
 - /research: Research articles, guides, and industry reports
+- /research/is-biolongevity-labs-legit: How to verify the supplier; no jobs board
+- /research/biolongevity-labs-reviews: What is published versus third-party reviews
+- /research/biolongevity-labs-coupon-codes: No public promo code is listed
+- /research/biolongevity-labs-peptides: Catalog home for Biolongevity peptides
+- /research/a-15-ovary-peptide-bioregulator: Zhenoluten A-15 capsule note
 - /about: Company mission, USA manufacturing, and quality standards
-- /peptide-guide: Educational peptide reference
+- /peptide-guide: Educational peptide reference for laboratory handling
 - /protocol-finder: Research goal-based compound discovery tool
-- /resources/peptide-calculator: Reconstitution calculator for lab preparation
+- /resources/peptide-calculator: Peptide calculator for laboratory reconstitution
+- /research/where-to-buy-bpc-157: BPC-157 is listed only inside Regeno Blend, not as a 10mg vial
+- /research/bioregulator-peptides-catalog: Bronchogen, Cartalax, Vesugen, Testagen, Vilon, Endoluten, FLGR242, and related SKUs
 - /support: Customer support and policies
+- /support/faq: Ordering, COA, storage, and RUO questions
 - /shipping-and-payments: Shipping methods and payment information
 
 ## Primary Topics
 - Research grade peptides for sale (USA)
 - BPC-157 and TB-500 research compounds
 - Bioregulator peptides and capsules
-- Peptide reconstitution and dosage guides (research context)
+- Peptide reconstitution and handling for laboratory use
 - Third-party COA verification and HPLC testing
 - Peptide industry quality standards
 
 ## Contact
-- Website: https://biolongevitylabss.com
-- Support: https://biolongevitylabss.com/support
+- Website: https://www.biolongevitylabss.com
+- Support: https://www.biolongevitylabss.com/support

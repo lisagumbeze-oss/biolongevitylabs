@@ -4,6 +4,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, BookOpen, FlaskConical, Beaker, ShieldCheck, FileText, Anchor, PenTool, Hash } from "lucide-react";
+import AnswerCapsule from "@/components/AnswerCapsule";
 
 const guides = [
     {
@@ -11,56 +12,56 @@ const guides = [
         description: "Start your exploration with the fundamentals of peptide science. This introduction explores the 20 standard amino acids, how peptide bonds form complex chains, and key differences between peptides and proteins.",
         image: "https://biolongevitylabs.com/wp-content/uploads/2025/06/peptide-molecules.webp",
         icon: BookOpen,
-        link: "#"
+        link: "/research/polar-vs-nonpolar-amino-acids"
     },
     {
         title: "Peptide Synthesis: How Peptides Are Made",
         description: "Discover how modern peptide synthesis has evolved from niche laboratory techniques to essential biomedical research tools. This comprehensive guide explores major synthesis methods including solid-phase and liquid-phase.",
         image: "https://biolongevitylabs.com/wp-content/uploads/2025/06/lab-molecules.webp",
         icon: FlaskConical,
-        link: "#"
+        link: "/research"
     },
     {
         title: "Introduction to Peptide Purification Techniques",
         description: "Master essential peptide purification techniques to ensure clean, reliable research results. This guide covers reversed-phase chromatography, ion-exchange methods, size exclusion, and advanced techniques.",
         image: "https://biolongevitylabs.com/wp-content/uploads/2025/06/laboratory-vials.webp",
         icon: Beaker,
-        link: "#"
+        link: "/research"
     },
     {
         title: "Peptide Quality Control: Methods & Standards",
         description: "Ensure research success with comprehensive peptide quality control methods and standards. This guide covers essential analytical techniques including HPLC, mass spectrometry, and NMR.",
         image: "https://biolongevitylabs.com/wp-content/uploads/2025/06/quality-control.webp",
         icon: ShieldCheck,
-        link: "#"
+        link: "/research/how-to-read-peptide-coa"
     },
     {
         title: "The Basics of Peptide Modification",
         description: "Discover essential peptide modification techniques that enhance stability, solubility, and functionality for research applications. This guide covers post-translational modifications and chemical enhancements.",
         image: "https://biolongevitylabs.com/wp-content/uploads/2025/06/vials-test-in-laboratory.webp",
         icon: PenTool,
-        link: "#"
+        link: "/research"
     },
     {
         title: "Peptide Stability: Guidelines for Handling",
         description: "Protect your research investment with proven peptide stability guidelines and handling protocols. This comprehensive guide covers storage conditions, solubilization strategies, and essential SOPs.",
         image: "https://biolongevitylabs.com/wp-content/uploads/2025/06/Artboard-1.webp",
         icon: Anchor,
-        link: "#"
+        link: "/research/peptide-reconstitution-guide"
     },
     {
         title: "Peptide Nomenclature: Reference for Naming",
         description: "Navigate essential peptide naming conventions with confidence in this reference guide to IUPAC-IUBMB nomenclature standards. Learn amino acid codes, proper sequence notation, and modification symbols.",
         image: "https://biolongevitylabs.com/wp-content/uploads/2025/06/bll-peptide-vials-banner.webp",
         icon: FileText,
-        link: "#"
+        link: "/research"
     },
     {
         title: "Peptide Glossary: Definitions and Terminology",
         description: "Master the language of peptide science with our comprehensive glossary of terms and definitions. An invaluable reference for researchers at all levels working with peptides.",
         image: "https://biolongevitylabs.com/wp-content/uploads/2025/06/peptide-glossary-featured.png",
         icon: Hash,
-        link: "#"
+        link: "/support/faq"
     }
 ];
 
@@ -92,6 +93,9 @@ export default function PeptideGuidePage() {
                         <p className="text-xl text-slate-300 font-medium leading-relaxed mb-8">
                             Research peptides are key to advancing science in biochemistry, cell biology and molecular research. This knowledge center provides laboratory scientists with the technical information and practical guidance to select, handle and work with research-grade peptides for in vitro and ex vivo applications.
                         </p>
+                        <AnswerCapsule className="mb-8 max-w-3xl">
+                            This peptide guide explains how laboratories select, reconstitute, and store research-grade peptides, including synthesis, purification, and quality-control context. Cards link to existing research articles. Compounds discussed here are for in vitro and qualified non-clinical research only, not for human or veterinary use.
+                        </AnswerCapsule>
 
                         <div className="flex items-center gap-4 bg-white/5 p-4 rounded-2xl border border-white/10 backdrop-blur-md inline-flex">
                             <Image

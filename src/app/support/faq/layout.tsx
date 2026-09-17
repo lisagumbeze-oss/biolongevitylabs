@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { canonicalPath } from "@/lib/seo";
+import { SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Research Peptide FAQ | Ordering, COA & RUO Policy",
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
     title: "Research Peptide FAQ | BioLongevity Labs",
     description:
       "Answers on research peptide ordering, batch COAs, shipping, and laboratory RUO policy.",
-    url: "https://biolongevitylabss.com/support/faq",
+    url: `${SITE_URL}/support/faq`,
     siteName: "BioLongevity Labs",
     type: "website",
   },

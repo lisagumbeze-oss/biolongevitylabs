@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { HelpCircle, Mail, MapPin, MessageSquare, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
+import { SITE_URL } from '@/lib/site';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function ContactPage() {
@@ -97,13 +98,13 @@ export default function ContactPage() {
                                 "@type": "ListItem",
                                 "position": 1,
                                 "name": "Home",
-                                "item": "https://biolongevitylabss.com/"
+                                "item": `${SITE_URL}/`
                             },
                             {
                                 "@type": "ListItem",
                                 "position": 2,
                                 "name": "Support",
-                                "item": "https://biolongevitylabss.com/support"
+                                "item": `${SITE_URL}/support`
                             }
                         ]
                     })

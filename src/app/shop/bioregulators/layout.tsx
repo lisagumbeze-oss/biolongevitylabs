@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { canonicalPath } from "@/lib/seo";
+import { SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Bioregulator Peptides for Research | Vials, Capsules & Creams",
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
     title: "Bioregulator Peptides for Research | BioLongevity Labs",
     description:
       "Browse bioregulator vials, capsules, and creams for in vitro and cell-model research with documented purity.",
-    url: "https://biolongevitylabss.com/shop/bioregulators",
+    url: `${SITE_URL}/shop/bioregulators`,
     siteName: "BioLongevity Labs",
     type: "website",
   },

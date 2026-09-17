@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { researchPosts } from '@/data/researchPosts';
 import { canonicalPath } from '@/lib/seo';
+import { SITE_URL } from '@/lib/site';
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
@@ -19,7 +20,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     openGraph: {
       title: post.title,
       description: post.excerpt,
-      url: `https://biolongevitylabss.com/research/${post.slug}`,
+      url: `${SITE_URL}/research/${post.slug}`,
       siteName: 'BioLongevity Labs',
       type: 'article',
       publishedTime: post.date,

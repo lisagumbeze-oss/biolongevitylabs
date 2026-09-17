@@ -6,7 +6,7 @@ import { SITE_URL, OG_IMAGE } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Research Grade Peptides for Sale",
   description:
-    "Where to buy research peptides online: USA-made BPC-157, TB-500, thymulin & bioregulators. 99%+ purity, third-party COA, fast lab fulfillment. Research use only.",
+    "Bio Longevity Labs: buy research peptides online. USA-made BPC-157, TB-500, thymulin and bioregulators. Third-party COA. Research use only.",
   alternates: {
     canonical: SITE_URL,
   },

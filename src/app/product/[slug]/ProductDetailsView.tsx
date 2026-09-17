@@ -15,7 +15,6 @@ import Link from "next/link";
 import ProductCard from "@/components/ProductCard";
 import RecentlyViewedSection from "@/components/RecentlyViewedSection";
 import HPLCGraph from "@/components/HPLCGraph";
-import ScientificTooltip from "@/components/ScientificTooltip";
 import ReviewList from "@/components/ReviewList";
 import ReviewForm from "@/components/ReviewForm";
 import AnswerCapsule from "@/components/AnswerCapsule";
@@ -34,12 +33,13 @@ import { motion, AnimatePresence } from "framer-motion";
 
 interface Props {
     slug: string;
+    initialProduct?: Product | null;
 }
 
-export default function ProductDetailsView({ slug }: Props) {
+export default function ProductDetailsView({ slug, initialProduct = null }: Props) {
     const router = useRouter();
-    const [product, setProduct] = useState<Product | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
+    const [product, setProduct] = useState<Product | null>(initialProduct);
+    const [isLoading, setIsLoading] = useState(!initialProduct);
     const [allProducts, setAllProducts] = useState<Product[]>([]);
 
     const addItem = useCart((state) => state.addItem);
@@ -231,7 +231,7 @@ export default function ProductDetailsView({ slug }: Props) {
     }
 
     return (
-        <div className="bg-white min-h-screen transition-colors pb-20 overflow-x-hidden">
+        <div className="bg-white min-h-screen pb-20 transition-colors">
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
 
                 {/* Breadcrumbs */}
@@ -245,8 +245,8 @@ export default function ProductDetailsView({ slug }: Props) {
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
                     {/* Sticky Image Section */}
-                    <div className="lg:sticky lg:top-24 h-fit space-y-6">
-                        <div className="relative aspect-square rounded-4xl overflow-hidden bg-slate-50 border border-slate-100 shadow-inner group">
+                    <div className="h-fit min-w-0 space-y-6 lg:sticky lg:top-24 lg:z-10 lg:self-start">
+                        <div className="group relative aspect-square overflow-hidden rounded-4xl border border-slate-200 bg-white">
                             <motion.img
                                 key={selectedImage}
                                 initial={{ opacity: 0 }}
@@ -257,10 +257,10 @@ export default function ProductDetailsView({ slug }: Props) {
                                 className="w-full h-full object-contain p-8 md:p-12"
                             />
                             <div className="absolute top-6 right-6 flex flex-col gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <button className="p-3 bg-white/80 dark:bg-slate-800/80 backdrop-blur-md rounded-2xl shadow-lg hover:scale-110 transition-transform text-slate-900 dark:text-white">
+                                <button className="rounded-2xl bg-white p-3 text-slate-700 shadow-md ring-1 ring-slate-200 transition-transform hover:scale-110">
                                     <Heart className="w-5 h-5" />
                                 </button>
-                                <button className="p-3 bg-white/80 dark:bg-slate-800/80 backdrop-blur-md rounded-2xl shadow-lg hover:scale-110 transition-transform text-slate-900 dark:text-white">
+                                <button className="rounded-2xl bg-white p-3 text-slate-700 shadow-md ring-1 ring-slate-200 transition-transform hover:scale-110">
                                     <Share2 className="w-5 h-5" />
                                 </button>
                             </div>
@@ -284,8 +284,8 @@ export default function ProductDetailsView({ slug }: Props) {
                     </div>
 
                     {/* Details Section */}
-                    <div className="flex flex-col">
-                        <div className="mb-10">
+                    <div className="flex min-w-0 flex-col">
+                        <div className="mb-10 min-w-0">
                             <div className="flex items-center gap-3 mb-4">
                                 <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest">
                                     {product.category}
@@ -302,13 +302,14 @@ export default function ProductDetailsView({ slug }: Props) {
                                 )}
                             </div>
 
-                            <h1 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white mb-6 tracking-tight leading-[1.1]">
+                            <h1 className="mb-6 w-full max-w-full break-words text-3xl font-black leading-tight tracking-tight text-slate-950 sm:text-4xl">
                                 {product.name}
                             </h1>
 
-                            {productSeo?.answerCapsule && (
-                                <AnswerCapsule className="mb-8">{productSeo.answerCapsule}</AnswerCapsule>
-                            )}
+                            <AnswerCapsule className="mb-8">
+                                {productSeo?.answerCapsule ??
+                                    `${product.name} is supplied as a research-grade compound for laboratory investigation, with batch documentation where available. It is for research use only and is not for human or veterinary administration.`}
+                            </AnswerCapsule>
 
                             <div className="flex flex-wrap items-center gap-6 mb-8 py-6 border-y border-slate-100 dark:border-slate-800">
                                 <div className="flex items-center gap-3">
@@ -386,7 +387,7 @@ export default function ProductDetailsView({ slug }: Props) {
                         </div>
 
                         {/* Selection Controls */}
-                        <div className="space-y-8 mb-12 p-8 bg-slate-50/50 dark:bg-slate-900/50 rounded-[2.5rem] border border-slate-100 dark:border-slate-800">
+                        <div className="mb-12 space-y-8 rounded-[2.5rem] border border-slate-200 bg-white p-8">
                             {product.variables && product.variables.length > 0 && (
                                 <div className="flex flex-col gap-6">
                                     {product.variables
@@ -612,14 +613,14 @@ export default function ProductDetailsView({ slug }: Props) {
                                     key={post.id}
                                     href={`/research/${post.slug}`}
                                     aria-label={`Read research article about ${post.title}`}
-                                    className="group flex flex-col sm:flex-row gap-6 p-6 bg-slate-50 dark:bg-slate-900/50 rounded-4xl border border-slate-100 dark:border-slate-800 hover:border-primary/50 transition-all hover:shadow-xl"
+                                    className="group flex flex-col gap-6 rounded-4xl border border-slate-200 bg-white p-6 transition-all hover:border-primary/40 hover:shadow-md sm:flex-row"
                                 >
-                                    <div className="w-full sm:w-32 h-32 shrink-0 rounded-2xl overflow-hidden relative bg-slate-200 dark:bg-slate-800">
+                                    <div className="relative h-32 w-full shrink-0 overflow-hidden rounded-2xl border border-slate-100 bg-white sm:w-32">
                                         <img src={post.imageUrl} alt={post.title} className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                                     </div>
                                     <div className="flex flex-col justify-center text-left">
                                         <span className="text-[10px] font-black uppercase tracking-widest text-primary mb-2 italic">{post.category}</span>
-                                        <h3 className="text-lg font-black text-slate-900 dark:text-white leading-tight group-hover:text-primary transition-colors mb-2 line-clamp-2">{post.title}</h3>
+                                        <h3 className="mb-2 line-clamp-2 text-lg font-semibold leading-tight text-slate-950 transition-colors group-hover:text-primary">{post.title}</h3>
                                         <span className="text-xs font-bold text-slate-400 uppercase tracking-tighter flex items-center gap-2">
                                             Read Full Study
                                             <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
@@ -660,72 +661,46 @@ export default function ProductDetailsView({ slug }: Props) {
                     </div>
                 )}
 
-                {/* Product Description Full Width */}
-                <div className="mt-20 lg:mt-32 pt-20 border-t border-slate-100 dark:border-slate-800 animate-in fade-in slide-in-from-bottom-10 duration-1000 text-left">
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-20">
-                        <div className="lg:col-span-1">
-                            <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter mb-4 leading-none uppercase">Product Information</h2>
-                            <p className="text-sm font-bold text-slate-400 uppercase tracking-widest leading-loose max-w-xs">Detailed laboratory specifications, compound structure, and research applications.</p>
-
-                            <div className="mt-10 space-y-4">
-                                <div className="flex items-center gap-3 p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-100 dark:border-slate-800">
-                                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
-                                        <Beaker className="w-5 h-5" />
-                                    </div>
-                                    <div>
-                                        <p className="text-[10px] font-black uppercase text-slate-900 dark:text-white">Research Grade</p>
-                                        <p className="text-[9px] font-bold uppercase text-slate-500">HPLC 99%+ Purity</p>
-                                    </div>
-                                </div>
-                                <div className="flex items-center gap-3 p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
-                                        <ShieldCheck className="w-5 h-5" />
-                                    </div>
-                                    <div>
-                                        <p className="text-[10px] font-black uppercase text-slate-900">Verified Origin</p>
-                                        <p className="text-[9px] font-bold uppercase text-slate-500">GMP Manufactured</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                            <div className="prose prose-slate max-w-none 
-                                prose-h2:text-xl prose-h2:font-black prose-h2:uppercase prose-h2:tracking-widest prose-h2:mb-6 prose-h2:text-slate-900
-                                prose-h3:text-sm prose-h3:font-bold prose-h3:uppercase prose-h3:tracking-widest prose-h3:mt-10 prose-h3:mb-4 prose-h3:text-primary
-                                prose-p:text-slate-800 prose-p:leading-relaxed prose-p:mb-6 prose-p:text-base
-                                prose-strong:text-slate-900 prose-strong:font-black"
-                            >
-                                <div dangerouslySetInnerHTML={{ __html: expandedBodyHtml }} />
-                                
-                                <div className="mt-8 p-6 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-100 dark:border-slate-800 flex items-start gap-4">
-                                    <div className="w-10 h-10 rounded-xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 flex items-center justify-center text-primary shrink-0">
-                                        <Info className="w-5 h-5" />
-                                    </div>
-                                    <div>
-                                        <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-900 dark:text-white mb-2 text-left">Research Glossary</h4>
-                                        <p className="text-xs text-slate-500 font-medium leading-relaxed text-left">
-                                            This compound is verified to induce <ScientificTooltip term="Angiogenesis" definition="The physiological process through which new blood vessels form from pre-existing vessels.">angiogenesis</ScientificTooltip> and accelerate <ScientificTooltip term="Myogenesis" definition="The formation of muscular tissue, particularly during embryonic development.">myogenesis</ScientificTooltip> in in-vitro research environments.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="mt-16 p-8 bg-amber-50 dark:bg-amber-900/10 border border-amber-100 dark:border-amber-900/20 rounded-3xl">
-                                <div className="flex items-start gap-4">
-                                    <Info className="w-6 h-6 text-amber-600 dark:text-amber-500 shrink-0 mt-1" />
-                                    <div>
-                                        <h3 className="text-sm font-black text-amber-900 dark:text-amber-400 uppercase tracking-widest mb-2">Research Chemical Disclaimer</h3>
-                                        <p className="text-xs text-amber-800/70 dark:text-amber-500/70 leading-relaxed font-bold uppercase tracking-tight text-left">
-                                            This product is intended for laboratory research use only. It is not for human consumption,
-                                            diagnostic, or therapeutic purposes. Handling should only be performed by qualified professionals.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {productSeo?.faqs && <ProductFaq faqs={productSeo.faqs} />}
-                        </div>
+                {/* Product Description */}
+                <section className="mt-16 border-t border-slate-200 pt-12 text-left lg:mt-24 lg:pt-16">
+                    <div className="mb-8 max-w-3xl">
+                        <p className="mb-2 text-sm font-semibold text-primary">Product information</p>
+                        <h2 className="text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl">
+                            About {product.name}
+                        </h2>
                     </div>
+
+                    <dl className="mb-10 grid grid-cols-1 gap-3 sm:grid-cols-3">
+                        {[
+                            { label: "Category", value: product.category },
+                            { label: "Form", value: product.form },
+                            { label: "Use", value: "Laboratory research only" },
+                        ].map((spec) => (
+                            <div key={spec.label} className="rounded-xl border border-slate-200 bg-white px-4 py-3">
+                                <dt className="text-xs font-medium text-slate-500">{spec.label}</dt>
+                                <dd className="mt-1 text-sm font-semibold text-slate-900">{spec.value}</dd>
+                            </div>
+                        ))}
+                    </dl>
+
+                    <div
+                        className="product-copy max-w-3xl"
+                        dangerouslySetInnerHTML={{ __html: expandedBodyHtml }}
+                    />
+
+                    <div className="mt-10 max-w-3xl rounded-xl border border-amber-200 bg-amber-50 px-5 py-4">
+                        <h3 className="text-sm font-semibold text-amber-950">Research use only</h3>
+                        <p className="mt-1 text-sm leading-relaxed text-amber-900">
+                            This material is for laboratory research by qualified professionals. It is not for human consumption, diagnosis, or therapeutic use.
+                        </p>
+                    </div>
+
+                    {productSeo?.faqs && (
+                        <div className="mt-10 max-w-3xl">
+                            <ProductFaq faqs={productSeo.faqs} />
+                        </div>
+                    )}
+                </section>
 
                 {/* Related Products */}
                 {relatedProducts.length > 0 && (

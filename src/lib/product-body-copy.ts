@@ -166,19 +166,28 @@ const BIOREGULATOR_EXTRA = `<h2>Bioregulator research primer</h2>
 <p>Bioregulator peptides are short sequences studied for organ-specific gene-expression effects in cell and tissue models—distinct from broad-spectrum repair peptides. Khavinson-class compounds appear across vascular, immune, metabolic, and CNS research literature with model-specific endpoints.</p>
 <p>Capsule lines (A-series) reflect tissue-derived peptide complexes used in aging and organ-support research framing; lyophilized vials suit precise mass-based dosing in culture. Choose formulation based on how your protocol delivers peptide to the biological system under study.</p>`;
 
-const ABOUT_PRODUCT_INTRO = (product: Product) => {
-  const plainDesc = product.description
-    .replace(/<[^>]+>/g, " ")
-    .replace(/\s+/g, " ")
+function sanitizeDescriptionHtml(html: string): string {
+  return html
+    .replace(/<script[\s\S]*?<\/script>/gi, "")
+    .replace(/<style[\s\S]*?<\/style>/gi, "")
+    .replace(/\s(?:style|class|id|width|height)="[^"]*"/gi, "")
+    .replace(/<\/?span\b[^>]*>/gi, "")
+    .replace(/<(\/?)b\b[^>]*>/gi, "<$1strong>")
+    .replace(/<(?!\/?(p|h2|h3|h4|strong|em|ul|ol|li|a|br)\b)[^>]+>/gi, "")
+    .replace(/(?:<br\s*\/?\s*>\s*){3,}/gi, "<br><br>")
+    .replace(/\n{3,}/g, "\n\n")
     .trim();
+}
+
+const ABOUT_PRODUCT_INTRO = (product: Product) => {
+  const source = sanitizeDescriptionHtml(product.description || "");
   const lead =
-    plainDesc.length > 40
-      ? `<p>${plainDesc}</p>`
+    source.length > 40
+      ? source
       : `<p>${product.name} is supplied as a research-grade ${product.form.toLowerCase()} in the ${product.category} category for qualified laboratory use.</p>`;
   return `<h2>Overview</h2>
 ${lead}
-<p>BioLongevity Labs synthesizes and distributes this SKU for in vitro and qualified non-clinical research. Buyers must be 18+ and accept research-use-only terms. The compound is not approved as a drug, medical device, or dietary supplement for human use.</p>
-<p>SKU path: <a href="${productPath(product)}">${product.name}</a>. Compare alternatives in the <a href="/shop">full shop</a> or browse <a href="/research">research articles</a> for handling and mechanism primers.</p>`;
+<p>BioLongevity Labs supplies this material for in vitro and qualified non-clinical research. Buyers must be 18 or older and accept research-use-only terms. It is not a drug, medical device, or dietary supplement.</p>`;
 };
 
 /** Per-product overrides with 800+ words (Sprint B top PDPs + high-traffic SKUs). */
@@ -226,6 +235,35 @@ function wrapSections(sections: string[]): string {
   return sections.filter(Boolean).join("\n");
 }
 
+/** Apply catalog formatting so headings, paragraphs, and links stay distinct in the PDP. */
+function formatProductCopy(html: string): string {
+  const sections = html
+    .split(/<h2>/i)
+    .map((part) => part.trim())
+    .filter(Boolean);
+
+  return sections
+    .map((part, index) => {
+      const [heading = "", ...rest] = part.split(/<\/h2>/i);
+      const title = heading.replace(/<[^>]+>/g, "").trim();
+      const body = rest.join("</h2>")
+        .replace(/<h3>/gi, '<h3 style="margin:1.5rem 0 0.4rem;color:#0f172a;font-size:1.05rem;font-weight:600;line-height:1.4">')
+        .replace(/<p>/gi, '<p style="margin:0 0 0.9rem;color:#475569;font-size:1rem;line-height:1.75">')
+        .replace(/<strong>/gi, '<strong style="color:#0f172a;font-weight:600">')
+        .replace(/<a /gi, '<a style="color:#137fec;font-weight:600;text-decoration:underline;text-underline-offset:3px" ')
+        .replace(/<ul>/gi, '<ul style="margin:0 0 1rem;padding-left:1.25rem;color:#475569;line-height:1.7">')
+        .replace(/<ol>/gi, '<ol style="margin:0 0 1rem;padding-left:1.25rem;color:#475569;line-height:1.7">')
+        .replace(/<li>/gi, '<li style="margin:0.3rem 0">');
+
+      const border = index === 0 ? "" : "border-top:1px solid #e2e8f0;padding-top:1.5rem;";
+      return `<section style="margin:0 0 1.5rem;${border}">
+<h2 style="margin:0 0 0.75rem;color:#0f172a;font-size:1.25rem;font-weight:600;letter-spacing:-0.02em;line-height:1.3">${title}</h2>
+${body}
+</section>`;
+    })
+    .join("\n");
+}
+
 /**
  * Returns HTML body copy targeting 800+ words for PDP SEO.
  * Composes category + compound + quality blocks; top SKUs use full overrides.
@@ -248,21 +286,20 @@ function sharedTailSections(product: Product): string {
 
 export function getExpandedProductBody(product: Product): string {
   const override = PRODUCT_BODY_OVERRIDES[product.id];
-  if (override) {
-    return override + sharedTailSections(product);
-  }
-
-  const compound = detectCompound(product.name);
-  return wrapSections([
-    ABOUT_PRODUCT_INTRO(product),
-    compoundSection(product.name, compound),
-    categorySection(product),
-    `<h2>Research program design notes</h2>
+  const html = override
+    ? override + sharedTailSections(product)
+    : wrapSections([
+        ABOUT_PRODUCT_INTRO(product),
+        compoundSection(product.name, detectCompound(product.name)),
+        categorySection(product),
+        `<h2>Research program design notes</h2>
 <p>Define primary and secondary endpoints before ordering: cell viability, migration, qPCR panels, or secretome profiling. Use vehicle controls and batch-matched reference material. Power studies for expected effect sizes rather than duplicating anecdotal dosing from non-research forums.</p>
 <p>When publishing, include vendor name, catalog identifier, batch number, purity method, and reconstitution solvent. Transparent methods support reproducibility and institutional audit readiness.</p>
 <p>Pair ${product.name} with complementary SKUs only when your protocol pre-specifies combination arms—avoid post-hoc stacking that confounds interpretation.</p>`,
-    sharedTailSections(product),
-  ]);
+        sharedTailSections(product),
+      ]);
+
+  return formatProductCopy(html);
 }
 
 export function expandedBodyWordCount(html: string): number {

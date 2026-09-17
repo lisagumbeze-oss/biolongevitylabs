@@ -9,6 +9,7 @@ import { products } from "@/data/products";
 import { researchPosts } from "@/data/researchPosts";
 import AnswerCapsule from "@/components/AnswerCapsule";
 import { productPath } from "@/lib/product-slug";
+import { SITE_URL } from "@/lib/site";
 import { motion } from "framer-motion";
 
 // Very simple markdown parser for the included data
@@ -35,8 +36,9 @@ const parseMarkdown = (text: string) => {
 
 export default function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
     const resolvedParams = React.use(params);
-    const [post, setPost] = React.useState<any>(null);
-    const [loading, setLoading] = React.useState(true);
+    const seeded = researchPosts.find((p) => p.slug === resolvedParams.slug) ?? null;
+    const [post, setPost] = React.useState<any>(seeded);
+    const [loading, setLoading] = React.useState(!seeded);
     const [otherPosts, setOtherPosts] = React.useState<any[]>([]);
 
     React.useEffect(() => {
@@ -92,19 +94,19 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
                                 "@type": "ListItem",
                                 "position": 1,
                                 "name": "Home",
-                                "item": "https://biolongevitylabss.com/"
+                                "item": `${SITE_URL}/`
                             },
                             {
                                 "@type": "ListItem",
                                 "position": 2,
                                 "name": "Research",
-                                "item": "https://biolongevitylabss.com/research"
+                                "item": `${SITE_URL}/research`
                             },
                             {
                                 "@type": "ListItem",
                                 "position": 3,
                                 "name": post.title,
-                                "item": `https://biolongevitylabss.com/research/${post.slug}`
+                                "item": `${SITE_URL}/research/${post.slug}`
                             }
                         ]
                     })
@@ -120,7 +122,7 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
                         "@type": "BlogPosting",
                         "headline": post.title,
                         "image": [
-                            post.imageUrl.startsWith("http") ? post.imageUrl : `https://biolongevitylabss.com${post.imageUrl}`
+                            post.imageUrl.startsWith("http") ? post.imageUrl : `${SITE_URL}${post.imageUrl}`
                         ],
                         "datePublished": post.date,
                         "dateModified": post.dateModified || post.date,
@@ -133,7 +135,7 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
                             "name": "BioLongevity Labs",
                             "logo": {
                                 "@type": "ImageObject",
-                                "url": "https://biolongevitylabss.com/logo.png"
+                                "url": `${SITE_URL}/logo.png`
                             }
                         },
                         "description": post.excerpt

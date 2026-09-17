@@ -85,10 +85,10 @@ export default function HomePage() {
       <section className="bg-white dark:bg-slate-950 border-b border-slate-100 dark:border-slate-800 py-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
           <AnswerCapsule>
-            <strong>BioLongevity Labs</strong> is a USA-based supplier of research-grade peptides and
-            bioregulators with third-party COA verification on every batch. Laboratories source BPC-157,
-            TB-500, thymulin, and Khavinson-class compounds here for in vitro study—never for human
-            consumption.
+            <strong>BioLongevity Labs</strong> (also searched as Bio Longevity Labs, Biolongevity, and
+            biolongevitylabs) is a USA-based supplier of research-grade peptides and bioregulators with
+            third-party COA verification. Laboratories source BPC-157, TB-500, thymulin, and bioregulators
+            here for in vitro study—never for human consumption.
           </AnswerCapsule>
           <nav aria-label="Key research catalog links" className="flex flex-wrap gap-3 text-sm font-bold">
             <Link href="/shop" className="text-primary hover:underline">
@@ -101,6 +101,14 @@ export default function HomePage() {
             <span className="text-slate-300">·</span>
             <Link href="/about" className="text-primary hover:underline">
               USA synthesis &amp; testing
+            </Link>
+            <span className="text-slate-300">·</span>
+            <Link href="/research/is-biolongevity-labs-legit" className="text-slate-600 dark:text-slate-400 hover:text-primary">
+              Is BioLongevity Labs legit?
+            </Link>
+            <span className="text-slate-300">·</span>
+            <Link href="/research/biolongevity-labs-peptides" className="text-slate-600 dark:text-slate-400 hover:text-primary">
+              Biolongevity peptides
             </Link>
             {TOP_PRODUCT_LINKS.map((link) => (
               <React.Fragment key={link.href}>

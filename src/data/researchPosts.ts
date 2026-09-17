@@ -1,3 +1,4 @@
+import { brandQueryArticles } from "./researchPostsBrand";
 import { sprintCArticles } from "./researchPostsSprintC";
 import { sprintC2Articles } from "./researchPostsSprintC2";
 export type { BlogPost } from "./researchPostTypes";
@@ -148,6 +149,7 @@ Compare mechanisms in [BPC-157 vs TB-500](/research/bpc-157-vs-tb-500) or explor
 
 /** Newest SEO articles first, then legacy catalog */
 export const researchPosts: BlogPost[] = [
+    ...brandQueryArticles,
     ...sprintC2Articles,
     ...sprintCArticles,
     ...legacyResearchPosts,

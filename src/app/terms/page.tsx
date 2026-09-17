@@ -1,9 +1,19 @@
 import React from 'react';
 import { FileText, Database, Cookie, Shield, Gavel, Mail } from 'lucide-react';
+import { canonicalPath } from '@/lib/seo';
+import { SITE_URL } from '@/lib/site';
 
 export const metadata = {
     title: 'Legal Policies & Terms | BioLongevity Labs',
     description: 'Terms and Conditions, Privacy Policy, and Data Collection guidelines for BioLongevity Labs.',
+    alternates: canonicalPath('/terms'),
+    openGraph: {
+        title: 'Legal Policies & Terms | BioLongevity Labs',
+        description: 'Terms, privacy, and data-collection guidelines for BioLongevity Labs.',
+        url: `${SITE_URL}/terms`,
+        siteName: 'BioLongevity Labs',
+        type: 'website',
+    },
 };
 
 export default function TermsPage() {

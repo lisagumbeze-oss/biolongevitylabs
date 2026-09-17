@@ -144,7 +144,59 @@ export const PRODUCT_SEO: Record<string, ProductSeoConfig> = {
       },
     ],
   },
+  prod_439: {
+    metaTitle: "A-15 Ovary Peptide Bioregulator 60 Capsules",
+    metaDescription:
+      "Zhenoluten A-15 ovary peptide bioregulator capsules, including a 60-capsule option, for laboratory research. Batch documentation on request. RUO only.",
+    answerCapsule:
+      "Zhenoluten is the A-15 ovary peptide bioregulator in this catalog, offered as capsules including a 60-capsule count. It is for laboratory research only and is not for human or veterinary administration.",
+    faqs: [
+      {
+        question: "Is the 60-capsule A-15 ovary peptide bioregulator the Zhenoluten SKU?",
+        answer:
+          "Yes. Select the 60-capsule count on the Zhenoluten A-15 product page. Availability and price are shown at checkout. " + RUO_FOOTER,
+      },
+      {
+        question: "Is this ovary peptide bioregulator for human use?",
+        answer:
+          "No. It is supplied for laboratory research only and is not for human or veterinary administration.",
+      },
+    ],
+  },
 };
+
+function researchSku(name: string, phrase: string): ProductSeoConfig {
+  return {
+    metaTitle: `${phrase} for Laboratory Research`,
+    metaDescription: `${phrase} research material from BioLongevity Labs. Batch documentation on request. Research use only, not for human or veterinary administration.`.slice(0, 160),
+    answerCapsule: `${name} is listed in this catalog for laboratory research. It is not for human or veterinary administration. Confirm the vial label and COA before use in a study.`,
+    faqs: [
+      {
+        question: `Where is ${phrase} listed?`,
+        answer: `On this product page. ${RUO_FOOTER}`,
+      },
+      {
+        question: "Is this for human use?",
+        answer: "No. It is supplied for laboratory research only.",
+      },
+    ],
+  };
+}
+
+Object.assign(PRODUCT_SEO, {
+  prod_4101: researchSku("Bronchogen (20mg)", "Bronchogen peptide"),
+  prod_4102: researchSku("Cardiogen (20mg)", "Cardiogen peptide"),
+  prod_4104: researchSku("Chonluten (20mg)", "Chonluten peptide"),
+  prod_26974: researchSku("Vesugen Peptide (20mg)", "Vesugen peptide"),
+  prod_26970: researchSku("Testagen Peptide (20mg)", "Testagen peptide"),
+  prod_26969: researchSku("Prostamax Peptide (20mg)", "Prostamax peptide"),
+  prod_26964: researchSku("Ovagen Peptide (20mg)", "Ovagen peptide"),
+  prod_26963: researchSku("Livagen Peptide (20mg)", "Livagen peptide"),
+  prod_26962: researchSku("Vilon peptide", "Vilon peptide"),
+  prod_440: researchSku("Bonomarlot A-20", "Bonomarlot peptide bioregulator"),
+  prod_52438: researchSku("BioPineal A-8 Endoluten", "Endoluten pineal peptide bioregulator"),
+  prod_230039: researchSku("Follistatin FLGR242 (10mg)", "FLGR242 follistatin peptide for research"),
+});
 
 export function getProductSeo(productId: string): ProductSeoConfig | undefined {
   return PRODUCT_SEO[productId];

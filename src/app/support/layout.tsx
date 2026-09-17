@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { canonicalPath } from '@/lib/seo';
+import { SITE_URL } from '@/lib/site';
 
 export const metadata: Metadata = {
   title: 'Contact Support',
@@ -8,7 +9,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Contact Support | BioLongevity Labs',
     description: 'Contact BioLongevity Labs support team for assistance with your research orders.',
-    url: 'https://biolongevitylabss.com/support',
+    url: `${SITE_URL}/support`,
     siteName: 'BioLongevity Labs',
     type: 'website',
   },

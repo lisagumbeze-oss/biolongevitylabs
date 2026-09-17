@@ -1,8 +1,9 @@
 import { Metadata } from "next";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { canonicalPath } from "@/lib/seo";
+import { SITE_URL } from "@/lib/site";
 import { getProductBySlugOrId } from "@/lib/catalog-product";
-import { isProductId, productPath } from "@/lib/product-slug";
+import { productPath } from "@/lib/product-slug";
 import {
     getProductSeo,
     buildFaqPageSchema,
@@ -23,6 +24,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     if (!product) {
         return {
             title: "Product Not Found",
+            robots: { index: false, follow: false },
         };
     }
 
@@ -30,9 +32,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const title =
         seo?.metaTitle ??
         (product.name.includes("for Research") ? product.name : `${product.name} for Research`);
-    const plainDescription = product.description.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
-    const description = seo?.metaDescription ?? plainDescription.substring(0, 160);
+    const plainDescription = (product.description || "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+    const fallbackDescription = `${product.name} research compound for laboratory investigation. Research use only, not for human or veterinary use.`.slice(0, 160);
+    const description = (seo?.metaDescription ?? plainDescription.substring(0, 160)) || fallbackDescription;
     const path = productPath(product);
+    const imageUrl = product.image.startsWith("http") ? product.image : `${SITE_URL}${product.image}`;
 
     return {
         title,
@@ -41,12 +45,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         openGraph: {
             title: `${title} | BioLongevity Labs`,
             description,
-            url: `https://biolongevitylabss.com${path}`,
+            url: `${SITE_URL}${path}`,
             siteName: "BioLongevity Labs",
             type: "website",
             images: [
                 {
-                    url: product.image.startsWith("http") ? product.image : `https://biolongevitylabss.com${product.image}`,
+                    url: imageUrl,
                     width: 1200,
                     height: 630,
                     alt: product.name,
@@ -57,7 +61,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             card: "summary_large_image",
             title,
             description,
-            images: [product.image.startsWith("http") ? product.image : `https://biolongevitylabss.com${product.image}`],
+            images: [imageUrl],
         },
     };
 }
@@ -66,7 +70,7 @@ export default async function ProductDetailsPage({ params }: Props) {
     const { slug } = await params;
     const product = await getProductBySlugOrId(slug);
 
-    if (!product) return <ProductDetailsView slug={slug} key={slug} />;
+    if (!product) notFound();
 
     const canonicalSlug = product.slug!;
     if (slug !== canonicalSlug) {
@@ -90,19 +94,19 @@ export default async function ProductDetailsPage({ params }: Props) {
                                 "@type": "ListItem",
                                 position: 1,
                                 name: "Home",
-                                item: "https://biolongevitylabss.com/",
+                                item: `${SITE_URL}/`,
                             },
                             {
                                 "@type": "ListItem",
                                 position: 2,
                                 name: "Shop",
-                                item: "https://biolongevitylabss.com/shop",
+                                item: `${SITE_URL}/shop`,
                             },
                             {
                                 "@type": "ListItem",
                                 position: 3,
                                 name: product.name,
-                                item: `https://biolongevitylabss.com${path}`,
+                                item: `${SITE_URL}${path}`,
                             },
                         ],
                     }),
@@ -116,7 +120,7 @@ export default async function ProductDetailsPage({ params }: Props) {
                         "@context": "https://schema.org",
                         "@type": "Product",
                         name: product.name,
-                        image: product.image.startsWith("http") ? product.image : `https://biolongevitylabss.com${product.image}`,
+                        image: product.image.startsWith("http") ? product.image : `${SITE_URL}${product.image}`,
                         description: product.description,
                         sku: product.id,
                         mpn: product.id,
@@ -127,7 +131,7 @@ export default async function ProductDetailsPage({ params }: Props) {
                         category: product.category,
                         offers: {
                             "@type": "Offer",
-                            url: `https://biolongevitylabss.com${path}`,
+                            url: `${SITE_URL}${path}`,
                             priceCurrency: "USD",
                             price: product.isVariable && product.minPrice ? product.minPrice : product.price,
                             priceValidUntil: "2026-12-31",
@@ -149,7 +153,7 @@ export default async function ProductDetailsPage({ params }: Props) {
                     }}
                 />
             ) : null}
-            <ProductDetailsView slug={canonicalSlug} key={canonicalSlug} />
+            <ProductDetailsView slug={canonicalSlug} initialProduct={product} key={canonicalSlug} />
         </>
     );
 }

@@ -102,7 +102,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             className="group bg-white dark:bg-slate-900 rounded-4xl overflow-hidden border border-slate-100 dark:border-slate-800 flex flex-col h-full hover:shadow-[0_20px_50px_rgba(0,0,0,0.05)] dark:hover:shadow-[0_20px_50px_rgba(0,0,0,0.3)] transition-all duration-500"
         >
             <Link href={href} className="flex flex-col flex-1">
-                <div className="relative aspect-square bg-slate-50 dark:bg-slate-950 overflow-hidden m-4 rounded-3xl">
+                <div className="relative m-4 aspect-square overflow-hidden rounded-3xl border border-slate-100 bg-white">
                     {image ? (
                         <Image
                             src={image}

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import AnswerCapsule from "@/components/AnswerCapsule";
 import BioregulatorsShop from "@/components/BioregulatorsShop";
+import { SITE_URL } from "@/lib/site";
 
 export default function BioregulatorsPage() {
   return (
@@ -12,13 +13,13 @@ export default function BioregulatorsPage() {
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
             itemListElement: [
-              { "@type": "ListItem", position: 1, name: "Home", item: "https://biolongevitylabss.com/" },
-              { "@type": "ListItem", position: 2, name: "Shop", item: "https://biolongevitylabss.com/shop" },
+              { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` },
+              { "@type": "ListItem", position: 2, name: "Shop", item: `${SITE_URL}/shop` },
               {
                 "@type": "ListItem",
                 position: 3,
                 name: "Bioregulators",
-                item: "https://biolongevitylabss.com/shop/bioregulators",
+                item: `${SITE_URL}/shop/bioregulators`,
               },
             ],
           }),

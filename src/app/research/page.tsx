@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ArrowRight, Calendar, User, Search, Tag } from "lucide-react";
 import { motion } from "framer-motion";
 import { researchPosts } from "@/data/researchPosts";
+import { SITE_URL } from "@/lib/site";
 import type { BlogPost } from "@/data/researchPostTypes";
 
 export default function ResearchPage() {
@@ -43,13 +44,13 @@ export default function ResearchPage() {
                                 "@type": "ListItem",
                                 "position": 1,
                                 "name": "Home",
-                                "item": "https://biolongevitylabss.com/"
+                                "item": `${SITE_URL}/`
                             },
                             {
                                 "@type": "ListItem",
                                 "position": 2,
                                 "name": "Research",
-                                "item": "https://biolongevitylabss.com/research"
+                                "item": `${SITE_URL}/research`
                             }
                         ]
                     })
