@@ -26,6 +26,10 @@ const SMARTSUPP_BOOTSTRAP = `
 var _smartsupp = _smartsupp || {};
 _smartsupp.key = '${SMARTSUPP_KEY}';
 _smartsupp.color = '${BRAND_PRIMARY}';
+if (window.innerWidth < 768) {
+  _smartsupp.offsetX = ${SMARTSUPP_OFFSET_X};
+  _smartsupp.offsetY = ${SMARTSUPP_MOBILE_OFFSET_Y};
+}
 window.smartsupp||(function(d) {
   var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
   s=d.getElementsByTagName('script')[0];c=d.createElement('script');
@@ -47,14 +51,42 @@ export default function SmartsuppWidget() {
   useEffect(() => {
     if (!shouldLoad) return;
 
+    const placeChat = () => {
+      if (window.innerWidth >= 768) return;
+      const bottom = `${SMARTSUPP_MOBILE_OFFSET_Y}px`;
+
+      document.querySelectorAll<HTMLElement>("[data-smartsupp-id]").forEach((node) => {
+        if (getComputedStyle(node).position !== "fixed") return;
+        const height = node.getBoundingClientRect().height;
+        if (height === 0 || height > 140) return;
+        if (node.style.bottom === bottom) return;
+        node.style.bottom = bottom;
+        node.style.top = "auto";
+      });
+    };
+
+    placeChat();
+    const observer = new MutationObserver(placeChat);
+    observer.observe(document.documentElement, { childList: true, subtree: true });
+    const interval = window.setInterval(placeChat, 1000);
+    const stop = window.setTimeout(() => window.clearInterval(interval), 8000);
+
+    return () => {
+      observer.disconnect();
+      window.clearInterval(interval);
+      window.clearTimeout(stop);
+    };
+  }, [shouldLoad]);
+
+  useEffect(() => {
+    if (!shouldLoad) return;
+
     window._smartsupp = window._smartsupp || {};
     window._smartsupp.color = BRAND_PRIMARY;
-    window._smartsupp.offsetX = SMARTSUPP_OFFSET_X;
 
-    if (typeof window !== "undefined" && window.innerWidth < 768) {
+    if (window.innerWidth < 768) {
+      window._smartsupp.offsetX = SMARTSUPP_OFFSET_X;
       window._smartsupp.offsetY = SMARTSUPP_MOBILE_OFFSET_Y;
-    } else {
-      window._smartsupp.offsetY = 20;
     }
   }, [shouldLoad]);
 

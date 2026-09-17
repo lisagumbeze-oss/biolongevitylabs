@@ -24,6 +24,14 @@ export default function ShopPage() {
     const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
     useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const category = params.get("category");
+        const form = params.get("form");
+        if (category) setActiveCategory(category);
+        if (form) setActiveForm(form);
+    }, []);
+
+    useEffect(() => {
         const fetchProducts = async () => {
             try {
                 const response = await fetch('/api/products');

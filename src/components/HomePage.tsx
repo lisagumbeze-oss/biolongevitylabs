@@ -23,6 +23,44 @@ const staggerContainer = {
   },
 };
 
+const PRODUCT_SECTIONS: {
+  title: string;
+  description: string;
+  href: string;
+  match: (product: Product) => boolean;
+}[] = [
+  {
+    title: "Peptide capsules",
+    description: "Capsule lots for formulation and cell-model studies, with a certificate of analysis on every batch.",
+    href: "/shop?category=Peptide%20Capsules",
+    match: (product) => product.category === "Peptide Capsules",
+  },
+  {
+    title: "Bioregulator vials",
+    description: "Lyophilized short peptides for organ- and tissue-specific in vitro research.",
+    href: "/shop?category=Bioregulator%20Vials",
+    match: (product) => product.category === "Bioregulator Vials",
+  },
+  {
+    title: "Bioregulator capsules",
+    description: "Organ-specific capsule formats for laboratory work that needs an oral research matrix.",
+    href: "/shop?category=Bioregulator%20Capsules",
+    match: (product) => product.category === "Bioregulator Capsules",
+  },
+  {
+    title: "Research creams",
+    description: "Topical bioregulators prepared for dermal and barrier-model studies.",
+    href: "/shop?category=Bioregulator%20Creams",
+    match: (product) => product.category === "Bioregulator Creams",
+  },
+];
+
+function productsForSection(products: Product[], match: (product: Product) => boolean, skipIds: Set<string>) {
+  const matched = products.filter((product) => match(product) && !skipIds.has(product.id));
+  const inStock = matched.filter((product) => product.stockStatus !== "Out of Stock");
+  return (inStock.length >= 4 ? inStock : matched).slice(0, 4);
+}
+
 const TOP_PRODUCT_LINKS = [
   { href: "/product/regeno-blend-bpc-157-tb-500-cartalax-30mg", label: "BPC-157 & TB-500 blend" },
   { href: "/product/thymulin-peptide-10mg", label: "Thymulin peptide" },
@@ -36,6 +74,11 @@ export default function HomePage() {
   const [isPaused, setIsPaused] = useState(false);
 
   const carouselProducts = products.slice(0, 10);
+  const featuredIds = new Set(carouselProducts.map((product) => product.id));
+  const productSections = PRODUCT_SECTIONS.map((section) => ({
+    ...section,
+    items: productsForSection(products, section.match, featuredIds),
+  })).filter((section) => section.items.length > 0);
   const totalProducts = carouselProducts.length;
   const visibleCount = 4;
 
@@ -215,6 +258,35 @@ export default function HomePage() {
           </div>
         </motion.div>
       </section>
+
+      {!isLoading &&
+        productSections.map((section) => (
+          <section key={section.title} className="border-t border-slate-200 bg-white py-16 lg:py-20">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="mb-8 flex items-end justify-between gap-6">
+                <div>
+                  <h2 className="text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl">
+                    {section.title}
+                  </h2>
+                  <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-base">
+                    {section.description}
+                  </p>
+                </div>
+                <Link
+                  href={section.href}
+                  className="shrink-0 text-sm font-semibold text-primary hover:underline"
+                >
+                  View all
+                </Link>
+              </div>
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                {section.items.map((product) => (
+                  <ProductCard key={product.id} {...product} />
+                ))}
+              </div>
+            </div>
+          </section>
+        ))}
 
       <section className="relative py-24 overflow-hidden">
         <div className="absolute inset-0 bg-slate-900">

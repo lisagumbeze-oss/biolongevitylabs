@@ -7,13 +7,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   FLOATING_ACTION_GAP_PX,
   FLOATING_ACTION_SIZE_PX,
+  SMARTSUPP_BUTTON_HEIGHT_PX,
   SMARTSUPP_MOBILE_OFFSET_Y,
   SMARTSUPP_OFFSET_X,
 } from "@/lib/brand";
 
 const SHOW_AFTER_SCROLL_PX = 320;
 const DESKTOP_CHAT_OFFSET_Y = 20;
-const stackAboveChat = FLOATING_ACTION_SIZE_PX + FLOATING_ACTION_GAP_PX;
 
 export default function BackToTopButton() {
   const pathname = usePathname();
@@ -53,8 +53,9 @@ export default function BackToTopButton() {
 
   if (isAdminPage) return null;
 
-  const chatOffsetY = isMobile ? SMARTSUPP_MOBILE_OFFSET_Y : DESKTOP_CHAT_OFFSET_Y;
-  const bottomPx = chatOffsetY + stackAboveChat;
+  const bottomPx = isMobile
+    ? SMARTSUPP_MOBILE_OFFSET_Y + SMARTSUPP_BUTTON_HEIGHT_PX + FLOATING_ACTION_GAP_PX
+    : DESKTOP_CHAT_OFFSET_Y + FLOATING_ACTION_SIZE_PX + FLOATING_ACTION_GAP_PX;
 
   return (
     <AnimatePresence>

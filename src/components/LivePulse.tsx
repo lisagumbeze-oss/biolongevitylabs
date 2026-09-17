@@ -2,8 +2,12 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Zap, Globe } from "lucide-react";
+import { products } from "@/data/products";
+import { researchPosts } from "@/data/researchPosts";
+import { productPath } from "@/lib/product-slug";
 
 const activities = [
     { city: "London", country: "UK", product: "BPC-157 5mg", action: "verified order" },
@@ -14,6 +18,50 @@ const activities = [
     { city: "Toronto", country: "Canada", product: "Semaglutide", action: "COA downloaded" },
     { city: "Paris", country: "France", product: "Retatrutide", action: "verified order" },
 ];
+
+function compoundKeys(label: string): string[] {
+    return label
+        .toLowerCase()
+        .split(/[\s,/]+/)
+        .map((part) => part.replace(/[^a-z0-9]/g, ""))
+        .filter((part) => part.length >= 4 && !/^\d+(mg|mcg|ml)?$/.test(part));
+}
+
+function findProductHref(label: string): string | null {
+    const keys = compoundKeys(label);
+    if (!keys.length) return null;
+
+    const match = products.find((product) => {
+        const name = product.name.toLowerCase().replace(/[^a-z0-9]/g, "");
+        return keys.every((key) => name.includes(key));
+    }) || products.find((product) => {
+        const name = product.name.toLowerCase().replace(/[^a-z0-9]/g, "");
+        return keys.some((key) => name.includes(key));
+    });
+
+    return match ? productPath(match) : null;
+}
+
+function findResearchHref(label: string): string | null {
+    const keys = compoundKeys(label);
+    if (!keys.length) return null;
+
+    const match = researchPosts.find((post) => {
+        const haystack = `${post.title} ${post.slug}`.toLowerCase().replace(/[^a-z0-9]/g, "");
+        return keys.some((key) => haystack.includes(key));
+    });
+
+    return match ? `/research/${match.slug}` : null;
+}
+
+function activityHref(activity: (typeof activities)[number]): string {
+    const prefersResearch = /research|log|analysis|coa/i.test(activity.action);
+    const productHref = findProductHref(activity.product);
+    const researchHref = findResearchHref(activity.product);
+
+    if (prefersResearch) return researchHref || productHref || "/research";
+    return productHref || researchHref || "/shop";
+}
 
 export default function LivePulse() {
     const pathname = usePathname();
@@ -51,36 +99,39 @@ export default function LivePulse() {
                         initial={{ opacity: 0, x: -50, scale: 0.9 }}
                         animate={{ opacity: 1, x: 0, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.9, x: -20 }}
-                        className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-slate-200 dark:border-slate-800 p-4 rounded-3xl shadow-2xl shadow-primary/10 flex items-center gap-4 max-w-[320px] pointer-events-auto"
+                        className="pointer-events-auto max-w-[320px]"
                     >
-                        <div className="relative">
-                            <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
-                                <Globe className="w-6 h-6 animate-pulse" />
-                            </div>
-                            <div className="absolute -top-1 -right-1 w-4 h-4 bg-emerald-500 border-2 border-white dark:border-slate-900 rounded-full animate-pulse" />
-                        </div>
-
-                        <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-0.5">
-                                <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-widest">
-                                    {activities[currentActivity].city}, {activities[currentActivity].country}
-                                </span>
-                                <span className="w-1 h-1 rounded-full bg-slate-300" />
-                                <span className="text-[9px] font-bold text-slate-400 uppercase">Just now</span>
-                            </div>
-                            <p className="text-[11px] text-slate-600 dark:text-slate-400 font-medium leading-tight">
-                                <span className="font-black text-slate-900 dark:text-white">{activities[currentActivity].product}</span>
-                                <br />
-                                {activities[currentActivity].action}
-                            </p>
-                        </div>
-
-                        <button 
-                            onClick={() => setIsVisible(false)}
-                            className="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors text-slate-400"
+                        <Link
+                            href={activityHref(activities[currentActivity])}
+                            className="bg-white border border-slate-200 p-4 rounded-3xl shadow-2xl shadow-primary/10 flex items-center gap-4 hover:border-primary/40 hover:shadow-primary/20 transition-colors"
+                            aria-label={`${activities[currentActivity].product}, ${activities[currentActivity].action}`}
                         >
-                            <Zap className="w-3.5 h-3.5 fill-primary text-primary" />
-                        </button>
+                            <div className="relative">
+                                <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
+                                    <Globe className="w-6 h-6 animate-pulse" />
+                                </div>
+                                <div className="absolute -top-1 -right-1 w-4 h-4 bg-emerald-500 border-2 border-white rounded-full animate-pulse" />
+                            </div>
+
+                            <div className="flex-1">
+                                <div className="flex items-center gap-2 mb-0.5">
+                                    <span className="text-[10px] font-black text-slate-950 uppercase tracking-widest">
+                                        {activities[currentActivity].city}, {activities[currentActivity].country}
+                                    </span>
+                                    <span className="w-1 h-1 rounded-full bg-slate-300" />
+                                    <span className="text-[9px] font-bold text-slate-500 uppercase">Just now</span>
+                                </div>
+                                <p className="text-[11px] text-slate-600 font-medium leading-tight">
+                                    <span className="font-black text-slate-950">{activities[currentActivity].product}</span>
+                                    <br />
+                                    {activities[currentActivity].action}
+                                </p>
+                            </div>
+
+                            <span className="p-1 text-primary" aria-hidden>
+                                <Zap className="w-3.5 h-3.5 fill-primary" />
+                            </span>
+                        </Link>
                     </motion.div>
                 )}
             </AnimatePresence>

@@ -1,139 +1,123 @@
-"use client";
-
 import React from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
 import Image from "next/image";
-import { ArrowRight, FlaskConical, ShieldCheck, Zap } from "lucide-react";
-import MolecularViewer from "./MolecularViewer";
+import { ArrowRight } from "lucide-react";
+import { products } from "@/data/products";
+import { productPath } from "@/lib/product-slug";
+
+const FEATURED_SLUGS = [
+    "regeno-blend-bpc-157-tb-500-cartalax-30mg",
+    "thymulin-peptide-10mg",
+    "follistatin-flgr242-10mg",
+];
+
+const SPECIFICATIONS = [
+    { label: "Testing", value: "Third-party COA on every batch" },
+    { label: "Origin", value: "Synthesized and fulfilled in the USA" },
+    { label: "Documentation", value: "HPLC and mass spectrometry reports" },
+    { label: "Use", value: "In vitro research only" },
+];
+
+const featured = FEATURED_SLUGS.map((slug) => products.find((product) => product.slug === slug)).filter(
+    (product): product is (typeof products)[number] => Boolean(product)
+);
+
+function formatPrice(price: number) {
+    return price % 1 === 0 ? `$${price.toFixed(0)}` : `$${price.toFixed(2)}`;
+}
 
 const Hero = () => {
     return (
-        <div className="relative overflow-hidden bg-linear-to-br from-slate-950 via-slate-900 to-indigo-950 min-h-[90vh] flex items-center">
-            {/* Animated Background Blobs */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <motion.div
-                    animate={{
-                        x: [0, 60, -40, 0],
-                        y: [0, -80, 40, 0],
-                        scale: [1, 1.2, 0.9, 1],
-                    }}
-                    transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
-                    className="absolute -top-32 -left-32 w-[600px] h-[600px] rounded-full bg-primary/20 blur-[100px]"
-                />
-                <motion.div
-                    animate={{
-                        x: [0, -50, 30, 0],
-                        y: [0, 60, -50, 0],
-                        scale: [1, 0.8, 1.1, 1],
-                    }}
-                    transition={{ duration: 22, repeat: Infinity, ease: "easeInOut", delay: 3 }}
-                    className="absolute top-1/2 right-0 w-[500px] h-[500px] rounded-full bg-indigo-500/15 blur-[80px]"
-                />
-                <motion.div
-                    animate={{
-                        x: [0, 40, -20, 0],
-                        y: [0, -30, 60, 0],
-                        scale: [1, 1.3, 0.95, 1],
-                    }}
-                    transition={{ duration: 15, repeat: Infinity, ease: "easeInOut", delay: 6 }}
-                    className="absolute bottom-0 left-1/3 w-[400px] h-[400px] rounded-full bg-violet-500/10 blur-[90px]"
-                />
-            </div>
-
-            {/* Grid overlay */}
-            <div className="absolute inset-0 bg-[linear-gradient(rgba(99,102,241,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(99,102,241,0.03)_1px,transparent_1px)] bg-[size:64px_64px] pointer-events-none" />
-
-            <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
-                <div className="grid lg:grid-cols-2 gap-16 items-center">
-                    {/* Left column */}
-                    <div>
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5 }}
-                            className="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 text-primary rounded-full px-4 py-2 text-xs font-bold uppercase tracking-widest mb-6"
+        <section aria-labelledby="home-hero-heading" className="bg-white border-b border-slate-200">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-center py-16 lg:py-24">
+                    <div className="lg:col-span-7">
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary">
+                            Research use only
+                        </p>
+                        <h1
+                            id="home-hero-heading"
+                            className="mt-5 max-w-xl text-4xl sm:text-5xl lg:text-[3.35rem] font-semibold tracking-tight text-slate-950 leading-[1.08]"
                         >
-                            <FlaskConical className="w-3.5 h-3.5" />
-                            Research-Grade Compounds
-                        </motion.div>
-
-                        <motion.h1
-                            initial={{ opacity: 1, y: 0 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="text-5xl sm:text-6xl xl:text-7xl tracking-tight font-black text-white leading-[1.05] mb-6"
-                        >
-                            Buy Research
-                            <span className="block text-transparent bg-clip-text bg-linear-to-r from-primary via-violet-400 to-indigo-400">
-                                Peptides for Sale
-                            </span>
-                            Online
-                        </motion.h1>
-
-                        <motion.p
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5, delay: 0.2 }}
-                            className="text-lg text-slate-300 max-w-lg leading-relaxed mb-8"
-                        >
-                            Premium purity BPC-157, TB-500, and cutting-edge peptides. USA-made, third-party tested, and research-compliant biotechnology delivered to your door.
-                        </motion.p>
-
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5, delay: 0.3 }}
-                            className="flex flex-wrap gap-4 mb-12"
-                        >
+                            Research peptides for laboratory use.
+                        </h1>
+                        <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate-600">
+                            BioLongevity Labs supplies lyophilized peptides and bioregulators for in vitro study.
+                            Lots are independently tested, documented, and available to order online with the
+                            certificate of analysis included.
+                        </p>
+                        <div className="mt-8 flex flex-wrap items-center gap-3">
                             <Link
                                 href="/shop"
-                                aria-label="Shop our full peptide catalog"
-                                className="group inline-flex items-center gap-2 px-8 py-4 bg-primary hover:bg-primary/90 text-white font-black rounded-2xl transition-all shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:scale-105 text-base"
+                                className="inline-flex h-11 items-center gap-2 rounded-md bg-primary px-5 text-sm font-semibold text-white transition-colors hover:bg-[#0f6fd4]"
                             >
-                                Shop Catalog
-                                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                                Browse catalog
+                                <ArrowRight className="h-4 w-4" aria-hidden />
                             </Link>
                             <Link
-                                href="/shop?filter=deals"
-                                aria-label="View current research peptide deals"
-                                className="inline-flex items-center gap-2 px-8 py-4 bg-white/10 hover:bg-white/15 border border-white/10 text-white font-bold rounded-2xl transition-all text-base"
+                                href="/research"
+                                className="inline-flex h-11 items-center rounded-md border border-slate-300 bg-white px-5 text-sm font-semibold text-slate-900 transition-colors hover:border-slate-400"
                             >
-                                View Deals
+                                Research library
                             </Link>
-                        </motion.div>
-
-                        {/* Trust Badges */}
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ duration: 0.5, delay: 0.5 }}
-                            className="flex flex-wrap gap-6"
-                        >
-                            {[
-                                { icon: ShieldCheck, label: "3rd Party Tested" },
-                                { icon: Zap, label: "Same-Day Shipping" },
-                                { icon: FlaskConical, label: "≥98% Purity" },
-                            ].map(({ icon: Icon, label }) => (
-                                <div key={label} className="flex items-center gap-2 text-slate-300 text-sm font-semibold">
-                                    <Icon className="w-4 h-4 text-primary" />
-                                    {label}
-                                </div>
-                            ))}
-                        </motion.div>
+                        </div>
                     </div>
 
-                    {/* Right column – Molecular Viewer */}
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
-                        className="relative hidden lg:block"
-                    >
-                        <MolecularViewer />
-                    </motion.div>
+                    <aside className="lg:col-span-5">
+                        <div className="rounded-2xl border border-slate-200 bg-white">
+                            <div className="flex items-baseline justify-between gap-4 border-b border-slate-200 px-5 py-4">
+                                <p className="text-sm font-semibold text-slate-950">In the catalog</p>
+                                <Link href="/shop" className="text-sm font-medium text-primary hover:underline">
+                                    View all
+                                </Link>
+                            </div>
+                            <ul>
+                                {featured.map((product) => (
+                                    <li key={product.id} className="border-b border-slate-100 last:border-b-0">
+                                        <Link
+                                            href={productPath(product)}
+                                            className="group flex items-center gap-4 px-5 py-4"
+                                        >
+                                            <span className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg border border-slate-200 bg-white">
+                                                <Image
+                                                    src={product.image}
+                                                    alt=""
+                                                    fill
+                                                    sizes="64px"
+                                                    className="object-contain p-1"
+                                                />
+                                            </span>
+                                            <span className="min-w-0 flex-1">
+                                                <span className="block truncate text-sm font-semibold text-slate-950 group-hover:text-primary">
+                                                    {product.name}
+                                                </span>
+                                                <span className="mt-1 block text-xs text-slate-500">
+                                                    {product.form} · {product.category}
+                                                </span>
+                                            </span>
+                                            <span className="shrink-0 text-sm font-semibold tabular-nums text-slate-950">
+                                                {formatPrice(product.price)}
+                                            </span>
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </aside>
                 </div>
+
+                <dl className="grid border-t border-slate-200 sm:grid-cols-2 lg:grid-cols-4">
+                    {SPECIFICATIONS.map((item) => (
+                        <div key={item.label} className="border-b border-slate-200 py-5 sm:border-b-0 sm:pr-8 lg:py-6">
+                            <dt className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">
+                                {item.label}
+                            </dt>
+                            <dd className="mt-2 text-sm font-medium text-slate-950">{item.value}</dd>
+                        </div>
+                    ))}
+                </dl>
             </div>
-        </div>
+        </section>
     );
 };
 
