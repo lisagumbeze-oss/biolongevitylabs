@@ -1,8 +1,7 @@
 import React from 'react';
-import { Text, Heading, Section, Row, Column } from '@react-email/components';
-import EmailLayout from './shared/EmailLayout';
-import { OrderTable, InfoBlock } from './shared/EmailComponents';
-import { CRYPTO_WALLETS, CRYPTO_DISCOUNT_PERCENT } from '@/config/payments';
+import EmailLayout, { EMAIL_SUPPORT } from './shared/EmailLayout';
+import { CryptoWalletList, DetailList, EmailActions, EmailHeading, EmailParagraph, OrderTable } from './shared/EmailComponents';
+import { SITE_URL } from '@/lib/site';
 import type { CryptoQuote } from '@/lib/crypto-quotes';
 
 interface AdminOrderNotificationEmailProps {
@@ -50,79 +49,39 @@ export const AdminOrderNotificationEmail = ({
         country: 'USA'
     }
 }: AdminOrderNotificationEmailProps) => {
+    const orderPath = orderId.replace('#', '');
+    const address = [
+        shippingAddress.addressLine1,
+        shippingAddress.addressLine2,
+        `${shippingAddress.city}, ${shippingAddress.state} ${shippingAddress.zipCode}`,
+        shippingAddress.country,
+    ].filter(Boolean).join('\n');
+
     return (
-        <EmailLayout previewText={`ALERT: New Order ${orderId} - $${total.toFixed(2)}`}>
-            {/* Admin Header */}
-            <Section className="mb-10">
-                <Text className="text-emerald-500 text-[10px] font-black uppercase tracking-[0.3em] m-0 mb-3">
-                    Transaction Log: New Acquisition
-                </Text>
-                <Heading className="text-slate-900 text-[32px] font-black leading-[1.1] m-0 tracking-tight">
-                    Order {orderId}
-                </Heading>
-                <Text className="text-slate-500 text-[14px] mt-2 font-medium">
-                    New research order submitted via the global portal. Action required for logistics and payment verification.
-                </Text>
-            </Section>
-
-            {/* Customer & Payment Info Grid */}
-            <Section className="mb-8 p-1 bg-slate-950 border border-slate-800 border-solid rounded-2xl overflow-hidden shadow-xl">
-                <table className="w-full border-collapse">
-                    <tbody>
-                        <tr>
-                            <td className="p-6 border-b border-slate-800 border-solid" style={{ width: '50%' }}>
-                                <Text className="text-slate-500 text-[10px] font-black uppercase tracking-widest m-0 mb-1">Researcher Identification</Text>
-                                <Text className="text-white text-[16px] font-bold m-0">{customerName}</Text>
-                                <Text className="text-primary text-[14px] font-bold m-0">{customerEmail}</Text>
-                            </td>
-                            <td className="p-6 border-b border-slate-800 border-solid border-l" style={{ width: '50%' }}>
-                                <Text className="text-slate-500 text-[10px] font-black uppercase tracking-widest m-0 mb-1">Financial Protocol</Text>
-                                <Text className="text-white text-[16px] font-bold m-0 uppercase tracking-wide">{paymentMethod}</Text>
-                                {paymentType === 'crypto' && (
-                                    <Text className="text-emerald-400 text-[12px] font-bold m-0 mt-2">
-                                        {CRYPTO_DISCOUNT_PERCENT}% cryptocurrency discount included in the order total.
-                                    </Text>
-                                )}
-                                {paymentType === 'crypto' && CRYPTO_WALLETS.map((wallet) => {
-                                    const quote = cryptoQuotes?.find((item) => item.id === wallet.id);
-                                    return (
-                                    <Text key={wallet.id} className="text-primary text-[12px] font-bold m-0 mt-2" style={{ wordBreak: 'break-all' }}>
-                                        {wallet.symbol}{quote ? `: send exactly ${quote.amount}` : ''}<br />{wallet.address}
-                                    </Text>
-                                    );
-                                })}
-                                <Text className="text-emerald-500 text-[12px] font-black m-0 uppercase mt-1">Pending Verification</Text>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </Section>
-
+        <EmailLayout previewText={`New order ${orderId} · $${total.toFixed(2)} from ${customerName}`}>
+            <EmailHeading
+                eyebrow="New order"
+                title={orderId}
+                subtitle="A customer placed an order. Confirm the payment, then update the order status."
+            />
+            <DetailList
+                rows={[
+                    { label: 'Customer', value: customerName },
+                    { label: 'Email', value: customerEmail },
+                    { label: 'Payment', value: paymentMethod },
+                    { label: 'Total due', value: `$${total.toFixed(2)}` },
+                    { label: 'Ship to', value: address },
+                ]}
+            />
             <OrderTable items={items} total={total} />
-
-            <InfoBlock title="Logistics Destination" iconColor="#137fec">
-                <div className="bg-white p-4 rounded-xl border border-slate-200 border-solid shadow-sm">
-                    <Text className="text-slate-900 text-[15px] font-bold m-0 mb-1">{customerName}</Text>
-                    <Text className="text-slate-600 text-[14px] leading-[22px] m-0">
-                        {shippingAddress.addressLine1}
-                        {shippingAddress.addressLine2 && <><br />{shippingAddress.addressLine2}</>}
-                        <br />
-                        {shippingAddress.city}, {shippingAddress.state} {shippingAddress.zipCode}
-                        <br />
-                        <span className="font-black text-slate-900 uppercase tracking-widest text-[11px]">{shippingAddress.country}</span>
-                    </Text>
-                </div>
-            </InfoBlock>
-
-            <Section className="mt-10 p-6 bg-slate-50 border border-slate-200 border-solid rounded-2xl">
-                <Text className="text-slate-500 text-[12px] m-0 font-medium leading-[20px]">
-                    <strong>Next Steps:</strong> Please cross-reference the transfer in the financial dashboard. Once verified, update the order status to "Processing" to trigger laboratory selection.
-                </Text>
-            </Section>
-
-            <Text className="text-slate-400 text-[11px] text-center mt-12 font-mono">
-                SECURE TRANSMISSION // ID: {orderId.replace('#', '')} // PORTAL: ADMIN-V1
-            </Text>
+            {paymentType === 'crypto' && <CryptoWalletList quotes={cryptoQuotes} total={total} />}
+            <EmailActions
+                primary={{ href: `${SITE_URL}/admin/orders/${orderPath}`, label: 'Open order' }}
+                secondary={{ href: `mailto:${customerEmail}`, label: 'Email customer' }}
+            />
+            <EmailParagraph>
+                Replies to this message can also go to {EMAIL_SUPPORT}.
+            </EmailParagraph>
         </EmailLayout>
     );
 };

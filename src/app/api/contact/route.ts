@@ -3,6 +3,7 @@ import React from 'react';
 import { sendEmailToBoth, isEmailConfigured } from '@/lib/mail';
 import ContactFormEmail from '@/components/emails/ContactFormEmail';
 import SubmissionReceivedEmail from '@/components/emails/SubmissionReceivedEmail';
+import { SITE_URL } from '@/lib/site';
 
 export async function POST(request: Request) {
     try {
@@ -30,6 +31,8 @@ export async function POST(request: Request) {
                         { label: 'Phone', value: phone || 'Not provided' },
                         { label: 'Message', value: message },
                     ],
+                    primaryAction: { href: SITE_URL, label: 'Visit BioLongevity Labs' },
+                    secondaryAction: { href: 'mailto:support@biolongevitylabss.com', label: 'Email support' },
                 }),
                 adminSubject: `New Contact Form Message from ${name}`,
                 adminReact: React.createElement(ContactFormEmail, {

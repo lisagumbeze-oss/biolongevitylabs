@@ -1,8 +1,6 @@
 import React from 'react';
-import { Text, Section, Heading, Img } from '@react-email/components';
-import EmailLayout from './shared/EmailLayout';
-import { OrderTable, InfoBlock, HeroHeader } from './shared/EmailComponents';
-import { CRYPTO_WALLETS, CRYPTO_DISCOUNT_PERCENT } from '@/config/payments';
+import EmailLayout, { EMAIL_SUPPORT } from './shared/EmailLayout';
+import { CryptoWalletList, EmailActions, EmailHeading, EmailParagraph, OrderTable } from './shared/EmailComponents';
 import { SITE_URL } from '@/lib/site';
 import type { CryptoQuote } from '@/lib/crypto-quotes';
 
@@ -36,92 +34,27 @@ export const OrderReceiptEmail = ({
     paymentType,
     cryptoQuotes,
 }: OrderReceiptEmailProps) => {
+    const supportHref = `mailto:${EMAIL_SUPPORT}?subject=${encodeURIComponent(`Order ${orderId}`)}`;
+
     return (
-        <EmailLayout previewText={`Receipt: Order ${orderId} - BioLongevity Labs`}>
-            <HeroHeader 
-                title="Order Received" 
-                subtitle={`Verification of acquisition for ${customerName}. Your research materials are being prepared pending final payment verification.`}
+        <EmailLayout previewText={`Order ${orderId} received. Total due $${total.toFixed(2)}.`}>
+            <EmailHeading
+                eyebrow="Order received"
+                title={`Thank you, ${customerName.split(' ')[0] || customerName}`}
+                subtitle={`Order ${orderId} is waiting for payment. Send the total below and include the order number as the reference.`}
             />
-
+            <EmailParagraph>
+                Payment method: {paymentMethod}. We will email you again after the transfer is confirmed.
+            </EmailParagraph>
             <OrderTable items={items} total={total} />
-
-            <InfoBlock title="Payment Protocol" iconColor="#137fec">
-                <Text className="m-0 font-bold text-slate-900">Method: {paymentMethod}</Text>
-                {paymentType === 'crypto' && (
-                    <div style={{ marginTop: '16px' }}>
-                        <Text className="text-emerald-700 text-[13px] font-bold m-0 mb-3">
-                            A {CRYPTO_DISCOUNT_PERCENT}% cryptocurrency discount is included in the total above.
-                        </Text>
-                        <Text className="text-slate-500 text-[12px] m-0 mb-3">
-                            Send the exact amount shown for one currency. Each amount equals <strong>${total.toFixed(2)}</strong>. Include order ID <strong>{orderId}</strong> in the memo if your wallet supports it.
-                        </Text>
-                        {CRYPTO_WALLETS.map((wallet) => {
-                            const quote = cryptoQuotes?.find((item) => item.id === wallet.id);
-                            return (
-                            <div key={wallet.id} style={{ marginTop: '12px', padding: '20px', backgroundColor: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
-                                <Text className="text-slate-400 text-[10px] font-black uppercase tracking-widest m-0 mb-2">{wallet.name} ({wallet.symbol})</Text>
-                                {quote && (
-                                    <Text className="text-slate-900 text-[18px] font-black m-0 mb-3">Send exactly {quote.amount} {wallet.symbol}</Text>
-                                )}
-                                {wallet.qrSrc && (
-                                    <Img
-                                        src={`${SITE_URL}${wallet.qrSrc}`}
-                                        alt={`${wallet.name} wallet QR code`}
-                                        width="160"
-                                        height="160"
-                                        style={{ margin: '0 0 12px', borderRadius: '12px' }}
-                                    />
-                                )}
-                                <Text className="text-slate-400 text-[10px] font-black uppercase tracking-widest m-0 mb-2">Wallet Address</Text>
-                                <Text className="text-slate-900 text-[14px] font-black m-0" style={{ wordBreak: 'break-all' }}>{wallet.address}</Text>
-                            </div>
-                            );
-                        })}
-                    </div>
-                )}
-                <Text className="mt-2 m-0 text-slate-600">
-                    Your order is currently in <strong>PENDING</strong> status. Please ensure the manual transfer is completed as per the instructions provided at checkout. Use your Order ID <strong>{orderId}</strong> as the reference.
-                </Text>
-            </InfoBlock>
-
-            <Section className="bg-slate-50 p-6 rounded-2xl border border-slate-200 border-solid">
-                <Heading as="h4" className="text-[11px] font-black uppercase tracking-[0.2em] m-0 mb-3 text-slate-400">
-                    Next Phases
-                </Heading>
-                <table className="w-full">
-                    <tr>
-                        <td className="pr-4 py-2" style={{ width: '20%' }}>
-                            <div className="bg-primary text-white text-[10px] font-black w-6 h-6 rounded-full flex items-center justify-center">1</div>
-                        </td>
-                        <td className="py-2">
-                            <Text className="text-[13px] font-bold text-slate-900 m-0">Payment Verification</Text>
-                            <Text className="text-[12px] text-slate-500 m-0">Our financial team verifies your transfer (typically 12-24 hours).</Text>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td className="pr-4 py-2">
-                            <div className="bg-slate-200 text-slate-500 text-[10px] font-black w-6 h-6 rounded-full flex items-center justify-center">2</div>
-                        </td>
-                        <td className="py-2">
-                            <Text className="text-[13px] font-bold text-slate-400 m-0">Laboratory Selection</Text>
-                            <Text className="text-[12px] text-slate-400 m-0">Items are pulled from temperature-controlled storage and inspected.</Text>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td className="pr-4 py-2">
-                            <div className="bg-slate-200 text-slate-500 text-[10px] font-black w-6 h-6 rounded-full flex items-center justify-center">3</div>
-                        </td>
-                        <td className="py-2">
-                            <Text className="text-[13px] font-bold text-slate-400 m-0">Global Logistics</Text>
-                            <Text className="text-[12px] text-slate-400 m-0">Dispatched via secure courier with real-time tracking IDs.</Text>
-                        </td>
-                    </tr>
-                </table>
-            </Section>
-
-            <Text className="text-slate-400 text-[11px] text-center mt-10 font-mono">
-                REFERENCE: {orderId} // {customerEmail.toUpperCase()}
-            </Text>
+            {paymentType === 'crypto' && <CryptoWalletList quotes={cryptoQuotes} total={total} />}
+            <EmailActions
+                primary={{ href: supportHref, label: 'Email support about this order' }}
+                secondary={{ href: SITE_URL, label: 'Visit the site' }}
+            />
+            <EmailParagraph>
+                This message was sent to {customerEmail}.
+            </EmailParagraph>
         </EmailLayout>
     );
 };

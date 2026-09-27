@@ -11,6 +11,7 @@ import PaymentReceivedEmail1 from '@/components/emails/PaymentReceivedEmail1';
 import OrderCancellationEmail from '@/components/emails/OrderCancellationEmail';
 import OrderShippedEmail from '@/components/emails/OrderShippedEmail';
 import SubmissionReceivedEmail from '@/components/emails/SubmissionReceivedEmail';
+import { SITE_URL } from '@/lib/site';
 import { cryptoDiscountAmount, roundMoney } from '@/config/payments';
 import { getCryptoQuotes, type CryptoQuote } from '@/lib/crypto-quotes';
 
@@ -361,6 +362,8 @@ async function sendStatusUpdateEmail(orderData: any) {
                         { label: 'Order', value: orderData.id },
                         { label: 'Payment method', value: orderData.payment_method || 'Manual transfer' },
                     ],
+                    primaryAction: { href: `mailto:support@biolongevitylabss.com?subject=${encodeURIComponent(`Payment receipt ${orderData.id}`)}`, label: 'Send receipt' },
+                    secondaryAction: { href: SITE_URL, label: 'Visit the site' },
                 }),
                 adminSubject: `Customer marked order paid - ${orderData.id}`,
                 adminReact: React.createElement(SubmissionReceivedEmail, {
@@ -374,6 +377,8 @@ async function sendStatusUpdateEmail(orderData: any) {
                         { label: 'Email', value: orderData.email },
                         { label: 'Payment method', value: orderData.payment_method || 'Manual transfer' },
                     ],
+                    primaryAction: { href: `${SITE_URL}/admin/orders/${String(orderData.id || '').replace('#', '')}`, label: 'Open order' },
+                    secondaryAction: { href: `mailto:${orderData.email}`, label: 'Email customer' },
                 }),
                 replyToCustomer: orderData.email,
             });

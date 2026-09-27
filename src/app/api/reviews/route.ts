@@ -5,6 +5,7 @@ import fs from 'fs';
 import path from 'path';
 import { sendEmailToBoth, isEmailConfigured } from '@/lib/mail';
 import SubmissionReceivedEmail from '@/components/emails/SubmissionReceivedEmail';
+import { SITE_URL } from '@/lib/site';
 
 const REVIEWS_JSON = path.join(process.cwd(), 'src/data/reviews.json');
 const ORDERS_JSON = path.join(process.cwd(), 'src/data/orders.json');
@@ -46,6 +47,7 @@ async function sendReviewEmails(review: {
                     { label: 'Rating', value: `${review.rating} / 5` },
                     { label: 'Review', value: review.comment },
                 ],
+                primaryAction: { href: SITE_URL, label: 'Visit BioLongevity Labs' },
             }),
             adminSubject: `New review from ${review.authorName}`,
             adminReact: React.createElement(SubmissionReceivedEmail, {
@@ -60,6 +62,8 @@ async function sendReviewEmails(review: {
                     { label: 'Rating', value: `${review.rating} / 5` },
                     { label: 'Review', value: review.comment },
                 ],
+                primaryAction: { href: `mailto:${review.authorEmail}`, label: 'Email reviewer' },
+                secondaryAction: { href: `${SITE_URL}/admin/reviews`, label: 'Open reviews' },
             }),
             replyToCustomer: review.authorEmail,
         });

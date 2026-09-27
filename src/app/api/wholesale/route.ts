@@ -3,6 +3,7 @@ import React from 'react';
 import { sendEmailToBoth, isEmailConfigured } from '@/lib/mail';
 import WholesaleApplicationEmail from '@/components/emails/WholesaleApplicationEmail';
 import SubmissionReceivedEmail from '@/components/emails/SubmissionReceivedEmail';
+import { SITE_URL } from '@/lib/site';
 
 export async function POST(request: Request) {
     try {
@@ -31,6 +32,8 @@ export async function POST(request: Request) {
                         { label: 'Projected volume', value: volume || 'Not provided' },
                         { label: 'Message', value: message || 'No additional details provided.' },
                     ],
+                    primaryAction: { href: `${SITE_URL}/wholesale`, label: 'View wholesale' },
+                    secondaryAction: { href: 'mailto:support@biolongevitylabss.com', label: 'Email support' },
                 }),
                 adminSubject: `New Wholesale Application from ${company}`,
                 adminReact: React.createElement(WholesaleApplicationEmail, {
