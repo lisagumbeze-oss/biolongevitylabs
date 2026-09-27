@@ -1,6 +1,7 @@
 import Link from "next/link";
 import AnswerCapsule from "@/components/AnswerCapsule";
 import { HelpCircle } from "lucide-react";
+import { CRYPTO_DISCOUNT_PERCENT } from "@/config/payments";
 
 const FAQ_ITEMS = [
   {
@@ -11,6 +12,11 @@ const FAQ_ITEMS = [
     q: "Do you provide a certificate of analysis (COA)?",
     a: "Yes. Batch-specific COA documentation with HPLC purity and identity testing is provided for catalog peptides. See our guide on how to read a peptide COA.",
     href: "/research/how-to-read-peptide-coa",
+  },
+  {
+    q: "Is there a discount for cryptocurrency payment?",
+    a: `Yes. Paying with cryptocurrency takes ${CRYPTO_DISCOUNT_PERCENT}% off the product total. Shipping is not discounted. The savings appear in the checkout summary when cryptocurrency is selected.`,
+    href: "/shipping-and-payments",
   },
   {
     q: "How fast do orders ship?",

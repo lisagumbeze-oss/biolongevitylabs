@@ -5,6 +5,7 @@ import { X, Trash2, Minus, Plus, ShoppingBag, ArrowRight, Bolt, Zap } from "luci
 import { useCart } from "@/store/useCart";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { cryptoDiscountAmount, CRYPTO_DISCOUNT_PERCENT } from "@/config/payments";
 
 const CartDrawer: React.FC = () => {
     const { items, removeItem, updateQuantity, isCartOpen, setIsCartOpen } = useCart();
@@ -22,6 +23,7 @@ const CartDrawer: React.FC = () => {
     }, [isOpen]);
 
     const subtotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    const cryptoSavings = cryptoDiscountAmount(subtotal);
 
     return (
         <AnimatePresence>
@@ -191,6 +193,11 @@ const CartDrawer: React.FC = () => {
                                         <p className="text-lg font-bold text-slate-900 uppercase tracking-tighter">Total</p>
                                         <p className="text-2xl font-black text-primary tracking-tighter">${subtotal.toFixed(2)}</p>
                                     </div>
+                                    {cryptoSavings > 0 && (
+                                        <p className="text-xs font-semibold text-emerald-700">
+                                            Cryptocurrency saves {CRYPTO_DISCOUNT_PERCENT}% (${cryptoSavings.toFixed(2)}) at checkout.
+                                        </p>
+                                    )}
                                 </div>
 
                                 <div className="flex flex-col gap-3">

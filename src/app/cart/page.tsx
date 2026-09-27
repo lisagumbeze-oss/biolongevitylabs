@@ -5,11 +5,13 @@ import { Trash2, Minus, Plus, ShoppingBag, ArrowRight, ArrowLeft, ShieldCheck, T
 import { useCart } from "@/store/useCart";
 import Link from "next/link";
 import { productPath } from "@/lib/product-slug";
+import { cryptoDiscountAmount, CRYPTO_DISCOUNT_PERCENT } from "@/config/payments";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function CartPage() {
     const { items, removeItem, updateQuantity } = useCart();
     const subtotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    const cryptoSavings = cryptoDiscountAmount(subtotal);
 
     return (
         <div className="bg-white min-h-screen pb-20">
@@ -125,6 +127,11 @@ export default function CartPage() {
                                             <p className="text-sm font-bold uppercase tracking-widest text-slate-400">Total Due</p>
                                             <p className="text-4xl font-black text-primary tracking-tighter">${subtotal.toFixed(2)}</p>
                                         </div>
+                                        {cryptoSavings > 0 && (
+                                            <p className="text-sm font-semibold text-emerald-400">
+                                                Pay with cryptocurrency and this total becomes ${(subtotal - cryptoSavings).toFixed(2)} ({CRYPTO_DISCOUNT_PERCENT}% off products).
+                                            </p>
+                                        )}
                                     </div>
 
                                     <Link

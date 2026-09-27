@@ -2,6 +2,8 @@ import React from 'react';
 import { Text, Heading, Section, Row, Column } from '@react-email/components';
 import EmailLayout from './shared/EmailLayout';
 import { OrderTable, InfoBlock } from './shared/EmailComponents';
+import { CRYPTO_WALLETS, CRYPTO_DISCOUNT_PERCENT } from '@/config/payments';
+import type { CryptoQuote } from '@/lib/crypto-quotes';
 
 interface AdminOrderNotificationEmailProps {
     orderId: string;
@@ -18,6 +20,7 @@ interface AdminOrderNotificationEmailProps {
     paymentMethod: string;
     paymentWalletAddress?: string;
     paymentType?: string;
+    cryptoQuotes?: CryptoQuote[];
     shippingAddress: {
         addressLine1: string;
         addressLine2?: string;
@@ -37,8 +40,8 @@ export const AdminOrderNotificationEmail = ({
     ],
     total = 119.98,
     paymentMethod = 'Venmo',
-    paymentWalletAddress,
     paymentType,
+    cryptoQuotes,
     shippingAddress = {
         addressLine1: '123 Main St',
         city: 'Anytown',
@@ -75,9 +78,19 @@ export const AdminOrderNotificationEmail = ({
                             <td className="p-6 border-b border-slate-800 border-solid border-l" style={{ width: '50%' }}>
                                 <Text className="text-slate-500 text-[10px] font-black uppercase tracking-widest m-0 mb-1">Financial Protocol</Text>
                                 <Text className="text-white text-[16px] font-bold m-0 uppercase tracking-wide">{paymentMethod}</Text>
-                                {paymentType === 'crypto' && paymentWalletAddress && (
-                                    <Text className="text-primary text-[12px] font-bold m-0 mt-2" style={{ wordBreak: 'break-all' }}>{paymentWalletAddress}</Text>
+                                {paymentType === 'crypto' && (
+                                    <Text className="text-emerald-400 text-[12px] font-bold m-0 mt-2">
+                                        {CRYPTO_DISCOUNT_PERCENT}% cryptocurrency discount included in the order total.
+                                    </Text>
                                 )}
+                                {paymentType === 'crypto' && CRYPTO_WALLETS.map((wallet) => {
+                                    const quote = cryptoQuotes?.find((item) => item.id === wallet.id);
+                                    return (
+                                    <Text key={wallet.id} className="text-primary text-[12px] font-bold m-0 mt-2" style={{ wordBreak: 'break-all' }}>
+                                        {wallet.symbol}{quote ? `: send exactly ${quote.amount}` : ''}<br />{wallet.address}
+                                    </Text>
+                                    );
+                                })}
                                 <Text className="text-emerald-500 text-[12px] font-black m-0 uppercase mt-1">Pending Verification</Text>
                             </td>
                         </tr>

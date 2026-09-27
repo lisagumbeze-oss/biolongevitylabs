@@ -10,7 +10,16 @@ import {
     trackPurchase,
     persistPurchaseForConfirmation,
 } from "@/lib/analytics";
-import { getAvailablePaymentMethods, CRYPTO_ONLY_ORDER_MAX } from "@/config/payments";
+import {
+    getAvailablePaymentMethods,
+    CRYPTO_ONLY_ORDER_MAX,
+    CRYPTO_PAYMENT_LABEL,
+    CRYPTO_CHECKOUT_INSTRUCTIONS,
+    CRYPTO_DISCOUNT_PERCENT,
+    CRYPTO_DISCOUNT_NOTICE,
+    cryptoDiscountAmount,
+} from "@/config/payments";
+import type { CryptoQuote } from "@/lib/crypto-quotes";
 
 interface PaymentMethod {
     id: string;
@@ -92,6 +101,9 @@ export default function CheckoutPage() {
     const [couponCode, setCouponCode] = useState("");
     const [appliedCoupon, setAppliedCoupon] = useState<Coupon | null>(null);
     const [couponError, setCouponError] = useState("");
+    const [cryptoQuotes, setCryptoQuotes] = useState<CryptoQuote[] | null>(null);
+    const [cryptoQuotesLoading, setCryptoQuotesLoading] = useState(false);
+    const [cryptoQuotesError, setCryptoQuotesError] = useState(false);
 
     useEffect(() => {
         const fetchSettings = async () => {
@@ -130,23 +142,65 @@ export default function CheckoutPage() {
         }
     }
 
-    const total = Math.max(0, subtotal - discount) + shippingPrice;
+    const merchandiseAfterCoupon = Math.max(0, subtotal - discount);
+    const orderBeforeCrypto = merchandiseAfterCoupon + shippingPrice;
     const isReady = isMounted && (_hasHydrated || hydrationGaveUp);
 
     const availablePayments = settings
-        ? getAvailablePaymentMethods(settings.paymentMethods, total)
+        ? getAvailablePaymentMethods(settings.paymentMethods, orderBeforeCrypto)
         : [];
-    const isCryptoOnlyCheckout = total < CRYPTO_ONLY_ORDER_MAX;
+    const isCryptoOnlyCheckout = orderBeforeCrypto < CRYPTO_ONLY_ORDER_MAX;
+    const selectedPmPreview = availablePayments.find((pm) => pm.id === selectedPayment);
+    const cryptoSavings = selectedPmPreview?.type === "crypto"
+        ? cryptoDiscountAmount(merchandiseAfterCoupon)
+        : 0;
+    const total = orderBeforeCrypto - cryptoSavings;
+
+    useEffect(() => {
+        if (selectedPmPreview?.type !== "crypto" || total <= 0) {
+            setCryptoQuotes(null);
+            setCryptoQuotesLoading(false);
+            setCryptoQuotesError(false);
+            return;
+        }
+
+        const controller = new AbortController();
+        const timer = setTimeout(() => {
+            setCryptoQuotesLoading(true);
+            setCryptoQuotesError(false);
+            fetch(`/api/crypto-quotes?usd=${encodeURIComponent(total.toFixed(2))}`, { signal: controller.signal })
+                .then(async (res) => {
+                    if (!res.ok) throw new Error("quote failed");
+                    return res.json();
+                })
+                .then((data) => {
+                    setCryptoQuotes(data.quotes);
+                })
+                .catch((error: unknown) => {
+                    if (error instanceof DOMException && error.name === "AbortError") return;
+                    setCryptoQuotes(null);
+                    setCryptoQuotesError(true);
+                })
+                .finally(() => {
+                    if (!controller.signal.aborted) setCryptoQuotesLoading(false);
+                });
+        }, 300);
+
+        return () => {
+            clearTimeout(timer);
+            controller.abort();
+        };
+    }, [selectedPmPreview?.type, total]);
 
     useEffect(() => {
         if (!settings?.paymentMethods.length) return;
-        const payments = getAvailablePaymentMethods(settings.paymentMethods, total);
+        const payments = getAvailablePaymentMethods(settings.paymentMethods, orderBeforeCrypto);
         if (payments.length === 0) return;
         setSelectedPayment((prev) => {
             if (payments.some((pm) => pm.id === prev)) return prev;
             return payments[0].id;
         });
-    }, [settings, total]);
+    }, [settings, orderBeforeCrypto]);
 
     useEffect(() => {
         if (!isReady || items.length === 0 || beginCheckoutTracked.current) return;
@@ -182,6 +236,8 @@ export default function CheckoutPage() {
 
         const selectedPm = availablePayments.find(pm => pm.id === selectedPayment)
             ?? settings?.paymentMethods.find(pm => pm.id === selectedPayment);
+        const isCrypto = selectedPm?.type === "crypto";
+        const paymentLabel = isCrypto ? CRYPTO_PAYMENT_LABEL : (selectedPm?.name || "Transfer");
 
         const orderData = {
             id: orderId,
@@ -189,6 +245,9 @@ export default function CheckoutPage() {
             email: formData.email,
             phone: formData.phone,
             total: `$${total.toFixed(2)}`,
+            coupon_discount: discount,
+            shipping_amount: shippingPrice,
+            crypto_discount: cryptoSavings,
             status: 'Pending',
             items: items.reduce((acc, item) => acc + item.quantity, 0),
             full_items: items.map(item => ({
@@ -205,10 +264,10 @@ export default function CheckoutPage() {
                 zip: formData.zipCode,
                 country: formData.country
             },
-            payment_method: selectedPm?.name || 'Transfer',
+            payment_method: paymentLabel,
             payment_method_id: selectedPm?.id,
             payment_type: selectedPm?.type,
-            payment_wallet_address: selectedPm?.walletAddress || undefined,
+            payment_wallet_address: isCrypto ? undefined : (selectedPm?.walletAddress || undefined),
         };
 
         const controller = new AbortController();
@@ -228,6 +287,8 @@ export default function CheckoutPage() {
                 const detail = errorData.detail ? `\n\nDetail: ${errorData.detail}` : '';
                 throw new Error((errorData.error || 'Failed to create order') + detail);
             }
+
+            const created = await res.json().catch(() => ({}));
 
             // Track coupon usage
             if (appliedCoupon) {
@@ -250,10 +311,12 @@ export default function CheckoutPage() {
             trackPurchase(purchasePayload);
 
             sessionStorage.setItem(`order_payment_${orderId}`, JSON.stringify({
-                paymentMethod: selectedPm?.name || 'Transfer',
+                paymentMethod: paymentLabel,
                 paymentType: selectedPm?.type,
-                walletAddress: selectedPm?.walletAddress,
-                total: total.toFixed(2),
+                total: typeof created?.quoted_total === "string"
+                    ? created.quoted_total.replace(/[^0-9.]/g, "")
+                    : total.toFixed(2),
+                cryptoQuotes: Array.isArray(created?.crypto_quotes) ? created.crypto_quotes : cryptoQuotes,
             }));
 
             clearCart();
@@ -508,9 +571,12 @@ export default function CheckoutPage() {
                                 Manual Payment Selection
                             </h2>
                             <p className="text-slate-500 dark:text-slate-400 text-sm mb-4 font-medium">Research-compliant payment steps follow order review.</p>
+                            <p className="text-sm font-semibold text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-3 mb-4">
+                                {CRYPTO_DISCOUNT_NOTICE}
+                            </p>
                             {isCryptoOnlyCheckout && (
                                 <p className="text-xs font-bold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/50 rounded-xl px-4 py-3 mb-6">
-                                    Orders under ${CRYPTO_ONLY_ORDER_MAX} are processed via Bitcoin only. All payment options become available at ${CRYPTO_ONLY_ORDER_MAX} and above.
+                                    Orders under ${CRYPTO_ONLY_ORDER_MAX} are processed via cryptocurrency only. All payment options become available at ${CRYPTO_ONLY_ORDER_MAX} and above.
                                 </p>
                             )}
 
@@ -525,20 +591,36 @@ export default function CheckoutPage() {
                                                 onChange={() => setSelectedPayment(pm.id)}
                                                 className="w-5 h-5 text-primary focus:ring-primary border-slate-300 dark:border-slate-600 bg-transparent"
                                             />
-                                            <span className="font-bold text-slate-900 dark:text-white">{pm.name}</span>
+                                            <span className="font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                                                {pm.type === "crypto" ? CRYPTO_PAYMENT_LABEL : pm.name}
+                                                {pm.type === "crypto" && (
+                                                    <span className="rounded-full bg-emerald-600 px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-white">
+                                                        Save {CRYPTO_DISCOUNT_PERCENT}%
+                                                    </span>
+                                                )}
+                                            </span>
                                         </label>
                                         {selectedPayment === pm.id && (
                                             <div className="px-5 pb-5 animate-in slide-in-from-top-2 duration-300">
                                                 <div className="bg-white dark:bg-slate-800/50 p-5 rounded-xl border border-primary/10 shadow-inner">
                                                     <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed font-medium">
-                                                        {pm.instructions}
+                                                        {pm.type === "crypto" ? CRYPTO_CHECKOUT_INSTRUCTIONS : pm.instructions}
                                                     </p>
-                                                    {pm.type === 'crypto' && pm.walletAddress && (
-                                                        <div className="mt-4 p-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-700">
-                                                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">BTC Wallet Address</p>
-                                                            <p className="text-sm font-mono font-bold text-slate-900 dark:text-white break-all select-all">
-                                                                {pm.walletAddress}
-                                                            </p>
+                                                    {pm.type === "crypto" && (
+                                                        <div className="mt-4 space-y-2">
+                                                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Exact amount for this ${total.toFixed(2)} order</p>
+                                                            {cryptoQuotesLoading && (
+                                                                <p className="text-xs font-bold text-slate-400">Calculating...</p>
+                                                            )}
+                                                            {cryptoQuotesError && (
+                                                                <p className="text-xs font-bold text-amber-600">Live rates are unavailable right now. The exact amount is calculated again when you confirm the order.</p>
+                                                            )}
+                                                            {cryptoQuotes?.map((quote) => (
+                                                                <div key={quote.id} className="flex items-center justify-between gap-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 px-3 py-2">
+                                                                    <span className="text-xs font-black uppercase tracking-widest text-slate-500">{quote.name}</span>
+                                                                    <span className="text-sm font-mono font-bold text-slate-900 dark:text-white">{quote.amount} {quote.symbol}</span>
+                                                                </div>
+                                                            ))}
                                                         </div>
                                                     )}
                                                     <div className="flex items-center gap-2 mt-4 text-[10px] font-black text-amber-500 uppercase tracking-widest border-t border-slate-100 dark:border-slate-700 pt-3">
@@ -586,6 +668,17 @@ export default function CheckoutPage() {
                                         <span className="text-sm font-bold uppercase tracking-widest">Discount ({appliedCoupon.code})</span>
                                         <span className="font-bold">-${discount.toFixed(2)}</span>
                                     </div>
+                                )}
+                                {cryptoSavings > 0 && (
+                                    <div className="flex justify-between items-center text-emerald-600">
+                                        <span className="text-sm font-bold uppercase tracking-widest">Crypto {CRYPTO_DISCOUNT_PERCENT}% off</span>
+                                        <span className="font-bold">-${cryptoSavings.toFixed(2)}</span>
+                                    </div>
+                                )}
+                                {cryptoSavings === 0 && merchandiseAfterCoupon > 0 && (
+                                    <p className="text-sm font-semibold text-emerald-700">
+                                        Choose cryptocurrency to save ${cryptoDiscountAmount(merchandiseAfterCoupon).toFixed(2)}.
+                                    </p>
                                 )}
                                 <div className="flex justify-between items-center text-slate-500 dark:text-slate-400">
                                     <span className="text-sm font-bold uppercase tracking-widest">Shipping</span>

@@ -1,17 +1,20 @@
 "use client";
 
 import React, { useEffect, useState, Suspense } from "react";
-import { CheckCircle2, ArrowRight, ShoppingBag, Mail, ExternalLink, Copy, Check, Bitcoin } from "lucide-react";
+import { CheckCircle2, ArrowRight, ShoppingBag, Mail, ExternalLink, Copy, Check, Wallet, Info } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useCart } from "@/store/useCart";
 import { trackPurchaseFromSession } from "@/lib/analytics";
+import { CRYPTO_PAYMENT_LABEL, CRYPTO_WALLETS, CRYPTO_DISCOUNT_PERCENT } from "@/config/payments";
+import type { CryptoQuote } from "@/lib/crypto-quotes";
 
 interface OrderPaymentInfo {
     paymentMethod: string;
     paymentType?: string;
     walletAddress?: string;
     total: string;
+    cryptoQuotes?: CryptoQuote[];
 }
 
 function OrderConfirmationContent() {
@@ -19,9 +22,13 @@ function OrderConfirmationContent() {
     const searchParams = useSearchParams();
     const [orderId, setOrderId] = useState("");
     const [paymentInfo, setPaymentInfo] = useState<OrderPaymentInfo | null>(null);
-    const [copied, setCopied] = useState(false);
+    const [copiedId, setCopiedId] = useState<string | null>(null);
     const [paymentSubmitted, setPaymentSubmitted] = useState(false);
     const [submittingPayment, setSubmittingPayment] = useState(false);
+    const [cryptoQuotes, setCryptoQuotes] = useState<CryptoQuote[] | null>(null);
+    const [quotesLoading, setQuotesLoading] = useState(false);
+    const [quotesError, setQuotesError] = useState(false);
+    const [quoteAttempt, setQuoteAttempt] = useState(0);
 
     useEffect(() => {
         clearCart();
@@ -47,16 +54,56 @@ function OrderConfirmationContent() {
         }
     }, [searchParams]);
 
-    const isCryptoPayment = paymentInfo?.paymentType === "crypto" && paymentInfo?.walletAddress;
+    const isCryptoPayment = paymentInfo?.paymentType === "crypto"
+        || /crypto|bitcoin/i.test(paymentInfo?.paymentMethod || "");
 
-    const handleCopyAddress = async () => {
-        if (!paymentInfo?.walletAddress) return;
+    useEffect(() => {
+        if (!isCryptoPayment || !paymentInfo?.total) return;
+
+        if (paymentInfo.cryptoQuotes?.length) {
+            setCryptoQuotes(paymentInfo.cryptoQuotes);
+            setQuotesLoading(false);
+            setQuotesError(false);
+            return;
+        }
+
+        const usd = Number(paymentInfo.total);
+        if (!Number.isFinite(usd) || usd <= 0) return;
+
+        let cancelled = false;
+        setQuotesLoading(true);
+        setQuotesError(false);
+
+        fetch(`/api/crypto-quotes?usd=${encodeURIComponent(usd.toFixed(2))}`)
+            .then(async (res) => {
+                if (!res.ok) throw new Error("quote failed");
+                return res.json();
+            })
+            .then((data) => {
+                if (!cancelled) setCryptoQuotes(data.quotes);
+            })
+            .catch(() => {
+                if (!cancelled) {
+                    setCryptoQuotes(null);
+                    setQuotesError(true);
+                }
+            })
+            .finally(() => {
+                if (!cancelled) setQuotesLoading(false);
+            });
+
+        return () => {
+            cancelled = true;
+        };
+    }, [isCryptoPayment, paymentInfo, quoteAttempt]);
+
+    const handleCopyAddress = async (id: string, address: string) => {
         try {
-            await navigator.clipboard.writeText(paymentInfo.walletAddress);
-            setCopied(true);
-            setTimeout(() => setCopied(false), 2000);
+            await navigator.clipboard.writeText(address);
+            setCopiedId(id);
+            setTimeout(() => setCopiedId(null), 2000);
         } catch {
-            // fallback: select-all is available via select-all styling
+            // address remains selectable in the panel
         }
     };
 
@@ -109,6 +156,105 @@ function OrderConfirmationContent() {
                         <span className="text-sm font-black text-primary">{orderId}</span>
                     </div>
 
+                    {isCryptoPayment && (
+                        <div className="w-full max-w-lg mb-8 text-left border-2 border-primary rounded-2xl overflow-hidden bg-primary/5 animate-in slide-in-from-top-2 duration-500">
+                            <div className="flex items-center gap-3 px-5 py-4">
+                                <div className="w-5 h-5 rounded-full border-[5px] border-primary bg-white shrink-0" />
+                                <span className="font-bold text-slate-900 dark:text-white">{CRYPTO_PAYMENT_LABEL}</span>
+                            </div>
+                            <div className="px-5 pb-5">
+                                <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-primary/10 shadow-inner">
+                                    <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed font-medium">
+                                        A {CRYPTO_DISCOUNT_PERCENT}% cryptocurrency discount is included in this total. Send the exact amount shown for one currency. Each amount equals {paymentInfo?.total ? `$${paymentInfo.total}` : "your order total"}. Include your order number in the transaction memo if your wallet supports it.
+                                    </p>
+                                    {quotesLoading && (
+                                        <p className="mt-3 text-xs font-bold uppercase tracking-widest text-slate-400">Calculating exact amounts...</p>
+                                    )}
+                                    {quotesError && (
+                                        <button
+                                            type="button"
+                                            onClick={() => setQuoteAttempt((attempt) => attempt + 1)}
+                                            className="mt-3 text-xs font-bold text-primary hover:text-primary/80"
+                                        >
+                                            Couldn&apos;t calculate amounts. Try again.
+                                        </button>
+                                    )}
+                                    <div className="mt-4 space-y-3">
+                                        {CRYPTO_WALLETS.map((wallet) => (
+                                            <div key={wallet.id} className="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700">
+                                                <div className="flex items-center gap-2 mb-3">
+                                                    <Wallet className="w-3.5 h-3.5 text-slate-400" />
+                                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                                                        {wallet.name} ({wallet.symbol})
+                                                    </p>
+                                                </div>
+                                                {(() => {
+                                                    const quote = cryptoQuotes?.find((item) => item.id === wallet.id);
+                                                    if (!quote) return null;
+                                                    return (
+                                                        <div className="mb-4">
+                                                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Send exactly</p>
+                                                            <p className="text-lg font-black text-slate-900 dark:text-white tracking-tight">
+                                                                {quote.amount} {wallet.symbol}
+                                                            </p>
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => handleCopyAddress(`${wallet.id}-amount`, quote.amount)}
+                                                                className="mt-2 inline-flex items-center gap-2 text-xs font-bold text-primary hover:text-primary/80 transition-colors"
+                                                            >
+                                                                {copiedId === `${wallet.id}-amount` ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                                                                {copiedId === `${wallet.id}-amount` ? "Amount copied!" : "Copy Amount"}
+                                                            </button>
+                                                        </div>
+                                                    );
+                                                })()}
+                                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Wallet address</p>
+                                                {wallet.qrSrc && (
+                                                    <img
+                                                        src={wallet.qrSrc}
+                                                        alt={`${wallet.name} wallet QR code`}
+                                                        className="w-40 h-40 mb-4 rounded-xl bg-white p-2 border border-slate-200 dark:border-slate-700"
+                                                    />
+                                                )}
+                                                <p className="text-sm font-mono font-bold text-slate-900 dark:text-white break-all select-all text-left">
+                                                    {wallet.address}
+                                                </p>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleCopyAddress(wallet.id, wallet.address)}
+                                                    className="mt-3 inline-flex items-center gap-2 text-xs font-bold text-primary hover:text-primary/80 transition-colors"
+                                                >
+                                                    {copiedId === wallet.id ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                                                    {copiedId === wallet.id ? "Copied!" : "Copy Address"}
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <div className="flex items-center gap-2 mt-4 text-[10px] font-black text-amber-500 uppercase tracking-widest border-t border-slate-100 dark:border-slate-700 pt-3">
+                                        <Info className="w-3 h-3 shrink-0" /> Note: Order processes only after manual confirmation.
+                                    </div>
+                                    <div className="mt-4">
+                                        {paymentSubmitted ? (
+                                            <div className="flex items-center justify-center gap-2 py-4 bg-emerald-50 dark:bg-emerald-950/30 rounded-xl border border-emerald-200 dark:border-emerald-800/50 text-emerald-700 dark:text-emerald-400">
+                                                <CheckCircle2 className="w-5 h-5" />
+                                                <span className="text-sm font-black uppercase tracking-wider">Payment notification received — thank you!</span>
+                                            </div>
+                                        ) : (
+                                            <button
+                                                type="button"
+                                                onClick={handlePaymentSubmitted}
+                                                disabled={submittingPayment}
+                                                className="w-full py-4 rounded-xl bg-primary hover:bg-primary/95 text-white font-black uppercase tracking-widest text-sm transition-all shadow-lg shadow-primary/20 active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed"
+                                            >
+                                                {submittingPayment ? "Submitting..." : "I Have Paid"}
+                                            </button>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
                     <div className="max-w-md mx-auto space-y-6 mb-12 w-full">
                         <p className="text-lg text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
                             Thank you for your purchase! We&apos;ve received your order and it&apos;s currently{" "}
@@ -122,57 +268,6 @@ function OrderConfirmationContent() {
                                 </p>
                                 <p className="text-xs text-slate-500 dark:text-slate-400 font-medium mb-5">
                                     Amount due: ${paymentInfo.total}
-                                </p>
-
-                                {paymentSubmitted ? (
-                                    <div className="flex items-center justify-center gap-2 py-4 bg-emerald-50 dark:bg-emerald-950/30 rounded-xl border border-emerald-200 dark:border-emerald-800/50 text-emerald-700 dark:text-emerald-400">
-                                        <CheckCircle2 className="w-5 h-5" />
-                                        <span className="text-sm font-black uppercase tracking-wider">Payment notification received — thank you!</span>
-                                    </div>
-                                ) : (
-                                    <button
-                                        type="button"
-                                        onClick={handlePaymentSubmitted}
-                                        disabled={submittingPayment}
-                                        className="w-full py-4 rounded-xl bg-primary hover:bg-primary/95 text-white font-black uppercase tracking-widest text-sm transition-all shadow-lg shadow-primary/20 active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed"
-                                    >
-                                        {submittingPayment ? "Submitting..." : "I Have Paid"}
-                                    </button>
-                                )}
-                            </div>
-                        )}
-
-                        {isCryptoPayment && (
-                            <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/50 p-6 rounded-2xl text-left w-full">
-                                <div className="flex items-center gap-3 mb-4">
-                                    <div className="w-10 h-10 rounded-full bg-amber-100 dark:bg-amber-900/50 flex items-center justify-center text-amber-600 dark:text-amber-400 shrink-0">
-                                        <Bitcoin className="w-5 h-5" />
-                                    </div>
-                                    <div>
-                                        <h2 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider">Bitcoin Payment</h2>
-                                        <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-                                            Send ${paymentInfo.total} worth of BTC
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-amber-100 dark:border-amber-900/50 mb-4">
-                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">BTC Wallet Address</p>
-                                    <p className="text-sm font-mono font-bold text-slate-900 dark:text-white break-all select-all text-left">
-                                        {paymentInfo.walletAddress}
-                                    </p>
-                                    <button
-                                        type="button"
-                                        onClick={handleCopyAddress}
-                                        className="mt-3 inline-flex items-center gap-2 text-xs font-bold text-primary hover:text-primary/80 transition-colors"
-                                    >
-                                        {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                                        {copied ? "Copied!" : "Copy Address"}
-                                    </button>
-                                </div>
-
-                                <p className="text-xs text-slate-500 dark:text-slate-400 font-medium mb-5">
-                                    Include your order ID <strong className="text-slate-700 dark:text-slate-300">{orderId}</strong> in the transaction memo if your wallet supports it.
                                 </p>
 
                                 {paymentSubmitted ? (

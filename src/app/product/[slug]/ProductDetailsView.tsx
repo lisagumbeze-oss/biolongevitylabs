@@ -18,6 +18,7 @@ import HPLCGraph from "@/components/HPLCGraph";
 import ReviewList from "@/components/ReviewList";
 import ReviewForm from "@/components/ReviewForm";
 import AnswerCapsule from "@/components/AnswerCapsule";
+import { CRYPTO_DISCOUNT_NOTICE } from "@/config/payments";
 import ProductFaq from "@/components/ProductFaq";
 import { getProductSeo } from "@/lib/product-seo";
 import { getExpandedProductBody } from "@/lib/product-body-copy";
@@ -559,6 +560,8 @@ export default function ProductDetailsView({ slug, initialProduct = null }: Prop
                             </div>
                         )}
                     </div>
+
+                    <p className="mb-6 text-sm font-semibold text-emerald-800">{CRYPTO_DISCOUNT_NOTICE}</p>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <button

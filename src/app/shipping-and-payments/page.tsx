@@ -1,5 +1,6 @@
 import React from 'react';
 import { Truck, ShieldCheck, RefreshCcw, CreditCard, UserCheck, HeartHandshake } from 'lucide-react';
+import { CRYPTO_DISCOUNT_PERCENT } from '@/config/payments';
 
 export const metadata = {
     title: 'Shipping and Payments | BioLongevity Labs',
@@ -94,7 +95,10 @@ export default function ShippingAndPaymentsPage() {
                         </div>
                         <div className="prose prose-slate dark:prose-invert max-w-none text-slate-600 dark:text-slate-400">
                             <p>
-                                We currently accept secure manual payments including Bank Transfer, Zelle, Venmo, CashApp, and Bitcoin.
+                                We currently accept secure manual payments including Bank Transfer, Zelle, Venmo, CashApp, and cryptocurrency.
+                            </p>
+                            <p>
+                                <strong>Cryptocurrency orders receive {CRYPTO_DISCOUNT_PERCENT}% off the product total.</strong> Shipping is charged at the normal rate. The discount is applied automatically at checkout when cryptocurrency is selected.
                             </p>
                             <p>
                                 We offer individual pricing. Please see our products pages for quantity discounts via product variations. Please contact us by email for large bulk discounts.

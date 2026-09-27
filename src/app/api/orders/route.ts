@@ -11,6 +11,8 @@ import PaymentReceivedEmail1 from '@/components/emails/PaymentReceivedEmail1';
 import OrderCancellationEmail from '@/components/emails/OrderCancellationEmail';
 import OrderShippedEmail from '@/components/emails/OrderShippedEmail';
 import SubmissionReceivedEmail from '@/components/emails/SubmissionReceivedEmail';
+import { cryptoDiscountAmount, roundMoney } from '@/config/payments';
+import { getCryptoQuotes, type CryptoQuote } from '@/lib/crypto-quotes';
 
 const ORDERS_JSON = path.join(process.cwd(), 'src/data/orders.json');
 
@@ -22,6 +24,41 @@ function readOrdersLocal() {
 
 function writeOrdersLocal(orders: unknown[]) {
     fs.writeFileSync(ORDERS_JSON, JSON.stringify(orders, null, 4));
+}
+
+function applyCryptoPricing(orderData: any) {
+    const items = Array.isArray(orderData.full_items) ? orderData.full_items : [];
+    const merchandise = items.reduce((sum: number, item: any) => {
+        return sum + (Number(item.price) || 0) * (Number(item.quantity) || 0);
+    }, 0);
+
+    if (!items.length || !Number.isFinite(merchandise) || merchandise <= 0) return orderData;
+
+    const coupon = Math.min(merchandise, Math.max(0, Number(orderData.coupon_discount) || 0));
+    const shipping = Math.max(0, Number(orderData.shipping_amount) || 0);
+    const afterCoupon = roundMoney(Math.max(0, merchandise - coupon));
+    const cryptoDiscount = orderData.payment_type === 'crypto' ? cryptoDiscountAmount(afterCoupon) : 0;
+
+    return {
+        ...orderData,
+        crypto_discount: cryptoDiscount,
+        total: `$${roundMoney(afterCoupon - cryptoDiscount + shipping).toFixed(2)}`,
+    };
+}
+
+async function attachCryptoQuotes(orderData: any) {
+    if (orderData.payment_type !== 'crypto') return orderData;
+
+    const usd = parseFloat(String(orderData.total || '').replace(/[^0-9.]/g, ''));
+    if (!Number.isFinite(usd) || usd <= 0) return orderData;
+
+    try {
+        const crypto_quotes: CryptoQuote[] = await getCryptoQuotes(usd);
+        return { ...orderData, crypto_quotes };
+    } catch (error) {
+        console.error('Failed to quote cryptocurrency amounts:', error);
+        return orderData;
+    }
 }
 
 interface OrderRow {
@@ -132,6 +169,7 @@ async function sendOrderEmails(orderData: any) {
                 paymentMethod: orderData.payment_method || 'Manual Transfer',
                 paymentWalletAddress: orderData.payment_wallet_address,
                 paymentType: orderData.payment_type,
+                cryptoQuotes: orderData.crypto_quotes,
             }),
             adminSubject: `New Order Received ${orderData.id}`,
             adminReact: React.createElement(AdminOrderNotificationEmail, {
@@ -143,6 +181,7 @@ async function sendOrderEmails(orderData: any) {
                 paymentMethod: orderData.payment_method || 'Manual Transfer',
                 paymentWalletAddress: orderData.payment_wallet_address,
                 paymentType: orderData.payment_type,
+                cryptoQuotes: orderData.crypto_quotes,
                 shippingAddress: {
                     addressLine1: orderData.shipping_address?.address || orderData.shipping_address?.street || '',
                     city: orderData.shipping_address?.city || '',
@@ -161,7 +200,7 @@ async function sendOrderEmails(orderData: any) {
 
 export async function POST(request: Request) {
     try {
-        const orderData = await request.json();
+        const orderData = await attachCryptoQuotes(applyCryptoPricing(await request.json()));
 
         // Log incoming order for debugging
         console.log('[Orders API] Creating order:', orderData.id, 'email:', orderData.email);
@@ -225,7 +264,11 @@ export async function POST(request: Request) {
             });
             
             console.log('[Orders API] Order created successfully:', orderData.id);
-            return NextResponse.json(order, { status: 201 });
+            return NextResponse.json({
+                ...order,
+                crypto_quotes: orderData.crypto_quotes,
+                quoted_total: orderData.total,
+            }, { status: 201 });
 
         } else {
             // Local JSON fallback (development / no Supabase)
@@ -244,14 +287,22 @@ export async function POST(request: Request) {
                     console.error('[Orders API] Background email failed (local):', emailErr);
                 });
 
-                return NextResponse.json(orderWithMeta, { status: 201 });
+                return NextResponse.json({
+                    ...orderWithMeta,
+                    crypto_quotes: orderData.crypto_quotes,
+                    quoted_total: orderData.total,
+                }, { status: 201 });
             } catch (fsError) {
                 // Filesystem may be read-only in some environments
                 console.error('[Orders API] Local file write failed:', fsError);
                 // Return success anyway — email was likely the only goal
                 const fallbackOrder = { ...orderData, created_at: new Date().toISOString() };
                 try { await sendOrderEmails(orderData); } catch (_) {}
-                return NextResponse.json(fallbackOrder, { status: 201 });
+                return NextResponse.json({
+                    ...fallbackOrder,
+                    crypto_quotes: orderData.crypto_quotes,
+                    quoted_total: orderData.total,
+                }, { status: 201 });
             }
         }
     } catch (error: unknown) {

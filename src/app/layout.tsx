@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import CryptoDiscountBanner from "@/components/CryptoDiscountBanner";
 import Footer from "@/components/Footer";
 import LoadingProgress from "@/components/LoadingProgress";
 import ConsentModal from "@/components/ConsentModal";
@@ -73,6 +74,7 @@ export default function RootLayout({
             </React.Suspense>
             <ConsentModal />
             <Navbar />
+            <CryptoDiscountBanner />
             <main className="grow pb-24 md:pb-0">
               {children}
             </main>

@@ -49,11 +49,11 @@
         },
         {
             "id": "bitcoin",
-            "name": "Bitcoin (BTC)",
-            "instructions": "Send the exact order total in BTC to the wallet address below. Include your order number in the transaction memo if your wallet supports it.",
+            "name": "Cryptocurrency",
+            "instructions": "Cryptocurrency payment includes a 10% discount on the product total. After you confirm this order, wallet addresses appear below the success message. Send the discounted order total to one of those addresses and include your order number in the memo if your wallet supports it.",
             "enabled": true,
             "type": "crypto",
-            "walletAddress": "1CED26bTSz4JVWzrQCe3vCoxYfAwj95bFN"
+            "walletAddress": "bc1qzsn5djk2pklr49hepvpu4ckzwj9tujkxtdlqma"
         }
     ],
     "general": {
