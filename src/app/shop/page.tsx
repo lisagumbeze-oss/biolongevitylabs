@@ -1,16 +1,18 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import ProductCard from "@/components/ProductCard";
 import FilterSidebar from "@/components/FilterSidebar";
 import { Product } from "@/data/products";
-import { Search, ArrowUpDown, Package, SlidersHorizontal, X, Loader2 } from "lucide-react";
+import { Search, ArrowUpDown, Package, SlidersHorizontal, X, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 import { ShopSkeleton } from "@/components/Skeleton";
 import AnswerCapsule from "@/components/AnswerCapsule";
 import Link from "next/link";
 import { SITE_URL } from "@/lib/site";
+
+const PAGE_SIZE = 30;
 
 export default function ShopPage() {
     const [products, setProducts] = useState<Product[]>([]);
@@ -22,6 +24,8 @@ export default function ShopPage() {
     const [maxPrice, setMaxPrice] = useState(5000);
     const [sortBy, setSortBy] = useState("featured");
     const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
+    const [page, setPage] = useState(1);
+    const gridRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
@@ -101,6 +105,20 @@ export default function ShopPage() {
                 return 0;
             });
     }, [products, searchQuery, activeCategory, activeForm, minPrice, maxPrice, sortBy]);
+
+    const pageCount = Math.max(1, Math.ceil(filteredProducts.length / PAGE_SIZE));
+    const currentPage = Math.min(page, pageCount);
+    const pageStart = (currentPage - 1) * PAGE_SIZE;
+    const visibleProducts = filteredProducts.slice(pageStart, pageStart + PAGE_SIZE);
+
+    useEffect(() => {
+        setPage(1);
+    }, [searchQuery, activeCategory, activeForm, minPrice, maxPrice, sortBy]);
+
+    useEffect(() => {
+        if (page === 1) return;
+        gridRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, [page]);
 
     if (isLoading) {
         return (
@@ -183,7 +201,7 @@ export default function ShopPage() {
                         </h1>
                         <p className="text-slate-500 text-base flex items-center gap-2">
                             <Package className="w-4 h-4 text-primary" />
-                            Showing {filteredProducts.length} of {products.length} research-grade products
+                            Showing {filteredProducts.length === 0 ? 0 : pageStart + 1}–{pageStart + visibleProducts.length} of {filteredProducts.length} research-grade products
                         </p>
                     </div>
 
@@ -320,7 +338,7 @@ export default function ShopPage() {
                     </div>
 
                     {/* Product Grid */}
-                    <div className="flex-1">
+                    <div className="flex-1 scroll-mt-28" ref={gridRef}>
                         {/* Active Filter Indicator */}
                         {(activeCategory !== "All" || activeForm !== "All" || minPrice > 0 || maxPrice < 5000 || searchQuery) && (
                             <div className="flex flex-wrap items-center gap-2 mb-8">
@@ -367,11 +385,50 @@ export default function ShopPage() {
                         )}
 
                         {filteredProducts.length > 0 ? (
+                            <>
                             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-                                {filteredProducts.map((product) => (
-                                    <ProductCard key={product.id} {...product} />
+                                {visibleProducts.map((product) => (
+                                    <ProductCard key={product.id} {...product} description={undefined} />
                                 ))}
                             </div>
+                            {pageCount > 1 && (
+                                <nav aria-label="Product pages" className="mt-10 flex items-center justify-center gap-2">
+                                    <button
+                                        type="button"
+                                        onClick={() => setPage((current) => Math.max(1, current - 1))}
+                                        disabled={currentPage === 1}
+                                        className="inline-flex h-10 items-center gap-1 rounded-xl border border-slate-200 px-3 text-sm font-semibold text-slate-700 disabled:opacity-40"
+                                    >
+                                        <ChevronLeft className="h-4 w-4" />
+                                        Previous
+                                    </button>
+                                    {Array.from({ length: pageCount }, (_, index) => index + 1).map((pageNumber) => (
+                                        <button
+                                            key={pageNumber}
+                                            type="button"
+                                            onClick={() => setPage(pageNumber)}
+                                            aria-current={pageNumber === currentPage ? "page" : undefined}
+                                            className={`h-10 min-w-10 rounded-xl px-3 text-sm font-semibold ${
+                                                pageNumber === currentPage
+                                                    ? "bg-primary text-white"
+                                                    : "border border-slate-200 text-slate-700"
+                                            }`}
+                                        >
+                                            {pageNumber}
+                                        </button>
+                                    ))}
+                                    <button
+                                        type="button"
+                                        onClick={() => setPage((current) => Math.min(pageCount, current + 1))}
+                                        disabled={currentPage === pageCount}
+                                        className="inline-flex h-10 items-center gap-1 rounded-xl border border-slate-200 px-3 text-sm font-semibold text-slate-700 disabled:opacity-40"
+                                    >
+                                        Next
+                                        <ChevronRight className="h-4 w-4" />
+                                    </button>
+                                </nav>
+                            )}
+                            </>
                         ) : (
                             <div className="flex flex-col items-center justify-center py-24 text-center bg-slate-50 rounded-[40px] border-2 border-dashed border-slate-200">
                                 <div className="w-20 h-20 bg-white rounded-full shadow-xl shadow-slate-200 flex items-center justify-center mb-6">
