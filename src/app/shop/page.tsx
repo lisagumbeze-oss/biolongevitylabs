@@ -388,7 +388,7 @@ export default function ShopPage() {
                             <>
                             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                                 {visibleProducts.map((product) => (
-                                    <ProductCard key={product.id} {...product} description={undefined} />
+                                    <ProductCard key={product.id} {...product} />
                                 ))}
                             </div>
                             {pageCount > 1 && (

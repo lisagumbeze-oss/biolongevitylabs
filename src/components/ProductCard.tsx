@@ -18,7 +18,6 @@ interface ProductCardProps {
     minPrice?: number | null;
     maxPrice?: number | null;
     image: string;
-    description?: string;
     color?: string;
     originalPrice?: number;
     isSale?: boolean;
@@ -38,7 +37,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
     minPrice,
     maxPrice,
     image,
-    description,
     color,
     originalPrice,
     isSale,
@@ -183,13 +181,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
                     <h3 className="text-lg font-black text-slate-900 dark:text-white line-clamp-2 mb-2 group-hover:text-primary transition-colors leading-tight tracking-tight">
                         {name}
                     </h3>
-
-                    {description && (
-                        <div
-                            className="text-[10px] font-bold text-slate-400 dark:text-slate-500 line-clamp-2 mb-4 leading-relaxed uppercase tracking-tighter"
-                            dangerouslySetInnerHTML={{ __html: description }}
-                        />
-                    )}
                 </div>
             </Link>
 

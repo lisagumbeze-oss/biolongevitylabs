@@ -136,8 +136,7 @@ export default function ProtocolFinder() {
                                     </div>
                                     <div className="p-8 space-y-6 flex-1 flex flex-col">
                                         <div>
-                                            <h3 className="text-xl font-black text-slate-900 dark:text-white mb-2">{product.name}</h3>
-                                            <p className="text-sm text-slate-500 line-clamp-2">{product.description}</p>
+                                            <h3 className="text-xl font-black text-slate-900 dark:text-white">{product.name}</h3>
                                         </div>
                                         
                                         <div className="pt-4 border-t border-slate-50 dark:border-slate-800 mt-auto">
