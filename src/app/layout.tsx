@@ -12,6 +12,7 @@ import Providers from "@/components/Providers";
 import SmartsuppWidget from "@/components/SmartsuppWidget";
 import BackToTopButton from "@/components/BackToTopButton";
 import LivePulse from "@/components/LivePulse";
+import ScrollToTop from "@/components/ScrollToTop";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import { SITE_URL, OG_IMAGE } from "@/lib/site";
 
@@ -63,10 +64,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${inter.variable} font-sans antialiased min-h-screen flex flex-col bg-white text-slate-900 transition-colors duration-300`}
       >
+        <script
+          dangerouslySetInnerHTML={{
+            __html: "if('scrollRestoration' in history)history.scrollRestoration='manual';if(!location.hash){scrollTo(0,0);}",
+          }}
+        />
+        <ScrollToTop />
         <Providers>
           <MaintenanceGuard>
             <React.Suspense fallback={null}>

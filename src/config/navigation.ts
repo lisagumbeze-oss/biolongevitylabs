@@ -46,6 +46,7 @@ export const footerSections: FooterSection[] = [
     title: "Explore",
     links: [
       { href: "/shop", label: "Shop All" },
+      { href: "/shop/bioregulators", label: "Bioregulators" },
       { href: "/research", label: "Research Articles" },
       { href: "/protocol-finder", label: "Protocol Finder" },
       { href: "/wholesale", label: "Wholesale" },
@@ -70,6 +71,7 @@ export const footerSections: FooterSection[] = [
     links: [
       { href: "/about", label: "About Us" },
       { href: "/support", label: "Customer Service" },
+      { href: "/support/faq", label: "FAQ" },
       { href: "/shipping-and-payments", label: "Shipping & Payments" },
       { href: "/refunds", label: "Refunds & Returns" },
       { href: "/terms", label: "Terms & Conditions" },
