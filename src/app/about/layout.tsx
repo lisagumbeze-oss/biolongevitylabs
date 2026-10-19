@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     siteName: 'BioLongevity Labs',
     images: [
       {
-        url: 'https://biolongevitylabss.com/wp-content/uploads/2024/12/Bg1-ABOUT-US.jpg',
+        url: 'https://pcphezslywxavphlcdon.supabase.co/storage/v1/object/public/media/content/about/1d8db7d432a9087f-Bg1-ABOUT-US.jpg',
         width: 1200,
         height: 630,
         alt: 'BioLongevity Labs Research Facilities',
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'About Us | BioLongevity Labs',
     description: 'Learn about BioLongevity Labs and our mission to provide the highest-purity, research-grade peptides.',
-    images: ['https://biolongevitylabss.com/wp-content/uploads/2024/12/Bg1-ABOUT-US.jpg'],
+    images: ['https://pcphezslywxavphlcdon.supabase.co/storage/v1/object/public/media/content/about/1d8db7d432a9087f-Bg1-ABOUT-US.jpg'],
   },
 };
 

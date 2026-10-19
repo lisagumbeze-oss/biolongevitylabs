@@ -21,6 +21,7 @@ CREATE TABLE products (
     min_price DECIMAL(12,2),
     max_price DECIMAL(12,2),
     image_url TEXT,
+    gallery JSONB DEFAULT '[]'::jsonb,
     category_name TEXT REFERENCES categories(name) ON UPDATE CASCADE,
     form TEXT CHECK (form IN ('Vial', 'Capsule', 'Cream', 'Solution')),
     description TEXT,

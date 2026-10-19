@@ -24,6 +24,7 @@ interface MediaFile {
     size: number;
     createdAt: string;
     type: string;
+    path?: string;
 }
 
 export default function MediaLibraryPage() {
@@ -82,13 +83,16 @@ export default function MediaLibraryPage() {
         }
     };
 
-    const handleDelete = async (name: string) => {
+    const handleDelete = async (file: MediaFile) => {
         if (!confirm('Permanently delete this scientific asset?')) return;
 
         try {
-            const res = await fetch(`/api/admin/media?name=${name}`, { method: 'DELETE' });
+            const params = new URLSearchParams();
+            if (file.path) params.set('path', file.path);
+            else params.set('name', file.name);
+            const res = await fetch(`/api/admin/media?${params.toString()}`, { method: 'DELETE' });
             if (res.ok) {
-                setFiles(files.filter(f => f.name !== name));
+                setFiles(files.filter(f => (f.path || f.name) !== (file.path || file.name)));
                 toast.success('Asset removed');
             } else {
                 throw new Error('Delete failed');
@@ -209,7 +213,7 @@ export default function MediaLibraryPage() {
                                             <Copy className="w-4 h-4" />
                                         </button>
                                         <button 
-                                            onClick={() => handleDelete(file.name)}
+                                            onClick={() => handleDelete(file)}
                                             className="p-2 bg-rose-500/20 hover:bg-rose-500/40 text-rose-500 rounded-lg backdrop-blur-md transition-all"
                                             title="Delete"
                                         >
@@ -260,7 +264,7 @@ export default function MediaLibraryPage() {
                                         <td className="px-6 py-4 text-right">
                                             <div className="flex items-center justify-end gap-2">
                                                 <button onClick={() => copyUrl(file.url)} className="p-2 text-slate-400 hover:text-primary transition-all"><Copy className="w-4 h-4" /></button>
-                                                <button onClick={() => handleDelete(file.name)} className="p-2 text-slate-400 hover:text-rose-500 transition-all"><Trash2 className="w-4 h-4" /></button>
+                                                <button onClick={() => handleDelete(file)} className="p-2 text-slate-400 hover:text-rose-500 transition-all"><Trash2 className="w-4 h-4" /></button>
                                             </div>
                                         </td>
                                     </tr>

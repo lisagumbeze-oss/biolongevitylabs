@@ -79,14 +79,15 @@ async function main() {
         process.stdout.write(`⏳ Uploading: ${product.name.substring(0, 30)}... `);
         
         try {
-            // Upsert main product
-            const { error: pError } = await supabase.from('products').upsert({
+            // Upsert main product (include gallery when column exists)
+            const payload = {
                 id: product.id,
                 name: product.name,
                 price: product.price,
                 min_price: product.minPrice,
                 max_price: product.maxPrice,
                 image_url: product.image,
+                gallery: product.gallery || [],
                 category_name: product.category,
                 form: product.form,
                 description: product.description,
@@ -95,7 +96,13 @@ async function main() {
                 is_sale: product.isSale,
                 is_bestseller: false,
                 is_new: false,
-            }, { onConflict: 'id' });
+            };
+            let { error: pError } = await supabase.from('products').upsert(payload, { onConflict: 'id' });
+
+            if (pError && String(pError.message || '').includes('gallery')) {
+                delete payload.gallery;
+                ({ error: pError } = await supabase.from('products').upsert(payload, { onConflict: 'id' }));
+            }
 
             if (pError) throw pError;
 

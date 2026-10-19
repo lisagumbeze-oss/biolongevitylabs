@@ -4,7 +4,7 @@ const RUO =
   "For laboratory research use only—not for human or veterinary administration.";
 
 const IMAGE =
-  "https://biolongevitylabs.com/wp-content/uploads/2025/06/quality-control.webp";
+  "https://pcphezslywxavphlcdon.supabase.co/storage/v1/object/public/media/content/research/1a36e2a4782b280c-quality-control.webp";
 
 export const brandQueryArticles: BlogPost[] = [
   {
@@ -129,7 +129,7 @@ ${RUO}
     dateModified: "2026-09-17",
     category: "Peptide Research",
     imageUrl:
-      "https://biolongevitylabs.com/wp-content/uploads/2025/06/laboratory-vials.webp",
+      "https://pcphezslywxavphlcdon.supabase.co/storage/v1/object/public/media/content/research/72fc7a9df6e9adc9-laboratory-vials.webp",
     content: `
 ## What are Biolongevity peptides?
 
@@ -164,7 +164,7 @@ ${RUO}
     dateModified: "2026-09-17",
     category: "Bioregulators",
     imageUrl:
-      "https://biolongevitylabs.com/wp-content/uploads/2025/06/vials-test-in-laboratory.webp",
+      "https://pcphezslywxavphlcdon.supabase.co/storage/v1/object/public/media/content/research/5ac448d5a4ecfd16-vials-test-in-laboratory.webp",
     content: `
 ## What is the A-15 ovary peptide bioregulator?
 
@@ -196,7 +196,7 @@ ${RUO}
     dateModified: "2026-09-17",
     category: "Peptide Research",
     imageUrl:
-      "https://biolongevitylabs.com/wp-content/uploads/2025/06/laboratory-vials.webp",
+      "https://pcphezslywxavphlcdon.supabase.co/storage/v1/object/public/media/content/research/72fc7a9df6e9adc9-laboratory-vials.webp",
     content: `
 ## Where is BPC-157 listed?
 

@@ -39,12 +39,13 @@ const Hero = () => {
                             id="home-hero-heading"
                             className="mt-5 max-w-xl text-4xl sm:text-5xl lg:text-[3.35rem] font-semibold tracking-tight text-slate-950 leading-[1.08]"
                         >
-                            Research peptides for laboratory use.
+                            How to buy research peptides in USA.
                         </h1>
                         <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate-600">
-                            BioLongevity Labs supplies lyophilized peptides and bioregulators for in vitro study.
-                            Lots are independently tested, documented, and available to order online with the
-                            certificate of analysis included.
+                            Looking for where can I buy research peptides in USA? BioLongevity Labs supplies
+                            lyophilized peptides and bioregulators for in vitro study—with USA fulfillment to
+                            California, Texas, Florida, and nationwide. How much for catalog SKUs? See live
+                            pricing with batch COA on every order.
                         </p>
                         <div className="mt-8 flex flex-wrap items-center gap-3">
                             <Link

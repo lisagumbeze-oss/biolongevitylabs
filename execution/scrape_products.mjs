@@ -397,6 +397,23 @@ async function mapProduct(rawProduct, index, total) {
     };
 }
 
+function isOwnedStorageUrl(url) {
+    return typeof url === 'string' && url.includes('.supabase.co/storage/v1/object/public/');
+}
+
+function preferOwnedImages(scraped, existing) {
+    const image =
+        existing?.image_url && isOwnedStorageUrl(existing.image_url)
+            ? existing.image_url
+            : scraped.image;
+    const existingGallery = Array.isArray(existing?.gallery) ? existing.gallery : [];
+    const gallery =
+        existingGallery.length > 0 && existingGallery.every(isOwnedStorageUrl)
+            ? existingGallery
+            : scraped.gallery || [];
+    return { image, gallery };
+}
+
 // ─── Step 6: Upsert to Supabase ────────────────────────────────────────────────
 async function upsertToSupabase(supabase, products) {
     log.add('INFO', `Upserting ${products.length} products to Supabase...`);
@@ -405,6 +422,14 @@ async function upsertToSupabase(supabase, products) {
 
     for (const product of products) {
         try {
+            const { data: existing } = await supabase
+                .from('products')
+                .select('image_url, gallery')
+                .eq('id', product.id)
+                .maybeSingle();
+
+            const { image, gallery } = preferOwnedImages(product, existing);
+
             // Upsert product
             const { error: pError } = await supabase.from('products').upsert({
                 id: product.id,
@@ -412,7 +437,8 @@ async function upsertToSupabase(supabase, products) {
                 price: product.price,
                 min_price: product.minPrice,
                 max_price: product.maxPrice,
-                image_url: product.image,
+                image_url: image,
+                gallery,
                 category_name: product.category,
                 form: product.form,
                 description: product.description,
@@ -423,7 +449,31 @@ async function upsertToSupabase(supabase, products) {
                 is_new: false,
             }, { onConflict: 'id' });
 
-            if (pError) throw pError;
+            if (pError) {
+                // gallery column may not exist yet — retry without it
+                if (String(pError.message || '').includes('gallery')) {
+                    const { error: pError2 } = await supabase.from('products').upsert({
+                        id: product.id,
+                        name: product.name,
+                        price: product.price,
+                        min_price: product.minPrice,
+                        max_price: product.maxPrice,
+                        image_url: image,
+                        category_name: product.category,
+                        form: product.form,
+                        description: product.description,
+                        stock_status: product.stockStatus,
+                        is_variable: product.isVariable,
+                        is_sale: product.isSale,
+                        is_bestseller: false,
+                        is_new: false,
+                    }, { onConflict: 'id' });
+                    if (pError2) throw pError2;
+                    log.add('WARN', 'Upserted without gallery — run 004_media_storage.sql', { id: product.id });
+                } else {
+                    throw pError;
+                }
+            }
 
             // Delete existing variables and variations, then re-insert
             await supabase.from('product_variables').delete().eq('product_id', product.id);
@@ -480,8 +530,27 @@ async function upsertToSupabase(supabase, products) {
 
 // ─── Step 7: Write Local JSON ───────────────────────────────────────────────────
 function writeLocalJson(products) {
-    // Strip internal metadata before saving
-    const cleanProducts = products.map(({ _sourceUrl, _contentHash, ...rest }) => rest);
+    // Preserve already-migrated Supabase Storage URLs from existing JSON
+    let existingById = new Map();
+    if (fs.existsSync(CONFIG.outputJsonPath)) {
+        try {
+            const prev = JSON.parse(fs.readFileSync(CONFIG.outputJsonPath, 'utf-8'));
+            existingById = new Map(prev.map((p) => [p.id, p]));
+        } catch {
+            // ignore corrupt local file
+        }
+    }
+
+    const cleanProducts = products.map(({ _sourceUrl, _contentHash, ...rest }) => {
+        const existing = existingById.get(rest.id);
+        if (!existing) return rest;
+        const next = { ...rest };
+        if (isOwnedStorageUrl(existing.image)) next.image = existing.image;
+        if (Array.isArray(existing.gallery) && existing.gallery.length > 0 && existing.gallery.every(isOwnedStorageUrl)) {
+            next.gallery = existing.gallery;
+        }
+        return next;
+    });
     fs.writeFileSync(CONFIG.outputJsonPath, JSON.stringify(cleanProducts, null, 4));
     log.add('SUCCESS', `Wrote ${cleanProducts.length} products to ${CONFIG.outputJsonPath}`);
 }

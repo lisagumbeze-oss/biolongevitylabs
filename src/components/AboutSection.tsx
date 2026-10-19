@@ -68,7 +68,7 @@ const AboutSection = () => {
                                 </div>
                                 <div>
                                     <h3 className="text-xl font-black text-slate-900 dark:text-white mb-2 tracking-tight group-hover:text-primary transition-colors">Trusted by Researchers</h3>
-                                    <p className="text-slate-500 dark:text-slate-400 leading-relaxed">Our compounds are sourced and synthesized under total quality control, meeting regulatory standards for academic research.</p>
+                                    <p className="text-slate-500 dark:text-slate-400 leading-relaxed">Where can I buy research peptides in USA? Labs in California, Texas, Florida, and nationwide order from our catalog with documented quality control for academic and institutional research.</p>
                                 </div>
                             </motion.div>
                         </div>

@@ -17,7 +17,7 @@ export const sprintC2Articles: BlogPost[] = [
     dateModified: "2026-05-21",
     category: "Peptide Research",
     imageUrl:
-      "https://biolongevitylabs.com/wp-content/uploads/2025/06/quality-control.webp",
+      "https://pcphezslywxavphlcdon.supabase.co/storage/v1/object/public/media/content/research/1a36e2a4782b280c-quality-control.webp",
     content: `
 ## What is a certificate of analysis (COA)?
 
@@ -70,7 +70,7 @@ ${RUO}
     dateModified: "2026-05-21",
     category: "Peptide Research",
     imageUrl:
-      "https://biolongevitylabs.com/wp-content/uploads/2025/07/laboratory-vials.webp",
+      "https://pcphezslywxavphlcdon.supabase.co/storage/v1/object/public/media/content/research/72fc7a9df6e9adc9-laboratory-vials.webp",
     content: `
 ## What should labs look for when buying peptides online?
 
@@ -121,7 +121,7 @@ ${RUO}
     dateModified: "2026-05-21",
     category: "Bioregulators",
     imageUrl:
-      "https://biolongevitylabs.com/wp-content/uploads/2025/07/Why-Some-Vials-Arent-Vacuum-Sealed.webp",
+      "https://pcphezslywxavphlcdon.supabase.co/storage/v1/object/public/media/content/research/01c881b130daadc8-Why-Some-Vials-Arent-Vacuum-Sealed.webp",
     content: `
 ## What is thymulin in research?
 

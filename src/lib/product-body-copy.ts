@@ -143,9 +143,9 @@ const COA_SECTION = `<h2>Certificate of analysis (COA) &amp; quality verificatio
 <p>On receipt, verify that the batch number on the COA matches the vial or container label, archive the document in your ELN/LIMS, and reject material that lacks identity data. Read our <a href="/research/how-to-read-peptide-coa">COA interpretation guide</a> for red flags and institutional procurement checklists.</p>
 <p>Third-party or qualified in-house testing should be cited in publication methods. Do not assume prior batches apply to new experiments.</p>`;
 
-const PROCUREMENT_SECTION = `<h2>Ordering, fulfillment &amp; institutional procurement</h2>
-<p>BioLongevity Labs fulfills research orders from USA facilities with documented RUO acceptance at checkout. Business-day cutoffs apply for same-day shipping on qualifying orders—see <a href="/shipping-and-payments">shipping and payments</a> for carrier and cutoff details.</p>
-<p>Qualified laboratories, universities, and CROs may contact <a href="/support">support</a> for batch traceability questions. Wholesale inquiries route through <a href="/wholesale">wholesale</a>. For peptide selection by research goal, use the <a href="/protocol-finder">protocol finder</a>.</p>
+const PROCUREMENT_SECTION = `<h2>How to buy this research SKU in USA</h2>
+<p>Looking for <strong>where can I buy research peptides in USA</strong>? BioLongevity Labs fulfills orders from USA facilities with documented RUO acceptance at checkout—including California, Texas, Florida, New York, Illinois, and Arizona. <strong>How to buy:</strong> select your option on this page and complete checkout. <strong>How much for this SKU in USA?</strong> Live pricing is listed above and updates with batch availability.</p>
+<p>Business-day cutoffs apply for same-day shipping on qualifying orders—see <a href="/shipping-and-payments">shipping and payments</a> for carrier and cutoff details. Qualified laboratories, universities, and CROs may contact <a href="/support">support</a> for batch traceability questions. Wholesale inquiries route through <a href="/wholesale">wholesale</a>. For peptide selection by research goal, use the <a href="/protocol-finder">protocol finder</a>.</p>
 <p>Returns on opened research material may be restricted to preserve chain-of-custody—review <a href="/refunds">refund policy</a> before ordering.</p>`;
 
 const METHODOLOGY_SECTION = `<h2>Study design &amp; methodology recommendations</h2>
@@ -192,8 +192,11 @@ ${lead}
 
 /** Per-product overrides with 800+ words (Sprint B top PDPs + high-traffic SKUs). */
 const PRODUCT_BODY_OVERRIDES: Record<string, string> = {
-  prod_105727: `<h2>Regeno Blend — BPC-157, TB-500 &amp; Cartalax (30mg)</h2>
-<p>Regeno Blend combines three research peptides—10mg BPC-157, 10mg TB-500, and 10mg Cartalax—in one lyophilized vial for laboratories studying connective-tissue signaling, matrix remodeling, and synergistic regeneration pathways in controlled models.</p>
+  prod_105727: `<h2>Regeno Blend — How to Buy in USA (BPC-157, TB-500 &amp; Cartalax 30mg)</h2>
+<p>If you are asking <strong>where can I buy Regeno Blend in USA</strong>, this page is the direct catalog listing. Regeno Blend combines three research peptides—10mg BPC-157, 10mg TB-500, and 10mg Cartalax—in one lyophilized vial for laboratories studying connective-tissue signaling, matrix remodeling, and synergistic regeneration pathways in controlled models.</p>
+<h2>How to buy Regeno Blend in California, Texas, Florida &amp; nationwide</h2>
+<p><strong>How to buy Regeno Blend in California, Texas, or Florida:</strong> choose the vial option on this page, complete RUO checkout, and we fulfill to research buyers across the United States. Labs in New York, Illinois, and Arizona use the same order flow—no separate state storefront required.</p>
+<p><strong>How much for Regeno Blend in USA?</strong> Live pricing appears above and updates with batch availability. Confirm the listed price before procurement and archive your invoice with the batch COA.</p>
 <h2>Why labs choose a multi-peptide blend</h2>
 <p>Combining BPC-157 and TB-500 reduces preparation variables when comparing migration, angiogenesis, and fibroblast proliferation readouts against Cartalax-inclusive matrix assays. Document the exact milligram ratio in methods sections and tie results to the batch COA shipped with your order.</p>
 <p>Single-compound SKUs remain available if your IRB or study design requires monotherapy arms. ${RUO}</p>
@@ -203,10 +206,11 @@ const PRODUCT_BODY_OVERRIDES: Record<string, string> = {
 <p>Store lyophilized powder at 2–8°C. Reconstitute with bacteriostatic water per SOP; aliquot to avoid repeated freeze-thaw. See the <a href="/research/peptide-reconstitution-guide">reconstitution guide</a> and <a href="/resources/peptide-calculator">calculator</a>.</p>
 <h2>Research literature themes</h2>
 <p>BPC-157: cytoprotection, tendon/ligament fibroblast studies. TB-500: Thymosin β4–related actin and migration models. Cartalax: cartilage and extracellular-matrix research. None of these applications constitute human treatment claims.</p>
-<h2>Procurement</h2>
-<p>Order from the USA catalog with RUO checkout attestation. Questions: <a href="/support">support</a>. Related: <a href="/research/bpc-157-vs-tb-500">BPC-157 vs TB-500</a>, <a href="/research/best-peptides-for-healing">healing research peptides</a>.</p>`,
-  prod_201099: `<h2>Thymulin peptide (10mg) for immune research</h2>
-<p>Thymulin is a zinc-dependent nonapeptide produced by thymic epithelial cells, used in immune cell differentiation, T-cell maturation, and neuroendocrine–immune interaction studies. This 10mg lyophilized vial is intended for qualified laboratory research only.</p>
+<h2>Procurement — does Regeno Blend ship to my state?</h2>
+<p>Yes for standard U.S. research shipping destinations covered by our checkout. Order from the USA catalog with RUO attestation. Questions: <a href="/support">support</a>. Related: <a href="/research/bpc-157-vs-tb-500">BPC-157 vs TB-500</a>, <a href="/research/where-to-buy-research-peptides">where to buy research peptides</a>, <a href="/research/best-peptides-for-healing">healing research peptides</a>.</p>`,
+  prod_201099: `<h2>Thymulin peptide (10mg) — How to Buy in USA</h2>
+<p>Looking for <strong>where can I buy thymulin peptide in USA</strong>? Thymulin is a zinc-dependent nonapeptide produced by thymic epithelial cells, used in immune cell differentiation, T-cell maturation, and neuroendocrine–immune interaction studies. This 10mg lyophilized vial is intended for qualified laboratory research only.</p>
+<p><strong>How to buy thymulin in California, Texas, or Florida:</strong> order from this page with RUO checkout for nationwide research shipping. <strong>How much for thymulin in USA?</strong> See live pricing above.</p>
 <h2>Mechanistic background</h2>
 <p>Active thymulin requires zinc coordination; apothymulin forms may differ in bioactivity in cell assays. Design experiments with appropriate cofactors and controls. Distinguish thymulin (defined sequence) from thymalin (multi-component extracts) in your protocol narrative.</p>
 <p>Literature spans thymic involution models, T-cell subset profiling, and cytokine co-regulation experiments. Align concentrations to pilot titrations rather than unverified non-research dosing tables.</p>
@@ -216,19 +220,19 @@ const PRODUCT_BODY_OVERRIDES: Record<string, string> = {
 <p>Refrigerate lyophilized material; reconstitute per institutional SOP. Aliquot after first thaw. ${RUO}</p>
 <h2>Related research</h2>
 <p><a href="/research/thymulin-research-overview">Thymulin overview</a>, <a href="/research/what-is-a-bioregulator">bioregulators</a>, <a href="/shop/bioregulators">bioregulator catalog</a>.</p>`,
-  prod_230039: `<h2>Follistatin (FLGR242) 10mg — myostatin-pathway research</h2>
-<p>Follistatin FLGR242 is supplied as a lyophilized research peptide for laboratories investigating activin/myostatin signaling, muscle cell models, and related metabolic pathways. This SKU is analytical-grade research material, not a consumer supplement.</p>
+  prod_230039: `<h2>Follistatin (FLGR242) 10mg — Where to Buy in USA</h2>
+<p><strong>Where can I buy Follistatin FLGR242 in USA?</strong> This lyophilized research peptide supports activin/myostatin signaling, muscle cell models, and related metabolic pathways. How to buy in Florida, Illinois, or Arizona: complete checkout on this page. How much for FLGR242 in USA? Pricing is listed above. Analytical-grade research material only—not a consumer supplement.</p>
 <h2>Experimental framing</h2>
 <p>Define whether your study measures receptor binding, gene expression, protein secretion, or phenotypic differentiation. Follistatin-related tools require context-specific controls because pathway effects vary by cell type and serum conditions.</p>
 <p>Serum lot and differentiation state strongly modulate readouts; block with appropriate pathway inhibitors where your design requires causal inference. Archive COA batch IDs with each figure panel.</p>
 <p>Document batch purity and solvent composition in methods. For combination studies, cite each peptide batch independently in supplementary tables. Subscription and one-time SKUs share the same analytical release standards when batch numbers match. ${RUO}</p>`,
-  prod_26974: `<h2>Vesugen bioregulator (20mg) — vascular &amp; aging research</h2>
-<p>Vesugen (Lys-Glu-Asp) is a Khavinson-class tripeptide bioregulator used in endothelial, vascular, and cellular aging research programs. The 20mg lyophilized format supports precise mass-based preparation for in vitro systems.</p>
+  prod_26974: `<h2>Vesugen bioregulator (20mg) — How Much in USA</h2>
+<p><strong>How much for Vesugen in USA?</strong> See live pricing on this page. Where can I buy Vesugen in Ohio, Georgia, or Pennsylvania? Order this 20mg vial for endothelial, vascular, and cellular aging research with USA fulfillment. Vesugen (Lys-Glu-Asp) is a Khavinson-class tripeptide bioregulator for qualified laboratory programs.</p>
 <p>Compare Vesugen hypotheses against general repair peptides (BPC-157, TB-500) only when your protocol explicitly tests different mechanism classes. Bioregulators target organ-specific expression research questions.</p>
 <p>Endothelial barrier, angiogenesis sprouting, and senescence-associated secretory phenotype assays appear frequently in related literature—select endpoints that match your tissue source.</p>`,
-  prod_4103: `<h2>Cartalax peptide (20mg) — cartilage &amp; matrix research</h2>
-<p>Cartalax is used in connective-tissue, chondrocyte, and extracellular-matrix remodeling studies. Researchers pair Cartalax with matrix assays and co-culture systems; combination blends such as Regeno (BPC-157/TB-500/Cartalax) exist for multi-arm designs.</p>
-<p>Verify batch COA before introduction to culture; store lyophilized vials cold. ${RUO}</p>`,
+  prod_4103: `<h2>Cartalax peptide (20mg) — How to Buy in USA</h2>
+<p>Looking for <strong>where can I buy Cartalax in USA</strong>? Cartalax is used in connective-tissue, chondrocyte, and extracellular-matrix remodeling studies. How to buy in Washington, Colorado, or Michigan: order from this page. How much for Cartalax in USA? Pricing updates with batch availability above.</p>
+<p>Researchers pair Cartalax with matrix assays and co-culture systems; combination blends such as Regeno (BPC-157/TB-500/Cartalax) exist for multi-arm designs. Verify batch COA before introduction to culture; store lyophilized vials cold. ${RUO}</p>`,
 };
 
 function wrapSections(sections: string[]): string {

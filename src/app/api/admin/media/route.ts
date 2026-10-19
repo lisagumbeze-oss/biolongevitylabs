@@ -1,39 +1,101 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
-import { writeFile, unlink } from 'fs/promises';
+import {
+    MEDIA_BUCKET,
+    deleteFromMedia,
+    listMedia,
+    storagePathFromPublicUrl,
+    uploadToMedia,
+} from '@/lib/storage';
+import { supabase } from '@/lib/supabase';
 
 export const dynamic = 'force-dynamic';
 
-const UPLOADS_DIR = path.join(process.cwd(), 'public', 'uploads');
+async function listAllMedia() {
+    // List common prefixes used by migration + admin uploads
+    const prefixes = ['uploads', 'products', 'content', ''];
+    const seen = new Set<string>();
+    const media: {
+        name: string;
+        url: string;
+        size: number;
+        createdAt: string;
+        type: string;
+        path: string;
+    }[] = [];
 
-// Ensure uploads directory exists
-if (!fs.existsSync(UPLOADS_DIR)) {
-    fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+    for (const prefix of prefixes) {
+        const items = await listMedia(prefix, 200);
+        for (const item of items) {
+            if (seen.has(item.path)) continue;
+            // Skip folder stubs when listing root
+            if (!prefix && item.size === 0 && !item.path.includes('.')) {
+                continue;
+            }
+            seen.add(item.path);
+            media.push({
+                name: item.name,
+                url: item.url,
+                size: item.size,
+                createdAt: item.createdAt,
+                type: item.type,
+                path: item.path,
+            });
+        }
+    }
+
+    // Also list one level under products/ and content/ folders
+    for (const root of ['products', 'content'] as const) {
+        if (!supabase) break;
+        const { data: folders } = await supabase.storage.from(MEDIA_BUCKET).list(root, { limit: 100 });
+        for (const folder of folders || []) {
+            if (!folder.name || folder.name.includes('.')) continue;
+            const nested = await listMedia(`${root}/${folder.name}`, 100);
+            for (const item of nested) {
+                if (seen.has(item.path)) continue;
+                seen.add(item.path);
+                media.push({
+                    name: item.name,
+                    url: item.url,
+                    size: item.size,
+                    createdAt: item.createdAt,
+                    type: item.type,
+                    path: item.path,
+                });
+            }
+        }
+    }
+
+    return media.sort(
+        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
 }
 
 export async function GET() {
     try {
-        const files = fs.readdirSync(UPLOADS_DIR);
-        const media = files.map(file => {
-            const stats = fs.statSync(path.join(UPLOADS_DIR, file));
-            return {
-                name: file,
-                url: `/uploads/${file}`,
-                size: stats.size,
-                createdAt: stats.birthtime,
-                type: file.split('.').pop()?.toLowerCase()
-            };
-        }).sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+        if (!supabase) {
+            return NextResponse.json(
+                { error: 'Supabase is not configured.' },
+                { status: 503 }
+            );
+        }
 
+        const media = await listAllMedia();
         return NextResponse.json(media);
-    } catch (error: any) {
-        return NextResponse.json({ error: error.message }, { status: 500 });
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : String(error);
+        return NextResponse.json({ error: message }, { status: 500 });
     }
 }
 
 export async function POST(request: Request) {
     try {
+        if (!supabase) {
+            return NextResponse.json(
+                { error: 'Supabase is not configured.' },
+                { status: 503 }
+            );
+        }
+
         const formData = await request.formData();
         const file = formData.get('file') as File;
 
@@ -42,42 +104,50 @@ export async function POST(request: Request) {
         }
 
         const bytes = await file.arrayBuffer();
-        const buffer = Buffer.from(bytes);
-
-        // Create unique filename
         const filename = `${Date.now()}-${file.name.replace(/\s+/g, '-')}`;
-        const filePath = path.join(UPLOADS_DIR, filename);
+        const objectPath = `uploads/${filename}`;
+        const publicUrl = await uploadToMedia(objectPath, bytes, file.type || undefined);
 
-        await writeFile(filePath, buffer);
-
-        return NextResponse.json({ 
+        return NextResponse.json({
             name: filename,
-            url: `/uploads/${filename}`,
+            url: publicUrl,
+            path: objectPath,
             size: file.size,
-            type: filename.split('.').pop()
+            type: filename.split('.').pop(),
         });
-    } catch (error: any) {
-        return NextResponse.json({ error: error.message }, { status: 500 });
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : String(error);
+        return NextResponse.json({ error: message }, { status: 500 });
     }
 }
 
 export async function DELETE(request: Request) {
     try {
+        if (!supabase) {
+            return NextResponse.json(
+                { error: 'Supabase is not configured.' },
+                { status: 503 }
+            );
+        }
+
         const { searchParams } = new URL(request.url);
         const name = searchParams.get('name');
+        const pathParam = searchParams.get('path');
+        const urlParam = searchParams.get('url');
 
-        if (!name) {
-            return NextResponse.json({ error: 'Filename required' }, { status: 400 });
+        let objectPath = pathParam || (name ? `uploads/${name}` : null);
+        if (!objectPath && urlParam) {
+            objectPath = storagePathFromPublicUrl(urlParam);
         }
 
-        const filePath = path.join(UPLOADS_DIR, name);
-        if (fs.existsSync(filePath)) {
-            await unlink(filePath);
-            return NextResponse.json({ success: true });
-        } else {
-            return NextResponse.json({ error: 'File not found' }, { status: 404 });
+        if (!objectPath) {
+            return NextResponse.json({ error: 'Filename or path required' }, { status: 400 });
         }
-    } catch (error: any) {
-        return NextResponse.json({ error: error.message }, { status: 500 });
+
+        await deleteFromMedia(objectPath);
+        return NextResponse.json({ success: true });
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : String(error);
+        return NextResponse.json({ error: message }, { status: 500 });
     }
 }

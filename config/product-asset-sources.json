@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "notes": [
+    "Phase 1 always uses the owned WooCommerce store first.",
+    "Phase 2 domains are public storefronts used only as research references for image URLs and factual product metadata (strength, form).",
+    "Do not copy competitor marketing copy verbatim — rewrite into BioLongevity RUO voice before publishing.",
+    "Respect robots.txt, rate limits, and each site's terms. Prefer official product images you have rights to use."
+  ],
+  "ownedSources": [
+    {
+      "id": "biolongevity-wp",
+      "label": "BioLongevity Labs WooCommerce",
+      "baseUrl": "https://biolongevitylabs.com",
+      "productApi": "https://biolongevitylabs.com/wp-json/wc/store/v1/products",
+      "priority": 1
+    }
+  ],
+  "referenceDomains": [
+    {
+      "id": "limitlesslifenootropics",
+      "label": "Limitless Life Nootropics",
+      "baseUrl": "https://limitlesslifenootropics.com",
+      "searchPath": "/?s={query}&post_type=product",
+      "priority": 2,
+      "enabled": true
+    },
+    {
+      "id": "peptide-sciences",
+      "label": "Peptide Sciences",
+      "baseUrl": "https://www.peptidesciences.com",
+      "searchPath": "/search?q={query}",
+      "priority": 3,
+      "enabled": true
+    },
+    {
+      "id": "pure-rawz",
+      "label": "PureRawz",
+      "baseUrl": "https://purerawz.co",
+      "searchPath": "/?s={query}",
+      "priority": 4,
+      "enabled": true
+    }
+  ],
+  "imagePolicy": {
+    "downloadDir": "public/uploads/sourced",
+    "preferFormats": ["webp", "jpg", "jpeg", "png"],
+    "maxBytes": 5000000,
+    "userAgent": "BioLongevityLabsAssetSourcer/1.0 (+internal catalog enrichment)"
+  },
+  "descriptionPolicy": {
+    "minChars": 180,
+    "mustIncludeRuo": true,
+    "rewriteRequired": true,
+    "tone": "scientific-RUO"
+  }
+}

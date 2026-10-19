@@ -31,25 +31,29 @@ const PRODUCT_SECTIONS: {
 }[] = [
   {
     title: "Peptide capsules",
-    description: "Capsule lots for formulation and cell-model studies, with a certificate of analysis on every batch.",
+    description:
+      "Where can I buy peptide capsules in USA? Capsule lots for formulation and cell-model studies, with a certificate of analysis on every batch.",
     href: "/shop?category=Peptide%20Capsules",
     match: (product) => product.category === "Peptide Capsules",
   },
   {
     title: "Bioregulator vials",
-    description: "Lyophilized short peptides for organ- and tissue-specific in vitro research.",
+    description:
+      "How to buy bioregulator vials in California, Texas, or Florida: lyophilized short peptides for organ- and tissue-specific in vitro research.",
     href: "/shop?category=Bioregulator%20Vials",
     match: (product) => product.category === "Bioregulator Vials",
   },
   {
     title: "Bioregulator capsules",
-    description: "Organ-specific capsule formats for laboratory work that needs an oral research matrix.",
+    description:
+      "How much for bioregulator capsules in USA? Organ-specific capsule formats for laboratory work that needs an oral research matrix.",
     href: "/shop?category=Bioregulator%20Capsules",
     match: (product) => product.category === "Bioregulator Capsules",
   },
   {
     title: "Research creams",
-    description: "Topical bioregulators prepared for dermal and barrier-model studies.",
+    description:
+      "Where can I buy research creams in New York or Illinois? Topical bioregulators prepared for dermal and barrier-model studies.",
     href: "/shop?category=Bioregulator%20Creams",
     match: (product) => product.category === "Bioregulator Creams",
   },
@@ -62,9 +66,9 @@ function productsForSection(products: Product[], match: (product: Product) => bo
 }
 
 const TOP_PRODUCT_LINKS = [
-  { href: "/product/regeno-blend-bpc-157-tb-500-cartalax-30mg", label: "BPC-157 & TB-500 blend" },
-  { href: "/product/thymulin-peptide-10mg", label: "Thymulin peptide" },
-  { href: "/product/follistatin-flgr242-10mg", label: "Follistatin (FLGR242)" },
+  { href: "/product/regeno-blend-bpc-157-tb-500-cartalax-30mg", label: "How to buy Regeno Blend in USA" },
+  { href: "/product/thymulin-peptide-10mg", label: "Where to buy thymulin in USA" },
+  { href: "/product/follistatin-flgr242-10mg", label: "How much for Follistatin in USA" },
 ];
 
 export default function HomePage() {
@@ -128,10 +132,12 @@ export default function HomePage() {
       <section className="bg-white dark:bg-slate-950 border-b border-slate-100 dark:border-slate-800 py-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
           <AnswerCapsule>
-            <strong>BioLongevity Labs</strong> (also searched as Bio Longevity Labs, Biolongevity, and
-            biolongevitylabs) is a USA-based supplier of research-grade peptides and bioregulators with
-            third-party COA verification. Laboratories source BPC-157, TB-500, thymulin, and bioregulators
-            here for in vitro study—never for human consumption.
+            <strong>Where can I buy research peptides in USA?</strong> BioLongevity Labs (also searched as
+            Bio Longevity Labs, Biolongevity, and biolongevitylabs) fulfills COA-verified peptides and
+            bioregulators nationwide—including California, Texas, Florida, New York, Illinois, and Arizona.
+            How to buy: open the catalog, select a SKU, and complete research-use-only checkout. How much
+            for BPC-157 blends, TB-500 lines, thymulin, and bioregulators? Live pricing is on each product
+            page. For in vitro study only—never for human consumption.
           </AnswerCapsule>
           <nav aria-label="Key research catalog links" className="flex flex-wrap gap-3 text-sm font-bold">
             <Link href="/shop" className="text-primary hover:underline">
@@ -340,7 +346,7 @@ export default function HomePage() {
               <div className="relative aspect-[3/4] sm:aspect-[4/5] lg:min-h-[480px] lg:aspect-auto rounded-[2.5rem] overflow-hidden border border-white/10 bg-slate-900/30 group">
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/15 to-violet-600/15 pointer-events-none" />
                 <img
-                  src="https://mlavgymrtxzc.i.optimole.com/cb:572_.56b/w:auto/h:auto/q:mauto/f:best/https://biolongevitylabs.com/wp-content/uploads/2026/01/Thymulin.jpg"
+                  src="https://pcphezslywxavphlcdon.supabase.co/storage/v1/object/public/media/products/prod_201099/c213ee66909e7951-Thymulin.jpg"
                   alt="Thymulin peptide research vial — BioLongevity Labs"
                   className="relative z-10 w-full h-full min-h-[280px] lg:min-h-[480px] object-contain object-center p-6 sm:p-8 group-hover:scale-[1.02] transition-transform duration-700"
                 />

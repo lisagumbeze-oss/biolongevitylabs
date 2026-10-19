@@ -17,7 +17,7 @@ export const sprintCArticles: BlogPost[] = [
     dateModified: "2026-05-21",
     category: "Peptide Research",
     imageUrl:
-      "https://biolongevitylabs.com/wp-content/uploads/2025/07/laboratory-vials.webp",
+      "https://pcphezslywxavphlcdon.supabase.co/storage/v1/object/public/media/content/research/72fc7a9df6e9adc9-laboratory-vials.webp",
     content: `
 Body Protection Compound-157 (BPC-157) is a synthetic pentadecapeptide studied in connective-tissue, angiogenesis, and gut-barrier cell models. This guide explains how laboratories think about **research quantities and concentrations**—not human dosing.
 
@@ -97,7 +97,7 @@ ${RUO}
     dateModified: "2026-05-20",
     category: "Peptide Research",
     imageUrl:
-      "https://biolongevitylabs.com/wp-content/uploads/2025/06/quality-control.webp",
+      "https://pcphezslywxavphlcdon.supabase.co/storage/v1/object/public/media/content/research/1a36e2a4782b280c-quality-control.webp",
     content: `
 Lyophilization preserves peptide integrity during shipping, but every lab must reconstitute powder into a workable solution before experiments. This guide describes **standard research handling**—adapt all steps to your institution's biosafety and QA SOPs.
 
@@ -174,7 +174,7 @@ Browse lyophilized [research vials](/shop) with batch COAs. ${RUO}
     dateModified: "2026-05-19",
     category: "Peptide Research",
     imageUrl:
-      "https://biolongevitylabs.com/wp-content/uploads/2025/06/mobile-hero-peptide-guide.webp",
+      "https://pcphezslywxavphlcdon.supabase.co/storage/v1/object/public/media/content/research/2687c64d60e74b26-mobile-hero-peptide-guide.webp",
     content: `
 Researchers frequently ask whether BPC-157 or TB-500 better fits a tissue-repair or angiogenesis model. The answer depends on **pathway, solubility, and experimental design**—not marketing claims.
 
@@ -246,7 +246,7 @@ These compounds are **research chemicals**. ${RUO}
     dateModified: "2026-05-18",
     category: "Bioregulators",
     imageUrl:
-      "https://biolongevitylabs.com/wp-content/uploads/2025/07/Why-Some-Vials-Arent-Vacuum-Sealed.webp",
+      "https://pcphezslywxavphlcdon.supabase.co/storage/v1/object/public/media/content/research/01c881b130daadc8-Why-Some-Vials-Arent-Vacuum-Sealed.webp",
     content: `
 The term **bioregulator** (often linked to Khavinson peptide research) describes short, organ-associated peptide sequences investigated for their influence on **gene expression profiles** in cell and tissue models—not for consumer "anti-aging" supplementation.
 
@@ -315,7 +315,7 @@ ${RUO}
     dateModified: "2026-05-17",
     category: "Peptide Research",
     imageUrl:
-      "https://biolongevitylabs.com/wp-content/uploads/2025/07/laboratory-vials.webp",
+      "https://pcphezslywxavphlcdon.supabase.co/storage/v1/object/public/media/content/research/72fc7a9df6e9adc9-laboratory-vials.webp",
     content: `
 "What are the best peptides for healing research?" is really a question about **which pathways your model measures**. This pillar guide maps common peptides to experimental goals—without clinical recommendations.
 

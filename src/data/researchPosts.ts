@@ -43,7 +43,7 @@ Browse the [research peptide shop](/shop) or review [BPC-157 dosage guidance](/r
         author: "Editorial Team",
         date: "2026-02-15",
         category: "Peptide Research",
-        imageUrl: "https://biolongevitylabs.com/wp-content/uploads/2025/07/laboratory-vials.webp"
+        imageUrl: "https://pcphezslywxavphlcdon.supabase.co/storage/v1/object/public/media/content/research/72fc7a9df6e9adc9-laboratory-vials.webp"
     },
     {
         id: "2",
@@ -83,7 +83,7 @@ See the [peptide reconstitution guide](/research/peptide-reconstitution-guide) f
         author: "Editorial Team",
         date: "2026-01-20",
         category: "Peptide Research",
-        imageUrl: "https://biolongevitylabs.com/wp-content/uploads/2025/06/quality-control.webp"
+        imageUrl: "https://pcphezslywxavphlcdon.supabase.co/storage/v1/object/public/media/content/research/1a36e2a4782b280c-quality-control.webp"
     },
     {
         id: "3",
@@ -117,7 +117,7 @@ Source [Thymulin for research](/product/prod_201099) with batch COA documentatio
         author: "Editorial Team",
         date: "2025-12-05",
         category: "Bioregulators",
-        imageUrl: "https://biolongevitylabs.com/wp-content/uploads/2025/07/Why-Some-Vials-Arent-Vacuum-Sealed.webp"
+        imageUrl: "https://pcphezslywxavphlcdon.supabase.co/storage/v1/object/public/media/content/research/01c881b130daadc8-Why-Some-Vials-Arent-Vacuum-Sealed.webp"
     },
     {
         id: "4",
@@ -143,7 +143,7 @@ Compare mechanisms in [BPC-157 vs TB-500](/research/bpc-157-vs-tb-500) or explor
         author: "Editorial Team",
         date: "2025-11-10",
         category: "Peptide Research",
-        imageUrl: "https://biolongevitylabs.com/wp-content/uploads/2025/06/mobile-hero-peptide-guide.webp"
+        imageUrl: "https://pcphezslywxavphlcdon.supabase.co/storage/v1/object/public/media/content/research/2687c64d60e74b26-mobile-hero-peptide-guide.webp"
     }
 ];
 

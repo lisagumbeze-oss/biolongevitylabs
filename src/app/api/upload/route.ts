@@ -1,11 +1,18 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
+import { MEDIA_BUCKET, uploadToMedia } from '@/lib/storage';
+import { supabase } from '@/lib/supabase';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(req: Request) {
     try {
+        if (!supabase) {
+            return NextResponse.json(
+                { error: 'Supabase is not configured. Cannot upload media.' },
+                { status: 503 }
+            );
+        }
+
         const formData = await req.formData();
         const files = formData.getAll('files') as File[];
 
@@ -13,32 +20,24 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'No files uploaded.' }, { status: 400 });
         }
 
-        if (files.length > 6) { // allow main + 5 gallery
+        if (files.length > 6) {
+            // allow main + 5 gallery
             return NextResponse.json({ error: 'Maximum 6 files allowed at once.' }, { status: 400 });
-        }
-
-        const uploadDir = path.join(process.cwd(), 'public', 'uploads');
-        if (!fs.existsSync(uploadDir)) {
-            fs.mkdirSync(uploadDir, { recursive: true });
         }
 
         const uploadedUrls: string[] = [];
 
         for (const file of files) {
-            const bytes: ArrayBuffer = await file.arrayBuffer();
-            const buffer = Buffer.from(bytes);
-
+            const bytes = await file.arrayBuffer();
             const cleanName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, '');
             const filename = `${Date.now()}-${cleanName}`;
-            const filepath = path.join(uploadDir, filename);
+            const objectPath = `uploads/${filename}`;
 
-            fs.writeFileSync(filepath, buffer);
-
-            uploadedUrls.push(`/uploads/${filename}`);
+            const publicUrl = await uploadToMedia(objectPath, bytes, file.type || undefined);
+            uploadedUrls.push(publicUrl);
         }
 
-        return NextResponse.json({ urls: uploadedUrls }, { status: 200 });
-
+        return NextResponse.json({ urls: uploadedUrls, bucket: MEDIA_BUCKET }, { status: 200 });
     } catch (error) {
         console.error('File upload error:', error);
         return NextResponse.json({ error: 'Failed to upload files.' }, { status: 500 });

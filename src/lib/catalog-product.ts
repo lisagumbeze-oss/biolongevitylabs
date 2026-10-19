@@ -39,6 +39,7 @@ export interface ProductRow {
     min_price: number | null;
     max_price: number | null;
     image_url: string;
+    gallery?: string[] | null;
     category_name: string;
     form: string;
     description: string;
@@ -76,6 +77,10 @@ export function mapProductRow(p: ProductRow): Product {
             options: v.options,
         })) || [];
 
+    const gallery = Array.isArray(p.gallery)
+        ? p.gallery.filter((u): u is string => typeof u === "string" && u.length > 0)
+        : undefined;
+
     const mapped: Product = {
         id: p.id,
         name: decodeEntities(p.name),
@@ -83,6 +88,7 @@ export function mapProductRow(p: ProductRow): Product {
         minPrice,
         maxPrice,
         image: p.image_url,
+        ...(gallery && gallery.length > 0 ? { gallery } : {}),
         category: p.category_name as Product["category"],
         form: p.form as Product["form"],
         description: p.description,

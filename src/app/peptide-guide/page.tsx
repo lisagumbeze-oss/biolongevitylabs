@@ -10,56 +10,56 @@ const guides = [
     {
         title: "Peptides and Amino Acids: A Beginner's Guide",
         description: "Start your exploration with the fundamentals of peptide science. This introduction explores the 20 standard amino acids, how peptide bonds form complex chains, and key differences between peptides and proteins.",
-        image: "https://biolongevitylabs.com/wp-content/uploads/2025/06/peptide-molecules.webp",
+        image: "https://pcphezslywxavphlcdon.supabase.co/storage/v1/object/public/media/content/peptide-guide/65e1370e44cd3003-peptide-molecules.webp",
         icon: BookOpen,
         link: "/research/polar-vs-nonpolar-amino-acids"
     },
     {
         title: "Peptide Synthesis: How Peptides Are Made",
         description: "Discover how modern peptide synthesis has evolved from niche laboratory techniques to essential biomedical research tools. This comprehensive guide explores major synthesis methods including solid-phase and liquid-phase.",
-        image: "https://biolongevitylabs.com/wp-content/uploads/2025/06/lab-molecules.webp",
+        image: "https://pcphezslywxavphlcdon.supabase.co/storage/v1/object/public/media/content/peptide-guide/40e6e91781ab3ced-lab-molecules.webp",
         icon: FlaskConical,
         link: "/research"
     },
     {
         title: "Introduction to Peptide Purification Techniques",
         description: "Master essential peptide purification techniques to ensure clean, reliable research results. This guide covers reversed-phase chromatography, ion-exchange methods, size exclusion, and advanced techniques.",
-        image: "https://biolongevitylabs.com/wp-content/uploads/2025/06/laboratory-vials.webp",
+        image: "https://pcphezslywxavphlcdon.supabase.co/storage/v1/object/public/media/content/research/72fc7a9df6e9adc9-laboratory-vials.webp",
         icon: Beaker,
         link: "/research"
     },
     {
         title: "Peptide Quality Control: Methods & Standards",
         description: "Ensure research success with comprehensive peptide quality control methods and standards. This guide covers essential analytical techniques including HPLC, mass spectrometry, and NMR.",
-        image: "https://biolongevitylabs.com/wp-content/uploads/2025/06/quality-control.webp",
+        image: "https://pcphezslywxavphlcdon.supabase.co/storage/v1/object/public/media/content/research/1a36e2a4782b280c-quality-control.webp",
         icon: ShieldCheck,
         link: "/research/how-to-read-peptide-coa"
     },
     {
         title: "The Basics of Peptide Modification",
         description: "Discover essential peptide modification techniques that enhance stability, solubility, and functionality for research applications. This guide covers post-translational modifications and chemical enhancements.",
-        image: "https://biolongevitylabs.com/wp-content/uploads/2025/06/vials-test-in-laboratory.webp",
+        image: "https://pcphezslywxavphlcdon.supabase.co/storage/v1/object/public/media/content/research/5ac448d5a4ecfd16-vials-test-in-laboratory.webp",
         icon: PenTool,
         link: "/research"
     },
     {
         title: "Peptide Stability: Guidelines for Handling",
         description: "Protect your research investment with proven peptide stability guidelines and handling protocols. This comprehensive guide covers storage conditions, solubilization strategies, and essential SOPs.",
-        image: "https://biolongevitylabs.com/wp-content/uploads/2025/06/Artboard-1.webp",
+        image: "https://pcphezslywxavphlcdon.supabase.co/storage/v1/object/public/media/content/peptide-guide/81607ada1f5aea65-Artboard-1.webp",
         icon: Anchor,
         link: "/research/peptide-reconstitution-guide"
     },
     {
         title: "Peptide Nomenclature: Reference for Naming",
         description: "Navigate essential peptide naming conventions with confidence in this reference guide to IUPAC-IUBMB nomenclature standards. Learn amino acid codes, proper sequence notation, and modification symbols.",
-        image: "https://biolongevitylabs.com/wp-content/uploads/2025/06/bll-peptide-vials-banner.webp",
+        image: "https://pcphezslywxavphlcdon.supabase.co/storage/v1/object/public/media/content/peptide-guide/e76b30ff8030d34a-bll-peptide-vials-banner.webp",
         icon: FileText,
         link: "/research"
     },
     {
         title: "Peptide Glossary: Definitions and Terminology",
         description: "Master the language of peptide science with our comprehensive glossary of terms and definitions. An invaluable reference for researchers at all levels working with peptides.",
-        image: "https://biolongevitylabs.com/wp-content/uploads/2025/06/peptide-glossary-featured.png",
+        image: "https://pcphezslywxavphlcdon.supabase.co/storage/v1/object/public/media/content/peptide-guide/1a2ea62ac1e13c14-peptide-glossary-featured.png",
         icon: Hash,
         link: "/support/faq"
     }
@@ -72,7 +72,7 @@ export default function PeptideGuidePage() {
             <section className="relative py-24 lg:py-32 overflow-hidden bg-slate-900 dark:bg-slate-950">
                 <div className="absolute inset-0 z-0">
                     <Image
-                        src="https://biolongevitylabs.com/wp-content/uploads/2025/06/mobile-hero-peptide-guide.webp"
+                        src="https://pcphezslywxavphlcdon.supabase.co/storage/v1/object/public/media/content/research/2687c64d60e74b26-mobile-hero-peptide-guide.webp"
                         alt="Peptide Guide Hero"
                         fill
                         className="object-cover opacity-20"
@@ -99,7 +99,7 @@ export default function PeptideGuidePage() {
 
                         <div className="flex items-center gap-4 bg-white/5 p-4 rounded-2xl border border-white/10 backdrop-blur-md inline-flex">
                             <Image
-                                src="https://biolongevitylabs.com/wp-content/uploads/2025/07/Asset-21.png"
+                                src="https://pcphezslywxavphlcdon.supabase.co/storage/v1/object/public/media/content/peptide-guide/9ae20c5b28f7b932-Asset-21.png"
                                 alt="USA Made"
                                 width={48}
                                 height={32}
@@ -120,7 +120,7 @@ export default function PeptideGuidePage() {
                     <div className="grid md:grid-cols-2 gap-16 items-center mb-24">
                         <div className="order-2 md:order-1 relative h-[500px] rounded-3xl overflow-hidden shadow-2xl">
                             <Image
-                                src="https://biolongevitylabs.com/wp-content/uploads/2025/07/peptides-in-research.webp"
+                                src="https://pcphezslywxavphlcdon.supabase.co/storage/v1/object/public/media/content/peptide-guide/08a9612ddf81dedd-peptides-in-research.webp"
                                 alt="Peptides in Research"
                                 fill
                                 className="object-cover"
@@ -151,7 +151,7 @@ export default function PeptideGuidePage() {
                         </div>
                         <div className="relative h-[400px] rounded-3xl overflow-hidden shadow-2xl">
                             <Image
-                                src="https://biolongevitylabs.com/wp-content/uploads/2025/07/Why-Quality-Matters-in-Peptide-Research.webp"
+                                src="https://pcphezslywxavphlcdon.supabase.co/storage/v1/object/public/media/content/peptide-guide/a7880ee3b8de1038-Why-Quality-Matters-in-Peptide-Research.webp"
                                 alt="Why Quality Matters"
                                 fill
                                 className="object-cover"
@@ -232,7 +232,7 @@ export default function PeptideGuidePage() {
                         {/* Vacuum Seal Question */}
                         <div className="relative rounded-3xl overflow-hidden group">
                             <Image
-                                src="https://biolongevitylabs.com/wp-content/uploads/2025/07/Why-Some-Vials-Arent-Vacuum-Sealed.webp"
+                                src="https://pcphezslywxavphlcdon.supabase.co/storage/v1/object/public/media/content/research/01c881b130daadc8-Why-Some-Vials-Arent-Vacuum-Sealed.webp"
                                 alt="Lab Researcher"
                                 fill
                                 className="object-cover group-hover:scale-105 transition-transform duration-700"

@@ -3,21 +3,21 @@ import { canonicalPath } from '@/lib/seo';
 import { SITE_URL } from '@/lib/site';
 
 export const metadata: Metadata = {
-  title: 'Buy Research Peptides Online — Shop Catalog',
+  title: 'How to Buy Research Peptides in USA — Shop Catalog',
   description:
-    'Buy peptides online for laboratory research: vials, capsules, and bioregulators with HPLC-verified COA. USA fulfillment, 99%+ purity. Research use only.',
+    'Where can I buy research peptides in USA? How much for vials, capsules, and bioregulators? HPLC-verified COA, California to Florida shipping. Research use only.',
   alternates: canonicalPath('/shop'),
   openGraph: {
-    title: 'Shop Premium Peptides & Bioregulators | BioLongevity Labs',
-    description: 'Browse our extensive catalog of 99%+ purity research-grade peptides, bioregulators, creams, and capsules crafted under GMP standards in the USA.',
+    title: 'How to Buy Research Peptides in USA | BioLongevity Labs',
+    description: 'Where can I buy research peptides in California, Texas, or New York? Browse COA-verified vials, capsules, and bioregulators with USA fulfillment.',
     url: `${SITE_URL}/shop`,
     siteName: 'BioLongevity Labs',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Shop Premium Peptides & Bioregulators | BioLongevity Labs',
-    description: 'Browse our extensive catalog of 99%+ purity research-grade peptides, bioregulators, creams, and capsules.',
+    title: 'How to Buy Research Peptides in USA | BioLongevity Labs',
+    description: 'Where can I buy research peptides in USA? How much for catalog SKUs? Batch COA, USA fulfillment. Research use only.',
   },
 };
 

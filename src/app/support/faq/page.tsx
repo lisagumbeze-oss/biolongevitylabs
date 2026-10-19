@@ -5,6 +5,21 @@ import { CRYPTO_DISCOUNT_PERCENT } from "@/config/payments";
 
 const FAQ_ITEMS = [
   {
+    q: "Where can I buy research peptides in the USA?",
+    a: "Order directly from the BioLongevity Labs shop. We fulfill COA-verified research peptides and bioregulators to qualified buyers nationwide, including California, Texas, Florida, New York, Illinois, and Arizona.",
+    href: "/shop",
+  },
+  {
+    q: "How to buy research peptides in California, Texas, or Florida?",
+    a: "Open a product page, choose your option, and complete research-use-only checkout. The same catalog flow ships to labs across U.S. states—no separate state storefront is required.",
+    href: "/shop",
+  },
+  {
+    q: "How much for research peptides in USA?",
+    a: "Pricing is listed on each product page and updates with batch availability. Compare vial, capsule, and cream options before you order.",
+    href: "/shop",
+  },
+  {
     q: "Who can purchase from BioLongevity Labs?",
     a: "Qualified researchers, institutions, and laboratories that accept our research-use-only (RUO) terms at checkout. Products are not for human or veterinary administration.",
   },
@@ -105,9 +120,10 @@ export default function ResearchFaqPage() {
             </h1>
           </div>
           <AnswerCapsule>
-            BioLongevity Labs sells research-grade peptides with batch COAs, USA fulfillment,
-            and strict RUO policy acceptance at checkout—never for human consumption or medical
-            treatment.
+            Where can I buy research peptides in USA? BioLongevity Labs sells research-grade
+            peptides with batch COAs, USA fulfillment to California, Texas, Florida, and
+            nationwide, and strict RUO checkout—never for human consumption or medical treatment.
+            How much for catalog SKUs? See each product page.
           </AnswerCapsule>
         </header>
 

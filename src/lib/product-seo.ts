@@ -20,12 +20,28 @@ const RUO_FOOTER =
 /** Sprint B — top PDPs by search demand and catalog availability */
 export const PRODUCT_SEO: Record<string, ProductSeoConfig> = {
   prod_105727: {
-    metaTitle: "BPC-157 & TB-500 Research Blend (30mg) for Sale",
+    metaTitle: "How to Buy Regeno Blend in USA | BPC-157 & TB-500 (30mg)",
     metaDescription:
-      "Buy Regeno Blend with BPC-157, TB-500, and Cartalax for in vitro research. 99%+ purity, USA-made, batch COA included. Research use only.",
+      "Where can I buy Regeno Blend in USA? How much for Regeno Blend in California or Texas? Research BPC-157, TB-500 & Cartalax blend with batch COA. Research use only.",
     answerCapsule:
-      "Regeno Blend combines BPC-157, TB-500, and Cartalax in a single 30mg research vial for connective-tissue and regeneration studies. BioLongevity Labs verifies each batch with third-party HPLC testing before release.",
+      "Looking for where can I buy Regeno Blend in USA? Regeno Blend combines BPC-157, TB-500, and Cartalax (10mg each) in a 30mg research vial for connective-tissue studies. How to buy in California, Texas, or Florida: order from this page with USA fulfillment. How much for Regeno Blend in USA? See live pricing below. Each batch is HPLC-verified before release.",
     faqs: [
+      {
+        question: "Where can I buy Regeno Blend in the USA?",
+        answer:
+          "BioLongevity Labs ships Regeno Blend research vials to qualified buyers across the United States. Order directly from this product page for nationwide fulfillment. " +
+          RUO_FOOTER,
+      },
+      {
+        question: "How to buy Regeno Blend in Texas, California, or Florida?",
+        answer:
+          "Select the vial option, complete checkout, and we ship to research buyers in Texas, California, Florida, and other U.S. states. The same catalog flow applies for New York, Illinois, and Arizona labs.",
+      },
+      {
+        question: "How much for Regeno Blend in USA?",
+        answer:
+          "Current pricing is shown on this page and may update with batch availability. Compare options before ordering; institutional buyers can contact support for procurement questions.",
+      },
       {
         question: "What is included in the Regeno Blend research vial?",
         answer:
@@ -36,58 +52,58 @@ export const PRODUCT_SEO: Record<string, ProductSeoConfig> = {
         answer:
           "Yes. Batch-specific COA documentation with HPLC purity data ships with your order and is available on request for institutional records.",
       },
-      {
-        question: "How should this blend be stored for research?",
-        answer:
-          "Store lyophilized material refrigerated (2–8°C). After reconstitution, follow your lab SOP; aliquot and freeze if holding beyond immediate use. " + RUO_FOOTER,
-      },
-      {
-        question: "Can I buy BPC-157 and TB-500 together for one study?",
-        answer:
-          "This blend is formulated for labs comparing synergistic signaling in tissue-repair models. Single-compound SKUs are also listed in our peptide catalog.",
-      },
     ],
   },
   prod_201099: {
-    metaTitle: "Thymulin Peptide (10mg) for Research",
+    metaTitle: "How to Buy Thymulin Peptide in USA (10mg)",
     metaDescription:
-      "Thymulin peptide for immune and thymic hormone research. USA-synthesized, HPLC-verified, 10mg lyophilized vial. Research use only.",
+      "Where can I buy thymulin in USA? How much for thymulin in California or Texas? 10mg research vial, HPLC-verified. Research use only.",
     answerCapsule:
-      "Thymulin is a thymic peptide studied for immune cell differentiation and endocrine signaling in vitro. This 10mg vial is third-party tested and intended exclusively for qualified laboratory research.",
+      "Looking for where can I buy thymulin peptide in USA? This 10mg vial supports immune and thymic hormone research in vitro. How to buy in California, Texas, or Florida: order from this page with USA fulfillment. How much for thymulin in USA? See live pricing below.",
     faqs: [
+      {
+        question: "Where can I buy thymulin peptide in the USA?",
+        answer:
+          "Order from this BioLongevity Labs product page for nationwide research fulfillment. " + RUO_FOOTER,
+      },
+      {
+        question: "How to buy thymulin in Texas, California, or New York?",
+        answer:
+          "Select the vial, complete RUO checkout, and we ship to research buyers across U.S. states including Texas, California, and New York.",
+      },
+      {
+        question: "How much for thymulin peptide in USA?",
+        answer:
+          "Current pricing is shown on this page and may update with batch availability.",
+      },
       {
         question: "What research applications use thymulin peptide?",
         answer:
           "Literature focuses on thymic hormone pathways, T-cell differentiation models, and immune senescence assays in controlled cell cultures. " + RUO_FOOTER,
       },
-      {
-        question: "What purity standard does this thymulin batch meet?",
-        answer:
-          "We target ≥99% purity by HPLC with mass spectrometry confirmation documented on the batch COA.",
-      },
-      {
-        question: "How do I reconstitute a 10mg thymulin vial?",
-        answer:
-          "Use bacteriostatic water or your lab-approved diluent per protocol. See our peptide reconstitution guide in the Research hub for general lyophilized handling steps.",
-      },
     ],
   },
   prod_230039: {
-    metaTitle: "Follistatin (FLGR242) 10mg Research Peptide",
+    metaTitle: "Where to Buy Follistatin FLGR242 in USA (10mg)",
     metaDescription:
-      "Follistatin FLGR242 10mg for myostatin-pathway and muscle research models. Lab-tested purity, USA fulfillment. Research use only.",
+      "How to buy Follistatin FLGR242 in USA? How much for FLGR242 in Florida or Illinois? 10mg research peptide, USA fulfillment. Research use only.",
     answerCapsule:
-      "Follistatin (FLGR242) is supplied as a 10mg lyophilized research peptide for investigating myostatin-related signaling in vitro. Each unit includes batch verification suitable for institutional lab workflows.",
+      "Where can I buy Follistatin (FLGR242) in USA? This 10mg lyophilized research peptide supports myostatin-pathway studies in vitro. How to buy in Florida, Illinois, or Arizona: complete checkout on this page. How much for FLGR242 in USA? See pricing below.",
     faqs: [
+      {
+        question: "Where can I buy Follistatin FLGR242 in the USA?",
+        answer:
+          "This catalog page is the direct listing for qualified laboratory buyers with USA shipping. " + RUO_FOOTER,
+      },
+      {
+        question: "How much for Follistatin FLGR242 in California?",
+        answer:
+          "Live pricing is listed on this page for all U.S. research buyers, including California.",
+      },
       {
         question: "What is Follistatin FLGR242 used for in research?",
         answer:
           "Researchers employ follistatin family peptides to study activin/myostatin pathway modulation in cell and tissue models—not for performance or human use. " + RUO_FOOTER,
-      },
-      {
-        question: "Is this product the same as consumer follistatin supplements?",
-        answer:
-          "No. This is a defined research-grade peptide SKU with analytical testing, not a dietary supplement.",
       },
       {
         question: "Do you provide COA documentation?",
@@ -97,40 +113,45 @@ export const PRODUCT_SEO: Record<string, ProductSeoConfig> = {
     ],
   },
   prod_26974: {
-    metaTitle: "Vesugen Bioregulator Peptide (20mg) for Research",
+    metaTitle: "How Much for Vesugen Peptide in USA (20mg)",
     metaDescription:
-      "Vesugen 20mg bioregulator peptide for vascular and cellular aging research. USA-made, COA-verified. Research use only.",
+      "Where can I buy Vesugen in USA? How to buy Vesugen in Ohio or Georgia? 20mg bioregulator, COA-verified. Research use only.",
     answerCapsule:
-      "Vesugen is a Khavinson-class bioregulator peptide used in vascular and longevity-related in vitro research. BioLongevity Labs provides 20mg lyophilized material with documented batch purity.",
+      "How much for Vesugen in USA? See live pricing on this page. Where can I buy Vesugen bioregulator in USA? Order this 20mg vial for vascular and cellular aging research with USA fulfillment to Ohio, Georgia, Pennsylvania, and nationwide.",
     faqs: [
+      {
+        question: "Where can I buy Vesugen in the USA?",
+        answer:
+          "BioLongevity Labs ships this bioregulator vial to qualified U.S. research buyers from this product page. " + RUO_FOOTER,
+      },
+      {
+        question: "How to buy Vesugen in Ohio, Georgia, or Pennsylvania?",
+        answer:
+          "Choose the vial option, complete RUO checkout, and we fulfill to research addresses in those states and across the USA.",
+      },
       {
         question: "What is a bioregulator peptide like Vesugen?",
         answer:
           "Bioregulators are short peptides studied for organ-specific gene expression patterns in cell models. They are research tools, not approved therapeutics. " + RUO_FOOTER,
       },
-      {
-        question: "How does Vesugen differ from standard growth peptides?",
-        answer:
-          "Vesugen is positioned for vascular/endothelial research contexts, whereas peptides like BPC-157 are commonly used in tissue-repair signaling studies.",
-      },
-      {
-        question: "Where can I learn more about bioregulator research?",
-        answer:
-          "Visit our Research hub and peptide guide for educational overviews and handling protocols.",
-      },
     ],
   },
   prod_4103: {
-    metaTitle: "Cartalax Peptide (20mg) for Research",
+    metaTitle: "How to Buy Cartalax Peptide in USA (20mg)",
     metaDescription:
-      "Cartalax 20mg research peptide for cartilage and connective tissue studies. Third-party tested, USA shipping. Research use only.",
+      "Where can I buy Cartalax in USA? How much for Cartalax in Washington or Colorado? 20mg research peptide, USA shipping. Research use only.",
     answerCapsule:
-      "Cartalax is a bioregulator-associated peptide used in cartilage and extracellular matrix research models. This 20mg vial is batch-tested for identity and purity before fulfillment.",
+      "Looking for where can I buy Cartalax in USA? This 20mg vial supports cartilage and extracellular-matrix research. How to buy in Washington, Colorado, or Michigan: order below. How much for Cartalax in USA? Pricing is listed on this page.",
     faqs: [
       {
-        question: "What research models use Cartalax?",
+        question: "Where can I buy Cartalax peptide in the USA?",
         answer:
-          "Preclinical literature references connective tissue, chondrocyte, and matrix remodeling assays. " + RUO_FOOTER,
+          "Order from this product page for USA research fulfillment. " + RUO_FOOTER,
+      },
+      {
+        question: "How much for Cartalax in USA?",
+        answer:
+          "Current price appears on this page and updates with batch availability.",
       },
       {
         question: "Can Cartalax be combined with BPC-157 or TB-500?",
@@ -145,16 +166,21 @@ export const PRODUCT_SEO: Record<string, ProductSeoConfig> = {
     ],
   },
   prod_439: {
-    metaTitle: "A-15 Ovary Peptide Bioregulator 60 Capsules",
+    metaTitle: "Where to Buy A-15 Ovary Peptide Bioregulator in USA",
     metaDescription:
-      "Zhenoluten A-15 ovary peptide bioregulator capsules, including a 60-capsule option, for laboratory research. Batch documentation on request. RUO only.",
+      "How to buy Zhenoluten A-15 ovary peptide bioregulator in USA? How much for 60 capsules in New York? Research use only.",
     answerCapsule:
-      "Zhenoluten is the A-15 ovary peptide bioregulator in this catalog, offered as capsules including a 60-capsule count. It is for laboratory research only and is not for human or veterinary administration.",
+      "Where can I buy A-15 ovary peptide bioregulator in USA? Zhenoluten capsules, including a 60-capsule option, ship to research buyers nationwide. How much for Zhenoluten in USA? See live pricing on this page.",
     faqs: [
       {
-        question: "Is the 60-capsule A-15 ovary peptide bioregulator the Zhenoluten SKU?",
+        question: "Where can I buy A-15 ovary peptide bioregulator in the USA?",
         answer:
-          "Yes. Select the 60-capsule count on the Zhenoluten A-15 product page. Availability and price are shown at checkout. " + RUO_FOOTER,
+          "Select the capsule count on this Zhenoluten A-15 product page for USA research shipping. " + RUO_FOOTER,
+      },
+      {
+        question: "How much for A-15 ovary peptide bioregulator in USA?",
+        answer:
+          "Pricing for each capsule count is shown at checkout on this page.",
       },
       {
         question: "Is this ovary peptide bioregulator for human use?",
@@ -165,15 +191,19 @@ export const PRODUCT_SEO: Record<string, ProductSeoConfig> = {
   },
 };
 
-function researchSku(name: string, phrase: string): ProductSeoConfig {
+function researchSku(name: string, phrase: string, loc = "USA"): ProductSeoConfig {
   return {
-    metaTitle: `${phrase} for Laboratory Research`,
-    metaDescription: `${phrase} research material from BioLongevity Labs. Batch documentation on request. Research use only, not for human or veterinary administration.`.slice(0, 160),
-    answerCapsule: `${name} is listed in this catalog for laboratory research. It is not for human or veterinary administration. Confirm the vial label and COA before use in a study.`,
+    metaTitle: `How to Buy ${phrase} in ${loc}`,
+    metaDescription: `Where can I buy ${phrase} in USA? How much for ${phrase}? Batch documentation on request. Research use only.`.slice(0, 160),
+    answerCapsule: `Looking for where can I buy ${phrase} in USA? ${name} is listed here for laboratory research with USA fulfillment. How much for ${phrase} in ${loc}? See pricing on this page. Confirm the vial label and COA before use in a study.`,
     faqs: [
       {
-        question: `Where is ${phrase} listed?`,
-        answer: `On this product page. ${RUO_FOOTER}`,
+        question: `Where can I buy ${phrase} in the USA?`,
+        answer: `On this product page with nationwide research fulfillment. ${RUO_FOOTER}`,
+      },
+      {
+        question: `How much for ${phrase} in USA?`,
+        answer: "Live pricing is listed on this page and may update with batch availability.",
       },
       {
         question: "Is this for human use?",
@@ -184,18 +214,16 @@ function researchSku(name: string, phrase: string): ProductSeoConfig {
 }
 
 Object.assign(PRODUCT_SEO, {
-  prod_4101: researchSku("Bronchogen (20mg)", "Bronchogen peptide"),
-  prod_4102: researchSku("Cardiogen (20mg)", "Cardiogen peptide"),
-  prod_4104: researchSku("Chonluten (20mg)", "Chonluten peptide"),
-  prod_26974: researchSku("Vesugen Peptide (20mg)", "Vesugen peptide"),
-  prod_26970: researchSku("Testagen Peptide (20mg)", "Testagen peptide"),
-  prod_26969: researchSku("Prostamax Peptide (20mg)", "Prostamax peptide"),
-  prod_26964: researchSku("Ovagen Peptide (20mg)", "Ovagen peptide"),
-  prod_26963: researchSku("Livagen Peptide (20mg)", "Livagen peptide"),
-  prod_26962: researchSku("Vilon peptide", "Vilon peptide"),
-  prod_440: researchSku("Bonomarlot A-20", "Bonomarlot peptide bioregulator"),
-  prod_52438: researchSku("BioPineal A-8 Endoluten", "Endoluten pineal peptide bioregulator"),
-  prod_230039: researchSku("Follistatin FLGR242 (10mg)", "FLGR242 follistatin peptide for research"),
+  prod_4101: researchSku("Bronchogen (20mg)", "Bronchogen peptide", "California"),
+  prod_4102: researchSku("Cardiogen (20mg)", "Cardiogen peptide", "Texas"),
+  prod_4104: researchSku("Chonluten (20mg)", "Chonluten peptide", "Florida"),
+  prod_26970: researchSku("Testagen Peptide (20mg)", "Testagen peptide", "New York"),
+  prod_26969: researchSku("Prostamax Peptide (20mg)", "Prostamax peptide", "Illinois"),
+  prod_26964: researchSku("Ovagen Peptide (20mg)", "Ovagen peptide", "Arizona"),
+  prod_26963: researchSku("Livagen Peptide (20mg)", "Livagen peptide", "Ohio"),
+  prod_26962: researchSku("Vilon peptide", "Vilon peptide", "Georgia"),
+  prod_440: researchSku("Bonomarlot A-20", "Bonomarlot peptide bioregulator", "Pennsylvania"),
+  prod_52438: researchSku("BioPineal A-8 Endoluten", "Endoluten pineal peptide bioregulator", "Washington"),
 });
 
 export function getProductSeo(productId: string): ProductSeoConfig | undefined {

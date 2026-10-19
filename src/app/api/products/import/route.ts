@@ -239,6 +239,7 @@ export async function POST(request: Request) {
                         min_price: productData.minPrice,
                         max_price: productData.maxPrice,
                         image_url: productData.image,
+                        gallery: productData.gallery || [],
                         category_name: productData.category,
                         form: productData.form,
                         description: productData.description,

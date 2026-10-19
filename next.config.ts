@@ -37,15 +37,12 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'biolongevitylabs.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'biolongevitylabss.com',
-      },
-      {
-        protocol: 'https',
         hostname: 'mlavgymrtxzc.i.optimole.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'pcphezslywxavphlcdon.supabase.co',
+        pathname: '/storage/v1/object/public/**',
       },
     ],
   },

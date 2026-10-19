@@ -142,9 +142,10 @@ export default function ShopPage() {
                             Buy Research Peptides &amp; Bioregulators Online
                         </h1>
                         <AnswerCapsule>
-                            You can buy Biolongevity peptides online from BioLongevity Labs with batch-specific COA
-                            documentation, USA-based fulfillment, and HPLC-verified purity targets of 99%+. Catalog
-                            includes lyophilized vials, capsules, and Khavinson-class bioregulators for in vitro work only.
+                            Where can I buy Biolongevity peptides in USA? Order from this catalog with batch-specific COA
+                            documentation, USA-based fulfillment to California, Texas, Florida, and nationwide, and
+                            HPLC-verified purity targets of 99%+. How much for research vials, capsules, and bioregulators?
+                            Prices are listed on each SKU. In vitro work only.
                         </AnswerCapsule>
                     </header>
                     <div className="flex flex-col lg:flex-row gap-8">
@@ -206,18 +207,20 @@ export default function ShopPage() {
                     </div>
 
                     <AnswerCapsule>
-                        You can buy Biolongevity peptides online from BioLongevity Labs with batch-specific COA
-                        documentation, USA-based fulfillment, and HPLC-verified purity targets of 99%+. Catalog
-                        includes lyophilized vials, capsules, and Khavinson-class bioregulators for in vitro work only.
+                        Where can I buy Biolongevity peptides in USA? Order from this catalog with batch-specific COA
+                        documentation, USA-based fulfillment to California, Texas, Florida, and nationwide, and
+                        HPLC-verified purity targets of 99%+. How much for research vials, capsules, and bioregulators?
+                        Prices are listed on each SKU. In vitro work only.
                     </AnswerCapsule>
 
                     <article className="prose prose-slate max-w-none text-slate-600 text-sm leading-relaxed">
                         <h2 className="text-lg font-bold text-slate-900 not-prose">
-                            Biolongevity peptides and bioregulators
+                            How to buy research peptides in USA
                         </h2>
                         <p>
-                            Searches for Biolongevity peptides, Biolongevity Labs peptides, and longevity labs
-                            peptides belong on this catalog, not a wishlist. Read the{" "}
+                            Looking for where can I buy research peptides in California, Texas, or New York? Open a
+                            product page, choose your option, and complete research-use-only checkout—the same flow
+                            serves labs in Illinois, Arizona, Ohio, and other U.S. states. Read the{" "}
                             <Link href="/research/biolongevity-labs-peptides" className="text-primary font-semibold hover:underline">
                                 Biolongevity peptides overview
                             </Link>{" "}
@@ -236,11 +239,12 @@ export default function ShopPage() {
                             .
                         </p>
                         <h2 className="text-lg font-bold text-slate-900 not-prose">
-                            Research-grade peptide catalog
+                            How much for research peptides in USA?
                         </h2>
                         <p>
-                            Our shop lists peptides and bioregulators synthesized under GMP-aligned USA processes and
-                            independently tested before release. Filter by product form—lyophilized{" "}
+                            Pricing updates with batch availability and is shown on each product page. Our shop lists
+                            peptides and bioregulators synthesized under GMP-aligned USA processes and independently
+                            tested before release. Filter by product form—lyophilized{" "}
                             <Link href="/shop" className="text-primary font-semibold hover:underline">
                                 research vials
                             </Link>
